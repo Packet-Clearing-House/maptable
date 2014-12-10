@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+
+<head>
+  <meta charset="utf-8">
+  <title>IXP Directory</title>
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="./css/bootstrap.min.css">
+
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="./css/bootstrap-theme.min.css">
+
+  <link href="css/maptable.css" rel="stylesheet">
+</head>
+
+<body>
+  <h1 class="page-header">IXP Directory</h1>
+  <div class="container">
+    <div id="map"></div>
+    <fieldset class="filters">
+      <legend class="filters_label">
+        <a href="javascript:;">
+          <div id="caret_filters"></div> Filters</a>
+        <div id="filters_new_filter" class="pull-right"></div>
+        <div id="filters_reset" class="pull-right"></div>
+        <div class="clearfix"></div>
+      </legend>
+      <div id="filters_container">
+        <div id="filters_content"></div>
+        <div class="clearfix"></div>
+      </div>
+    </fieldset>
+    <div id="table"></div>
+  </div>
+  </div>
+  <svg id="svg_filters" height="0">
+    <defs>
+      <filter id="drop-shadow" x="-100%" y="-100%" width="400%" height="400%">
+        <feGaussianBlur in="SourceAlpha" result="blur-out" stdDeviation="1" />
+        <feOffset in="blur-out" result="the-shadow" dx="1" dy="1" />
+        <feColorMatrix in="the-shadow" result="color-out" type="matrix" values="0 0 0 0   0
+      0 0 0 0   0
+      0 0 0 0   0
+      0 0 0 .3 0" />
+        <feBlend in="SourceGraphic" in2="color-out" mode="normal" />
+      </filter>
+      <radialGradient id="gardientYellow" gradientUnits="objectBoundingBox" fx="30%" fy="30%">
+
+        <stop offset="0%" style="stop-color:#FFFFFF" />
+        <stop offset="40%" style="stop-color:#f9ea65" />
+        <stop offset="100%" style="stop-color:#d4b91d" />
+      </radialGradient>
+    </defs>
+    <defs>
+      <filter id="drop-shadow-hover" x="-100%" y="-100%" width="400%" height="400%">
+        <feGaussianBlur in="SourceAlpha" result="blur-out" stdDeviation="1" />
+        <feOffset in="blur-out" result="the-shadow" dx="2" dy="2" />
+        <feColorMatrix in="the-shadow" result="color-out" type="matrix" values="0 0 0 0   0
+    0 0 0 0   0
+    0 0 0 0   0
+    0 0 0 .3 0" />
+        <feBlend in="SourceGraphic" in2="color-out" mode="normal" />
+      </filter>
+      <radialGradient id="gardientYellow" gradientUnits="objectBoundingBox" fx="30%" fy="30%">
+
+        <stop offset="0%" style="stop-color:#FFFFFF" />
+        <stop offset="40%" style="stop-color:#f9ea65" />
+        <stop offset="100%" style="stop-color:#d4b91d" />
+      </radialGradient>
+    </defs>
+  </svg>
+
+  <script src="js/d3.v3.min.js"></script>
+  <script src="js/topojson.js"></script>
+
+  <script src="js/maptable.js"></script>
+
+  <script type="text/javascript">
+    var ixp_map = MapTable.init({
+      data: {
+        type: "csv",
+        path: "data/result.csv",
+        filters: {
+          selector_new: "#filters_new_filter",
+          selector_reset: "#filters_reset",
+          range_values: [{
+            value: "",
+            text: "any"
+          }, {
+            value: "<",
+            text: "less than"
+          }, {
+            value: "=",
+            text: "exactly"
+          }, {
+            value: ">",
+            text: "more than"
+          }]
+        },
+
+        columns: [{
+          id: "region",
+          displayName: "region",
+          type: "dropdown"
+        }, {
+          id: "country_name",
+          displayName: "country",
+          type: "field"
+        }, {
+          id: "city",
+          displayName: "city",
+          type: "field"
+        }, {
+          id: "long_name",
+          displayName: "ixp_name",
+          type: "field"
+        }, {
+          id: "prefixes",
+          displayName: "prefixes",
+          type: "number",
+          cellContent: function(d) {
+            if (d["prefixes"] > 0) {
+              return d["prefixes"];
+            } else {
+              return "";
+            }
+          }
+        }, {
+          id: "established",
+          displayName: "established",
+          type: "date",
+          cellContent: function(d) {
+            months = new Array("", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec");
+            year = parseInt(d['established'].substring(0, 4)) * 1;
+            month = parseInt(d['established'].substring(4, 6)) * 1;
+            if (!isNaN(month) && month != 0) {
+              month = months[month];
+            } else {
+              month = "";
+            }
+            day = parseInt(d['established'].substring(6, 8)) * 1;
+            output = day + " " + month + " " + year;
+
+            if (isNaN(day) || day == 0) output = month + " " + year;
+            if (month == "") output = year;
+            if (isNaN(year) || year == 0) output = "";
+            return output;
+          },
+          dateParse: function(raw_date) {
+            full_year = parseInt(raw_date.substring(0, 4)) * 1;
+            if (isNaN(full_year) || full_year == 0) return null;
+
+            month = parseInt(raw_date.substring(4, 6)) * 1;
+            month = (!isNaN(month) && month != 0) ? (month - 1) : 0;
+
+            day = parseInt(raw_date.substring(6, 8)) * 1;
+            day = (!isNaN(day) && day != 0) ? (day - 1) : 0;
+
+            return new Date(full_year, month, day);
+          }
+        }, {
+          id: "custom_1",
+          displayName: "URL",
+          type: "virtual",
+          cellContent: function(d) {
+            if (d['url'] && d['url'] !== "") {
+              return "<a href='" + d['url'] + "' target='_blank'>Web</a>";
+            }
+            return "";
+          }
+        }]
+      },
+      map: {
+        selector: "#map",
+        path: "data/countries.topo.json",
+        auto_width: true,
+        zoom: true,
+        scale_height: 0.83,
+        ratio_from_width: 0.5,
+        watermark: {
+          src: "img/watermark.svg",
+          width: 130,
+          height: 60,
+          position: "bottom left",
+          style: "opacity:0.1"
+        },
+        title: {
+          bgcolor: "#F5F5F5",
+          font_size: "11",
+          content: function(showing, total, filters) {
+            if (showing == 0 || total == 0) {
+              out = "No IXP shown";
+            } else if (showing < total) {
+              out = 'Showing <tspan font-weight="bold">' + showing + '</tspan> IXP from <tspan font-weight="bold">' + total + '</tspan>';
+            } else {
+              out = '<tspan font-weight="bold">' + total + '</tspan> IXP shown';
+            }
+
+            if (filters != "") {
+              out += " — " + filters;
+            }
+            return out;
+          },
+          source: function() {
+            return 'Source: <a xlink:href="http://www.pch.net/" target="_blank"><tspan font-weight="bold">pch.net</tspan></a>';
+          }
+        },
+        svg_filters: "#svg_filters",
+        markers: {
+          group_by: function(d) {
+            return d.city + ", " + d.country_name;
+          },
+          rollup: function(leaves) {
+            return leaves.length;
+          },
+          tooltip: function(d) {
+            out = "<strong>" + d.key + "</strong> [" + d.values.length + "]<br>";
+            for (i = 0; i < d.values.length; i++) {
+              out += " • " + d.values[i].long_name + "<br>"
+            }
+            return out;
+          },
+          attr: {
+            'r': ['min', 'max', function(r) {
+              return Math.sqrt(r) * 3;
+            }],
+            'fill': "url(#gardientYellow)",
+            'stroke': "#d9d9d9",
+            'stroke-width': 0.5,
+            'filter': "url(#drop-shadow)"
+          }
+
+        },
+        countries: {
+          group_by: function(d) {
+            return d.country_name;
+          },
+          rollup: function(leaves) {
+            return leaves.length;
+          },
+          attr: {
+            'fill': ['#a9b6c2', '#6c89a3'],
+            'stroke': "#d9d9d9",
+            'stroke-width': 0.5
+          },
+          attr_empty: {
+            'fill': '#f9f9f9'
+          }
+        },
+      },
+      table: {
+        rowClassName: function(d) {
+          if (parseInt(d.participants) > 5) {}
+          return "";
+        },
+        default_sorting: {
+          id: "region",
+          mode: "asc"
+        },
+        collapse_rows_by: ["region", "country_name", "city"]
+      }
+    });
+  </script>
+
+</body>
+
+</html>

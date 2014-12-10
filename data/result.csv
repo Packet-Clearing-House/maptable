@@ -1,0 +1,434 @@
+region,country_name,country_code,city,long_name,short_name,prefixes,established,url,latitude,longitude
+Latin America,Argentina,AR,Buenos Aires,NAP CABASE Buenos Aires,NAP CABASE Buenos Aires,7331,19980401,http://www.cabase.org.ar,-34.60372,-58.38159
+Asia-Pacific,Australia,AU,Melbourne,AUSIX,AUSIX,0,20010700,http://www.ausix.net/,-37.81411,144.96328
+Asia-Pacific,Australia,AU,Melbourne,Victoria Internet Exchange,VIC-IX,0,20110000,http://www.ix.asn.au/peering.html,-37.81411,144.96328
+Asia-Pacific,Australia,AU,Perth,Western Australian Internet Association (Inc.),WAIX,23696,19970000,http://www.ix.asn.au/peering.html,-31.95300,115.85747
+Asia-Pacific,Australia,AU,Sydney,Equinix Sydney,Equinix Sydney,26810,20030000,http://www.equinix.com,-33.86749,151.20699
+Asia-Pacific,Australia,AU,Brisbane,PIPE Networks Brisbane,PIPE Brisbane,0,20020500,http://www.pipenetworks.com,-27.47101,153.02345
+Europe,Austria,AT,Graz,Grazer Internet Exchange,GraX,0,20100304,http://www.grax.at/,47.07071,15.43950
+Europe,Austria,AT,Vienna,Vienna Internet Exchange,VIX,122781,19960400,http://www.VIX.at/,48.20817,16.37382
+Asia-Pacific,Bangladesh,BD,Dhaka,Bangladesh Internet Exchange,BDIX,1983,20040826,http://www.bdix.net/,23.81033,90.41252
+Europe,Belgium,BE,Brussels,Belgian National Internet Exchange,BNIX,0,19950000,http://www.bnix.net/,50.85034,4.35171
+Latin America,Brazil,BR,Belo Horizonte,Ponto de Troca de TrÃ¡fego do Belo Horizonte,PTT Belo Horizonte,0,20100100,http://ptt.br/adesao/mg/,-19.92452,-43.93527
+Latin America,Brazil,BR,BrasÃ­lia,Ponto de Troca de TrÃ¡fego do BrasÃ­lia,PTT BrasÃ­lia,0,20090000,http://ptt.br/adesao/df,-15.79415,-47.88255
+Latin America,Brazil,BR,ParanÃ¡,Ponto de Troca de TrÃ¡fego do ParanÃ¡,PRIX,0,20020600,http://ptt.br/adesao/pr,-25.25209,-52.02154
+Latin America,Brazil,BR,FlorianÃ³polis,Ponto de Troca de TrÃ¡fego do FlorianÃ³polis,PTT FlorianÃ³polis,0,20080000,http://ptt.br/adesao/ce,-27.59499,-48.54817
+Latin America,Brazil,BR,SÃ£o Paulo,NAP do Brasil,NAP do Brasil,0,19980000,http://www.terremark.com/data-centers/americas/nap-brazil.aspx,-14.36524,-51.69136
+Latin America,Brazil,BR,SÃ£o Paulo,Ponto de Troca de TrÃ¡fego Metro SÃ£o Paulo,PTTMetro SÃ£o Paulo,0,20041004,http://ptt.br/adesao/sp,-14.36524,-51.69136
+North America,Canada,CA,Ottawa,Ottawa Internet Exchange,OttIX,994,20010410,http://www.ottix.net/,45.42153,-75.69719
+North America,Canada,CA,Toronto,Toronto Internet Exchange,TORIX,71695,19980000,http://www.torix.net/,43.65323,-79.38318
+Latin America,Chile,CL,Santiago,NAP Chile,NAP Chile,0,19970900,http://www.nap.cl/,-33.46912,-70.64200
+Asia-Pacific,China,CN,Beijing,Beijing National Internet Exchange Center,BIX,0,20000400,,39.90403,116.40753
+Latin America,Colombia,CO,BogotÃ¡,NAP-Colombia,NAP-Colombia,0,20000629,http://www.nap.com.co/,4.59806,-74.07583
+Europe,Croatia,HR,Zagreb,Croatian Internet Exchange,CIX,0,20050000,http://www.cix.hr/,45.81501,15.98192
+Latin America,Cuba,CU,Habana,NAP de Cuba,NAP de Cuba,0,20010600,http://www.etecsa.cu/?page=internet_conectividad&sub=transmision_datos,23.05407,-82.34519
+Europe,Cyprus,CY,Lefkosia,Cyprus Internet Exchange,CyIX,0,19990000,http://www.cytanet.com.cy/network/cyix/,35.16667,33.36667
+Europe,Czech Republic,CZ,Prague,Neutral Internet Exchange,NIX,0,19960800,http://www.nix.cz,50.07554,14.43780
+Europe,Denmark,DK,Copenhagen,Danish Internet Exchange,DIX,0,19940500,http://www.dix.dk/,55.67610,12.56834
+Latin America,Ecuador,EC,Guayaquil,NAP AEPROVI Guayaquil,NAP AEPROVI Guayaquil,0,20030000,http://www.aeprovi.org.ec/index.php?option=com_content&task=blogcategory&id=5&Itemid=85,-2.17100,-79.92236
+Latin America,Ecuador,EC,Quito,NAP AEPROVI Quito,NAP AEPROVI Quito,0,20030000,http://www.aeprovi.org.ec/index.php?option=com_content&task=blogcategory&id=5&Itemid=85,-0.18065,-78.46784
+Africa,Egypt,EG,Cairo,Cairo Internet Exchange,CAIX,2533,20020500,http://www.caix.net.eg/,30.04442,31.23571
+Europe,United Kingdom,GB,London,London Internet Exchange,LINX,654911,19941108,http://www.linx.net,51.50735,-0.12776
+Europe,United Kingdom,GB,London,London Network Access Point,LoNAP,72306,19980000,http://www.lonap.net,51.50735,-0.12776
+Europe,United Kingdom,GB,London,XchangePoint London IPP,XP-London IXP,0,20010000,http://www.xchangepoint.net,51.50735,-0.12776
+Europe,Estonia,EE,Tallinn,Tallinn Internet Exchange (TIX),TIX,0,20020000,http://tix.estpak.ee,59.43696,24.75357
+Europe,Finland,FI,Helsinki,Finnish Communication and Internet Exchange Helsinki,FICIX2,0,19930000,http://www.ficix.fi/english/main.php,60.17332,24.94102
+Europe,Finland,FI,Tampere,Tampere Region Exchange,TREX,653,20030803,http://www.trex.fi/,61.50000,23.76667
+Europe,France,FR,Lyon,Lyon Internet Exchange,LyonIX,38443,20100601,http://www.lyonix.net/,45.76404,4.83566
+Europe,France,FR,Paris,Mix Internet Exchange and Transit,MIXT,0,19990000,http://www.mixt.net/,48.85661,2.35222
+Europe,France,FR,Paris,PARIX,PARIX,0,20010000,http://www.parix.net,48.85661,2.35222
+Europe,France,FR,Paris,Service for French Internet Exchange,SFINX,16530,19950000,http://www.renater.fr/spip.php?rubrique270,48.85661,2.35222
+Europe,Germany,DE,Berlin,Berlin Commercial Internet Exchange,BCIX,112740,20020906,http://www.bcix.de/,52.52001,13.40495
+Europe,Germany,DE,Berlin,European Commercial Internet Exchange Berlin,BLNX/ECIX BER,0,20030000,http://www.ecix.net/,52.52001,13.40495
+Europe,Germany,DE,DÃ¼sseldorf,European Commercial Internet Exchange DÃ¼sseldorf,ECIX DUS,0,20030000,http://www.ecix.net/,51.22774,6.77346
+Europe,Germany,DE,Frankfurt,Deutscher Commercial Internet Exchange,DE-CIX,681000,19950500,https://www.de-cix.net/,50.11092,8.68213
+Europe,Germany,DE,Hamburg,Internet Exchange Hamburg,INXS-HH,0,20001000,http://www.inxs.de,53.55108,9.99368
+Europe,Germany,DE,Hamburg,XchangePoint Hamburg IPP,XP-Hamburg IXP,0,20030400,http://www.xchangepoint.net,53.55108,9.99368
+Europe,Germany,DE,Hamburg,DE-CIX Hamburg,DE-CIX Hamburg,0,20080000,http://www.de-cix.net/products-services/de-cix-hamburg/,53.55108,9.99368
+Europe,Germany,DE,Munich,Internet Exchange Service,INXS,45451,19940600,http://www.inxs.de,48.13513,11.58198
+Europe,Germany,DE,Nuremberg,NÃ¼rnberger Internet Exchange,N-IX,0,20030000,http://www.n-ix.de,49.45203,11.07675
+Africa,Ghana,GH,Accra,Ghana Internet Exchange,GIX,0,20051018,http://www.gixa.org.gh,5.55000,-0.20000
+Europe,Greece,GR,Athens,Greek Internet Exchange,GR-IX,0,20000000,http://www.gr-ix.gr/,37.98392,23.72936
+Asia-Pacific,China,CN,Hong Kong,Hong Kong Internet Exchange,HKIX,339936,19950400,http://www.hkix.net,22.39643,114.10950
+Europe,Hungary,HU,Budapest,Budapest Internet Exchange,BIX,0,19960000,http://www.bix.hu/,47.49791,19.04024
+Europe,Iceland,IS,Reykjavik,Reykjavik Internet Exchange,RIX,0,19990000,http://www.rix.is,64.13333,-21.93333
+Asia-Pacific,India,IN,Mumbai,National Internet Exchange of India,NIXI Mumbai,0,20030719,http://nixi.in/en/,19.07598,72.87766
+Asia-Pacific,India,IN,New Delhi,National Internet Exchange of India,NIXI Delhi,0,20030719,http://nixi.in/index.php?option=com_noclocation&task=click&id=52&Itemid=28,28.63531,77.22496
+Asia-Pacific,India,IN,Chennai,National Internet Exchange of India,NIXI Chennai,0,20030719,http://nixi.in/en/noc-locations/55?view=noclocation,13.05970,80.22523
+Asia-Pacific,India,IN,Kolkata,National Internet Exchange of India,NIXI Kolkotta,0,20030719,http://nixi.in/index.php?option=com_noclocation&task=click&id=53&Itemid=28,22.57265,88.36390
+Asia-Pacific,Indonesia,ID,Jakarta,Indonesian Internet Exchange,IIX,8570,19970800,http://www.iix.net.id,-6.20876,106.84560
+Asia-Pacific,Indonesia,ID,Surabaya,Indonesian Internet Exchange,IIX,0,20031000,http://www.iix.net.id,-7.26424,112.74558
+Europe,Ireland,IE,Dublin,Internet Neutral Exchange Association Limited,INEX,6817,19960000,http://www.inex.ie,53.34981,-6.26031
+Europe,Israel,IL,Tel Aviv,Israeli Internet Exchange,IIX,0,19960000,http://www.isoc.org.il/iix/index.html,32.08530,34.78177
+Europe,Italy,IT,Milan,Milan Internet Exchange,MIX,0,20001100,http://www.mix-it.net/,45.46542,9.18592
+Europe,Italy,IT,Rome,NaMeX - Nautilus Mediterranean Exchange Point,NaMeX,0,19960000,http://www.namex.it,41.87239,12.48018
+Europe,Italy,IT,Torino,Torino Piemonte Exchange Point,TOP-ix,2897,20020000,http://www.top-ix.org,45.07031,7.68686
+Asia-Pacific,Japan,JP,Nagoya,JPIX Nagoya,JPIX Nagoya,0,20010400,http://www.jpix.ad.jp/en/,35.18145,136.90640
+Asia-Pacific,Japan,JP,Tokyo,JPIX Nihonbashi,JPIX Nihonbashi,0,20040400,http://www.jpix.ad.jp/en/,35.68949,139.69171
+Asia-Pacific,Japan,JP,Osaka,JPIX Osaka,JPIX OSAKA,0,20020400,http://www.jpix.ad.jp/en/,34.69374,135.50217
+Asia-Pacific,Japan,JP,Osaka,JPNAP Osaka,JPNAP Osaka,0,20020002,http://www.mfeed.co.jp/english/jpnap-osaka/index.html,34.69374,135.50217
+Asia-Pacific,Japan,JP,Osaka,NSPIXP-3,NSPIXP-3,0,19970300,http://nspixp.wide.ad.jp/3/,34.69374,135.50217
+Asia-Pacific,Japan,JP,Tokyo,Japan Internet Exchange,JPIX,28170,19970700,http://www.jpix.ad.jp,35.68949,139.69171
+Asia-Pacific,Japan,JP,Tokyo,JPNAP Tokyo I - Otemachi,JPNAP,0,20010000,http://www.jpnap.net/english/jpnap-tokyo-i/index.html,35.68949,139.69171
+Asia-Pacific,Japan,JP,Tokyo,Network Service Provider IXP (Distributed IX in Edo),DIX-IE,4017,19961000,http://nspixp.wide.ad.jp/2/,35.68949,139.69171
+Asia-Pacific,Japan,JP,Tokyo,Network Service Provider IXP-6,NSPIXP-6,0,19990800,http://www.wide.ad.jp/nspixp6/,35.68949,139.69171
+Asia-Pacific,Japan,JP,Tokyo,BBIX Tokyo,BBIX,0,20030700,http://www.bbix.net/en/service/ix/,35.68949,139.69171
+Asia-Pacific,Japan,JP,Osaka,BBIX Osaka,BBIX,0,20030900,http://www.bbix.net/en/service/ix/,34.69374,135.50217
+Asia-Pacific,Japan,JP,Nagoya,BBIX Nagoya,BBIX,0,20050500,http://www.bbix.net/en/service/ix/,35.18145,136.90640
+Asia-Pacific,Japan,JP,Fukuoka,BBIX Fukuoka,BBIX Fukuoka,0,20041000,http://www.bbix.net/en/service/ix/,33.59035,130.40172
+Asia-Pacific,Japan,JP,Tokyo,Equinix IBX Tokyo,Equinix Tokyo,0,20010529,http://www.ap.equinix.com/,35.68949,139.69171
+Africa,Kenya,KE,Nairobi,Kenya Internet Exchange Point,KIXP,0,20010200,http://www.kixp.or.ke,-1.29207,36.82195
+Asia-Pacific,Korea,KR,Seoul,6NGIX,6NGIX,0,20010800,http://vsix.net/eng/,37.56654,126.97797
+Asia-Pacific,Korea,KR,Seoul,LGDACOM Internet Exchange,LGDACOM IX,0,19961000,,37.56654,126.97797
+Asia-Pacific,Korea,KR,Seoul,Korea Internet Neutral Exchange KINX,KINX,65,19990600,https://global.kinx.net/,37.56654,126.97797
+Europe,Malta,MT,Msida,Malta Internet Exchange,MIX,0,19990907,http://www.mix.net.mt,35.89778,14.48944
+Africa,Mauritius,MU,Port Louis,Mauritius Internet Exchange,MIX,0,20051200,http://www.gov.mu/portal/sites/mixp/index.htm,-20.16667,57.51667
+Asia-Pacific,Mongolia,MN,Ulan Bator,Mongolia Internet Exchange,MIX,0,20010500,http://www.infocon.mn/info/node/95,47.92000,106.92000
+Africa,Mozambique,MZ,Maputo,Mozambique Internet Exchange,MIX,0,20020700,http://www.mozix.org.mz,-25.96667,32.58333
+Asia-Pacific,Nepal,NP,Kathmandu,Nepal Internet Exchange,NPIX,335,20020800,http://www.npix.net.np/,27.70000,85.33333
+Europe,Netherlands,NL,Amsterdam,Amsterdam Internet Exchange,AMS-IX,764277,19971229,http://www.ams-ix.net,52.37022,4.89517
+Europe,Netherlands,NL,Enschede,Nederlands-Duitse Internet Exchange,NDIX,0,20010400,http://www.ndix.net,52.22154,6.89366
+Europe,Netherlands,NL,Groningen,Groningen-IX,GN-IX,0,20010000,http://www.gn-ix.net/,53.21938,6.56650
+Asia-Pacific,New Zealand,NZ,Auckland,Auckland Peering Exchange,APE,14670,19990810,http://ape.nzix.net/,-36.84846,174.76333
+Asia-Pacific,New Zealand,NZ,Christchurch,Christchurch Internet Exchange,CHIX,0,20070000,http://chix.nzix.net/,-43.53205,172.63623
+Asia-Pacific,New Zealand,NZ,Palmerston North,Palmerston North Internet Exchange,PNIX,0,20041130,http://pnix.nzix.net/,-40.35231,175.60821
+Asia-Pacific,New Zealand,NZ,Wellington,Wellington Internet Exchange,WIX,5335,19961200,http://wix.nzix.net/,-41.28646,174.77624
+Latin America,Nicaragua,NI,Managua,Nicaraguan Internet Exchange,NicIX,0,20040400,http://www.ain.org.ni/index.php/nicix,12.10868,-86.25728
+Europe,Norway,NO,Oslo,Norwegian Internet Exchange Oslo 1,NIX1,0,19930300,http://www.nix.no/,59.91387,10.75225
+Latin America,Panama,PA,Panama City,Intered PanamÃ¡,Intered PanamÃ¡,0,0,,8.98333,-79.51667
+Latin America,Paraguay,PY,Asuncion,CAPADI NAP-PY,NAP-PY,0,20000920,http://www.capadi.org.py,-25.28220,-57.63510
+Latin America,Peru,PE,Lima,NAP PerÃº,NAP PerÃº,0,20010514,http://www.nap.pe,-12.04637,-77.04279
+Asia-Pacific,Philippines,PH,Manila,Common Routing Exchange,CORE,0,19930000,http://www.ph.net/CORE/,14.59951,120.98422
+Europe,Poland,PL,Warsaw,Warsaw Internet Exchange,WIX,0,19960000,http://www.wix.aster.pl/vxb/w/,52.22968,21.01223
+Europe,Portugal,PT,Lisbon,Gigabit Portugese Internet Exchange,GIGA-PIX,0,19950000,http://www.fccn.pt/pt/servicos/conectividade-e-infraestrutura/gigapix/,38.72225,-9.13934
+Europe,Romania,RO,Bucharest,Romanian National Internet Exchange,RoNIX,0,20010907,http://www.ronix.ro/,44.43250,26.10389
+Europe,Russia,RU,Ekaterinburg,Ekaterinburg Internet Exchange,EKT-IX,0,20120901,http://www.ix.ru/eng/ekt/,56.83333,60.58333
+Europe,Russia,RU,Moscow,Moscow Internet Exchange,M9-IX/MSK-IX,0,19950000,http://www.msk-ix.ru/eng/about/,55.75583,37.61730
+Europe,Russia,RU,Novosibirsk,Novosibirsk Internet Exchange,NSK-IX,0,20100000,http://www.ix.ru/eng/nsk/,55.00835,82.93573
+Europe,Russia,RU,Samara,Samara Internet Exchange,Samara-IX,0,20090000,http://www.ix.ru/eng/smr/,53.20278,50.14083
+Europe,Russia,RU,St. Petersburg,St. Petersburg Internet Exchange,SPB-IX,0,20090000,http://www.ix.ru/eng/spb/,59.93428,30.33510
+Asia-Pacific,Singapore,SG,Singapore,Singapore Open Exchange,SOX,4146,20010800,http://www.sox.net.sg,1.28009,103.85095
+Europe,Slovakia,SK,Bratislava,Slovak Internet Exchange,SIX,0,19961000,http://www.six.sk/index_en.shtml,48.14589,17.10714
+Europe,Slovenia,SI,Ljubljana,Slovenian Internet Exchange,SIX,0,19940200,http://www.arnes.si/en/infrastructure/six-internet-exchange.html,46.05695,14.50575
+Africa,South Africa,ZA,Cape Town,Cape Town Internet Exchange,CINX,3449,20090700,http://ispa.org.za/inx/cinx-information/,-33.92487,18.42406
+Africa,South Africa,ZA,Johannesburg,Johannesburg Internet Exchange,JINX,4069,19960606,http://www.ispa.org.za/inx/jinx-information,-26.20410,28.04731
+Europe,Spain,ES,Barcelona,Catalunya Neutral Internet Exchange Point,CATNIX,0,19990407,http://www.catnix.net,41.38506,2.17340
+Europe,Spain,ES,Bilbao,Punto Neutro Vasco de Internet,EuskoNIX,0,20020117,http://www.euskonix.net/,43.26301,-2.93499
+Europe,Spain,ES,Madrid,Punto Neutro EspaÃ±ol de Internet,ESPANIX,0,19970000,http://www.espanix.net,40.41678,-3.70379
+Europe,Spain,ES,Madrid,Terremark NAP de las Americas - Madrid,Terremark NAP Madrid,0,20041000,http://www.terremark.es/data-centers/europe-middle-east-africa/nap-of-madrid/,40.41678,-3.70379
+Asia-Pacific,Sri Lanka,LK,Colombo,Sri Lanka Internet Exchange,SLIX,0,20010701,http://www.lankacom.net/our-solutions/web-hosting,6.92708,79.86124
+Europe,Sweden,SE,Gothenburg,Netnod Gothenburg,Netnod Gothenburg,0,19980000,http://www.netnod.se,57.70887,11.97456
+Europe,Sweden,SE,LuleÃ¥,Netnod LuleÃ¥,Netnod LuleÃ¥,0,20040900,http://www.netnod.se,65.58482,22.15670
+Europe,Sweden,SE,Stockholm,Netnod Stockholm,Netnod,0,19970000,http://www.netnod.se,59.32932,18.06858
+Europe,Sweden,SE,Stockholm,SOLIX,SOLIX,0,20011200,http://www.solix.se/,59.32932,18.06858
+Europe,Sweden,SE,Sundsvall,Netnod Sundsvall,Netnod Sundsvall,0,20000000,http://www.netnod.se,62.39081,17.30693
+Europe,Sweden,SE,UmeÃ¥,NorrNod,NorrNod,0,19960000,http://www.norrnod.se,63.82585,20.26304
+Europe,Switzerland,CH,Geneva,CERN Internet Exchange Point,CIXP,0,19950000,http://www.cixp.ch,46.19839,6.14230
+Europe,Switzerland,CH,Zurich,SwissIX,SwissIX,16575,20010309,http://www.swissix.ch/,47.36865,8.53918
+Europe,Switzerland,CH,Zurich,Equinix Zurich,Equinix Zurich,0,19990000,http://www.equinix.ch/,47.36865,8.53918
+Asia-Pacific,Taiwan,TW,Taipei,Taipei Internet Exchange,TPIX,0,20020702,http://www.tpix.com.tw,25.04355,121.49132
+Asia-Pacific,Taiwan,TW,Taipei,Taiwan Internet Exchange,TWIX,0,19971200,http://www.twix.net.tw,25.04355,121.49132
+Asia-Pacific,Taiwan,TW,Taipei,Taiwan Network Access Point,TWNAP,0,20010000,http://www.nap.net.tw,25.04355,121.49132
+Africa,Tanzania,TZ,Dar es Salaam,Tanzania Internet Exchange,TIX,0,20030700,http://www.tix.or.tz/,-6.80000,39.28333
+Asia-Pacific,Thailand,TH,Bangkok,CAT National Internet Exchange,CAT-THIX,0,19970900,http://www.cat.net.th/thix-nix/index_eng.html,13.72790,100.52412
+Africa,Uganda,UG,Kampala,Uganda Internet Exchange,UIXP,0,20030700,http://www.uixp.co.ug,0.31361,32.58111
+Europe,Ukraine,UA,Kiev,Ukrainian Internet Exchange,UA-IX,0,20000700,http://www.ua-ix.net.ua/eng.phtml,50.45010,30.52340
+North America,United States,US,Ashburn,Equinix IBX Ashburn,Equinix Ashburn,532108,20021031,http://www.equinix.com/,39.04376,-77.48744
+North America,United States,US,Atlanta,Atlanta Internet Exchange,AtlantaIX,124733,20030800,http://www.atlantaix.com,33.74900,-84.38798
+North America,United States,US,Atlanta,Equinix Atlanta,Equinix-Atlanta,0,20041203,http://www.equinix.com/locations/united-states-colocation/atlanta-data-centers,33.74900,-84.38798
+North America,United States,US,Boston,Equinix-Boston,Equinix-Boston,0,20000720,http://www.switchanddata.com/subpages/PAIX_services.asp,42.35843,-71.05977
+North America,United States,US,Chicago,Equinix Chicago IBX,Equinix Chicago IBX,283288,20020304,http://peering.equinix.com/,41.87811,-87.62980
+North America,United States,US,Chicago,STAR TAP,STAR TAP,0,19980000,http://www.startap.net/ENGINEERING/IPPLAN.html,41.87811,-87.62980
+North America,United States,US,Chicago,StarLight,StarLight,0,20010300,http://www.startap.net/starlight/ENGINEERING/engIPadds.html,41.87811,-87.62980
+North America,United States,US,Dallas,Equinix IBX Dallas,Equinix IBX Dallas,0,20010615,http://www.equinix.net,32.78014,-96.80045
+North America,United States,US,Dallas,Equinix-Dallas(former PAIX),Equinix-Dallas,0,20020224,http://www.switchanddata.com/Dallas%5Fcolocation/,32.78014,-96.80045
+North America,United States,US,Honolulu,Hawaii Internet Exchange,HIX,0,19950700,http://www.hawaii.edu/hix/,21.30694,-157.85833
+North America,United States,US,Houston,Houston Network Access Point,Compaq-NAP,0,20100000,http://www.houston-nap.com/index.html,29.76019,-95.36939
+North America,United States,US,Houston,Rice EduPOP,Rice EduPOP,0,20010510,,29.76019,-95.36939
+North America,United States,US,Los Angeles,Los Angeles International Internet Exchange,LAIIX,117076,19960000,http://www.laiix.net/,34.05223,-118.24368
+North America,United States,US,Madison,Madison Internet Exchange,MadIX,0,20000000,http://kb.wisc.edu/ns/page.php?id=6636,43.07305,-89.40123
+North America,United States,US,Miami,NAP of the Americas,NOTA,313273,20040812,http://www.terremark.com/,25.78910,-80.20404
+North America,United States,US,Miami,Equinix-Miami,Equinix-Miami,0,0,,25.78910,-80.20404
+North America,United States,US,New Jersey,MAGPI Gigapop,MAGPI,0,0,http://www.magpi.org/,40.05832,-74.40566
+North America,United States,US,New York,Equinix New York IBX,Equinix NY,0,20030311,http://www.equinix.com/,40.71278,-74.00594
+North America,United States,US,New York,New York International Internet Exchange,NYIIX,128153,19960000,http://www.nyiix.net/,40.71278,-74.00594
+North America,United States,US,New York,Big Apple Peering Exchange,BIG APE,0,20010000,http://www.ny6ix.net/,40.71278,-74.00594
+North America,United States,US,New York,Equinix-NY(former Paix),Equinix-NY,141508,20000314,www.equinix.com,40.71278,-74.00594
+North America,United States,US,Palo Alto,Equinix- Palo Alto,Equinix- Palo Alto,738792,19941200,http://www.switchanddata.com/subpages/Public_Peering.asp,37.44188,-122.14302
+North America,United States,US,Philadelphia,The Philadelphia Internet Exchange,PHLIX,0,20130100,http://www.phlix.net/,39.95234,-75.16379
+North America,United States,US,Pittsburgh,Three Rivers Optical Exchange,3ROX GigaPOP,0,0,http://www.3rox.net/,40.44062,-79.99589
+North America,United States,US,Portland,Northwest Access Exchange,NWAX,57210,20021200,http://www.nwax.net,45.52345,-122.67621
+North America,United States,US,San Diego,San Diego Network Access Point,SD-NAP,0,19980200,http://www.sdsc.edu/sdnap/,32.71574,-117.16108
+North America,United States,US,San Francisco,Equinix San Francisco,Equinix-SF,0,20010700,,37.77493,-122.41942
+North America,United States,US,San Jose,Equinix IBX San Jose,Equinix IBX San Jose,0,20000525,http://www.equinix.net,37.33939,-121.89496
+North America,United States,US,Seattle,Equinix-Seattle,Equinix-Seattle,65281,20000313,hhttp://www.equinix.com/locations/united-states-colocation/seattle-data-centers,47.60621,-122.33207
+North America,United States,US,Seattle,Seattle Internet Exchange,SIX,206351,19970000,http://www.seattleix.net/,47.60621,-122.33207
+North America,United States,US,Seattle,Pacific Wave International Peering Exchange,Pacific Wave,0,19960000,http://pacificwave.net,47.60621,-122.33207
+North America,United States,US,Secaucus,Equinix IBX Secaucus,Equinix IBX Secaucus,0,20000314,http://www.equinix.net,40.78955,-74.05653
+North America,United States,US,Houston,Texas GigaPOP,Texas GigaPOP,0,19970000,http://www.gigapop.gen.tx.us/,29.76019,-95.36939
+North America,United States,US,Vienna,Equinix-VA,Equinix-VA,0,20010910,http://www.equinix.com/,38.90122,-77.26526
+Asia-Pacific,Viet Nam,VN,Da Nang city,Vietnam National Internet Exchange,VNIX,0,20050700,http://www.vnnic.vn/en/dns-vnix/about-vnix-system,16.05441,108.20217
+Asia-Pacific,Viet Nam,VN,Hanoi,Vietnam National Internet Exchange,VNIX,0,20031108,http://www.vnnic.vn/en/dns-vnix/about-vnix-system,21.03333,105.85000
+Asia-Pacific,Viet Nam,VN,Ho Chi Minh City,Viet Nam Internet Exchange,VNIX,0,20040300,http://www.vnnic.vn/en/dns-vnix/about-vnix-system,10.82310,106.62966
+Africa,Zimbabwe,ZW,Harare,Zimbabwe Internet Exchange,ZINX,0,20010700,http://www.zispa.org.zw/zinx.html,-17.86389,31.02972
+Africa,Botswana,BW,Gaborone,Botswana Internet Exchange,BINX,0,20051000,http://www.info.bw/bispa/binx.html,-24.65806,25.91222
+North America,United States,US,San Francisco,San Francisco Metropolitan Internet Exchange,SFMIX,83225,20060500,http://www.sfmix.org/,37.77493,-122.41942
+North America,United States,US,Los Angeles,Any2 California,Any2,269001,20051200,http://www.coresite.com/,34.05223,-118.24368
+Asia-Pacific,Australia,AU,Adelaide,PIPE Networks Adelaide,PIPE Adelaide,0,20030000,http://www.pipenetworks.com,-34.92862,138.59996
+Asia-Pacific,Australia,AU,Hobart,PIPE Networks Hobart,PIPE Hobart,0,20030800,http://www.pipenetworks.com,-42.88190,147.32381
+Asia-Pacific,Australia,AU,Melbourne,PIPE Networks Melbourne,PIPE Melbourne,0,20030700,http://www.pipenetworks.com,-37.81411,144.96328
+Asia-Pacific,Australia,AU,Canberra,PIPE Networks Canberra,PIPE Canberra,0,20040600,http://www.pipenetworks.com,-35.28200,149.12868
+Asia-Pacific,Australia,AU,Sydney,PIPE Networks Sydney,PIPE Sydney,0,20030000,http://www.pipenetworks.com,-33.86749,151.20699
+Latin America,Brazil,BR,Rio de Janeiro,Ponto de Troca de TrÃ¡fego do Rio de Janeiro,PTT Rio de Janeiro,0,20100000,http://ptt.br/adesao/rj,-22.90830,-43.19708
+Asia-Pacific,Singapore,SG,Singapore,Equinix Singapore IBX,Equinix Singapore,566048,20040426,http://www.equinix.sg/,1.28009,103.85095
+North America,United States,US,Los Angeles,Equinix Los Angeles IBX,Equinix LA,176927,20020711,http://www.equinix.com/,34.05223,-118.24368
+Africa,Congo-Kinshasa,CD,Kinshasa,Kinshasa Internet Exchange,KINIX,0,20021100,http://www.ispa-drc.cd/kinix.htm,-4.33167,15.31389
+Europe,France,FR,Marseille,Marseille Internet Exchange,,0,20050000,http://www.ma-ix.net/,43.29648,5.36978
+Europe,Italy,IT,Florence,Tuscany Internet Exchange,TIX,0,20030000,https://www.tix.it/en/web/guest/home,43.77103,11.24800
+Europe,Netherlands,NL,Leeuwarden,Friese Internet Exchange,Fr-IX,0,20060126,http://www.fr-ix.nl/,53.20123,5.79991
+Europe,Poland,PL,Warsaw,Polish Internet Exchange,PLIX,145385,20060402,http://www.plix.pl/,52.22968,21.01223
+Europe,Russia,RU,Krasnoyarsk,Krasnoyarsk Internet Exchange,KRS-IX,0,20060000,http://www.krs-ix.ru,56.01528,92.89325
+Asia-Pacific,Philippines,PH,Manila,Philippine Open Internet Exchange,PhOpenIX,0,20070000,http://www.phopenix.net/,14.59951,120.98422
+Africa,Burundi,BI,Bujumbura,BurundiX Internet Exchange Point,BurundiX,0,20140321,http://www.burundix.bi,-3.38333,29.36667
+Africa,Zambia,ZM,Lusaka,Zambia Internet Exchange Point,Zambia IXP,0,20060200,http://www.ispa.org.zm,-15.41667,28.28333
+Europe,Germany,DE,Frankfurt,KleyReX Internet Exchange,KleyRex,0,20020900,http://www.kleyrex.net/,50.11092,8.68213
+Europe,Estonia,EE,Tallinn,Tallinn Internet Exchange (TLLIX),TLLIX,0,20051100,http://www.tllix.net,59.43696,24.75357
+Europe,Netherlands,NL,Amsterdam,Netherlands Internet Exchange,NL-ix,68880,20020301,http://www.nl-ix.net,52.37022,4.89517
+Europe,Slovakia,SK,Bratislava,SitelIX,SitelIX,0,20050801,http://www.sitelix.sk,48.14589,17.10714
+North America,Puerto Rico,PR,San Juan,Internet Exchange of Puerto Rico,IX.PR,0,20060416,http://www.ix.pr/,18.46633,-66.10572
+North America,United States,US,Dayton,Dayton Metro Internet Exchange,DMIX,0,20030624,http://www.donet.com/~dmix/,39.75895,-84.19161
+North America,United States,US,New York,Peer 1 Internet Exchange,PIX,0,20040109,http://www.peer1.net/en/otherservices.asp,40.71278,-74.00594
+North America,United States,US,Richardson,North Texas GigaPOP,North Texas GigaPOP,0,20040820,http://www.northtexasgigapop.org/,32.94833,-96.72985
+North America,United States,US,Honolulu,DRFxchange,DRFxchange,0,20070108,http://www.drfortress.com/internet-exchange/drfxchange/,21.30694,-157.85833
+Africa,Egypt,EG,Cairo,Middle East Internet eXchange,MEIX,0,20070500,http://www.gpxglobal.net/,30.04442,31.23571
+Asia-Pacific,Malaysia,MY,Kuala Lumpur,Malaysia Internet Exchange,MyIX,0,20061215,http://www.myix.gov.my/,3.13900,101.68686
+Africa,Tanzania,TZ,Arusha,Arusha Internet Exchange Point,AIXP,0,20060626,http://www.aixp.or.tz/,-3.37230,36.69441
+Europe,Czech Republic,CZ,Brno,Commercial Brno Internet Exchange,CBIX,0,20070512,http://www.cbix.cz/en,49.19506,16.60684
+Europe,Czech Republic,CZ,Prague,Neutral czFree eXchange,NFXzspo,0,20070000,http://www.nfx.cz,50.07554,14.43780
+Africa,Nigeria,NG,Lagos,Internet eXchange Point of Nigeria,IXPN,0,20070500,http://www.ixp.net.ng/,6.52438,3.37921
+Europe,Sweden,SE,Stockholm,Stockholm Internet Exchange,STHIX,0,20070000,http://www.sthix.net,59.32932,18.06858
+Europe,France,FR,Paris,French National Internet Exchange IPv6,FNIX6,0,20021101,http://www.fnix6.net,48.85661,2.35222
+North America,United States,US,Kansas City,Kansas City Internet Exchange,KCIX,0,20060000,http://www.kcix.net/,39.09973,-94.57857
+Europe,Lebanon,LB,Beirut,Beirut Internet Exchange,BeirutIX,0,20071206,http://www.beirutix.net,33.88863,35.49548
+North America,United States,US,Billings,Yellowstone Regional Internet Exchange,YRIX,0,20030000,http://www.yrix.org,45.78329,-108.50069
+Europe,Germany,DE,Stuttgart,Stuttgarter Internet Exchange,S-IX,0,20050400,http://www.s-ix.info/,48.77542,9.18176
+Europe,France,FR,Alsace,EuroGIX,EuroGIX,0,20020304,http://www.eurogix.net/,48.31818,7.44162
+Europe,Germany,DE,Frankfurt,Frankfurt Network Access Point,fraNAP,0,20031001,http://www.franap.net/,50.11092,8.68213
+Europe,Poland,PL,KrakÃ³w,Krakowski Traffic Exchange Point,CIX,0,20091100,http://www.ix.krakow.pl,50.06465,19.94498
+Europe,Poland,PL,Wroclaw,Wroclaw Internet eXchange,WRIX,0,20010200,http://wrix.org,51.10789,17.03854
+Asia-Pacific,Bangladesh,BD,Dhaka,Bangladesh Society of Internet Exchange,BSIX,0,20040500,http://www.bsixbd.net/news.php,23.81033,90.41252
+Africa,Rwanda,RW,Kigali,Rwanda Internet exchange,RINEX,0,20030000,http://www.rinex.org.rw,-1.94389,30.05944
+Europe,Norway,NO,Oslo,Free Internet eXchange Oslo,FIXO,0,20080116,http://www.fixo.no,59.91387,10.75225
+Europe,Netherlands,NL,Rotterdam,Rotterdam Internet eXchange,R_iX,0,20070000,http://www.r-ix.nl/,51.92442,4.47773
+Europe,Romania,RO,Bucharest,InterLAN-IX,InterLAN-IX,0,20070000,http://www.interlan.ro/,44.43250,26.10389
+Asia-Pacific,China,CN,Hong Kong,Equinix Hong Kong,Equinix Hong Kong,0,20090000,http://www.equinix.hk,22.39643,114.10950
+Europe,Sweden,SE,Gothenburg,Gothenburg Internet Exchange,GIX,0,20051221,http://www.gix.se/,57.70887,11.97456
+Europe,Sweden,SE,MalmÃ¶,Internet exchange point of the Oresund Region,IXOR,0,20091014,http://www.ixor.se,55.60498,13.00382
+Europe,Poland,PL,Katowice,Tysiaclecie Internet Exchange,TIX,0,20040400,http://www.ix.1000lecie.pl/,50.26489,19.02378
+Asia-Pacific,Japan,JP,Tokyo,JPNAP Tokyo II - Ikebukuro,JPNAP Tokyo II,0,20080401,http://www.jpnap.net/english/jpnap-tokyo-ii/index.html,35.68949,139.69171
+Europe,Ukraine,UA,Donetsk ,Donetsk Internet Exchange,EUNIC-IX,0,0,http://www.ix.dn.ua/,48.01588,37.80285
+Asia-Pacific,Indonesia,ID,Jakarta,Biznet Internet Exchange,BIX,0,20060000,http://www.biznetnetworks.com/En/?menu=Bix,-6.20876,106.84560
+North America,United States,US,Albuquerque,New Mexico Internet Exchange,NMIX,0,20080000,http://www.nmix.net/index.html,35.11070,-106.60999
+Europe,Poland,PL,Poznan,Poznan Internet Exchange,PIX,0,20060310,http://www.pix.net.pl/,52.40637,16.92517
+Europe,Poland,PL,Warsaw,Thinx Poland,Thinx IX,0,20060000,http://www.thinx.pl/,52.22968,21.01223
+Europe,Lithuania,LT,Vilnius,Lithuanian Internet service providers exchange unit,LIPTAM,0,20080000,http://is.lt/,54.68716,25.27965
+North America,United States,US,Chicago,CoreSite - Any2,CoreSite - Any2,0,20080100,http://www.coresite.com/chicago-data-center.php,41.87811,-87.62980
+Africa,Angola,AO,Luanda,Angola Internet Exchange,ANG-IX,0,20060317,http://www.angola-ixp.ao,-8.83833,13.23444
+Europe,Ukraine,UA,Odessa,Odessa Internet Exchange,OD-IX,0,20070900,http://www.od-ix.net,46.48253,30.72331
+North America,United States,US,Phoenix,TelX Internet Exchange,TelX Phoenix,0,20080602,http://tie.telx.com/,33.44838,-112.07404
+Latin America,Haiti,HT,Port au Prince,AHTIC Internet Exchange Point,AIX,0,20090505,http://ixp.ht/,18.53333,-72.33333
+Latin America,Dominican Republic,DO,Santo Domingo,NAP del Caribe,NAP del Caribe,0,20080700,http://www.rsandh.com/who-we-serve/corporate/mission-critical/data-centers/terremark-nap-del-caribe,18.46667,-69.95000
+Latin America,Netherlands Antilles,AN,Philipsburg,Open Caribbean Internet eXchange,OCIX,0,20081000,http://www.ocix.net,18.02370,-63.04580
+Latin America,Netherlands Antilles,AN,CuraÃ§ao,Caribbean Internet Exchange,AMS-IX Caribbean,0,20090420,https://cw.ams-ix.net/,12.20189,-68.26238
+Asia-Pacific,Australia,AU,Canberra,ACT Internet Exchange,ACT-IX,0,20081001,http://www.actix.net.au,-35.28200,149.12868
+Latin America,Brazil,BR,Salvador,Ponto de Troca de Trafego do Salvador,PTT Salvador,0,20080000,http://ptt.br/adesao/ba,-12.97223,-38.50142
+Asia-Pacific,India,IN,Bangalore,National Internet Exchange of India,NIXI Bangalore,0,20080000,http://nixi.in/index.php?option=com_noclocation&task=click&id=60&Itemid=28,12.97160,77.59456
+Asia-Pacific,India,IN,Hyderabad,National Internet Exchange of India,NIXI Hyderabad,0,20080000,http://nixi.in/index.php?option=com_noclocation&task=click&id=59&Itemid=28,17.38504,78.48667
+Asia-Pacific,India,IN,Ahmedabad,National Internet Exchange of India,NIXI Ahmedabad,0,20080000,http://nixi.in/index.php?option=com_noclocation&task=click&id=58&Itemid=28,23.02251,72.57136
+Africa,Malawi,MW,Blantyre,Malawi IXP,Malawi IXP,71,20081201,http://www.mispa.org.mw/mix.html,-15.78611,35.00583
+Europe,Russia,RU,Vladivostok,Vladivostok Internet Exchange,VLV-IX,0,20080000,http://www.ix.ru/eng/vlv/,43.13333,131.90000
+Europe,Russia,RU,Rostov-on-Don,Rostov-on-Don Internet Exchange,RND-IX,0,20090000,http://www.ix.ru/eng/rnd/,47.23333,39.70000
+Europe,Germany,DE,Hamburg,European Commercial Internet Exchange Hamburg,ECIX HAM,0,20090121,http://www.ecix.de,53.55108,9.99368
+Europe,Saudi Arabia,SA,Riyadh,Internet Exchange of Saudi Arabia,IXSA Riyadh,0,20090100,http://www.ix.net.sa/,24.63333,46.71667
+Europe,Bahrain,BH,Manama,Gateway Gulf Internet Exchange Bahrain,GulfIX Bahrain,0,20090401,http://www.gatewaygulf.bh,26.21667,50.58333
+Latin America,Brazil,BR,Londrina,Ponto de Troca de Trafego do Londrina,PTT Londrina,0,20090215,http://ptt.br/adesao/lda,-23.30445,-51.16958
+Latin America,Brazil,BR,Fortaleza,Ponto de Troca de Trafego do Fortaleza,PTT Fortaleza,0,20081001,http://ptt.br/adesao/ce,-3.73186,-38.52667
+Latin America,Brazil,BR,Porto Alegre,Ponto de Troca de Trafego do Porto Alegre,PTT Porto Alegre,0,20020400,http://ptt.br/adesao/rs,-30.03465,-51.21766
+Europe,France,FR,Paris,Equinix Paris,Equinix Paris,86237,20080000,http://www.equinix-ix.fr,48.85661,2.35222
+Europe,Ireland,IE,Cork,Cork Neutral Internet Exchange,CNIX,0,20090717,http://www.cnix.ie,51.89689,-8.48632
+Europe,Ireland,IE,Galway,eXchange West,eXchange West,0,20090604,http://www.exwest.net,53.27056,-9.05667
+Europe,France,FR,Paris,France-IX,France-IX,94654,20101100,http://www.france-ix.fr/,48.85661,2.35222
+Europe,Italy,IT,Padova,VSIX NAP del Nord Est,NAP VSIX IPv4,0,20090901,http://www.vsix.it,45.40643,11.87676
+Europe,Italy,IT,Udine,Friuli Venezia Giulia Internet Exchange,FVG-IX,0,20090000,http://www.fvg-ix.net/,46.07107,13.23458
+Europe,Russia,RU,Ulyanovsk,Ulyanovsk Internet Exchange,ULN-IX,0,20090508,http://www.uln-ix.ru/,54.31667,48.36667
+Europe,Bulgaria,BG,Sofia,Bulgarian Internet eXchange,BIX.BG,5653,20090801,http://www.bix.bg/en/,42.69771,23.32187
+North America,United States,US,New York,TelX Internet Exchange,TelX New York,75674,20090000,http://tie.telx.com,40.71278,-74.00594
+Europe,Turkey,TR,Istanbul,Terremark IST-IX,IST-IX,275,20100000,http://www.terremark.com/data-centers/europe-middle-east-africa/nap-istanbul.aspx,41.00527,28.97696
+Europe,Bulgaria,BG,Sofia,Balkan Internet Exchange,Balkan-IX,0,20100000,http://www.b-ix.net,42.69771,23.32187
+Latin America,Argentina,AR,NeuquÃ©n,NAP CABASE NeuquÃ©n,NAP CABASE NeuquÃ©n,7317,20110510,http://www.cabase.org.ar/wordpress/nap-neuquen/,-38.95244,-68.06414
+Latin America,Brazil,BR,Campinas,Ponto de Troca de Trafego do Campinas,PTT Campinas,0,20091130,http://ptt.br/adesao/cas,-22.90994,-47.06263
+Latin America,Brazil,BR,Recife,Ponto de Troca de Trafego do Recife,PTT Recife,0,20091201,http://ptt.br/adesao/pe,-8.04755,-34.87696
+North America,United States,US,Dallas,Telx Internet Exchange,TIE-Dallas,0,0,https://tie.telx.com/,32.78014,-96.80045
+Africa,Kenya,KE,Mombasa,AMS-IX East Africa,AMS-IX East Africa,0,20100800,https://eastafrica.ams-ix.net,-4.04348,39.66821
+Europe,Russia,RU,Kazan,Kazan Internet Exchange,KZN-IX,0,20100500,http://www.ix.ru/eng/kzn/,55.79028,49.13472
+Europe,Austria,AT,Klagenfurt,Alpes Adria Internet Exchange,AAIX,207,20100000,http://www.aaix.at/,46.62794,14.30899
+Europe,France,FR,Toulouse,Le GIX de la grande region Toulousaine,Touix,0,20090416,http://www.touix.net/,43.60465,1.44421
+Europe,France,FR,Saint Etienne,The Saint-Etienne Internet eXchange Point,SaintetIX,0,20110100,http://www.saintetix.net/,45.43970,4.38718
+Europe,United Kingdom,GB,Leeds,Leeds Internet Exchange,IXLeeds,0,20100920,http://www.ixleeds.net/,53.83642,-1.47489
+Europe,Italy,IT,Milan,Milan Neutral Access Point,MiNAP,0,20080000,http://www.minap.it/,45.46542,9.18592
+Europe,Luxembourg,LU,Luxembourg,Luxembourg Commercial Internet Exchange,LU-CIX,0,20100000,http://www.lu-cix.lu/,49.61162,6.13193
+Europe,Latvia,LV,Riga,Santa Monica Internet Local Exchange,SMILE,0,20051011,http://www.smile-ixp.net/,56.94965,24.10519
+Europe,Poland,PL,Lodz,Lodz Internet Exchange,LIX - Poland,0,20090000,http://www.lix.net.pl/,51.75925,19.45598
+Europe,Ukraine,UA,Kiev,Digital Telecom Internet Exchange,DTEL-IX,0,20090000,http://dtel-ix.net/,50.45010,30.52340
+Europe,Russia,RU,Simferopol,Crimea Internet Exchange,Crimea-IX,0,20060220,http://crimea-ix.net/,44.95212,34.10242
+Asia-Pacific,Indonesia,ID,Jakarta,Matrix Cable System Internet Exchange,MCIX,92100,20110000,http://www.nap.net.id/internet_exchange.html,-6.20876,106.84560
+Asia-Pacific,New Zealand,NZ,Hamilton,Hamilton Internet Exchange,HIX,0,20100000,http://hix.nzix.net/,-37.78700,175.27925
+North America,United States,US,Minneapolis,Midwest Internet Cooperative Exchange,MICE,0,20110111,http://www.micemn.net,44.98333,-93.26667
+North America,United States,US,Guam,Guam Internet Exchange,GU-IX,0,20110000,http://www.gu-ix.net/,35.60888,-117.70124
+Europe,Russia,RU,St. Petersburg,DataIX St Petersburg,DataIX,0,20101020,http://www.dataix.ru/,59.93428,30.33510
+Europe,Russia,RU,Moscow,DataIX Moscow,DataIX Moscow,0,20101020,http://www.dataix.ru/,55.75583,37.61730
+Europe,Germany,DE,Munich,DE-CIX Munich,DE-CIX Munich,0,20100400,http://www.de-cix.net/products-services/de-cix-munich/,48.13513,11.58198
+Asia-Pacific,Singapore,SG,Singapore,Singapore Internet Exchange,SGIX,24549,20100607,http://sgix.sg/en/,1.28009,103.85095
+Latin America,Brazil,BR,Americana,Ponto de Troca de Trafego do Americana,PTT Metro Americana,0,20101220,http://ptt.br/adesao/ame/,-22.73785,-47.33357
+Latin America,Brazil,BR,Campina Grande,Ponto de Troca de Trafego do Campina Grande,PTT Campina Grande,0,20100928,http://ptt.br/adesao/cpv,-7.22237,-35.87347
+Latin America,Brazil,BR,GoiÃ¢nia,Ponto de Troca de Trafego do GoiÃ¢nia,PTT GoiÃ¢nia,0,20101020,http://ptt.br/adesao/gyn,-16.68689,-49.26479
+Asia-Pacific,Laos,LA,Vientiane,Lao National Internet Center,LANIC,0,20100901,http://www.lanic.la,17.96667,102.60000
+Asia-Pacific,Pakistan,PK,Karachi,Zero Point Internet Exchange,ZPIX,0,20110110,http://zpix.pk,24.86146,67.00994
+North America,United States,US,Phoenix,Arizona Internet Exchange,AZIX,0,20110000,http://arizonaix.net/,33.44838,-112.07404
+Latin America,Grenada,GD,St. Georges,Grenada Internet Exchange,GREX,68,20110512,http://ixgd.wordpress.com,12.05610,-61.74880
+Africa,South Africa,ZA,Johannesburg,NAPAfrica Johannesburg,NAPAfrica,0,20120000,http://www.napafrica.com,-26.20410,28.04731
+Africa,South Africa,ZA,Cape Town,NAPAfrica Cape Town,NAPAfrica,1953,20120000,http://www.napafrica.com,-33.92487,18.42406
+Africa,Sudan,SD,Khartoum,Sudan Internet Exchange Point,SIXP,0,20110000,http://www.sixp.sd,15.56667,32.51667
+North America,Canada,CA,Winnipeg,Manitoba Internet Exchange,MBIX,106888,20130729,http://www.mbix.ca,49.89975,-97.13749
+North America,United States,US,Jacksonville,Jacksonville Internet Exchange,JXIX,197,20120102,http://jxix.org,30.33218,-81.65565
+Asia-Pacific,China,CN,Hong Kong,AMS-IX Hong Kong,ASM-IX HK,0,20120401,http://www.ams-ix.hk,22.39643,114.10950
+Europe,United Kingdom,GB,Manchester,IXManchester powered by LINX,IXManchester,0,20120429,https://www.linx.net/,53.48076,-2.24263
+Europe,United Arab Emirates,AE,Dubai,UAE-IX,UAE-IX,1275,20120224,http://www.uae-ix.net/,25.04766,55.18174
+North America,United States,US,Boston,Boston Internet Exchange,Boston IX,0,20120409,http://markleygroup.com/Peering,42.35843,-71.05977
+Europe,Serbia,RS,Belgrade,Serbian Open Exchange,SOX,0,20100900,http://sox.rs,44.81667,20.46667
+Africa,South Africa,ZA,Durban,Durban Internet eXchange,DINX,703,20120914,http://stats.dinx.net.za,-29.85868,31.02184
+Latin America,Dominica,DM,Roseau,Dominica National Internet Exchange Point,DANIX,15,20130227,http://danix.dm/,15.30139,-61.38833
+Europe,Estonia,EE,Tallinn,Tallinn Governmental Internet Exchange,RTIX,417,20090700,http://www.rtix.ee/rtix/,59.43696,24.75357
+Asia-Pacific,Vanuatu,VU,Port Vila,Vanuatu Internet Exchange,VIX,0,20130201,http://www.vix.vu/,-17.73325,168.32732
+Europe,France,FR,Grenoble,GrenoblIX,GrenoblIX,0,20130000,http://www.grenoblix.net/,45.18853,5.72452
+Europe,France,FR,Valence,The ArdÃ¨che and DrÃ´me Internet eXchange Point ,ADNIX,0,20120000,http://www.adn-ix.net/en/,44.93339,4.89236
+Europe,Russia,RU,Saratov,Saratov Internet Exchange,Saratov-IX,0,20050000,http://saratov-ix.ru/,51.53333,46.01667
+Europe,Russia,RU,Stavropol,Stavropol Internet Exchange,STW-IX,0,20090000,http://www.ix.ru/eng/stw/,45.05000,41.98333
+Europe,Romania,RO,Bucharest,Balcan-IX,Balcan-IX,0,20080000,http://www.balcan-ix.net,44.43250,26.10389
+Latin America,Argentina,AR,BahÃ­a Blanca,NAP CABASE BahÃ­a Blanca,NAP CABASE BahÃ­a Blanca,0,20130000,http://www.cabase.org.ar/wordpress/nap-bahia-blanca-2/,-38.71168,-62.26808
+Latin America,Argentina,AR,CÃ³rdoba,NAP CABASE CÃ³rdoba,NAP CABASE CÃ³rdoba,0,20120800,http://www.cabase.org.ar/wordpress/nap-cordoba/,-31.39893,-64.18213
+Latin America,Argentina,AR,Mar del TuyÃº,NAP CABASE De la Costa,NAP CABASE De la Costa,0,20111129,http://www.cabase.org.ar/wordpress/nap-de-la-costa/,-36.57984,-56.69268
+Latin America,Argentina,AR,La Plata,NAP CABASE La Plata,NAP CABASE La Plata,0,20120606,http://www.cabase.org.ar/wordpress/nap-la-plata/,-34.92125,-57.95433
+Latin America,Argentina,AR,Mar del Plata,NAP CABASE Mar del Plata,NAP CABASE Mar del Plata,0,20121107,http://www.cabase.org.ar/wordpress/nap-mar-del-plata/,-37.97986,-57.58979
+Latin America,Argentina,AR,Mendoza,NAP CABASE Mendoza,NAP CABASE Mendoza,0,20111020,http://www.cabase.org.ar/wordpress/nap-mendoza/,-32.89018,-68.84405
+Latin America,Argentina,AR,Rosario,NAP CABASE Rosario,NAP CABASE Rosario,0,20110331,http://www.cabase.org.ar/wordpress/nap-rosario/,-32.95074,-60.66650
+Latin America,Argentina,AR,Santa Fe,NAP CABASE Santa Fe,NAP CABASE Santa Fe,0,20111122,http://www.cabase.org.ar/wordpress/nap-santa-fe/,-31.63239,-60.69946
+Latin America,Brazil,BR,BelÃ©m,Ponto de Troca de Trafego do BelÃ©m,PTT BelÃ©m,0,20110600,http://ptt.br/adesao/bel,-1.45575,-48.49018
+Latin America,Brazil,BR,Caxias do Sul,Ponto de Troca de Trafego do Caxias do Sul,PTT Caxias do Sul,0,20130600,http://ptt.br/adesao/cxj,-29.16340,-51.17967
+Latin America,Brazil,BR,Manaus,Ponto de Troca de Trafego do Manaus,PTT Manaus,0,20130100,http://ptt.br/adesao/mao,-3.11903,-60.02173
+Latin America,Brazil,BR,Natal,Ponto de Troca de Trafego do Natal,PTT Natal,0,20110600,http://ptt.br/adesao/nat,-5.77926,-35.20092
+Latin America,Brazil,BR,SÃ£o JosÃ© dos Campos,Ponto de Troca de Trafego do SÃ£o JosÃ© dos Campos,PTT SÃ£o JosÃ© dos Campos,0,20110000,http://ptt.br/adesao/sjc,-23.22370,-45.90091
+Latin America,Brazil,BR,SÃ£o JosÃ© do Rio Preto,Ponto de Troca de Trafego do SÃ£o JosÃ© do Rio Preto,PTT SÃ£o JosÃ© do Rio Preto,0,20130100,http://ptt.br/adesao/sjp,-20.81176,-49.37623
+Latin America,Brazil,BR,VitÃ³ria,Ponto de Troca de Trafego do VitÃ³ria,PTT VitÃ³ria,0,20120000,http://ptt.br/adesao/vix,-20.29762,-40.29578
+North America,Canada,CA,Calgary,Calgary Internet Exchange,YYCIX,106874,20130000,http://www.yycix.ca,51.04532,-114.05810
+Asia-Pacific,Australia,AU,Brisbane,Queensland Internet Exchange,QLD-IX,0,20110000,http://www.ix.asn.au/peering.html,-27.47101,153.02345
+Asia-Pacific,Australia,AU,Adelaide,South Australia Internet Exchange,SA-IX,0,20130227,http://www.ix.asn.au/peering.html,-34.92862,138.59996
+Africa,Tunisia,TN,Tunis,Tunisian Internet Exchange Point,TunIXP,0,20110000,http://www.ati.tn/TunIXP/,36.80649,10.18153
+North America,United States,US,Phoenix,Phoenix-IX,Phoenix-IX,0,20121200,http://phoenix-ix.net,33.44838,-112.07404
+Europe,Armenia,AM,Yerevan,Armenian Internet Traffic Exchange,ARMIX,0,20100000,http://www.armix.am/,40.18333,44.51667
+Europe,Norway,NO,Oslo,Norwegian Internet Exchange Oslo 2,NIX2,0,20000500,http://www.nix.no/,59.91387,10.75225
+Europe,Norway,NO,Bergen,Bergen Internet Exchange,BIX,0,20040000,http://www.nix.no/,60.39126,5.32205
+Europe,Norway,NO,Trondheim,Trondheim Internet Exchange,TRDIX,0,20050000,http://www.nix.no/,63.43051,10.39505
+Europe,Finland,FI,Oulu,Finnish Communication and Internet Exchange Oulu,FICIX3,0,20080000,http://www.ficix.fi/english/main.php,65.01667,25.46667
+Europe,Finland,FI,Espoo,Finnish Communication and Internet Exchange Espoo,FICIX1,0,19930000,http://www.ficix.fi/english/main.php,60.20549,24.65590
+Europe,Slovakia,SK,KoÅ¡ice,Slovak Internet Exchange,SIX KoÅ¡ice,0,20080600,http://www.six.sk/index_en.shtml,48.72101,21.25780
+Asia-Pacific,Cambodia,KH,Phnom Penh,HTN-Cambodia Internet Exchange,HTN-CIX,0,20130000,http://www.htnetworks.com.kh/index.php/ixservices,11.54487,104.89217
+Latin America,Bolivia,BO,La Paz,IX-LAPAZ,IX-LAPAZ,115,20131101,http://www.MegaLink.com/ixp/,-16.50000,-68.15000
+North America,Canada,CA,Winnipeg,Winnipeg Internet Exchange,WPGIX,57646,20130500,http://www.wpgix.net,49.89975,-97.13749
+Africa,Congo-Brazzaville,CG,Brazzaville,Congo Brazzaville IX,CG-IX,0,20130510,,-4.26778,15.29194
+Asia-Pacific,Indonesia,ID,Jakarta,NEX Internet Exchange,NEX-IX,0,20100000,http://www.nexdatacenter.com,-6.20876,106.84560
+Asia-Pacific,Indonesia,ID,Surabaya,IIX Jawa Timur,IIX JI,0,20080000,http://www2.jatim.apjii.or.id/,-7.26424,112.74558
+Asia-Pacific,Indonesia,ID,Jakarta,OpenIXP Internet exchange Point,Open IXP,0,20050000,http://www.openixp.net/,-6.20876,106.84560
+North America,United States,US,Buffalo,Buffalo Niagara International Internet Exchange,BNIIX,0,20110500,http://www.iixpeering.net/peering/bniix.php,42.88645,-78.87837
+North America,United States,US,Chicago,Greater Chicago International Internet Exchange,GCIIX,0,20121200,http://www.iixpeering.net/peering/gciix.php,41.87811,-87.62980
+Europe,Lithuania,LT,Vilnius,Lithuania Internet Exchange,LITIX,0,20100000,http://www.litix.lt,54.68716,25.27965
+Asia-Pacific,Australia,AU,Sydney,New South Wales IX,NSW-IX,14516,20130000,http://www.ix.asn.au/peering.html,-33.86749,151.20699
+Europe,Ukraine,UA,Kiev,Giganet Internet Exchange,Giganet IX,0,20120000,http://giganet.ua/,50.45010,30.52340
+North America,Canada,CA,Montreal,Quebec Internet Exchange,QIX,58864,20130100,http://www.qix.ca,45.50867,-73.55399
+Europe,Bulgaria,BG,Sofia,NetIX,NetIX,714903,20130101,http://www.netix.net,42.69771,23.32187
+Europe,Poland,PL,Warsaw,TPIX - Internet Exchange,TPIX,0,20101100,http://www.tpix.pl/,52.22968,21.01223
+Europe,Poland,PL,Warsaw,Krajowa Izba Komunikacji Ethernetowej,KIX,0,20090000,http://www.kike.pl/en/,52.22968,21.01223
+Europe,France,FR,Marseille,France-IX Marseille,France-IX Marseille,0,20110000,https://www.franceix.net/,43.29648,5.36978
+Europe,France,FR,Paris,FR-IX 75,FR-IX 75,0,20100505,http://www.fr-ix.fr/,48.85661,2.35222
+Europe,Germany,DE,Frankfurt,European Commercial Internet Exchange,ECIX Frankfurt,0,20130408,http://www.ecix.net/,50.11092,8.68213
+Europe,Germany,DE,DÃ¼sseldorf,OpenCarrier e.G. Member IX Duesseldorf,OCIX DÃ¼sseldorf,0,20070500,http://www.opencarrier.eu/,51.22774,6.77346
+North America,Canada,CA,Calgary,AlbertaIX,AlbertaIX,0,20140123,https://www.albertaix.ca/,51.04532,-114.05810
+Europe,Germany,DE,Frankfurt,OpenCarrier e.G. Member IX Frankfort,OCIX Frankfurt,0,20070500,http://www.opencarrier.eu/,50.11092,8.68213
+North America,United States,US,North-Virginia,LINX NoVa,LINX NoVa,0,20140300,https://www.linx.net/pubtools/topology.html?setlan=nov,37.44417,-76.40639
+North America,United States,US,Medford,Southern Oregon Access Exchange,SOAX,0,20130000,http://www.soax.org,42.32652,-122.87559
+North America,Canada,CA,Halifax,Halifax Internet Exchange,Halifax IXP,0,20131125,http://hfxix.ca,44.64886,-63.57532
+Europe,United Kingdom,GB,Edinburgh,IXScotland powered by LINX,IXScotland,0,20131000,https://linx.net/service/publicpeering/ixscotland.html,55.95325,-3.18827
+Europe,Kosovo,XK,PrishtinÃ«,KOSIX Internet Exchange Point,KOSIX,0,20110623,http://www.kosix.net,42.66291,21.16550
+Asia-Pacific,Uzbekistan,UZ,Tashkent,Uzbekistan Internet Exchange,TAS-IX,0,20041224,http://tas-ix.uz/,41.26667,69.21667
+North America,United States,US,Boston,Coresite - Any 2,Coresite - Any 2,0,20130000,http://www.coresite.com/solutions/interconnection/Peering-Exchanges/ANY2,42.35843,-71.05977
+North America,United States,US,Denver,Coresite - Any 2,Coresite - Any 2,0,20130000,http://www.coresite.com/solutions/interconnection/Peering-Exchanges/ANY2,39.73757,-104.98472
+North America,United States,US,Miami,Coresite - Any 2,Coresite - Any 2,0,20130000,http://www.coresite.com/solutions/interconnection/Peering-Exchanges/ANY2,25.78910,-80.20404
+North America,United States,US,New York,Coresite - Any 2,Coresite - Any 2,0,20130000,http://www.coresite.com/solutions/interconnection/Peering-Exchanges/ANY2,40.71278,-74.00594
+North America,United States,US,Reston,Coresite - Any 2 NorthEast,Coresite - Any 2,0,20130000,http://www.coresite.com/solutions/interconnection/Peering-Exchanges/ANY2,38.95863,-77.35700
+North America,United States,US,San Jose,Coresite - Any 2 Northern California,Coresite - Any 2,0,20130000,http://www.coresite.com/solutions/interconnection/Peering-Exchanges/ANY2,37.33939,-121.89496
+Europe,Czech Republic,CZ,Prague,Peering.cz,Peering.cz,7830,20121017,http://www.peering.cz,50.07554,14.43780
+North America,United States,US,New York,DE-CIX New York,DE-CIX NYC,0,20130000,http://nyc.de-cix.net/,40.71278,-74.00594
+Europe,Denmark,DK,Copenhagen,Netnod COMIX,COMIX,0,20140500,www.netnod.se,55.67610,12.56834
+Europe,Palestine,PS,Ramallah,Palestinian Internet Exchange,PIX,0,20120604,http://pix.ps,31.89804,35.20427
+Africa,Namibia,NA,Windhoek,Windhoek IXP,WHKIX,0,20140307,http://www.ixp.org.na,-22.57000,17.08361
+Latin America,Bolivia,BO,La Paz,Punto de Intercambio de Trafico de Bolivia,PIT Bolivia,0,20131113,,-16.50000,-68.15000
+Europe,France,FR,Saint Denis,Reunix,Reunix,0,20060200,http://www.renater.fr/reunix?lang=en,48.93618,2.35744
+Europe,France,FR,Mamoudzou,Mayotix,Mayotix,0,20120323,http://www.renater.fr/mayotix?lang=en,-12.78060,45.22780
+Europe,France,FR,Cayenne,Guyanix,Guyanix,0,0,http://www.renater.fr/guyanix,47.31538,5.99486
+North America,United States,US,Bend,Central Oregon Internet eXchange,COIX,0,20110512,http://www.centraloregonix.org,41.08246,-75.13116
+Africa,Cote D'Ivoire,CI,Abidjan,CÃ´te d'Ivoire Internet Exchange Point,CIVIX,0,20131003,www.civix.ci,5.31667,-4.03333
+North America,Canada,CA,Vancouver,Vancouver Internet Exchange,VANIX,0,20131130,http://www.vanix.ca,49.26123,-123.11393
+Latin America,Trinidad and Tobago,TT,Barataria,Trinidad and Tobago Internet Exchange,TTIX,0,20140418,http://ix.tt,10.65000,-61.46667
+Latin America,Costa Rica,CR,San Jose,Punto de Intercambio Neutro de Internet,IXP Costa Rica,549,20140429,http://www.crix.cr/,9.92807,-84.09072
+Latin America,Brazil,BR,CuiabÃ¡,Ponto de Troca de TrÃ¡fego do CuiabÃ¡,PTT CuiabÃ¡,0,0,http://ptt.br/adesao/cgb,-15.60141,-56.09789
+Latin America,Brazil,BR,Lajeado,Ponto de Troca de Trafego do Lajeado,PTT Lajeado,0,20130300,http://ptt.br/adesao/laj,-29.45958,-51.96494
+Latin America,Brazil,BR,SÃ£o Carlos,Ponto de Troca de Trafego do Central Paulista ,PTT Central Paulista ,0,20131000,http://ptt.br/adesao/sca,-22.00872,-47.89091
+North America,United States,US,New York,AMS-IX New York,AMS-IX New York,0,20140417,https://nynj.ams-ix.net/,40.71278,-74.00594
+Africa,Gambia,GM,Serrekunda,Serrekunda Internet Exchange Point,SIXP,0,20140725,www.sixp.gm,13.43861,-16.68167
+Europe,United Kingdom,GB,Cardiff,IXWales by LINX,IXWales,0,20141015,,51.48158,-3.17909
+Latin America,Jamaica,JM,Kingston,Jamaica Internet Exchange Point,JAIXP,0,20140831,,17.98333,-76.80000
+Europe,France,FR,Nantes,Ouest IX,OuestIX,0,20140402,http://www.ouestix.fr,47.21837,-1.55362
+North America,United States,US,Milwaukee,Milwaukee Internet Exchange,MKEIX,0,20110000,www.mkeix.net,43.03890,-87.90647
+Latin America,Brazil,BR,Curitiba,Ponto de Troca de Trafego do Curitiba,PTT Curitiba,0,20070000,http://ptt.br/adesao/pr,-25.42004,-49.26510
+Latin America,Brazil,BR,MaringÃ¡,Ponto de Troca de Trafego do Maringa,PTT Maringa,0,20131100,http://ptt.br/adesao/mgf,-23.42100,-51.93306
+Asia-Pacific,Singapore,SG,Singapore,BBIX Singapore,BBIX,0,20141001,www.bbix.net,1.28009,103.85095
+Asia-Pacific,China,CN,Hong Kong,BBIX Hong Kong,BBIX,0,20141001,www.bbix.net,22.39643,114.10950
+Europe,France,FR,Nice,NicIX - Alpes-Maritimes,NicIX,0,20140619,http://www.nicix.net/en,43.71017,7.26195
+Africa,Benin,BJ,Cotonou,Benin Point dâÃchange Internet,BENIN IX,0,20131200,,6.36667,2.43333
+Africa,South Africa,ZA,Durban,NAPAfrica Durban,NAPAfrica,0,0,http://www.napafrica.com,-29.85868,31.02184
+North America,United States,US,San Francisco,AMS-IX Bay Area,AMS-IX Bay Area,0,20140910,https://bay.ams-ix.net,37.77493,-122.41942
+Asia-Pacific,India,IN,Mumbai,Mumbai Convergence Hub,Mumbai CH,0,20140815,www.mumbaich.com,19.07598,72.87766
+North America,Mexico,MX,Mexico DF,Mexico IXP,CCIT,0,20140430,http://ixp.mx,19.43261,-99.13321
+North America,United States,US,Chicago,AMS-IX Chicago,AMS-IX Chicago,0,0,https://chi.ams-ix.net,41.87811,-87.62980
+Africa,Angola,AO,Luanda,ANGONIX,ANGONIX,0,20140901,http://angonix.net,-8.83833,13.23444
+Europe,Albania,AL,Tirana,Albania IX,ALB-IX,0,0,http://www.albtelecom.al/en/dedicated-service/infrastructure/434-alb-ix,41.32755,19.81870
+Europe,Denmark,DK,Copenhagen,Content-IX,Content-IX,0,0,www.content-ix.dk,55.67610,12.56834
+Europe,France,FR,Lille,Lillix,Lillix,0,20140627,http://www.lillix.fr,50.62925,3.05726
+Europe,Germany,DE,Bremen,BREM-IX,BREM-IX,0,20130000,http://www.brem-ix.net,53.07930,8.80169
+Europe,Germany,DE,Dortmund,Dortmund Internet exchange,DO-IX,0,20130901,https://www.do-ix.net,51.51359,7.46530
+Asia-Pacific,Japan,JP,Niigata,Echigo-IX,Echigo-IX,0,20110900,http://www.echigo-ix.jp,37.91619,139.03641
+Europe,Liechtenstein,LI,Eschen,Rheintal Internet Exchange,Rheintal IX,0,20111027,http://www.rheintal-ix.net,47.21239,9.52327
+Europe,Russia,RU,Ufa,DataIX Ufa,DataIX Ufa,0,0,http://www.dataix.ru,54.73876,55.97206
+Europe,Russia,RU,Novosibirsk,DataIX Novosibirsk,DataIX Novosibirsk,0,20120000,http://www.dataix.ru/,55.00835,82.93573
+Europe,Russia,RU,Khabarovsk,DataIX Khabarovsk,DataIX Khabarovsk,0,0,http://www.dataix.ru/,48.50273,135.06626
+Europe,Russia,RU,Omsk,Omsk Internet exchange,OMSK-IX,0,20060000,http://www.omsk-ix.ru,54.98333,73.36667
+Europe,Russia,RU,St. Petersburg,Pirix,Pirix,0,20080000,http://www.pirix.ru/,59.93428,30.33510
+Europe,Russia,RU,Krasnodar,Sea-IX Internet exchange,Sea-IX,0,0,http://sea-ix.ru,45.03333,38.96667
+Europe,Ukraine,UA,Khmelnytskiy,Khmelnytskiy Internet exchange point,KM-IX,0,20030809,http://ix.km.ua,49.42298,26.98713
+North America,United States,US,Cheyenne,Big Horn Fiber,Big Horn Fiber,0,20130000,http://www.bighornfiber.com,41.13998,-104.82025
+North America,United States,US,Los Angeles,CENIC International Internet eXchange,CIIX,0,19960000,http://www.ciix.net,34.05223,-118.24368
+North America,United States,US,Carrolton,CyrusOne,CyrusOne,0,0,http://www.cyrusone.com/data-center-technology-features/cyrusone-national-ix-internet-exchange/interconnection-peering-exchange/,32.97564,-96.88996
+North America,United States,US,Salt Lake City,Salt Lake Internet Exchange,SLIX,0,0,http://www.slix.net,40.76078,-111.89105
+North America,United States,US,Atlanta,South East Network Access Point,SNAP,0,20120000,http://www.southeastnap.com,33.74900,-84.38798
+North America,United States,US,St. George,Southern Utah Peering Regional Network,SUPrnet,0,5,www.suprnet.net,37.09653,-113.56842
+North America,United States,US,Atlanta,Telx Internet Exchange,TelX Internet Exchange,0,0,http://tie.telx.com/,33.74900,-84.38798
