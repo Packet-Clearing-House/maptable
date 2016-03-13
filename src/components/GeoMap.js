@@ -4,6 +4,7 @@ import Watermark from './Watermark';
 // Used the name GeoMap instead of Map to avoid collision with the native Map class of JS
 export default class GeoMap {
   constructor(maptable, options, jsonWorld) {
+    const that = this;
     this.maptable = maptable;
     this.scale = 1;
     this.transX = 0;
@@ -13,8 +14,12 @@ export default class GeoMap {
 
     this.jsonWorld = jsonWorld;
 
-    this.node = document.createElement('div');
-    this.maptable.node.appendChild(this.node);
+    this.node = document.querySelector('#mt-map');
+    if (!this.node) {
+      this.node = document.createElement('div');
+      this.node.setAttribute('class', 'mt-map');
+      this.maptable.node.insertBefore(this.node, this.maptable.node.firstChild);
+    }
 
     this.svg = d3.select(this.node)
       .append('svg')
@@ -34,9 +39,9 @@ export default class GeoMap {
 
     // Add coordinates to rawData
     this.maptable.rawData.forEach(d => {
-      d.longitude = parseFloat(d[this.options.longitudeKey]);
-      d.latitude = parseFloat(d[this.options.latitudeKey]);
-      const coord = this.projection([d.longitude, d.latitude]);
+      d.longitude = parseFloat(d[that.options.longitudeKey]);
+      d.latitude = parseFloat(d[that.options.latitudeKey]);
+      const coord = that.projection([d.longitude, d.latitude]);
       d.x = coord[0];
       d.y = coord[1];
       return d;
@@ -323,9 +328,9 @@ export default class GeoMap {
   }
 
   updateMarkers() {
+    const defaultGroupBy = a => `${a.longitude},${a.latitude}`;
     const dataMarkers = d3.nest()
-      .key(this.options.markers.groupBy ?
-        this.options.markers.groupBy : a => `${a.longitude},${a.latitude}`)
+      .key(this.options.markers.groupBy ? this.options.markers.groupBy : defaultGroupBy)
       .entries(this.maptable.data)
       .filter(d => {
         return d.values[0].latitude !== 0;
@@ -335,20 +340,24 @@ export default class GeoMap {
       .selectAll('.mt-map-marker')
       .data(dataMarkers);
 
+    // Exit
+    markerItem.exit().transition()
+      .attr('r', 0)
+      .attr('fill', '#eee')
+      .style('opacity', 0)
+      .remove();
+
     // Enter
-    markerItem.enter();
-    if (this.options.markers.custom_marker) {
-      this.options.markers.customMarker(markerItem);
+    let markerObject = markerItem.enter();
+    if (this.options.markers.customMarker) {
+      markerObject = this.options.markers.customMarker(markerObject);
     } else {
-      markerItem.append('svg:circle');
+      markerObject = markerObject.append('svg:circle');
     }
     const markerClassName = (this.options.markers.className) ?
       this.options.markers.className : '';
 
-    markerItem.attr('class', `mt-map-marker ${markerClassName}`);
-
-    // Exit
-    markerItem.exit().remove();
+    markerObject.attr('class', `mt-map-marker ${markerClassName}`);
 
     const attrX = (this.options.markers.attrX) ? this.options.markers.attrX : 'cx';
     const attrY = (this.options.markers.attrY) ? this.options.markers.attrY : 'cy';
@@ -357,13 +366,13 @@ export default class GeoMap {
     const attrYDelta = (this.options.markers.attrYDelta) ? this.options.markers.attrYDelta : 0;
 
     // Update
-    const markerUpdate = markerItem
+    let markerUpdate = markerItem
       .attr(attrX, d => d.values[0].x + attrXDelta)
       .attr(attrY, d => d.values[0].y + attrYDelta);
 
     if (this.options.markers.attr) {
       Object.keys(this.options.markers.attr).forEach(key => {
-        markerUpdate.attr(key, datum => {
+        markerUpdate = markerUpdate.attr(key, datum => {
           if (!datum.prop) datum.prop = {};
           datum.prop[key] = this.getScaledValue(this.options.markers, key, datum, dataMarkers);
           return datum.prop[key];

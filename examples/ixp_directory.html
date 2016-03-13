@@ -8,7 +8,11 @@
   </head>
   <body>
     <div class="container">
-      <div id="ixp_dir"></div>
+      <div id="ixp_dir">
+        <div id='mt-map'></div>
+        <div id='mt-filters' class='panel panel-default'></div>
+        <div id='mt-table'></div>
+      </div>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.16/d3.min.js" charset="utf-8"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/1.6.20/topojson.min.js"></script>
@@ -20,7 +24,7 @@
         .map({
           path: "maps/world-110m-wo-antarctica.json",
           autoWidth: true,
-          zoom: false,
+          zoom: true,
           scaleHeight: 0.86,
           ratioFromWidth: 0.48,
           watermark: {
@@ -67,8 +71,7 @@
               }],
               fill: "yellow",
               stroke: "#d9d9d9",
-              "stroke-width": 0.5,
-              filter: "url(#drop-shadow)"
+              "stroke-width": 0.5
             }
           },
           countries: {
@@ -89,18 +92,26 @@
           }
         })
         .table({
+          show: ['region', 'country', 'city', 'long_name', 'prefixes', 'established'],
           rowClassName: function(a) {
             if (a.status != "Active") return "inactive";
             return "";
           },
-          className: "table table-striped",
+          className: "table table-striped table-condensed",
           defaultSorting: {
             key: "city",
             mode: "asc"
           },
           collapseRowsBy: ["region", "country", "city"]
         })
-        .filters()
+        .filters({
+          show: ['region', 'country', 'city', 'long_name', 'prefixes', 'established'],
+        })
+        .columns({
+          region: {
+            nowrap: true,
+          }
+        })
         .render();
       </script>
   </body>

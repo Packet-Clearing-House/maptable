@@ -5,9 +5,13 @@ export default class Table {
     this.maptable = maptable;
     this.options = options;
     this.currentSorting = { key: null, mode: 'asc' };
-    this.node = document.createElement('div');
-    this.node.setAttribute('class', 'mt-table');
-    this.maptable.node.appendChild(this.node);
+
+    this.node = document.querySelector('#mt-table');
+    if (!this.node) {
+      this.node = document.createElement('div');
+      this.node.setAttribute('id', 'mt-table');
+      this.maptable.node.appendChild(this.node);
+    }
 
     this.node = d3.select(this.node)
       .append('table')
@@ -17,21 +21,32 @@ export default class Table {
 
     this.body = this.node.append('tbody');
 
+    if (this.options.show) {
+      const arrayDiff = this.options.show.filter(i => {
+        return Object.keys(this.maptable.columnDetails).indexOf(i) < 0;
+      });
+      if (arrayDiff.length > 0) {
+        throw new Error(`MapTable: invalid columns "${arrayDiff.join(', ')}"`);
+      }
+      this.activeColumns = this.options.show;
+    } else {
+      this.activeColumns = Object.keys(this.maptable.columnDetails);
+    }
+
     this.header.selectAll('tr')
       .data([1])
       .enter()
       .append('tr')
       .selectAll('th')
-      .data(Object.keys(this.maptable.columnDetails)
-        .map(k => Object.assign({ key: k }, this.maptable.columnDetails[k])))
+      .data(this.activeColumns.map(k => Object.assign({ key: k }, this.maptable.columnDetails[k])))
       .enter()
       .append('th')
       .attr('class', d => {
         let output = (d.sorting) ? 'mt-table-sortable' : '';
-        output += (!d.wrap) ? ' nowrap' : '';
+        output += (d.nowrap) ? ' nowrap' : '';
         return output;
       })
-      .attr('style', d => (!d.wrap) ? 'white-space:nowrap;' : '')
+      .attr('style', d => (d.nowrap) ? 'white-space:nowrap;' : '')
       .text(d => d.title)
       .attr('id', d => `column_header_${utils.sanitizeKey(d.key)}`)
       .on('click', d => {
@@ -48,6 +63,7 @@ export default class Table {
 
 
   render() {
+    const that = this;
     // Enter
     this.body.selectAll('tr')
       .data(this.maptable.data)
@@ -72,28 +88,26 @@ export default class Table {
       })
       .html(row => {
         let tds = '';
-        Object.keys(this.maptable.columnDetails).forEach(columnKey => {
-          const column = this.maptable.columnDetails[columnKey];
-          if (!column.useItOnlyInFilters) {
-            tds += '<td';
-            if (!column.wrap) {
-              tds += ' style="white-space:nowrap;"';
-            }
-            tds += '>';
+        that.activeColumns.forEach(columnKey => {
+          const column = that.maptable.columnDetails[columnKey];
+          tds += '<td';
+          if (column.nowrap) {
+            tds += ' style="white-space:nowrap;"';
+          }
+          tds += '>';
 
-            if (!(
-                this.options.collapseRowsBy.indexOf(columnKey) !== -1 &&
-                uniqueCollapsedRows[columnKey] &&
-                uniqueCollapsedRows[columnKey] === row[columnKey]
-              )) {
-              if (typeof (column.cellContent) === 'function') {
-                tds += column.cellContent(row);
-              } else {
-                if (row[columnKey] && row[columnKey] !== 'null') tds += row[columnKey];
-              }
-              if (this.options.collapseRowsBy.indexOf(columnKey) !== -1) {
-                uniqueCollapsedRows[columnKey] = row[columnKey];
-              }
+          if (!(
+              that.options.collapseRowsBy.indexOf(columnKey) !== -1 &&
+              uniqueCollapsedRows[columnKey] &&
+              uniqueCollapsedRows[columnKey] === row[columnKey]
+            )) {
+            if (typeof (column.cellContent) === 'function') {
+              tds += column.cellContent(row);
+            } else {
+              if (row[columnKey] && row[columnKey] !== 'null') tds += row[columnKey];
+            }
+            if (that.options.collapseRowsBy.indexOf(columnKey) !== -1) {
+              uniqueCollapsedRows[columnKey] = row[columnKey];
             }
             tds += '</td>';
           }

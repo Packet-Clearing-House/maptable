@@ -1,16 +1,8 @@
 export default {
-  data: {
+  map: {
     longitudeKey: 'longitude',
     latitudeKey: 'latitude',
-    filters: {
-      enabled: true,
-    },
-  },
-  map: {
-    width: 900,
-    height: 390,
     legend: false,
-    autoWidth: true,
     ratioFromWidth: 0.5,
     scaleHeight: 1,
     scaleZoom: [1, 10],

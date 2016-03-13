@@ -8,9 +8,13 @@ export default class Filters {
     this.container = document.createElement('div');
     this.maptable.node.appendChild(this.container);
 
-    this.node = document.createElement('div');
-    this.node.setAttribute('id', 'mt-filters');
-    this.node.setAttribute('class', 'panel panel-default');
+    this.node = document.querySelector('#mt-filters');
+    if (!this.node) {
+      this.node = document.createElement('div');
+      this.node.setAttribute('class', 'mt-filters');
+      this.node.setAttribute('class', 'panel panel-default');
+      this.maptable.node.appendChild(this.node);
+    }
 
     // -- Filters Header
 
@@ -44,14 +48,12 @@ export default class Filters {
 
     const filtersNewNode = document.createElement('a');
     filtersNewNode.setAttribute('id', 'mt-filters-new');
+    filtersNewNode.setAttribute('href', '#');
     filtersNewNode.innerText = '+ New filter';
     filtersNewNode.addEventListener('click', this.add.bind(this));
     filtersBodyNode.appendChild(filtersNewNode);
 
     this.node.appendChild(filtersBodyNode);
-
-    // -- Appending to main node
-    this.maptable.node.appendChild(this.node);
   }
 
   add() {
@@ -69,7 +71,7 @@ export default class Filters {
     if (replaceNode) {
       replaceNode.parentNode.replaceChild(rowNode, replaceNode);
     } else {
-      this.container.appendChild(rowNode);
+      document.querySelector('#mt-filters-elements').appendChild(rowNode);
     }
     this.criteria.push(filterName);
     if (this.container.style.display === 'none') {
