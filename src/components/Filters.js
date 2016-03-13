@@ -1,9 +1,22 @@
 import utils from '../utils';
 
 export default class Filters {
-  constructor(maptable) {
+  constructor(maptable, options) {
     this.maptable = maptable;
+    this.options = options;
     this.criteria = [];
+
+    if (this.options.show) {
+      const arrayDiff = this.options.show.filter(i => {
+        return Object.keys(this.maptable.columnDetails).indexOf(i) < 0;
+      });
+      if (arrayDiff.length > 0) {
+        throw new Error(`MapTable: invalid columns "${arrayDiff.join(', ')}"`);
+      }
+      this.activeColumns = this.options.show;
+    } else {
+      this.activeColumns = Object.keys(this.maptable.columnDetails);
+    }
 
     this.container = document.createElement('div');
     this.maptable.node.appendChild(this.container);
@@ -74,6 +87,7 @@ export default class Filters {
       document.querySelector('#mt-filters-elements').appendChild(rowNode);
     }
     this.criteria.push(filterName);
+    this.refresh();
     if (this.container.style.display === 'none') {
       this.toggle();
     }
@@ -81,9 +95,10 @@ export default class Filters {
 
   remove(filterName) {
     const rowNode = document.querySelector(`[data-mt-filter-name="${filterName}"]`);
-    rowNode.remove();
+    if (rowNode) rowNode.remove();
     const filterIndex = this.criteria.indexOf(filterName);
     this.criteria.splice(filterIndex, 1);
+    this.refresh();
   }
 
   reset() {
@@ -137,7 +152,7 @@ export default class Filters {
   }
 
   buildRow(filterName) {
-    const self = this;
+    const that = this;
 
     const possibleFilters = this.getPossibleFilters();
 
@@ -150,17 +165,17 @@ export default class Filters {
     // Button to remove filter
     const minusButton = document.createElement('button');
     minusButton.setAttribute('class', 'btn btn-default pull-right');
-    minusButton.setAttribute('data-mt-filter-btn-minus', null);
+    minusButton.setAttribute('data-mt-filter-btn-minus', 1);
     minusButton.innerText = '– Remove this filter';
     minusButton.addEventListener('click', () => {
-      filterName = rowNode.querySelector('.mt-filters-dropdown').value;
+      filterName = rowNode.querySelector('.mt-filter-name').value;
       this.remove(filterName);
     });
     rowNode.appendChild(minusButton);
 
     // Filters separator "AND"
     const filterSeparator = document.createElement('span');
-    filterSeparator.setAttribute('class', 'mt-filter-and');
+    filterSeparator.setAttribute('class', 'mt-filters-and');
     filterSeparator.innerText = 'And ';
     rowNode.appendChild(filterSeparator);
 
@@ -175,9 +190,9 @@ export default class Filters {
     filterNameSelect.addEventListener('change', function () {
       const oldFilterName = this.parentNode.getAttribute('data-mt-filter-name');
       const newFilterName = this.value;
-      self.create(newFilterName, this.parentNode);
-      self.remove(oldFilterName);
-      self.refresh();
+      that.create(newFilterName, this.parentNode);
+      that.remove(oldFilterName);
+      that.refresh();
     });
     rowNode.appendChild(filterNameSelect);
 
@@ -195,7 +210,7 @@ export default class Filters {
         return { text: v, value: v };
       }));
       filterRange.addEventListener('change', function () {
-        self.handleRangeChange(this);
+        that.handleRangeChange(this);
       });
       rowNode.appendChild(filterRange);
 
@@ -206,7 +221,7 @@ export default class Filters {
     // Filter value
     const filterValue = document.createElement('div');
     filterValue.style.display = 'inline-block';
-    filterValue.setAttribute('class', 'mt-filters-value');
+    filterValue.setAttribute('class', 'mt-filter-value');
 
     if (filterOptions.type === 'number' || filterOptions.type === 'custom') {
       ['min', 'max'].forEach((val, i) => {
@@ -245,7 +260,9 @@ export default class Filters {
         .entries(this.maptable.rawData);
 
       // TODO map uniqueValues
-      utils.appendOptions(filterSelect, [{ text: 'Any', value: '' }].concat(uniqueValues));
+      utils.appendOptions(filterSelect, [{ text: 'Any', value: '' }].concat(uniqueValues.map(k => {
+        return { text: k.key, value: k.key };
+      })));
 
       filterSelect.addEventListener('change', this.refresh.bind(this));
       filterValue.appendChild(filterSelect);
@@ -255,13 +272,13 @@ export default class Filters {
 
     // We trigger it here to handle the value of the filter range
     if (filterRange) {
-      this.changeRange(filterRange);
+      this.handleRangeChange(filterRange);
     }
 
     return rowNode;
   }
 
-  changeRange(filterRange) {
+  handleRangeChange(filterRange) {
     const rowNode = filterRange.parentNode;
     if (filterRange.value === 'any') {
       rowNode.querySelector('.mt-filter-value').style.display = 'none';
@@ -269,10 +286,10 @@ export default class Filters {
       rowNode.querySelector('.mt-filter-value').style.display = 'inline-block';
       if (filterRange.value === 'BETWEEN') {
         rowNode.querySelector('.mt-filter-value-min').style.display = 'inline-block';
-        rowNode.querySelector('.mt-mt-filter-value-max').style.display = 'inline-block';
+        rowNode.querySelector('.mt-filter-value-max').style.display = 'inline-block';
       } else {
-        rowNode.querySelector('.mt-filters-value-max').style.display = 'none';
-        rowNode.querySelector('.mt-filters-value-and').style.display = 'none';
+        rowNode.querySelector('.mt-filter-value-max').style.display = 'none';
+        rowNode.querySelector('.mt-filter-value-and').style.display = 'none';
       }
     }
   }
@@ -281,8 +298,11 @@ export default class Filters {
     return Object.keys(this.maptable.columnDetails)
       .map(k => Object.assign({ key: k }, this.maptable.columnDetails[k]))
       .filter(v => {
-        return (except && except === v.key) ||
-        (this.criteria.indexOf(v.key) === -1 && v.type && v.type !== 'virtual');
+        return (this.activeColumns.indexOf(v.key) !== -1) &&
+        (
+          (except && except === v.key) ||
+          (this.criteria.indexOf(v.key) === -1 && v.type && v.type !== 'virtual')
+        );
       });
   }
 
@@ -296,18 +316,18 @@ export default class Filters {
         const fmt = filterOptions.dataFormat; // shortcut
 
         if (filterOptions.type === 'dropdown') {
-          const filterValue = rowNode.querySelector('.mt-filters-value').value;
+          const filterValue = rowNode.querySelector('.mt-filter-value').value;
           if (filterValue === '') continue;
           if (d[filterName] !== filterValue) return false;
         } else if (filterOptions.type === 'field') {
-          const filterValue = rowNode.querySelector('.mt-filters-value').value;
+          const filterValue = rowNode.querySelector('.mt-filter-value').value;
           if (filterValue === '') continue;
           return (d[filterName].toLowerCase().indexOf(filterValue.toLowerCase()) !== -1);
         } else if (filterOptions.type === 'number' || filterOptions.type === 'custom') {
           const filterRange = rowNode.querySelector('.mt-filter-range').value;
           if (filterRange === 'BETWEEN') {
             const filterValueMin = rowNode.querySelector('.mt-filter-value-min').value;
-            const filterValueMax = rowNode.querySelector('.mt-filters-value-max').value;
+            const filterValueMax = rowNode.querySelector('.mt-filter-value-max').value;
             if (filterValueMin === '' || filterValueMax === '') continue;
 
             if (filterOptions.type === 'custom' && fmt) {
@@ -324,7 +344,7 @@ export default class Filters {
               }
             }
           } else {
-            const filterValue = rowNode.querySelector('.mt-filters-value').value;
+            const filterValue = rowNode.querySelector('.mt-filter-value').value;
             if (filterValue === '') continue;
             if (filterOptions.type === 'custom' && fmt) {
               if (!utils.rangeToBool(fmt(d[filterName]), filterRange, fmt(filterValue))) {

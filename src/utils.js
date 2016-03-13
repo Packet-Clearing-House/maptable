@@ -2,7 +2,7 @@ function appendOptions(select, options, defaultValue) {
   options.forEach(f => {
     // Filter select
     const option = document.createElement('option');
-    option.setAttribute('value', f.key);
+    option.setAttribute('value', f.value);
     option.innerText = f.text;
     select.appendChild(option);
   });
@@ -51,6 +51,11 @@ function extendRecursive(obj1, obj2) {
   return obj1;
 }
 
+function keyToTile(k) {
+  const upperK = k.charAt(0).toUpperCase() + k.slice(1);
+  return upperK.replace(/_/g, ' ');
+}
+
 function sanitizeKey(k) {
   return k.toLowerCase().replace(/ /g, '_').replace(/"/g, '').replace(/'/g, '');
 }
@@ -60,4 +65,5 @@ export default {
   appendOptions: appendOptions,
   extendRecursive: extendRecursive,
   sanitizeKey: sanitizeKey,
+  keyToTile: keyToTile,
 };

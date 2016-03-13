@@ -39,7 +39,7 @@ this.d3.maptable = (function () {
     options.forEach(function (f) {
       // Filter select
       var option = document.createElement('option');
-      option.setAttribute('value', f.key);
+      option.setAttribute('value', f.value);
       option.innerText = f.text;
       select.appendChild(option);
     });
@@ -88,6 +88,11 @@ this.d3.maptable = (function () {
     return obj1;
   }
 
+  function keyToTile(k) {
+    var upperK = k.charAt(0).toUpperCase() + k.slice(1);
+    return upperK.replace(/_/g, ' ');
+  }
+
   function sanitizeKey(k) {
     return k.toLowerCase().replace(/ /g, '_').replace(/"/g, '').replace(/'/g, '');
   }
@@ -96,7 +101,8 @@ this.d3.maptable = (function () {
     rangeToBool: rangeToBool,
     appendOptions: appendOptions,
     extendRecursive: extendRecursive,
-    sanitizeKey: sanitizeKey
+    sanitizeKey: sanitizeKey,
+    keyToTile: keyToTile
   };
 
   var defaultOptions = {
@@ -707,11 +713,26 @@ this.d3.maptable = (function () {
   }();
 
   var Filters = function () {
-    function Filters(maptable) {
+    function Filters(maptable, options) {
+      var _this = this;
+
       babelHelpers.classCallCheck(this, Filters);
 
       this.maptable = maptable;
+      this.options = options;
       this.criteria = [];
+
+      if (this.options.show) {
+        var arrayDiff = this.options.show.filter(function (i) {
+          return Object.keys(_this.maptable.columnDetails).indexOf(i) < 0;
+        });
+        if (arrayDiff.length > 0) {
+          throw new Error('MapTable: invalid columns "' + arrayDiff.join(', ') + '"');
+        }
+        this.activeColumns = this.options.show;
+      } else {
+        this.activeColumns = Object.keys(this.maptable.columnDetails);
+      }
 
       this.container = document.createElement('div');
       this.maptable.node.appendChild(this.container);
@@ -785,6 +806,7 @@ this.d3.maptable = (function () {
           document.querySelector('#mt-filters-elements').appendChild(rowNode);
         }
         this.criteria.push(filterName);
+        this.refresh();
         if (this.container.style.display === 'none') {
           this.toggle();
         }
@@ -793,9 +815,10 @@ this.d3.maptable = (function () {
       key: 'remove',
       value: function remove(filterName) {
         var rowNode = document.querySelector('[data-mt-filter-name="' + filterName + '"]');
-        rowNode.remove();
+        if (rowNode) rowNode.remove();
         var filterIndex = this.criteria.indexOf(filterName);
         this.criteria.splice(filterIndex, 1);
+        this.refresh();
       }
     }, {
       key: 'reset',
@@ -850,9 +873,9 @@ this.d3.maptable = (function () {
     }, {
       key: 'buildRow',
       value: function buildRow(filterName) {
-        var _this = this;
+        var _this2 = this;
 
-        var self = this;
+        var that = this;
 
         var possibleFilters = this.getPossibleFilters();
 
@@ -865,17 +888,17 @@ this.d3.maptable = (function () {
         // Button to remove filter
         var minusButton = document.createElement('button');
         minusButton.setAttribute('class', 'btn btn-default pull-right');
-        minusButton.setAttribute('data-mt-filter-btn-minus', null);
+        minusButton.setAttribute('data-mt-filter-btn-minus', 1);
         minusButton.innerText = '– Remove this filter';
         minusButton.addEventListener('click', function () {
-          filterName = rowNode.querySelector('.mt-filters-dropdown').value;
-          _this.remove(filterName);
+          filterName = rowNode.querySelector('.mt-filter-name').value;
+          _this2.remove(filterName);
         });
         rowNode.appendChild(minusButton);
 
         // Filters separator "AND"
         var filterSeparator = document.createElement('span');
-        filterSeparator.setAttribute('class', 'mt-filter-and');
+        filterSeparator.setAttribute('class', 'mt-filters-and');
         filterSeparator.innerText = 'And ';
         rowNode.appendChild(filterSeparator);
 
@@ -890,9 +913,9 @@ this.d3.maptable = (function () {
         filterNameSelect.addEventListener('change', function () {
           var oldFilterName = this.parentNode.getAttribute('data-mt-filter-name');
           var newFilterName = this.value;
-          self.create(newFilterName, this.parentNode);
-          self.remove(oldFilterName);
-          self.refresh();
+          that.create(newFilterName, this.parentNode);
+          that.remove(oldFilterName);
+          that.refresh();
         });
         rowNode.appendChild(filterNameSelect);
 
@@ -910,7 +933,7 @@ this.d3.maptable = (function () {
             return { text: v, value: v };
           }));
           filterRange.addEventListener('change', function () {
-            self.handleRangeChange(this);
+            that.handleRangeChange(this);
           });
           rowNode.appendChild(filterRange);
 
@@ -921,7 +944,7 @@ this.d3.maptable = (function () {
         // Filter value
         var filterValue = document.createElement('div');
         filterValue.style.display = 'inline-block';
-        filterValue.setAttribute('class', 'mt-filters-value');
+        filterValue.setAttribute('class', 'mt-filter-value');
 
         if (filterOptions.type === 'number' || filterOptions.type === 'custom') {
           ['min', 'max'].forEach(function (val, i) {
@@ -932,8 +955,8 @@ this.d3.maptable = (function () {
             } else {
               filterInput.setAttribute('type', 'text');
             }
-            filterInput.addEventListener('keyup', _this.refresh.bind(_this));
-            filterInput.addEventListener('change', _this.refresh.bind(_this));
+            filterInput.addEventListener('keyup', _this2.refresh.bind(_this2));
+            filterInput.addEventListener('change', _this2.refresh.bind(_this2));
             filterValue.appendChild(filterInput);
             if (i === 0) {
               // AND
@@ -959,7 +982,9 @@ this.d3.maptable = (function () {
           }).sortKeys(d3.ascending).entries(this.maptable.rawData);
 
           // TODO map uniqueValues
-          utils.appendOptions(filterSelect, [{ text: 'Any', value: '' }].concat(uniqueValues));
+          utils.appendOptions(filterSelect, [{ text: 'Any', value: '' }].concat(uniqueValues.map(function (k) {
+            return { text: k.key, value: k.key };
+          })));
 
           filterSelect.addEventListener('change', this.refresh.bind(this));
           filterValue.appendChild(filterSelect);
@@ -969,14 +994,14 @@ this.d3.maptable = (function () {
 
         // We trigger it here to handle the value of the filter range
         if (filterRange) {
-          this.changeRange(filterRange);
+          this.handleRangeChange(filterRange);
         }
 
         return rowNode;
       }
     }, {
-      key: 'changeRange',
-      value: function changeRange(filterRange) {
+      key: 'handleRangeChange',
+      value: function handleRangeChange(filterRange) {
         var rowNode = filterRange.parentNode;
         if (filterRange.value === 'any') {
           rowNode.querySelector('.mt-filter-value').style.display = 'none';
@@ -984,50 +1009,50 @@ this.d3.maptable = (function () {
           rowNode.querySelector('.mt-filter-value').style.display = 'inline-block';
           if (filterRange.value === 'BETWEEN') {
             rowNode.querySelector('.mt-filter-value-min').style.display = 'inline-block';
-            rowNode.querySelector('.mt-mt-filter-value-max').style.display = 'inline-block';
+            rowNode.querySelector('.mt-filter-value-max').style.display = 'inline-block';
           } else {
-            rowNode.querySelector('.mt-filters-value-max').style.display = 'none';
-            rowNode.querySelector('.mt-filters-value-and').style.display = 'none';
+            rowNode.querySelector('.mt-filter-value-max').style.display = 'none';
+            rowNode.querySelector('.mt-filter-value-and').style.display = 'none';
           }
         }
       }
     }, {
       key: 'getPossibleFilters',
       value: function getPossibleFilters(except) {
-        var _this2 = this;
+        var _this3 = this;
 
         return Object.keys(this.maptable.columnDetails).map(function (k) {
-          return Object.assign({ key: k }, _this2.maptable.columnDetails[k]);
+          return Object.assign({ key: k }, _this3.maptable.columnDetails[k]);
         }).filter(function (v) {
-          return except && except === v.key || _this2.criteria.indexOf(v.key) === -1 && v.type && v.type !== 'virtual';
+          return _this3.activeColumns.indexOf(v.key) !== -1 && (except && except === v.key || _this3.criteria.indexOf(v.key) === -1 && v.type && v.type !== 'virtual');
         });
       }
     }, {
       key: 'filterData',
       value: function filterData() {
-        var _this3 = this;
+        var _this4 = this;
 
         this.data = this.maptable.rawData.filter(function (d) {
           var rowNodes = document.querySelectorAll('.mt-filters-row');
           for (var i = 0; i < rowNodes.length; i++) {
             var rowNode = rowNodes[i];
             var filterName = rowNode.getAttribute('data-mt-filter-name');
-            var filterOptions = _this3.maptable.columnDetails[filterName];
+            var filterOptions = _this4.maptable.columnDetails[filterName];
             var fmt = filterOptions.dataFormat; // shortcut
 
             if (filterOptions.type === 'dropdown') {
-              var filterValue = rowNode.querySelector('.mt-filters-value').value;
+              var filterValue = rowNode.querySelector('.mt-filter-value').value;
               if (filterValue === '') continue;
               if (d[filterName] !== filterValue) return false;
             } else if (filterOptions.type === 'field') {
-              var _filterValue2 = rowNode.querySelector('.mt-filters-value').value;
+              var _filterValue2 = rowNode.querySelector('.mt-filter-value').value;
               if (_filterValue2 === '') continue;
               return d[filterName].toLowerCase().indexOf(_filterValue2.toLowerCase()) !== -1;
             } else if (filterOptions.type === 'number' || filterOptions.type === 'custom') {
               var filterRange = rowNode.querySelector('.mt-filter-range').value;
               if (filterRange === 'BETWEEN') {
                 var filterValueMin = rowNode.querySelector('.mt-filter-value-min').value;
-                var filterValueMax = rowNode.querySelector('.mt-filters-value-max').value;
+                var filterValueMax = rowNode.querySelector('.mt-filter-value-max').value;
                 if (filterValueMin === '' || filterValueMax === '') continue;
 
                 if (filterOptions.type === 'custom' && fmt) {
@@ -1042,7 +1067,7 @@ this.d3.maptable = (function () {
                   }
                 }
               } else {
-                var _filterValue3 = rowNode.querySelector('.mt-filters-value').value;
+                var _filterValue3 = rowNode.querySelector('.mt-filter-value').value;
                 if (_filterValue3 === '') continue;
                 if (filterOptions.type === 'custom' && fmt) {
                   if (!utils.rangeToBool(fmt(d[filterName]), filterRange, fmt(_filterValue3))) {
@@ -1295,7 +1320,7 @@ this.d3.maptable = (function () {
 
         // Filters
         if (this.options.filters) {
-          this.filters = new Filters(this);
+          this.filters = new Filters(this, this.options.filters);
         }
 
         // Table
@@ -1306,24 +1331,24 @@ this.d3.maptable = (function () {
     }, {
       key: 'setColumnDetails',
       value: function setColumnDetails() {
-        var _this2 = this;
-
-        if (this.rawData.length === 0) {
+        var that = this;
+        if (that.rawData.length === 0) {
           return;
         }
         var defaultColumns = {};
 
-        Object.keys(this.rawData[0]).forEach(function (k) {
+        Object.keys(that.rawData[0]).forEach(function (k) {
           var columnType = 'field';
-          if (typeof _this2.rawData[0][k] === 'number') {
+          var patternNumber = /^\d+$/;
+          if (patternNumber.test(that.rawData[0][k])) {
             columnType = 'number';
           }
           defaultColumns[k] = {
-            title: k,
+            title: utils.keyToTile(k),
             type: columnType
           };
         });
-        this.columnDetails = utils.extendRecursive(defaultColumns, this.options.columns);
+        that.columnDetails = utils.extendRecursive(defaultColumns, this.options.columns);
       }
     }]);
     return MapTable;

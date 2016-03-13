@@ -23,8 +23,7 @@
         .csv('./data/ixp.csv')
         .map({
           path: "maps/world-110m-wo-antarctica.json",
-          autoWidth: true,
-          zoom: true,
+          zoom: false,
           scaleHeight: 0.86,
           ratioFromWidth: 0.48,
           watermark: {
@@ -110,6 +109,7 @@
         .columns({
           region: {
             nowrap: true,
+            type: 'dropdown'
           }
         })
         .render();

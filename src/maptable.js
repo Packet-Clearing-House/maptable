@@ -38,7 +38,7 @@ export default class MapTable {
 
     // Filters
     if (this.options.filters) {
-      this.filters = new Filters(this);
+      this.filters = new Filters(this, this.options.filters);
     }
 
     // Table
@@ -48,21 +48,23 @@ export default class MapTable {
   }
 
   setColumnDetails() {
-    if (this.rawData.length === 0) {
+    const that = this;
+    if (that.rawData.length === 0) {
       return;
     }
     const defaultColumns = {};
 
-    Object.keys(this.rawData[0]).forEach(k => {
+    Object.keys(that.rawData[0]).forEach(k => {
       let columnType = 'field';
-      if (typeof(this.rawData[0][k]) === 'number') {
+      const patternNumber = /^\d+$/;
+      if (patternNumber.test(that.rawData[0][k])) {
         columnType = 'number';
       }
       defaultColumns[k] = {
-        title: k,
+        title: utils.keyToTile(k),
         type: columnType,
       };
     });
-    this.columnDetails = utils.extendRecursive(defaultColumns, this.options.columns);
+    that.columnDetails = utils.extendRecursive(defaultColumns, this.options.columns);
   }
 }
