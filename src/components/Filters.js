@@ -221,7 +221,7 @@ export default class Filters {
     // Filter value
     const filterValue = document.createElement('div');
     filterValue.style.display = 'inline-block';
-    filterValue.setAttribute('class', 'mt-filter-value');
+    filterValue.setAttribute('class', 'mt-filter-value-container');
 
     if (filterOptions.type === 'number' || filterOptions.type === 'custom') {
       ['min', 'max'].forEach((val, i) => {
@@ -233,8 +233,8 @@ export default class Filters {
         } else {
           filterInput.setAttribute('type', 'text');
         }
-        filterInput.addEventListener('keyup', this.refresh.bind(this));
-        filterInput.addEventListener('change', this.refresh.bind(this));
+        filterInput.addEventListener('keyup', this.maptable.render.bind(this.maptable));
+        filterInput.addEventListener('change', this.maptable.render.bind(this.maptable));
         filterValue.appendChild(filterInput);
         if (i === 0) {
           // AND
@@ -248,8 +248,8 @@ export default class Filters {
       const filterInput = document.createElement('input');
       filterInput.setAttribute('class', 'form-control form-control-inline mt-filter-value');
       filterInput.setAttribute('type', 'text');
-      filterInput.addEventListener('keyup', this.refresh.bind(this));
-      filterInput.addEventListener('change', this.refresh.bind(this));
+      filterInput.addEventListener('keyup', this.maptable.render.bind(this.maptable));
+      filterInput.addEventListener('change', this.maptable.render.bind(this.maptable));
       filterValue.appendChild(filterInput);
     } else if (filterOptions.type === 'dropdown') {
       const filterSelect = document.createElement('select');
@@ -259,12 +259,11 @@ export default class Filters {
         .sortKeys(d3.ascending)
         .entries(this.maptable.rawData);
 
-      // TODO map uniqueValues
       utils.appendOptions(filterSelect, [{ text: 'Any', value: '' }].concat(uniqueValues.map(k => {
         return { text: k.key, value: k.key };
       })));
 
-      filterSelect.addEventListener('change', this.refresh.bind(this));
+      filterSelect.addEventListener('change', this.maptable.render.bind(this.maptable));
       filterValue.appendChild(filterSelect);
     }
 
@@ -307,8 +306,8 @@ export default class Filters {
   }
 
   filterData() {
-    this.data = this.maptable.rawData.filter(d => {
-      const rowNodes = document.querySelectorAll('.mt-filters-row');
+    this.maptable.data = this.maptable.rawData.filter(d => {
+      const rowNodes = document.querySelectorAll('.mt-filter-row');
       for (let i = 0; i < rowNodes.length; i++) {
         const rowNode = rowNodes[i];
         const filterName = rowNode.getAttribute('data-mt-filter-name');
@@ -383,12 +382,8 @@ export default class Filters {
 
     // Check if we reached the maximum of allowed filters
     const disableNewFilter = (!this.getPossibleFilters().length);
-    document.getElementById('mt-filters-new').disabled = disableNewFilter;
-
-    const minusButtons = document.querySelectorAll('[data-mt-filter-btn-minus]');
-    for (let i = 0; i < minusButtons.length; i++) {
-      minusButtons[i].disabled = disableNewFilter;
-    }
+    document.querySelector('#mt-filters-new').style.visibility = disableNewFilter ?
+      'hidden' : 'visible';
   }
 
   toggle() {

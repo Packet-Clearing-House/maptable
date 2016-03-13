@@ -431,6 +431,29 @@ export default class GeoMap {
     }
   }
 
+  render() {
+    this.updateMarkers();
+    this.updateCountries();
+    this.updateTitle();
+    this.fitContent();
+    this.rescale();
+  }
+
+  updateTitle() {
+    if (this.options.title.content) {
+      const showing = this.maptable.data.filter(d => d[this.options.latitudeKey] === 0).length;
+      const total = this.maptable.rawData.filter(d => d[this.options.latitudeKey] === 0).length;
+
+      let inlineFilters = '';
+      if (this.maptable.filters) {
+        inlineFilters = this.maptable.filters.getDescription();
+      }
+
+      document.getElementById('mt-map-title').innerHTML = this.options.title
+        .content(showing, total, inlineFilters);
+    }
+  }
+
   activateTooltip(target, tooltipContent, cb) {
     target.on('mousemove', d => {
       const mousePosition = d3.mouse(this.svg.node()).map(v => parseInt(v, 10));

@@ -689,24 +689,54 @@ this.d3.maptable = (function () {
         }
       }
     }, {
-      key: 'activateTooltip',
-      value: function activateTooltip(target, tooltipContent, cb) {
+      key: 'render',
+      value: function render() {
+        this.updateMarkers();
+        this.updateCountries();
+        this.updateTitle();
+        this.fitContent();
+        this.rescale();
+      }
+    }, {
+      key: 'updateTitle',
+      value: function updateTitle() {
         var _this4 = this;
 
+        if (this.options.title.content) {
+          var showing = this.maptable.data.filter(function (d) {
+            return d[_this4.options.latitudeKey] === 0;
+          }).length;
+          var total = this.maptable.rawData.filter(function (d) {
+            return d[_this4.options.latitudeKey] === 0;
+          }).length;
+
+          var inlineFilters = '';
+          if (this.maptable.filters) {
+            inlineFilters = this.maptable.filters.getDescription();
+          }
+
+          document.getElementById('mt-map-title').innerHTML = this.options.title.content(showing, total, inlineFilters);
+        }
+      }
+    }, {
+      key: 'activateTooltip',
+      value: function activateTooltip(target, tooltipContent, cb) {
+        var _this5 = this;
+
         target.on('mousemove', function (d) {
-          var mousePosition = d3.mouse(_this4.svg.node()).map(function (v) {
+          var mousePosition = d3.mouse(_this5.svg.node()).map(function (v) {
             return parseInt(v, 10);
           });
-          _this4.tooltipNode.attr('style', 'display:block;').html(tooltipContent(d));
-          var tooltipDelta = _this4.tooltipNode.node().offsetWidth / 2;
+          _this5.tooltipNode.attr('style', 'display:block;').html(tooltipContent(d));
+          var tooltipDelta = _this5.tooltipNode.node().offsetWidth / 2;
           var mouseLeft = mousePosition[0] - tooltipDelta + document.getElementById('mt-map').offsetLeft;
           var mouseTop = mousePosition[1] + 10 + document.getElementById('mt-map').offsetTop;
-          _this4.tooltipNode.attr('style', 'top:' + mouseTop + 'px;left:' + mouseLeft + 'px;display:block;').on('mouseout', function () {
-            return _this4.tooltipNode.style('display', 'none');
+          _this5.tooltipNode.attr('style', 'top:' + mouseTop + 'px;left:' + mouseLeft + 'px;display:block;').on('mouseout', function () {
+            return _this5.tooltipNode.style('display', 'none');
           });
 
           if (cb) {
-            _this4.tooltipNode.on('click', cb);
+            _this5.tooltipNode.on('click', cb);
           }
         });
       }
@@ -946,7 +976,7 @@ this.d3.maptable = (function () {
         // Filter value
         var filterValue = document.createElement('div');
         filterValue.style.display = 'inline-block';
-        filterValue.setAttribute('class', 'mt-filter-value');
+        filterValue.setAttribute('class', 'mt-filter-value-container');
 
         if (filterOptions.type === 'number' || filterOptions.type === 'custom') {
           ['min', 'max'].forEach(function (val, i) {
@@ -957,8 +987,8 @@ this.d3.maptable = (function () {
             } else {
               filterInput.setAttribute('type', 'text');
             }
-            filterInput.addEventListener('keyup', _this2.refresh.bind(_this2));
-            filterInput.addEventListener('change', _this2.refresh.bind(_this2));
+            filterInput.addEventListener('keyup', _this2.maptable.render.bind(_this2.maptable));
+            filterInput.addEventListener('change', _this2.maptable.render.bind(_this2.maptable));
             filterValue.appendChild(filterInput);
             if (i === 0) {
               // AND
@@ -972,8 +1002,8 @@ this.d3.maptable = (function () {
           var filterInput = document.createElement('input');
           filterInput.setAttribute('class', 'form-control form-control-inline mt-filter-value');
           filterInput.setAttribute('type', 'text');
-          filterInput.addEventListener('keyup', this.refresh.bind(this));
-          filterInput.addEventListener('change', this.refresh.bind(this));
+          filterInput.addEventListener('keyup', this.maptable.render.bind(this.maptable));
+          filterInput.addEventListener('change', this.maptable.render.bind(this.maptable));
           filterValue.appendChild(filterInput);
         } else if (filterOptions.type === 'dropdown') {
           var filterSelect = document.createElement('select');
@@ -983,12 +1013,11 @@ this.d3.maptable = (function () {
             return d[filterName];
           }).sortKeys(d3.ascending).entries(this.maptable.rawData);
 
-          // TODO map uniqueValues
           utils.appendOptions(filterSelect, [{ text: 'Any', value: '' }].concat(uniqueValues.map(function (k) {
             return { text: k.key, value: k.key };
           })));
 
-          filterSelect.addEventListener('change', this.refresh.bind(this));
+          filterSelect.addEventListener('change', this.maptable.render.bind(this.maptable));
           filterValue.appendChild(filterSelect);
         }
 
@@ -1034,8 +1063,8 @@ this.d3.maptable = (function () {
       value: function filterData() {
         var _this4 = this;
 
-        this.data = this.maptable.rawData.filter(function (d) {
-          var rowNodes = document.querySelectorAll('.mt-filters-row');
+        this.maptable.data = this.maptable.rawData.filter(function (d) {
+          var rowNodes = document.querySelectorAll('.mt-filter-row');
           for (var i = 0; i < rowNodes.length; i++) {
             var rowNode = rowNodes[i];
             var filterName = rowNode.getAttribute('data-mt-filter-name');
@@ -1109,12 +1138,7 @@ this.d3.maptable = (function () {
 
         // Check if we reached the maximum of allowed filters
         var disableNewFilter = !this.getPossibleFilters().length;
-        document.getElementById('mt-filters-new').disabled = disableNewFilter;
-
-        var minusButtons = document.querySelectorAll('[data-mt-filter-btn-minus]');
-        for (var _i = 0; _i < minusButtons.length; _i++) {
-          minusButtons[_i].disabled = disableNewFilter;
-        }
+        document.querySelector('#mt-filters-new').style.visibility = disableNewFilter ? 'hidden' : 'visible';
       }
     }, {
       key: 'toggle',
@@ -1140,7 +1164,7 @@ this.d3.maptable = (function () {
 
       this.maptable = maptable;
       this.options = options;
-      this.currentSorting = { key: null, mode: 'asc' };
+      this.currentSorting = { key: null, mode: 'desc' };
 
       this.node = document.querySelector('#mt-table');
       if (!this.node) {
@@ -1242,7 +1266,7 @@ this.d3.maptable = (function () {
 
         var d3SortMode = this.currentSorting.mode === 'asc' ? d3.ascending : d3.descending;
         var filterOptions = this.maptable.columnDetails[this.currentSorting.key];
-        this.maptable.rawData = this.maptable.rawData.sort(function (a, b) {
+        this.maptable.data = this.maptable.data.sort(function (a, b) {
           var el1 = a[_this3.currentSorting.key];
           var el2 = b[_this3.currentSorting.key];
           if (filterOptions.type === 'virtual' && filterOptions.cellContent) {
@@ -1254,9 +1278,13 @@ this.d3.maptable = (function () {
           } else if (filterOptions.dataFormat) {
             el1 = filterOptions.dataFormat(el1);
             el2 = filterOptions.dataFormat(el2);
+          } else {
+            el1 = el1.toLowerCase();
+            el2 = el2.toLowerCase();
           }
           return d3SortMode(el1, el2);
         });
+        this.render();
       }
     }, {
       key: 'sortColumn',
@@ -1270,13 +1298,13 @@ this.d3.maptable = (function () {
           this.currentSorting.mode = 'asc';
         }
 
-        var sortableColums = document.getElementsByClassName('mt-table-sortable');
+        var sortableColums = document.querySelectorAll('.mt-table-sortable');
         for (var i = 0; i < sortableColums.length; i++) {
           sortableColums[i].setAttribute('class', 'mt-table-sortable');
         }
         document.getElementById('column_header_' + utils.sanitizeKey(columnKey)).setAttribute('class', 'mt-table-sortable sort_' + this.currentSorting.mode);
 
-        this.render();
+        this.applySort();
       }
     }]);
     return Table;
@@ -1331,6 +1359,21 @@ this.d3.maptable = (function () {
         }
       }
     }, {
+      key: 'render',
+      value: function render() {
+        if (this.filters) {
+          this.filters.filterData();
+        }
+
+        if (this.map) {
+          this.map.render();
+        }
+
+        if (this.table) {
+          this.table.render();
+        }
+      }
+    }, {
       key: 'setColumnDetails',
       value: function setColumnDetails() {
         var that = this;
@@ -1347,7 +1390,8 @@ this.d3.maptable = (function () {
           }
           defaultColumns[k] = {
             title: utils.keyToTile(k),
-            type: columnType
+            type: columnType,
+            sorting: true
           };
         });
         that.columnDetails = utils.extendRecursive(defaultColumns, this.options.columns);

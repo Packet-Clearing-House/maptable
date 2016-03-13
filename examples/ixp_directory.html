@@ -41,7 +41,7 @@
               if (0 == a || 0 == b) out = "No IXP shown";
               else if (a < b) out = 'Showing <tspan font-weight="bold">' + a + '</tspan> IXP from <tspan font-weight="bold">' + b + "</tspan>";
               else out = '<tspan font-weight="bold">' + b + "</tspan> IXP shown";
-              if ("" != c) out += " — " + c;
+              if ('' != c) out += " — " + c;
               return out;
             },
             source: function() {
@@ -95,7 +95,7 @@
           show: ['region', 'country', 'city', 'long_name', 'prefixes', 'established'],
           rowClassName: function(a) {
             if (a.status != "Active") return "inactive";
-            return "";
+            return '';
           },
           className: "table table-striped table-condensed",
           defaultSorting: {
@@ -111,6 +111,39 @@
           region: {
             nowrap: true,
             type: 'dropdown'
+          },
+          prefixes: {
+            cellContent: function(a) {
+      				if (a.prefixes > 0) return a.prefixes;
+      				return '';
+      			}
+          },
+          established: {
+            inputType: "date",
+      			type: "custom",
+      			cellContent: function(a) {
+      				months = new Array('', "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec");
+      				year = 1 * parseInt(a["established"].substring(0, 4));
+      				month = 1 * parseInt(a["established"].substring(4, 6));
+      				if (!isNaN(month) && 0 != month) month = months[month];
+      				else month = '';
+      				day = 1 * parseInt(a["established"].substring(6, 8));
+      				output = day + " " + month + " " + year;
+      				if (isNaN(day) || 0 == day) output = month + " " + year;
+      				if ('' == month) output = year;
+      				if (isNaN(year) || 0 == year) output = '';
+      				return output;
+      			},
+      			dataFormat: function(a) {
+              if(!a) return 0;
+      				full_year = 1 * parseInt(a.substring(0, 4));
+      				if (isNaN(full_year) || 0 == full_year) return null;
+      				month = 1 * parseInt(a.substring(4, 6));
+      				month = !isNaN(month) && 0 != month ? month - 1 : 0;
+      				day = 1 * parseInt(a.substring(6, 8));
+      				day = !isNaN(day) && 0 != day ? day - 1 : 0;
+      				return new Date(full_year, month, day);
+      			}
           }
         })
         .render();

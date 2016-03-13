@@ -47,6 +47,20 @@ export default class MapTable {
     }
   }
 
+  render() {
+    if (this.filters) {
+      this.filters.filterData();
+    }
+
+    if (this.map) {
+      this.map.render();
+    }
+
+    if (this.table) {
+      this.table.render();
+    }
+  }
+
   setColumnDetails() {
     const that = this;
     if (that.rawData.length === 0) {
@@ -63,6 +77,7 @@ export default class MapTable {
       defaultColumns[k] = {
         title: utils.keyToTile(k),
         type: columnType,
+        sorting: true,
       };
     });
     that.columnDetails = utils.extendRecursive(defaultColumns, this.options.columns);

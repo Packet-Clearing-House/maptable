@@ -4,7 +4,7 @@ export default class Table {
   constructor(maptable, options) {
     this.maptable = maptable;
     this.options = options;
-    this.currentSorting = { key: null, mode: 'asc' };
+    this.currentSorting = { key: null, mode: 'desc' };
 
     this.node = document.querySelector('#mt-table');
     if (!this.node) {
@@ -119,7 +119,7 @@ export default class Table {
   applySort() {
     const d3SortMode = (this.currentSorting.mode === 'asc') ? d3.ascending : d3.descending;
     const filterOptions = this.maptable.columnDetails[this.currentSorting.key];
-    this.maptable.rawData = this.maptable.rawData.sort((a, b) => {
+    this.maptable.data = this.maptable.data.sort((a, b) => {
       let el1 = a[this.currentSorting.key];
       let el2 = b[this.currentSorting.key];
       if (filterOptions.type === 'virtual' && filterOptions.cellContent) {
@@ -131,9 +131,13 @@ export default class Table {
       } else if (filterOptions.dataFormat) {
         el1 = filterOptions.dataFormat(el1);
         el2 = filterOptions.dataFormat(el2);
+      } else {
+        el1 = el1.toLowerCase();
+        el2 = el2.toLowerCase();
       }
       return d3SortMode(el1, el2);
     });
+    this.render();
   }
 
   sortColumn(columnKey, columnMode) {
@@ -146,13 +150,13 @@ export default class Table {
       this.currentSorting.mode = 'asc';
     }
 
-    const sortableColums = document.getElementsByClassName('mt-table-sortable');
+    const sortableColums = document.querySelectorAll('.mt-table-sortable');
     for (let i = 0; i < sortableColums.length; i++) {
       sortableColums[i].setAttribute('class', 'mt-table-sortable');
     }
     document.getElementById(`column_header_${utils.sanitizeKey(columnKey)}`)
       .setAttribute('class', `mt-table-sortable sort_${this.currentSorting.mode}`);
 
-    this.render();
+    this.applySort();
   }
 }
