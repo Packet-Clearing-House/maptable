@@ -218,7 +218,7 @@ export default class GeoMap {
   }
 
   rescale() {
-    const self = this;
+    const that = this;
     if (d3.event && d3.event.translate) {
       this.scale = d3.event.scale;
       this.transX = (this.scale === 1) ? 0 : d3.event.translate[0];
@@ -250,27 +250,31 @@ export default class GeoMap {
     this.layerGlobal.attr('transform',
       `translate(${this.transX}, ${this.transY})scale(${this.scale})`);
 
-    // Rescale attributes
-    if (this.markers) {
+    // Hide tooltip
+    that.tooltipNode.attr('style', 'display:none;');
+
+    // Rescale markers size
+    if (this.options.markers) {
       // markers
       d3.selectAll('.mt-map-marker').each(function (d) {
         // stroke
         if (d.prop['stroke-width']) {
-          d3.select(this).attr('stroke-width', d.prop['stroke-width'] / self.scaleAttributes());
+          d3.select(this).attr('stroke-width', d.prop['stroke-width'] / that.scaleAttributes());
         }
         // radius
         if (d.prop.r) {
-          d3.select(this).attr('r', d.prop.r / self.scaleAttributes());
-        }
-      });
-      // countries
-      d3.selectAll('.mt-map-country').each(d => {
-        // stroke
-        if (d.prop['stroke-width']) {
-          d3.select(this).attr('stroke-width', d.prop['stroke-width'] / self.scale_attributes());
+          d3.select(this).attr('r', d.prop.r / that.scaleAttributes());
         }
       });
     }
+
+    // Rescale Country stroke-width
+    d3.selectAll('.mt-map-country').each(function (d) {
+      // stroke
+      if (d.prop['stroke-width']) {
+        d3.select(this).attr('stroke-width', d.prop['stroke-width'] / that.scaleAttributes());
+      }
+    });
   }
 
   getScaledValue(obj, key, datum, data) {
@@ -386,7 +390,7 @@ export default class GeoMap {
   }
 
   updateCountries() {
-    const self = this;
+    const that = this;
     if (this.options.countries.attr) {
       let dataCountries = [];
       const dataCountriesAssoc = {};
@@ -406,10 +410,10 @@ export default class GeoMap {
 
       const countryItem = d3.selectAll('.mt-map-country')
         .each(function (datum) {
-          Object.keys(self.options.countries.attr).forEach(key => {
+          Object.keys(that.options.countries.attr).forEach(key => {
             d3.select(this).attr(key, () => {
               if (!datum.prop) datum.prop = {};
-              datum.prop[key] = self.getScaledValue(self.options.countries, key,
+              datum.prop[key] = that.getScaledValue(that.options.countries, key,
                  datum, dataCountries);
               return datum.prop[key];
             });

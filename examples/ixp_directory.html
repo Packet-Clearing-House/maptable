@@ -23,9 +23,10 @@
         .csv('./data/ixp.csv')
         .map({
           path: "maps/world-110m-wo-antarctica.json",
-          zoom: false,
+          zoom: true,
           scaleHeight: 0.86,
           ratioFromWidth: 0.48,
+          legend: true,
           watermark: {
             src: 'https://www.pch.net/assets/img/pch_logo.svg',
             width: 130,

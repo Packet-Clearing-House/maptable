@@ -469,9 +469,7 @@ this.d3.maptable = (function () {
     }, {
       key: 'rescale',
       value: function rescale() {
-        var _this = this;
-
-        var self = this;
+        var that = this;
         if (d3.event && d3.event.translate) {
           this.scale = d3.event.scale;
           this.transX = this.scale === 1 ? 0 : d3.event.translate[0];
@@ -502,27 +500,31 @@ this.d3.maptable = (function () {
 
         this.layerGlobal.attr('transform', 'translate(' + this.transX + ', ' + this.transY + ')scale(' + this.scale + ')');
 
-        // Rescale attributes
-        if (this.markers) {
+        // Hide tooltip
+        that.tooltipNode.attr('style', 'display:none;');
+
+        // Rescale markers size
+        if (this.options.markers) {
           // markers
           d3.selectAll('.mt-map-marker').each(function (d) {
             // stroke
             if (d.prop['stroke-width']) {
-              d3.select(this).attr('stroke-width', d.prop['stroke-width'] / self.scaleAttributes());
+              d3.select(this).attr('stroke-width', d.prop['stroke-width'] / that.scaleAttributes());
             }
             // radius
             if (d.prop.r) {
-              d3.select(this).attr('r', d.prop.r / self.scaleAttributes());
-            }
-          });
-          // countries
-          d3.selectAll('.mt-map-country').each(function (d) {
-            // stroke
-            if (d.prop['stroke-width']) {
-              d3.select(_this).attr('stroke-width', d.prop['stroke-width'] / self.scale_attributes());
+              d3.select(this).attr('r', d.prop.r / that.scaleAttributes());
             }
           });
         }
+
+        // Rescale Country stroke-width
+        d3.selectAll('.mt-map-country').each(function (d) {
+          // stroke
+          if (d.prop['stroke-width']) {
+            d3.select(this).attr('stroke-width', d.prop['stroke-width'] / that.scaleAttributes());
+          }
+        });
       }
     }, {
       key: 'getScaledValue',
@@ -584,7 +586,7 @@ this.d3.maptable = (function () {
     }, {
       key: 'updateMarkers',
       value: function updateMarkers() {
-        var _this2 = this;
+        var _this = this;
 
         var defaultGroupBy = function defaultGroupBy(a) {
           return a.longitude + ',' + a.latitude;
@@ -626,7 +628,7 @@ this.d3.maptable = (function () {
           Object.keys(this.options.markers.attr).forEach(function (key) {
             markerUpdate = markerUpdate.attr(key, function (datum) {
               if (!datum.prop) datum.prop = {};
-              datum.prop[key] = _this2.getScaledValue(_this2.options.markers, key, datum, dataMarkers);
+              datum.prop[key] = _this.getScaledValue(_this.options.markers, key, datum, dataMarkers);
               return datum.prop[key];
             });
           });
@@ -639,49 +641,49 @@ this.d3.maptable = (function () {
     }, {
       key: 'updateCountries',
       value: function updateCountries() {
-        var _this3 = this;
+        var _this2 = this;
 
-        var self = this;
+        var that = this;
         if (this.options.countries.attr) {
           (function () {
             var dataCountries = [];
             var dataCountriesAssoc = {};
-            if (_this3.options.countries.groupBy) {
-              dataCountries = d3.nest().key(_this3.options.countries.groupBy).entries(_this3.maptable.data);
+            if (_this2.options.countries.groupBy) {
+              dataCountries = d3.nest().key(_this2.options.countries.groupBy).entries(_this2.maptable.data);
               for (var i = 0; i < dataCountries.length; i++) {
                 dataCountriesAssoc[dataCountries[i].key] = dataCountries[i].values;
               }
             }
 
-            if (_this3.legendObject) {
+            if (_this2.legendObject) {
               var domain = d3.extent(dataCountries, function (d) {
-                return _this3.options.countries.rollup(d.values);
+                return _this2.options.countries.rollup(d.values);
               });
-              _this3.legendObject.updateExtents(domain);
+              _this2.legendObject.updateExtents(domain);
             }
 
             var countryItem = d3.selectAll('.mt-map-country').each(function (datum) {
-              var _this4 = this;
+              var _this3 = this;
 
-              Object.keys(self.options.countries.attr).forEach(function (key) {
-                d3.select(_this4).attr(key, function () {
+              Object.keys(that.options.countries.attr).forEach(function (key) {
+                d3.select(_this3).attr(key, function () {
                   if (!datum.prop) datum.prop = {};
-                  datum.prop[key] = self.getScaledValue(self.options.countries, key, datum, dataCountries);
+                  datum.prop[key] = that.getScaledValue(that.options.countries, key, datum, dataCountries);
                   return datum.prop[key];
                 });
               });
             });
 
-            if (_this3.legendObject) {
+            if (_this2.legendObject) {
               countryItem.on('mouseover', function (datum) {
-                return _this3.legendObject.indiceChange(datum.value);
+                return _this2.legendObject.indiceChange(datum.value);
               }).on('mouseout', function () {
-                return _this3.legendObject.indiceChange(NaN);
+                return _this2.legendObject.indiceChange(NaN);
               });
             }
 
-            if (_this3.options.countries.tooltip) {
-              _this3.activateTooltip(countryItem, _this3.options.countries.tooltip);
+            if (_this2.options.countries.tooltip) {
+              _this2.activateTooltip(countryItem, _this2.options.countries.tooltip);
             }
           })();
         }
@@ -689,22 +691,22 @@ this.d3.maptable = (function () {
     }, {
       key: 'activateTooltip',
       value: function activateTooltip(target, tooltipContent, cb) {
-        var _this5 = this;
+        var _this4 = this;
 
         target.on('mousemove', function (d) {
-          var mousePosition = d3.mouse(_this5.svg.node()).map(function (v) {
+          var mousePosition = d3.mouse(_this4.svg.node()).map(function (v) {
             return parseInt(v, 10);
           });
-          _this5.tooltipNode.attr('style', 'display:block;').html(tooltipContent(d));
-          var tooltipDelta = _this5.tooltipNode.node().offsetWidth / 2;
+          _this4.tooltipNode.attr('style', 'display:block;').html(tooltipContent(d));
+          var tooltipDelta = _this4.tooltipNode.node().offsetWidth / 2;
           var mouseLeft = mousePosition[0] - tooltipDelta + document.getElementById('mt-map').offsetLeft;
           var mouseTop = mousePosition[1] + 10 + document.getElementById('mt-map').offsetTop;
-          _this5.tooltipNode.attr('style', 'top:' + mouseTop + 'px;left:' + mouseLeft + 'px;display:block;').on('mouseout', function () {
-            return _this5.tooltipNode.style('display', 'none');
+          _this4.tooltipNode.attr('style', 'top:' + mouseTop + 'px;left:' + mouseLeft + 'px;display:block;').on('mouseout', function () {
+            return _this4.tooltipNode.style('display', 'none');
           });
 
           if (cb) {
-            _this5.tooltipNode.on('click', cb);
+            _this4.tooltipNode.on('click', cb);
           }
         });
       }
