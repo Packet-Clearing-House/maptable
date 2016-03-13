@@ -14,13 +14,14 @@
     "url": "https://www.pch.net"
   },
   "readmeFilename": "README.md",
-  "licenseFilename": "LICENSE",
+  "license": "MIT",
   "scripts": {
     "build": "gulp dist",
     "start": "gulp"
   },
   "devDependencies": {
-    "babel": "^6.3.26",
+    "babel": "^6.5.2",
+    "babel-plugin-closure-elimination": "^1.0.1",
     "babel-preset-es2015-rollup": "^1.1.1",
     "browser-sync": "^2.11.1",
     "eslint": "^1.10.3",
@@ -31,7 +32,7 @@
     "gulp-rimraf": "^0.2.0",
     "gulp-sequence": "^0.4.5",
     "gulp-uglify": "^1.5.2",
-    "rollup": "^0.25.1",
-    "rollup-plugin-babel": "^2.3.9"
+    "rollup": "^0.25.4",
+    "rollup-plugin-babel": "^2.4.0"
   }
 }

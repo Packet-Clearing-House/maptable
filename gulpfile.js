@@ -18,7 +18,7 @@ var reload = browserSync.reload;
 gulp.task('browser-sync', function() {
   browserSync.init({
     server: {
-      baseDir: "./examples/"
+      baseDir: ["./examples", "./build"]
     },
     files: ['./examples/**/*.*', './build/**/*.*'],
     browser: 'google chrome',
@@ -28,21 +28,26 @@ gulp.task('browser-sync', function() {
 
 // Watch
 gulp.task('watch', function() {
-  gulp.watch('src/js/**/*.js', ['build:js:main']);
+  gulp.watch('src/**/*.js', ['build:js']);
 });
 
 // Javascript VENDOR
 gulp.task('build:js', function() {
  return rollup.rollup({
-   entry: './src/js/index.js',
+   entry: './src/index.js',
    plugins: [
 		 babel({ runtimeHelpers: true })
 	 ]
  }).then( function ( bundle ) {
    bundle.write({
      format: 'iife',
-     sourceMap: true,
-     dest: './build/maptable.js'
+     moduleName: 'd3.maptable',
+     globals: {
+       d3: 'd3',
+       topojson: 'topojson'
+    },
+    sourceMap: true,
+    dest: './build/maptable.js'
    });
    browserSync.reload();
  });
@@ -50,12 +55,12 @@ gulp.task('build:js', function() {
 
 // Compression
 gulp.task('compress:js', function() {
-  return gulp.src('build/js/*.js')
+  return gulp.src('build/*.js')
     .pipe(compressJs())
     .pipe(rename({
       suffix: '.min'
     }))
-    .pipe(gulp.dest('./build/js'));
+    .pipe(gulp.dest('./build'));
 });
 
 // Clean
