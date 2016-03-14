@@ -87,7 +87,7 @@ export default class Filters {
       document.querySelector('#mt-filters-elements').appendChild(rowNode);
     }
     this.criteria.push(filterName);
-    this.refresh();
+    this.maptable.render();
     if (this.container.style.display === 'none') {
       this.toggle();
     }
@@ -98,7 +98,7 @@ export default class Filters {
     if (rowNode) rowNode.remove();
     const filterIndex = this.criteria.indexOf(filterName);
     this.criteria.splice(filterIndex, 1);
-    this.refresh();
+    this.maptable.render();
   }
 
   reset() {
@@ -111,7 +111,7 @@ export default class Filters {
   getDescription() {
     const outputArray = [];
 
-    const filtersChildren = this.container.childNodes;
+    const filtersChildren = document.querySelector('#mt-filters-elements').childNodes;
 
     for (let i = 0; i < filtersChildren.length; i++) {
       const element = filtersChildren[i];
@@ -280,9 +280,9 @@ export default class Filters {
   handleRangeChange(filterRange) {
     const rowNode = filterRange.parentNode;
     if (filterRange.value === 'any') {
-      rowNode.querySelector('.mt-filter-value').style.display = 'none';
+      rowNode.querySelector('.mt-filter-value-container').style.display = 'none';
     } else {
-      rowNode.querySelector('.mt-filter-value').style.display = 'inline-block';
+      rowNode.querySelector('.mt-filter-value-container').style.display = 'inline-block';
       if (filterRange.value === 'BETWEEN') {
         rowNode.querySelector('.mt-filter-value-min').style.display = 'inline-block';
         rowNode.querySelector('.mt-filter-value-max').style.display = 'inline-block';

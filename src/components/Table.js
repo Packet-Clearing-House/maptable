@@ -55,15 +55,18 @@ export default class Table {
         }
       });
 
-    this.render();
     if (this.options.defaultSorting) {
       this.sortColumn(this.options.defaultSorting.key, this.options.defaultSorting.mode);
+    } else {
+      this.render();
     }
   }
 
 
   render() {
-    const that = this;
+    // Apply Sort
+    this.applySort();
+
     // Enter
     this.body.selectAll('tr')
       .data(this.maptable.data)
@@ -88,8 +91,8 @@ export default class Table {
       })
       .html(row => {
         let tds = '';
-        that.activeColumns.forEach(columnKey => {
-          const column = that.maptable.columnDetails[columnKey];
+        this.activeColumns.forEach(columnKey => {
+          const column = this.maptable.columnDetails[columnKey];
           tds += '<td';
           if (column.nowrap) {
             tds += ' style="white-space:nowrap;"';
@@ -97,7 +100,7 @@ export default class Table {
           tds += '>';
 
           if (!(
-              that.options.collapseRowsBy.indexOf(columnKey) !== -1 &&
+              this.options.collapseRowsBy.indexOf(columnKey) !== -1 &&
               uniqueCollapsedRows[columnKey] &&
               uniqueCollapsedRows[columnKey] === row[columnKey]
             )) {
@@ -106,7 +109,7 @@ export default class Table {
             } else {
               if (row[columnKey] && row[columnKey] !== 'null') tds += row[columnKey];
             }
-            if (that.options.collapseRowsBy.indexOf(columnKey) !== -1) {
+            if (this.options.collapseRowsBy.indexOf(columnKey) !== -1) {
               uniqueCollapsedRows[columnKey] = row[columnKey];
             }
             tds += '</td>';
@@ -137,7 +140,6 @@ export default class Table {
       }
       return d3SortMode(el1, el2);
     });
-    this.render();
   }
 
   sortColumn(columnKey, columnMode) {
@@ -157,6 +159,6 @@ export default class Table {
     document.getElementById(`column_header_${utils.sanitizeKey(columnKey)}`)
       .setAttribute('class', `mt-table-sortable sort_${this.currentSorting.mode}`);
 
-    this.applySort();
+    this.render();
   }
 }

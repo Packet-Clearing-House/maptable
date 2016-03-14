@@ -57,16 +57,6 @@ export default class GeoMap {
       this.svg = this.svg.call(this.zoomListener.bind(this));
     }
 
-    // Add Watermark
-    if (this.options.watermark) {
-      this.watermark = new Watermark(this, this.options.watermark);
-    }
-
-    // Add Title
-    if (this.options.title) {
-      this.title = this.buildTitle();
-    }
-
     // Add tooltip
     this.tooltipNode = d3.select(this.node)
       .append('div')
@@ -77,6 +67,16 @@ export default class GeoMap {
     this.layerCountries = this.layerGlobal.append('g').attr('class', 'mt-map-countries');
     this.layerMarkers = this.layerGlobal.append('g').attr('class', 'mt-map-markers');
     this.loadGeometries();
+
+    // Add Watermark
+    if (this.options.watermark) {
+      this.watermark = new Watermark(this, this.options.watermark);
+    }
+
+    // Add Title
+    if (this.options.title) {
+      this.buildTitle();
+    }
   }
 
   scaleAttributes() {
@@ -153,7 +153,7 @@ export default class GeoMap {
 
     // center dots with the good ratio
     const ratio = this.getWidth() / this.getHeight();
-    const deltaMarker = 20;
+    const deltaMarker = 20 + ((this.options.title) ? 30 : 0);
 
     const currentWidth = (hor[1] - hor[0]) + deltaMarker;
     const currentHeight = (ver[1] - ver[0]) + deltaMarker;
@@ -441,8 +441,8 @@ export default class GeoMap {
 
   updateTitle() {
     if (this.options.title.content) {
-      const showing = this.maptable.data.filter(d => d[this.options.latitudeKey] === 0).length;
-      const total = this.maptable.rawData.filter(d => d[this.options.latitudeKey] === 0).length;
+      const showing = this.maptable.data.filter(d => d[this.options.latitudeKey] !== 0).length;
+      const total = this.maptable.rawData.filter(d => d[this.options.latitudeKey] !== 0).length;
 
       let inlineFilters = '';
       if (this.maptable.filters) {
@@ -457,17 +457,20 @@ export default class GeoMap {
   activateTooltip(target, tooltipContent, cb) {
     target.on('mousemove', d => {
       const mousePosition = d3.mouse(this.svg.node()).map(v => parseInt(v, 10));
+
       this.tooltipNode.attr('style', 'display:block;').html(tooltipContent(d));
+
       const tooltipDelta = this.tooltipNode.node().offsetWidth / 2;
       const mouseLeft = (mousePosition[0] - tooltipDelta +
         document.getElementById('mt-map').offsetLeft);
       const mouseTop = (mousePosition[1] + 10 + document.getElementById('mt-map').offsetTop);
+
       this.tooltipNode.attr('style', `top:${mouseTop}px;left:${mouseLeft}px;display:block;`)
         .on('mouseout', () => this.tooltipNode.style('display', 'none'));
 
       if (cb) {
         this.tooltipNode.on('click', cb);
       }
-    });
+    }).on('mouseout', () => this.tooltipNode.style('display', 'none'));
   }
 }

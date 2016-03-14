@@ -135,7 +135,7 @@ this.d3.maptable = (function () {
 
       this.map = map;
       // Create Legend
-      this.node = this.map.svg.append('g').attr('transform', 'translate(' + (this.map.getWidth() - 300) + ', ' + (this.map.getHeight() - 60) + ')');
+      this.node = this.map.svg.append('g').attr('id', 'mt-map-legend').attr('transform', 'translate(' + (this.map.getWidth() - 300) + ', ' + (this.map.getHeight() - 60) + ')');
 
       this.buildScale();
       this.buildIndice();
@@ -168,6 +168,7 @@ this.d3.maptable = (function () {
     }, {
       key: 'updateExtents',
       value: function updateExtents(domain) {
+        document.getElementById('mt-map-legend').style.opacity = domain[0] === domain[1] ? 0 : 1;
         if (document.getElementById('mt-map-legend-min')) {
           this.node.select('#mt-map-legend-min').text(domain[0]);
           this.node.select('#mt-map-legend-max').text(domain[1]);
@@ -329,16 +330,6 @@ this.d3.maptable = (function () {
         this.svg = this.svg.call(this.zoomListener.bind(this));
       }
 
-      // Add Watermark
-      if (this.options.watermark) {
-        this.watermark = new Legend$1(this, this.options.watermark);
-      }
-
-      // Add Title
-      if (this.options.title) {
-        this.title = this.buildTitle();
-      }
-
       // Add tooltip
       this.tooltipNode = d3.select(this.node).append('div').attr('class', 'mt-map-tooltip ' + this.options.tooltipClass).style('display', 'none');
 
@@ -346,6 +337,16 @@ this.d3.maptable = (function () {
       this.layerCountries = this.layerGlobal.append('g').attr('class', 'mt-map-countries');
       this.layerMarkers = this.layerGlobal.append('g').attr('class', 'mt-map-markers');
       this.loadGeometries();
+
+      // Add Watermark
+      if (this.options.watermark) {
+        this.watermark = new Legend$1(this, this.options.watermark);
+      }
+
+      // Add Title
+      if (this.options.title) {
+        this.buildTitle();
+      }
     }
 
     babelHelpers.createClass(GeoMap, [{
@@ -423,7 +424,7 @@ this.d3.maptable = (function () {
 
         // center dots with the good ratio
         var ratio = this.getWidth() / this.getHeight();
-        var deltaMarker = 20;
+        var deltaMarker = 20 + (this.options.title ? 30 : 0);
 
         var currentWidth = hor[1] - hor[0] + deltaMarker;
         var currentHeight = ver[1] - ver[0] + deltaMarker;
@@ -704,10 +705,10 @@ this.d3.maptable = (function () {
 
         if (this.options.title.content) {
           var showing = this.maptable.data.filter(function (d) {
-            return d[_this4.options.latitudeKey] === 0;
+            return d[_this4.options.latitudeKey] !== 0;
           }).length;
           var total = this.maptable.rawData.filter(function (d) {
-            return d[_this4.options.latitudeKey] === 0;
+            return d[_this4.options.latitudeKey] !== 0;
           }).length;
 
           var inlineFilters = '';
@@ -727,10 +728,13 @@ this.d3.maptable = (function () {
           var mousePosition = d3.mouse(_this5.svg.node()).map(function (v) {
             return parseInt(v, 10);
           });
+
           _this5.tooltipNode.attr('style', 'display:block;').html(tooltipContent(d));
+
           var tooltipDelta = _this5.tooltipNode.node().offsetWidth / 2;
           var mouseLeft = mousePosition[0] - tooltipDelta + document.getElementById('mt-map').offsetLeft;
           var mouseTop = mousePosition[1] + 10 + document.getElementById('mt-map').offsetTop;
+
           _this5.tooltipNode.attr('style', 'top:' + mouseTop + 'px;left:' + mouseLeft + 'px;display:block;').on('mouseout', function () {
             return _this5.tooltipNode.style('display', 'none');
           });
@@ -738,6 +742,8 @@ this.d3.maptable = (function () {
           if (cb) {
             _this5.tooltipNode.on('click', cb);
           }
+        }).on('mouseout', function () {
+          return _this5.tooltipNode.style('display', 'none');
         });
       }
     }]);
@@ -838,7 +844,7 @@ this.d3.maptable = (function () {
           document.querySelector('#mt-filters-elements').appendChild(rowNode);
         }
         this.criteria.push(filterName);
-        this.refresh();
+        this.maptable.render();
         if (this.container.style.display === 'none') {
           this.toggle();
         }
@@ -850,7 +856,7 @@ this.d3.maptable = (function () {
         if (rowNode) rowNode.remove();
         var filterIndex = this.criteria.indexOf(filterName);
         this.criteria.splice(filterIndex, 1);
-        this.refresh();
+        this.maptable.render();
       }
     }, {
       key: 'reset',
@@ -865,7 +871,7 @@ this.d3.maptable = (function () {
       value: function getDescription() {
         var outputArray = [];
 
-        var filtersChildren = this.container.childNodes;
+        var filtersChildren = document.querySelector('#mt-filters-elements').childNodes;
 
         for (var i = 0; i < filtersChildren.length; i++) {
           var element = filtersChildren[i];
@@ -1035,9 +1041,9 @@ this.d3.maptable = (function () {
       value: function handleRangeChange(filterRange) {
         var rowNode = filterRange.parentNode;
         if (filterRange.value === 'any') {
-          rowNode.querySelector('.mt-filter-value').style.display = 'none';
+          rowNode.querySelector('.mt-filter-value-container').style.display = 'none';
         } else {
-          rowNode.querySelector('.mt-filter-value').style.display = 'inline-block';
+          rowNode.querySelector('.mt-filter-value-container').style.display = 'inline-block';
           if (filterRange.value === 'BETWEEN') {
             rowNode.querySelector('.mt-filter-value-min').style.display = 'inline-block';
             rowNode.querySelector('.mt-filter-value-max').style.display = 'inline-block';
@@ -1209,9 +1215,10 @@ this.d3.maptable = (function () {
         }
       });
 
-      this.render();
       if (this.options.defaultSorting) {
         this.sortColumn(this.options.defaultSorting.key, this.options.defaultSorting.mode);
+      } else {
+        this.render();
       }
     }
 
@@ -1220,7 +1227,9 @@ this.d3.maptable = (function () {
       value: function render() {
         var _this2 = this;
 
-        var that = this;
+        // Apply Sort
+        this.applySort();
+
         // Enter
         this.body.selectAll('tr').data(this.maptable.data).enter().append('tr');
 
@@ -1236,21 +1245,21 @@ this.d3.maptable = (function () {
           return 'line';
         }).html(function (row) {
           var tds = '';
-          that.activeColumns.forEach(function (columnKey) {
-            var column = that.maptable.columnDetails[columnKey];
+          _this2.activeColumns.forEach(function (columnKey) {
+            var column = _this2.maptable.columnDetails[columnKey];
             tds += '<td';
             if (column.nowrap) {
               tds += ' style="white-space:nowrap;"';
             }
             tds += '>';
 
-            if (!(that.options.collapseRowsBy.indexOf(columnKey) !== -1 && uniqueCollapsedRows[columnKey] && uniqueCollapsedRows[columnKey] === row[columnKey])) {
+            if (!(_this2.options.collapseRowsBy.indexOf(columnKey) !== -1 && uniqueCollapsedRows[columnKey] && uniqueCollapsedRows[columnKey] === row[columnKey])) {
               if (typeof column.cellContent === 'function') {
                 tds += column.cellContent(row);
               } else {
                 if (row[columnKey] && row[columnKey] !== 'null') tds += row[columnKey];
               }
-              if (that.options.collapseRowsBy.indexOf(columnKey) !== -1) {
+              if (_this2.options.collapseRowsBy.indexOf(columnKey) !== -1) {
                 uniqueCollapsedRows[columnKey] = row[columnKey];
               }
               tds += '</td>';
@@ -1284,7 +1293,6 @@ this.d3.maptable = (function () {
           }
           return d3SortMode(el1, el2);
         });
-        this.render();
       }
     }, {
       key: 'sortColumn',
@@ -1304,7 +1312,7 @@ this.d3.maptable = (function () {
         }
         document.getElementById('column_header_' + utils.sanitizeKey(columnKey)).setAttribute('class', 'mt-table-sortable sort_' + this.currentSorting.mode);
 
-        this.applySort();
+        this.render();
       }
     }]);
     return Table;
@@ -1345,6 +1353,7 @@ this.d3.maptable = (function () {
               throw errGeoMap;
             }
             _this.map = new GeoMap(_this, _this.options.map, jsonWorld);
+            _this.render();
           });
         }
 

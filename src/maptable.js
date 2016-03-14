@@ -33,6 +33,7 @@ export default class MapTable {
           throw errGeoMap;
         }
         this.map = new GeoMap(this, this.options.map, jsonWorld);
+        this.render();
       });
     }
 

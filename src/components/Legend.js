@@ -4,6 +4,7 @@ export default class Legend {
     // Create Legend
     this.node = this.map.svg
       .append('g')
+      .attr('id', 'mt-map-legend')
       .attr('transform',
         `translate(${(this.map.getWidth() - 300)}, ${(this.map.getHeight() - 60)})`);
 
@@ -90,6 +91,7 @@ export default class Legend {
   }
 
   updateExtents(domain) {
+    document.getElementById('mt-map-legend').style.opacity = (domain[0] === domain[1]) ? 0 : 1;
     if (document.getElementById('mt-map-legend-min')) {
       this.node.select('#mt-map-legend-min').text(domain[0]);
       this.node.select('#mt-map-legend-max').text(domain[1]);
