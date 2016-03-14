@@ -51,6 +51,7 @@ export default class MapTable {
   render() {
     if (this.filters) {
       this.filters.filterData();
+      this.filters.refresh();
     }
 
     if (this.map) {

@@ -306,7 +306,7 @@ this.d3.maptable = (function () {
         this.maptable.node.insertBefore(this.node, this.maptable.node.firstChild);
       }
 
-      this.svg = d3.select(this.node).append('svg').attr('viewBox', '0 0 ' + this.getWidth() + ' ' + this.getHeight()).attr('width', this.getWidth()).attr('height', this.getHeight());
+      this.svg = d3.select(this.node).append('svg').attr('id', 'mt-map-svg').attr('viewBox', '0 0 ' + this.getWidth() + ' ' + this.getHeight()).attr('width', this.getWidth()).attr('height', this.getHeight());
 
       // Resize parent div
       d3.select(this.node).attr('style', 'height:' + this.getHeight() + 'px');
@@ -346,6 +346,11 @@ this.d3.maptable = (function () {
       // Add Title
       if (this.options.title) {
         this.buildTitle();
+      }
+
+      // Add Export SVG Capability
+      if (this.options.exportSvg) {
+        this.addExportSvgCapability();
       }
     }
 
@@ -732,7 +737,7 @@ this.d3.maptable = (function () {
           _this5.tooltipNode.attr('style', 'display:block;').html(tooltipContent(d));
 
           var tooltipDelta = _this5.tooltipNode.node().offsetWidth / 2;
-          var mouseLeft = mousePosition[0] - tooltipDelta + document.getElementById('mt-map').offsetLeft;
+          var mouseLeft = mousePosition[0] - tooltipDelta;
           var mouseTop = mousePosition[1] + 10 + document.getElementById('mt-map').offsetTop;
 
           _this5.tooltipNode.attr('style', 'top:' + mouseTop + 'px;left:' + mouseLeft + 'px;display:block;').on('mouseout', function () {
@@ -745,6 +750,37 @@ this.d3.maptable = (function () {
         }).on('mouseout', function () {
           return _this5.tooltipNode.style('display', 'none');
         });
+      }
+    }, {
+      key: 'exportSvg',
+      value: function exportSvg() {
+        // Get the d3js SVG element
+        var svg = document.getElementById('mt-map-svg');
+        // Extract the data as SVG text string
+        var svgXml = new XMLSerializer().serializeToString(svg);
+
+        // Submit the <FORM> to the server.
+        // The result will be an attachment file to download.
+        var form = document.getElementById('mt-map-svg-form');
+        form.querySelector('[name="data"]').value = svgXml;
+        form.submit();
+      }
+    }, {
+      key: 'addExportSvgCapability',
+      value: function addExportSvgCapability() {
+        var exportNode = document.createElement('div');
+        exportNode.setAttribute('id', 'mt-map-export');
+        document.getElementById('mt-map').appendChild(exportNode);
+
+        var exportButton = document.createElement('button');
+        exportButton.setAttribute('class', 'btn btn-xs btn-default');
+        exportButton.innerHTML = '<i class="glyphicon glyphicon-download-alt"></i> Download';
+        exportButton.addEventListener('click', this.exportSvg.bind(this));
+        exportNode.appendChild(exportButton);
+
+        var exportForm = document.createElement('div');
+        exportForm.innerHTML = '<form id="mt-map-svg-form" method="post"\n      action="' + this.options.exportSvg + '"><input type="hidden" name="data"></form>';
+        exportNode.appendChild(exportForm);
       }
     }]);
     return GeoMap;
@@ -1262,8 +1298,8 @@ this.d3.maptable = (function () {
               if (_this2.options.collapseRowsBy.indexOf(columnKey) !== -1) {
                 uniqueCollapsedRows[columnKey] = row[columnKey];
               }
-              tds += '</td>';
             }
+            tds += '</td>';
           });
           return tds;
         });
@@ -1372,6 +1408,7 @@ this.d3.maptable = (function () {
       value: function render() {
         if (this.filters) {
           this.filters.filterData();
+          this.filters.refresh();
         }
 
         if (this.map) {

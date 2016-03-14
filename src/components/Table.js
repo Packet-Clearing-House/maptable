@@ -112,8 +112,8 @@ export default class Table {
             if (this.options.collapseRowsBy.indexOf(columnKey) !== -1) {
               uniqueCollapsedRows[columnKey] = row[columnKey];
             }
-            tds += '</td>';
           }
+          tds += '</td>';
         });
         return tds;
       });

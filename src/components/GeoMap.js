@@ -23,6 +23,7 @@ export default class GeoMap {
 
     this.svg = d3.select(this.node)
       .append('svg')
+      .attr('id', 'mt-map-svg')
       .attr('viewBox', `0 0 ${this.getWidth()} ${this.getHeight()}`)
       .attr('width', this.getWidth())
       .attr('height', this.getHeight());
@@ -76,6 +77,11 @@ export default class GeoMap {
     // Add Title
     if (this.options.title) {
       this.buildTitle();
+    }
+
+    // Add Export SVG Capability
+    if (this.options.exportSvg) {
+      this.addExportSvgCapability();
     }
   }
 
@@ -461,8 +467,7 @@ export default class GeoMap {
       this.tooltipNode.attr('style', 'display:block;').html(tooltipContent(d));
 
       const tooltipDelta = this.tooltipNode.node().offsetWidth / 2;
-      const mouseLeft = (mousePosition[0] - tooltipDelta +
-        document.getElementById('mt-map').offsetLeft);
+      const mouseLeft = (mousePosition[0] - tooltipDelta);
       const mouseTop = (mousePosition[1] + 10 + document.getElementById('mt-map').offsetTop);
 
       this.tooltipNode.attr('style', `top:${mouseTop}px;left:${mouseLeft}px;display:block;`)
@@ -472,5 +477,35 @@ export default class GeoMap {
         this.tooltipNode.on('click', cb);
       }
     }).on('mouseout', () => this.tooltipNode.style('display', 'none'));
+  }
+
+  exportSvg() {
+    // Get the d3js SVG element
+    const svg = document.getElementById('mt-map-svg');
+    // Extract the data as SVG text string
+    const svgXml = (new XMLSerializer).serializeToString(svg);
+
+    // Submit the <FORM> to the server.
+    // The result will be an attachment file to download.
+    const form = document.getElementById('mt-map-svg-form');
+    form.querySelector('[name="data"]').value = svgXml;
+    form.submit();
+  }
+
+  addExportSvgCapability() {
+    const exportNode = document.createElement('div');
+    exportNode.setAttribute('id', 'mt-map-export');
+    document.getElementById('mt-map').appendChild(exportNode);
+
+    const exportButton = document.createElement('button');
+    exportButton.setAttribute('class', 'btn btn-xs btn-default');
+    exportButton.innerHTML = '<i class="glyphicon glyphicon-download-alt"></i> Download';
+    exportButton.addEventListener('click', this.exportSvg.bind(this));
+    exportNode.appendChild(exportButton);
+
+    const exportForm = document.createElement('div');
+    exportForm.innerHTML = `<form id="mt-map-svg-form" method="post"
+      action="${this.options.exportSvg}"><input type="hidden" name="data"></form>`;
+    exportNode.appendChild(exportForm);
   }
 }
