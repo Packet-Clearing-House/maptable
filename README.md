@@ -69,21 +69,48 @@ If you want to place the component `Map`, `Filters`, `Table` in a different orde
 
 ### Import datasets
 
-\# `viz.json(url)``
+\# `viz.json(url)`
 
 Import JSON file at the specified url with the mime type "application/json".
 
-\# `viz.csv(url)``
+\# `viz.csv(url)`
 
 Import CSV file at the specified url with the mime type "text/csv".
 
-\# `viz.*tsv*(url)``
+\# `viz.tsv(url)`
 
 Import TSV file at the specified url with the mime type "text/tab-separated-values".
 
+### Columns details
+
+By default, MapTable imports all the columns and detects its format automatically. But you can customize behaviors of specific columns and even create new virtual columns.
+
+\# `viz.columns(columnsDetails)`
+
+#### columnsDetails format
+
+- `<PUT_YOUR_COLUMN_KEY>:` _(Object)_ Provide the columns key here to provide its information below:
+
+  - `nowrap:` _(bool, default: false)_ When present, it specifies that the content inside a that column should not wrap.
+
+  - `title:` _(string, default: columnKey)_ What we show as column name in filters and table.
+
+  - `type:` _(string, default: 'field')_ Column format type, used for filtering. Available options:
+
+    - `field`: filter by keyword
+    - `dropdown`: exact match using a dropdown
+    - `number`: filter using comparison (≥, ≤, between ....)
+    - `custom`: custom format that we will define with the option `dataFormat`
+
+  - `dataFormat:` _(function(d))_ Used only when `type` is _custom_. Function that return the new formatted data.
+
+  - `cellContent:` _(function(d))_ Function that return what we will show on the table cell. 
+
 ### Map
 
-\# `viz.map(options)``
+If you want to add a Map on your visualization:
+
+\# `viz.map(options)`
 
 #### Options
 
@@ -164,6 +191,17 @@ Import TSV file at the specified url with the mime type "text/tab-separated-valu
     - `countries.attr.stroke:` _(ScaledValue)_ Marker border color
 
     - `countries.attr.stroke-width:` _(ScaledValue)_ Marker border width
+
+
+### Filters
+
+If you want to add filters on your visualization:
+
+\# `viz.filters(options)`
+
+#### Options
+
+- `show:` _([string, ...], default: null)_ Set the order and the columns that we want to see in the filters
 
 
 # Contribute
