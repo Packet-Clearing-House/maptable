@@ -2,14 +2,13 @@ export default {
   map: {
     longitudeKey: 'longitude',
     latitudeKey: 'latitude',
+    zoom: true,
     legend: false,
     ratioFromWidth: 0.5,
-    scaleHeight: 1,
+    scaleHeight: 1.0,
     scaleZoom: [1, 10],
-    animationDuration: 750,
     fitContentMargin: 10,
     autoFitContent: true,
-    showNullCoordinates: false,
     tooltipClass: 'popover bottom',
     title: {
       fontSize: 12,
