@@ -1,131 +1,113 @@
-Maptable
+MapTable
 ========
 
-(Work In Progress)
+Convert any dataset to a customizable set of components (Map, Filters, Table).
 
-Provide a CSV or JSON and the tool will plot a world Map with locations of the table rows, with filters and a table
+# Documentation
 
-# API documentation
+## Dependencies
 
-## Init a MapTable
+- MapTable requires [D3.js](https://d3js.org/) to work.
+- If you're expecting to use the `map` capability, you would also need to require [TopoJSON](https://github.com/mbostock/topojson).
 
-`MapTable.init("target selector", {options});
+## Import MapTable in your project
 
-## Options
-You can build different components of the tool just by mentioning it on the options
+### Browser
 
-### Data
-It's a mandatory tool, and contains details about the dataset:
-
+```html
+<script src="d3.min.js"></script>
+<script src="topojson.min.js"></script>
+<script src="maptable.min.js"></script>
+<script>
+  d3.maptable('#vizContainer')
+    .json('http://foo.com/dataset.json')
+    .map(...)
+    .filters(...)
+    .table(...);
+</script>
 ```
-data: {
-  type: "csv|json",
-  path: "path/to/data/file", // path to your JSON or CSV file
-  columns: [
-    {
-      id: "foo", // column name in the input file
-      displayName: "Foo", // how you want to display it on the header
-      type: "dropdown|field|number|virtual|custom", // Used for filter, it how you want to filter data:
-                                // Dropdown: Select within a list of unique occurrences
-                                // Field: Input a string to filter rows that contains this text
-                                // Number: Same as above, but for numbers (uses <input type="number">)
-                                // Virtual: Not included in the filters, used for button actions
-                                // Custom: will get the input type from the option input_type
-      input_type: "data|range|tel...", // Input type for the filter, check the previous comment
-      cellContent: function(d) { ... }, // How you want to format the cell on the table
-      dataFormat: function(d) { ... }, // If the data have to be converted before working with it
-    }
-  ]
-}
+MapTable is available on cdnjs.com. Remember though, cool kids concatenate their scripts to minimize http requests.
+
+### Bower
+
+```shell
+bower install --save maptable
 ```
+Notable files are: `build/maptable.min.js` `build/maptable.css`
+
+## Usage
+
+For clarity, we define `viz` as the variable that instantiate Maptable.
+
+## Initiate MapTable
+
+You would need to provide the container of your visualization
+```html
+<div id='vizContainer'></div>
+
+<script>
+  var viz = d3.maptable('#vizContainer'); // #vizContainer is the css selector that will contain your visualization
+</script>
+```
+
+If you want to place the component `Map`, `Filters`, `Table` in a different order, you can put them on the main container:
+
+```html
+<div id='vizContainer'>
+  <div id='mt-map'></div>
+  <div id='mt-filters'></div>
+  <div id='mt-table'></div>
+</div>
+```
+
+### Import datasets
+
+\# viz.*json*(url)
+
+Import JSON file at the specified url with the mime type "application/json".
+
+\# viz.*csv*(url)
+
+Import CSV file at the specified url with the mime type "text/csv".
+
+\# viz.*tsv*(url)
+
+Import TSV file at the specified url with the mime type "text/tab-separated-values".
 
 ### Map
 
-```
-map: {
-  path: "path/to/topojson/file", // Path to topojson file
-  auto_width: true
-  zoom: true,
-  scale_height: .86,
-  ratio_from_width: .48,
-  watermark: {
-    src: "path/to/watermark/image",
-    width: 130,
-    height: 60,
-    position: "bottom left",
-    style: "opacity:0.1"
-  },
-  title: {
-    bgcolor: "#F5F5F5",
-    font_size: "11",
-    content: function(countRowsFiltered, countTotalRows, filtersInline) { ... },
-    source: "source text"
-  },
-  svg_filters: "#svg_filters", // Selector for SVG filters (check example)
-  markers: {
-    group_by: function(d) {
-      return d.city + ", " + d.country;
-    },
-    rollup: function(d) {
-      return d.length;
-    },
-    tooltip: function(a) {
-      out = '<div class="arrow"></div>';
-      out += '<span class="badge pull-right"> ' + a.values.length + '</span><h3 class="popover-title"> ' + a.key + '</h3>';
-      out += '<div class="popover-content">';
+\# viz.*map*(options)
 
-      for (i = 0; i < a.values.length; i++) out += " • " + a.values[i].long_name + "<br>";
+#### Options
 
-      out += "</div>";
-      return out;
-    },
-    attr: {
-      r: ["min", "max", function(a) {
-        return 3 * Math.sqrt(a);
-      }],
-      fill: "url(#gardientYellow)",
-      stroke: "#d9d9d9",
-      "stroke-width": .5,
-      filter: "url(#drop-shadow)"
-    }
-  },
-  countries: {
-    group_by: function(a) {
-      return a['country_code'];
-    },
-    rollup: function(a) {
-      return a.length;
-    },
-    attr: {
-      fill: ["#a9b6c2", "#6c89a3"],
-      stroke: "#d9d9d9",
-      "stroke-width": .5
-    },
-    attr_empty: {
-      fill: "#f9f9f9"
-    }
-  }
-},
-```
+- `path:` _(string, required)_ URL of the TOPOJSON map, you can get them from Mike Bostock's repo: [world atlas](https://github.com/mbostock/world-atlas) and [us atlas](https://github.com/mbostock/us-atlas).
 
-### Table
+- `zoom:` _(bool, default: true)_ Enable zoom on the map (when scrolling up/down on the map).
 
-```
-table: {
-  rowClassName: function(a) {
-    if (a.status != "Active") return "inactive";
-    return "";
-  },
-  class: "table table-striped",
-  default_sorting: {
-    id: "city",
-    mode: "asc"
-  },
-  collapse_rows_by: ["region", "country", "city"]
-}
-```
+- `legend:` _(bool, default: false)_ Enable map legend (that would show the color scale with extremums).
+
+- `title:` _(object, default: *see below*)_ Add a title within the map.
+
+  - `title.fontSize:` _(integer, default:12)_ Title font size
+
+   - `title.fontFamily:` _(string, default: 'Helevetica, Arial, Sans-Serif')_ Title font family
+
+- `scaleZoom:` _([integer, integer], default: [1, 10])_ The map zoom scale extremums
+
+- `scaleHeight:` _(integer, default: 1)_ Ratio to scale the map height
+
+- `autoFitContent:` _(bool, default: true)_ Enable auto zoom to focus on the active markers
+
+- `fitContentMargin:` _(integer, default: 10)_ Padding in pixels to leave when we filter on a specific area.
+
+- `tooltipClass:` _(string, default: 'popover bottom')_ Class name of the tooltip (we're using bootstrap).
+
 
 # Contribute
 
 You are welcomed to fork the project and make pull requests.
-Be sure to create a branch for each feature!
+
+## Todo
+
+ * [ ] Write unit tests
+ * [ ] Improve documentation
