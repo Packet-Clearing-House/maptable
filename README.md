@@ -45,6 +45,33 @@ Functions that have `d` as parameter, means that `d` is a dictionary that contai
 
 Functions that have `groupedData` as parameter, means that `groupedData` is a dictionary `{ key: 'groupedByKey', values: [ {...d...} ] }` that contain grouped data.
 
+## Types definition
+
+### ScaledValue
+
+We use this type on this documentation to change the attributes of markers and countries, depending on the data.
+
+For example, for the map options on `countries.attr.fill`, if we want to have countries background color to be related to a scale from green to red, and be white if the country don't have any related data. The value should be:
+
+```js
+{
+  min: 'green',
+  max: 'red',
+  empty: 'white',
+}
+```
+
+If you want to attach the data extremums to the value of an attribute. For example, for the map options on `markers.attr.r`, if we want to have markers radius to be related to a scale from minimum value and the maximum value, but also transform the value following a function. The value should be:
+
+```js
+{
+  min: 'minValue',
+  max: 'maxValue',
+  transform: function (val) {
+    return Math.sqrt(val);
+  },
+}
+```
 
 ## Initiate MapTable
 
@@ -104,7 +131,7 @@ By default, MapTable imports all the columns and detects its format automaticall
 
   - `dataFormat:` _(function(d))_ Used only when `type` is _custom_. Function that return the new formatted data.
 
-  - `cellContent:` _(function(d))_ Function that return what we will show on the table cell. 
+  - `cellContent:` _(function(d))_ Function that return what we will show on the table cell.
 
 ### Map
 
@@ -156,41 +183,41 @@ If you want to add a Map on your visualization:
 
   - `watermark.style:` _(string)_ Additional css style for the watermark.
 
-- `markers:` _(object, default: null)_ Add markers on the map
+- `markers:` _(object, default: null)_ Add markers on the map.
 
-  - `markers.groupBy:` _(function(d))_ Function that returns a string that we use to group markers on the dataset. Example: `function(d) { return d.city + ', ' + d.country; }`
+  - `markers.groupBy:` _(function(d))_ Function that returns a string that we use to group markers on the dataset. Example: `function(d) { return d.city + ', ' + d.country; }`.
 
-  - `markers.rollup:` _(function(groupedData))_ Function that returns a value that we would use for every marker. We will use it to set the radius of the markers. Example: `function(values) { return values.length; }`
+  - `markers.rollup:` _(function(groupedData))_ Function that returns a value that we would use for every marker. We will use it to set the radius of the markers. Example: `function(values) { return values.length; }`.
 
   - `markers.tooltip:` _(function(d))_ Function that returns html that we would use as content for the tooltip. We recommend you to use the bootstrap popover. If we using groupBy, the parameter is going to be `groupedData`, otherwise it's `d` (check above on the naming conventions for more details).
 
-  - `markers.attr:` _(object)_ Markers attributes (same naming as svg attributes)
+  - `markers.attr:` _(object)_ Markers attributes (same naming as svg attributes).
 
-    - `markers.attr.fill:` _(ScaledValue)_ Marker background color
+    - `markers.attr.fill:` _(ScaledValue)_ Marker background color.
 
-    - `markers.attr.r:` _(ScaledValue)_ Marker radius
+    - `markers.attr.r:` _(ScaledValue)_ Marker radius.
 
-    - `markers.attr.stroke:` _(ScaledValue)_ Marker border color
+    - `markers.attr.stroke:` _(ScaledValue)_ Marker border color.
 
-    - `markers.attr.stroke-width:` _(ScaledValue)_ Marker border width
+    - `markers.attr.stroke-width:` _(ScaledValue)_ Marker border width.
 
-- `countries:` _(object, default: null)_ Add countries on the map
+- `countries:` _(object, default: null)_ Add countries on the map.
 
-  - `countries.groupBy:` _(function(d))_ Function that returns a string that we use to group row by countries on the dataset. Example: `function(d) { return d.country_code; }`
+  - `countries.groupBy:` _(function(d))_ Function that returns a string that we use to group row by countries on the dataset. Example: `function(d) { return d.country_code; }`.
 
-  - `countries.rollup:` _(function(groupedData))_ Function that returns a value that we would use for every country. Example: `function(values) { return values.length; }`
+  - `countries.rollup:` _(function(groupedData))_ Function that returns a value that we would use for every country. Example: `function(values) { return values.length; }`.
 
   - `countries.tooltip:` _(function(d))_ Function that returns html that we would use as content for the tooltip. We recommend you to use the bootstrap popover. If we using groupBy, the parameter is going to be `groupedData`, otherwise it's `d` (check above on the naming conventions for more details).
 
-  - `countries.attr:` _(object)_ Markers attributes (same naming as svg attributes)
+  - `countries.attr:` _(object)_ Markers attributes (same naming as svg attributes).
 
-    - `countries.attr.fill:` _(ScaledValue)_ Marker background color
+    - `countries.attr.fill:` _(ScaledValue)_ Marker background color.
 
-    - `countries.attr.r:` _(ScaledValue)_ Marker radius
+    - `countries.attr.r:` _(ScaledValue)_ Marker radius.
 
-    - `countries.attr.stroke:` _(ScaledValue)_ Marker border color
+    - `countries.attr.stroke:` _(ScaledValue)_ Marker border color.
 
-    - `countries.attr.stroke-width:` _(ScaledValue)_ Marker border width
+    - `countries.attr.stroke-width:` _(ScaledValue)_ Marker border width.
 
 
 ### Filters
@@ -201,7 +228,27 @@ If you want to add filters on your visualization:
 
 #### Options
 
-- `show:` _([string, ...], default: null)_ Set the order and the columns that we want to see in the filters
+- `show:` _([string, ...], default: null)_ Set the order and the columns that we want to see in the filters.
+
+### Table
+
+If you want to add a table on your visualization:
+
+\# `viz.table(options)`
+
+#### Options
+
+- `show:` _([string, ...], default: null)_ Set the order and the columns that we want to see in the table.
+
+- `rowClassName:` _(function(d), default: null)_ Function that returns the row class name depending on its content. Useful to highlight rows.
+
+- `defaultSorting:` _(object, default: see below)_ How we sort things on the table.
+
+  - `defaultSorting.key:` _(string, default: <first column shown>)_ default sorting on which column.
+
+  - `defaultSorting.mode:` _(string, default: 'asc')_ sorting mode: `asc` for ascending, `desc` for descending.
+
+- `collapseRowsBy:` _([string, ...], default: null)_ Array of columns that we want to be collapsed.
 
 
 # Contribute
@@ -210,5 +257,5 @@ You are welcomed to fork the project and make pull requests.
 
 ## Todo
 
- * [ ] Write unit tests
+ * [ ] Top priority! Write unit tests
  * [ ] Improve documentation
