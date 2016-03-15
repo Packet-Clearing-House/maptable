@@ -6,7 +6,7 @@ Convert any dataset to a customizable set of components of Map, Filters and Tabl
 - **Table** - A tabular representation of your dataset which can be sorted by header rows. This also dynamically responds to filters.
 - **Filters** - A programmatically generated list of drop downs and input fields to drill down into your dataset
 
-[![MapTable in action](examples/img/ixpdir.small.png "MapTable in action")]
+![MapTable in action](examples/img/ixpdir.small.png "MapTable in action")
 
 ## Dependencies
 
