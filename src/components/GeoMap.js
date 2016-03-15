@@ -42,10 +42,12 @@ export default class GeoMap {
     this.maptable.rawData.forEach(d => {
       d.longitude = parseFloat(d[that.options.longitudeKey]);
       d.latitude = parseFloat(d[that.options.latitudeKey]);
-      const coord = that.projection([d.longitude, d.latitude]);
+      let coord = [0, 0];
+      if (!isNaN(d.longitude) && !isNaN(d.latitude)) {
+        coord = that.projection([d.longitude, d.latitude]);
+      }
       d.x = coord[0];
       d.y = coord[1];
-      return d;
     });
 
     this.zoomListener = d3.behavior
@@ -337,7 +339,7 @@ export default class GeoMap {
       .key(this.options.markers.groupBy ? this.options.markers.groupBy : defaultGroupBy)
       .entries(this.maptable.data)
       .filter(d => {
-        return d.values[0].latitude !== 0;
+        return d.values[0].x !== 0;
       });
 
     const markerItem = this.layerMarkers
@@ -434,8 +436,10 @@ export default class GeoMap {
     this.updateMarkers();
     this.updateCountries();
     this.updateTitle();
-    this.fitContent();
-    this.rescale();
+    if (this.options.autoFitContent) {
+      this.fitContent();
+      this.rescale();
+    }
   }
 
   updateTitle() {

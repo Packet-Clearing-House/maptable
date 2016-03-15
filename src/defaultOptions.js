@@ -8,7 +8,7 @@ export default {
     scaleHeight: 1.0,
     scaleZoom: [1, 10],
     fitContentMargin: 10,
-    autoFitContent: true,
+    autoFitContent: false,
     tooltipClass: 'popover bottom',
     countries: {
       attr: {

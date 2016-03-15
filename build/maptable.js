@@ -115,7 +115,7 @@ this.d3.maptable = (function () {
       scaleHeight: 1.0,
       scaleZoom: [1, 10],
       fitContentMargin: 10,
-      autoFitContent: true,
+      autoFitContent: false,
       tooltipClass: 'popover bottom',
       countries: {
         attr: {
@@ -331,10 +331,12 @@ this.d3.maptable = (function () {
       this.maptable.rawData.forEach(function (d) {
         d.longitude = parseFloat(d[that.options.longitudeKey]);
         d.latitude = parseFloat(d[that.options.latitudeKey]);
-        var coord = that.projection([d.longitude, d.latitude]);
+        var coord = [0, 0];
+        if (!isNaN(d.longitude) && !isNaN(d.latitude)) {
+          coord = that.projection([d.longitude, d.latitude]);
+        }
         d.x = coord[0];
         d.y = coord[1];
-        return d;
       });
 
       this.zoomListener = d3.behavior.zoom().scaleExtent(this.options.scaleZoom).on('zoom', this.rescale.bind(this));
@@ -604,7 +606,7 @@ this.d3.maptable = (function () {
           return a.longitude + ',' + a.latitude;
         };
         var dataMarkers = d3.nest().key(this.options.markers.groupBy ? this.options.markers.groupBy : defaultGroupBy).entries(this.maptable.data).filter(function (d) {
-          return d.values[0].latitude !== 0;
+          return d.values[0].x !== 0;
         });
 
         var markerItem = this.layerMarkers.selectAll('.mt-map-marker').data(dataMarkers);
@@ -703,8 +705,10 @@ this.d3.maptable = (function () {
         this.updateMarkers();
         this.updateCountries();
         this.updateTitle();
-        this.fitContent();
-        this.rescale();
+        if (this.options.autoFitContent) {
+          this.fitContent();
+          this.rescale();
+        }
       }
     }, {
       key: 'updateTitle',
