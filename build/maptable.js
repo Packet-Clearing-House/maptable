@@ -138,7 +138,7 @@ this.d3.maptable = (function () {
       }
     },
     table: {
-      class: 'table table-striped table-bordered',
+      className: 'table table-striped table-bordered',
       collapseRowsBy: []
     }
   };
@@ -1209,7 +1209,7 @@ this.d3.maptable = (function () {
 
       this.maptable = maptable;
       this.options = options;
-      this.currentSorting = { key: null, mode: 'desc' };
+      this.currentSorting = { key: Object.keys(this.maptable.data[0])[0], mode: 'desc' };
 
       this.node = document.querySelector('#mt-table');
       if (!this.node) {
@@ -1461,7 +1461,9 @@ this.d3.maptable = (function () {
       table: null
     };
 
-    maptable.map = function (mapOptions) {
+    maptable.map = function () {
+      var mapOptions = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+
       if (!topojson) {
         throw new Error('Maptable requires topojson.js');
       }
@@ -1497,7 +1499,9 @@ this.d3.maptable = (function () {
       return maptable;
     };
 
-    maptable.table = function (tableOptions) {
+    maptable.table = function () {
+      var tableOptions = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+
       options.table = tableOptions;
       return maptable;
     };

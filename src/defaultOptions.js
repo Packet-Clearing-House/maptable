@@ -31,7 +31,7 @@ export default {
     },
   },
   table: {
-    class: 'table table-striped table-bordered',
+    className: 'table table-striped table-bordered',
     collapseRowsBy: [],
   },
 };
