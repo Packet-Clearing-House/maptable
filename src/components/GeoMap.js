@@ -135,7 +135,9 @@ export default class GeoMap {
       .attr('class', 'mt-map-country')
       .attr('d', d3.geo.path().projection(this.projection));
 
-    if (this.options.legend) {
+    if (this.legendObject &&
+          this.options.countries.attr.fill.min &&
+          this.options.countries.attr.fill.max) {
       this.legendObject = new Legend(this);
     }
     // Countries
@@ -284,48 +286,40 @@ export default class GeoMap {
   }
 
   getScaledValue(obj, key, datum, data) {
-    if (!obj.rollup) {
-      if (typeof (obj.attr[key]) === 'object') {
-        throw new Error(`No rollup and property is an object: ${key}`);
+    if (typeof (obj.attr[key]) === 'object') {
+      if (!obj.rollup) {
+        throw new Error(`MaptTable: rollup property is not defined for ${key}`);
       }
-      return obj.attr[key];
-    }
-    if (obj.attr[key] instanceof Array) {
+      const range = Object.assign({}, obj.attr[key]); // We clone the property to keep this pure!
+      if (!range.min || !range.max) {
+        throw new Error(`MaptTable: You should provide values for 'min' and 'max' for ${key}`);
+      }
       const domain = d3.extent(data, d => obj.rollup(d.values));
 
-      // We copy the variable instead of reference
-      const range = obj.attr[key].slice(0);
-
-      if (obj.attr[key][0] === 'min') {
-        range[0] = domain[0];
+      if (range.min === 'minValue') {
+        range.min = domain[0];
       }
-      if (obj.attr[key][1] === 'max') {
-        range[1] = domain[1];
+      if (range.max === 'maxValue') {
+        range.max = domain[1];
       }
 
-      if (range.length === 3) {
-        if (typeof (range[2]) === 'function') {
-          range[0] = range[2](range[0]);
-          range[1] = range[2](range[1]);
-        } else if (typeof (range[2]) === 'number') {
-          range[0] = range[0] * range[2];
-          range[1] = range[1] * range[2];
-        }
-        range.pop();
+      if (typeof (range.transform) === 'function') {
+        range.min = range.transform(range.min);
+        range.max = range.transform(range.max);
       }
+
       // Dynamic value
       const scale = d3.scale.linear()
         .domain(domain)
-        .range(range);
+        .range([range.min, range.max]);
 
       const filteredData = data.filter(d => d.key === datum.key);
 
       if (!filteredData.length) {
-        if (obj.attrEmpty && obj.attrEmpty[key]) {
-          datum.value = 0;
-          return obj.attrEmpty[key];
+        if (typeof (range.empty) !== 'undefined') {
+          return range.empty;
         }
-        throw new Error(`attrEmpty[${key}] not found`);
+        throw new Error(`MapTable: no empty property found for ${key}`);
       }
       datum.value = obj.rollup(filteredData[0].values);
       return scale(datum.value);
@@ -334,7 +328,7 @@ export default class GeoMap {
       // Static value
       return obj.attr[key];
     }
-    throw new Error(`Invalid value for ${key}`);
+    throw new Error(`Maptable: Invalid value for ${key}`);
   }
 
   updateMarkers() {
@@ -409,11 +403,6 @@ export default class GeoMap {
         }
       }
 
-      if (this.legendObject) {
-        const domain = d3.extent(dataCountries, d => this.options.countries.rollup(d.values));
-        this.legendObject.updateExtents(domain);
-      }
-
       const countryItem = d3.selectAll('.mt-map-country')
         .each(function (datum) {
           Object.keys(that.options.countries.attr).forEach(key => {
@@ -426,7 +415,11 @@ export default class GeoMap {
           });
         });
 
-      if (this.legendObject) {
+      if (this.legendObject &&
+            this.options.countries.attr.fill.min &&
+            this.options.countries.attr.fill.max) {
+        const domain = d3.extent(dataCountries, d => this.options.countries.rollup(d.values));
+        this.legendObject.updateExtents(domain);
         countryItem.on('mouseover', (datum) => this.legendObject.indiceChange(datum.value))
         .on('mouseout', () => this.legendObject.indiceChange(NaN));
       }

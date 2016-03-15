@@ -145,9 +145,9 @@ this.d3.maptable = (function () {
       value: function buildScale() {
         var legendGradient = this.node.append('defs').append('linearGradient').attr('id', 'mt-map-legend-gradient').attr('x1', '0%').attr('y1', '0%').attr('x2', '100%').attr('y2', '0%');
 
-        legendGradient.append('stop').attr('offset', '0%').attr('style', 'stop-color:' + this.map.options.countries.attr.fill[0] + ';stop-opacity:1');
+        legendGradient.append('stop').attr('offset', '0%').attr('style', 'stop-color:' + this.map.options.countries.attr.fill.min + ';stop-opacity:1');
 
-        legendGradient.append('stop').attr('offset', '100%').attr('style', 'stop-color:' + this.map.options.countries.attr.fill[1] + ';stop-opacity:1');
+        legendGradient.append('stop').attr('offset', '100%').attr('style', 'stop-color:' + this.map.options.countries.attr.fill.max + ';stop-opacity:1');
 
         this.node.append('rect').attr('x', 40).attr('y', 0).attr('width', 220).attr('height', 15).attr('fill', 'url(#mt-map-legend-gradient)');
       }
@@ -400,7 +400,7 @@ this.d3.maptable = (function () {
         // Create countries
         this.layerCountries.selectAll('.mt-map-country').data(dataGeometries).enter().insert('path').attr('class', 'mt-map-country').attr('d', d3.geo.path().projection(this.projection));
 
-        if (this.options.legend) {
+        if (this.legendObject && this.options.countries.attr.fill.min && this.options.countries.attr.fill.max) {
           this.legendObject = new Legend(this);
         }
         // Countries
@@ -534,50 +534,42 @@ this.d3.maptable = (function () {
     }, {
       key: 'getScaledValue',
       value: function getScaledValue(obj, key, datum, data) {
-        if (!obj.rollup) {
-          if (babelHelpers.typeof(obj.attr[key]) === 'object') {
-            throw new Error('No rollup and property is an object: ' + key);
+        if (babelHelpers.typeof(obj.attr[key]) === 'object') {
+          if (!obj.rollup) {
+            throw new Error('MaptTable: rollup property is not defined for ' + key);
           }
-          return obj.attr[key];
-        }
-        if (obj.attr[key] instanceof Array) {
+          var range = Object.assign({}, obj.attr[key]); // We clone the property to keep this pure!
+          if (!range.min || !range.max) {
+            throw new Error('MaptTable: You should provide values for \'min\' and \'max\' for ' + key);
+          }
           var domain = d3.extent(data, function (d) {
             return obj.rollup(d.values);
           });
 
-          // We copy the variable instead of reference
-          var range = obj.attr[key].slice(0);
-
-          if (obj.attr[key][0] === 'min') {
-            range[0] = domain[0];
+          if (range.min === 'minValue') {
+            range.min = domain[0];
           }
-          if (obj.attr[key][1] === 'max') {
-            range[1] = domain[1];
+          if (range.max === 'maxValue') {
+            range.max = domain[1];
           }
 
-          if (range.length === 3) {
-            if (typeof range[2] === 'function') {
-              range[0] = range[2](range[0]);
-              range[1] = range[2](range[1]);
-            } else if (typeof range[2] === 'number') {
-              range[0] = range[0] * range[2];
-              range[1] = range[1] * range[2];
-            }
-            range.pop();
+          if (typeof range.transform === 'function') {
+            range.min = range.transform(range.min);
+            range.max = range.transform(range.max);
           }
+
           // Dynamic value
-          var scale = d3.scale.linear().domain(domain).range(range);
+          var scale = d3.scale.linear().domain(domain).range([range.min, range.max]);
 
           var filteredData = data.filter(function (d) {
             return d.key === datum.key;
           });
 
           if (!filteredData.length) {
-            if (obj.attrEmpty && obj.attrEmpty[key]) {
-              datum.value = 0;
-              return obj.attrEmpty[key];
+            if (typeof range.empty !== 'undefined') {
+              return range.empty;
             }
-            throw new Error('attrEmpty[' + key + '] not found');
+            throw new Error('MapTable: no empty property found for ' + key);
           }
           datum.value = obj.rollup(filteredData[0].values);
           return scale(datum.value);
@@ -586,7 +578,7 @@ this.d3.maptable = (function () {
           // Static value
           return obj.attr[key];
         }
-        throw new Error('Invalid value for ' + key);
+        throw new Error('Maptable: Invalid value for ' + key);
       }
     }, {
       key: 'updateMarkers',
@@ -660,13 +652,6 @@ this.d3.maptable = (function () {
               }
             }
 
-            if (_this2.legendObject) {
-              var domain = d3.extent(dataCountries, function (d) {
-                return _this2.options.countries.rollup(d.values);
-              });
-              _this2.legendObject.updateExtents(domain);
-            }
-
             var countryItem = d3.selectAll('.mt-map-country').each(function (datum) {
               var _this3 = this;
 
@@ -679,7 +664,11 @@ this.d3.maptable = (function () {
               });
             });
 
-            if (_this2.legendObject) {
+            if (_this2.legendObject && _this2.options.countries.attr.fill.min && _this2.options.countries.attr.fill.max) {
+              var domain = d3.extent(dataCountries, function (d) {
+                return _this2.options.countries.rollup(d.values);
+              });
+              _this2.legendObject.updateExtents(domain);
               countryItem.on('mouseover', function (datum) {
                 return _this2.legendObject.indiceChange(datum.value);
               }).on('mouseout', function () {

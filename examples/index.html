@@ -67,9 +67,13 @@
               return out;
             },
             attr: {
-              r: ["min", "max", function(a) {
-                return 3 * Math.sqrt(a);
-              }],
+              r: {
+                min: "minValue",
+                max: "maxValue",
+                transform: function(v) {
+                  return 3 * Math.sqrt(v);
+                },
+              },
               fill: "yellow",
               stroke: "#d9d9d9",
               "stroke-width": 0.5
@@ -83,7 +87,11 @@
               return a.length;
             },
             attr: {
-              fill: ["#a9b6c2", "#6c89a3"],
+              fill: {
+                min: "#a9b6c2",
+                max: "#6c89a3",
+                empty: "#f9f9f9",
+              },
               stroke: "#d9d9d9",
               "stroke-width": 0.5
             },

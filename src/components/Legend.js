@@ -24,11 +24,11 @@ export default class Legend {
 
     legendGradient.append('stop')
     .attr('offset', '0%')
-    .attr('style', `stop-color:${this.map.options.countries.attr.fill[0]};stop-opacity:1`);
+    .attr('style', `stop-color:${this.map.options.countries.attr.fill.min};stop-opacity:1`);
 
     legendGradient.append('stop')
     .attr('offset', '100%')
-    .attr('style', `stop-color:${this.map.options.countries.attr.fill[1]};stop-opacity:1`);
+    .attr('style', `stop-color:${this.map.options.countries.attr.fill.max};stop-opacity:1`);
 
     this.node.append('rect')
       .attr('x', 40)
