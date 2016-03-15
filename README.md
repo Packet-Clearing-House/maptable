@@ -1,7 +1,7 @@
 MapTable
 ========
 
-Convert any dataset to a customizable set of components of Map, Filters and Table:
+This library was originally conceived to render the [home page](https://pch.net) and next generation of [IXP directory](https://pch.net/ixpdir) for Packet Clearing House ([PCH](https://pch.net)).  It's primary function is to convert any dataset to a customizable set of components of Map, Filters and Table:
 - **Map** - A fully customizable SVG map which dynamically responds to filters and can be exported to a stand alone SVG for external consumption
 - **Table** - A tabular representation of your dataset which can be sorted by header rows. This also dynamically responds to filters.
 - **Filters** - A programmatically generated list of drop downs and input fields to drill down into your dataset
@@ -19,6 +19,8 @@ Convert any dataset to a customizable set of components of Map, Filters and Tabl
 
 ### Browser
 
+Here is minimum amount of HTML to render a MapTable with Map, Filter and Table.
+
 ```html
 <div class='vizContainer'></div>
 
@@ -34,6 +36,13 @@ Convert any dataset to a customizable set of components of Map, Filters and Tabl
 </script>
 ```
 MapTable is available on cdnjs.com. Remember though, cool kids concatenate their scripts to minimize http requests.
+
+If you want to style the MapTable elements with some existing styles, you can prepend the above HTML with:
+
+```html
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+<link rel="stylesheet" href="/maptable.css">
+```
 
 ### Bower
 
