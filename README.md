@@ -11,9 +11,9 @@ Convert any dataset to a customizable set of components of Map, Filters and Tabl
 ## Dependencies
 
 - [D3.js](https://d3js.org/) 
-- [TopoJSON](https://github.com/mbostock/topojson)*
+- TopoJSON*: [homepage](https://github.com/mbostock/topojson) or [download (cdnjs)](https://cdnjs.com/#q=topojson)
 
-* - Only needed if you need a map
+\* Only used if you need a map
 
 ## Import MapTable in your project
 
