@@ -166,6 +166,16 @@ By default, MapTable imports all the columns and detects their format automatica
    - `dataFormat:` _(function(d))_ Used only when `type` is _custom_. Function that return the new formatted data.
    - `cellContent:` _(function(d))_ Function that return what we will show on the table cell.
 
+*Example (adding `nowrap` and `type` to the `region` column key):* 
+```json
+    .columns({
+        region: {
+            nowrap: true,
+            type: 'dropdown'
+        }
+    })
+```
+
 ### Map
 
 If you want to add a Map on your visualization:
