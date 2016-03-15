@@ -1,10 +1,12 @@
 MapTable
 ========
 
-This library was originally conceived to render the [home page](https://pch.net) and next generation of [IXP directory](https://pch.net/ixpdir) for Packet Clearing House ([PCH](https://pch.net)).  It's primary function is to convert any dataset to a customizable set of components of Map, Filters and Table:
+This library was originally conceived to render the [home page](https://pch.net) and next generation of [IXP directory](https://pch.net/ixpdir) for Packet Clearing House ([PCH](https://pch.net)). It's primary function is to convert any dataset to a customizable set of components of Map, Filters and Table:
 - **Map** - A fully customizable SVG map which dynamically responds to filters and can be exported to a stand alone SVG for external consumption
 - **Table** - A tabular representation of your dataset which can be sorted by header rows. This also dynamically responds to filters.
 - **Filters** - A programmatically generated list of drop downs and input fields to drill down into your dataset
+
+[Demo →](http://packet-clearing-house.github.io/maptable/)
 
 ![MapTable in action](examples/img/ixpdir.small.png "MapTable in action")
 
@@ -136,7 +138,7 @@ Import TSV file at the specified url with the mime type "text/tab-separated-valu
 
 ### Dataset requirements
 
-In order to plot your dataset on a map, there are minimum set of columns needed. They are `latitude`, `longitude` (for your markers coordinates), and `country_code` for the countries you will need `country_code` that is in [ISO_3166-1_alpha-3](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-3#Officially_assigned_code_elements) format:
+In order to plot your dataset on a map, there are minimum set of columns needed. They are `latitude`, `longitude` for your markers coordinates, and `country_code` for the countries that are in [ISO_3166-1_alpha-3](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-3#Officially_assigned_code_elements) format:
 
 ```json
 [
@@ -179,13 +181,7 @@ If you want to add a Map on your visualization:
 *Example:* `path: "maps/world-110m-wo-antarctica.json",`
 
 - `zoom:` _(bool, default: true)_ Enable zoom on the map (when scrolling up/down on the map).
-
-*Example:* `zoom: true,`
-
 - `legend:` _(bool, default: false)_ Enable map legend (that would show the color scale with minimum and maximum datapoints per country).
-
-*Example:* `legend: true,`
-
 - `title:` _(object, default: *see below*)_ Add a title within the map.
     - `title.bgColor:` _(string, default: '#000000')_ Title font size.
     - `title.fontSize:` _(integer, default: 12)_ Title font size.
@@ -213,27 +209,15 @@ title: {
 ```
 
 - `scaleZoom:` _([integer, integer], default: [1, 10])_ The map zoom scale.
-
-*Example:* `scaleZoom: [1, 5],`
-
 - `scaleHeight:` _(float, default: 1.0)_ Ratio to scale the map height.
-
-*Example:* `scaleHeight: 9/16,`
-
 - `autoFitContent:` _(bool, default: true)_ Enable auto zoom to focus on the active markers.
 - `fitContentMargin:` _(integer, default: 10)_ Padding in pixels to leave when we filter on a specific area.
 - `tooltipClass:` _(string, default: 'popover bottom')_ Class name of the tooltip (we're using bootstrap).
 - `ratioFromWidth:` _(float, default: 0.5)_ Ratio between the height and the width: height/width, used to deduce the height from the the width.
-
-*Example:* `ratioFromWidth: 0.48,`
-
 - `countryCodeKey:` _(string, default: 'country_code')_ Column name of the ISO_3166-1_alpha-3 country code (from the dataset).
 - `longitudeKey:` _(string, default: 'longitude')_ Column name of the longitude (from the dataset).
 - `latitudeKey:` _(string, default: 'latitude')_ Column name of the latitude (from the dataset).
-- `exportSvg:` _(string, default: null)_ URL endpoint to download the current visualization as SVG. Read more on the section export SVG.
-
-*Example:* `exportSvg: 'https://www.pch.net/svg/export',`
-
+- `exportSvg:` _(string, default: null)_ URL endpoint to download the current visualization as SVG. Read more on the section export SVG. (more details on a the section "Export as SVG")
 - `watermark:` _(object, default: null)_ Add a watermark within the map.
     - `watermark.src:` _(string)_ URL of the image (svg, png, jpg).
     - `watermark.width:` _(integer)_ Image width.
@@ -254,7 +238,11 @@ watermark: {
 - `markers:` _(object, default: null)_ Add markers on the map.
     - `markers.groupBy:` _(function(d))_ Function that returns a string that we use to group markers on the dataset.
     - `markers.rollup:` _(function(groupedData))_ Function that returns a value that we would use for every marker. We will use it to set the radius of the markers.
-    - `markers.customTag:` _(function(markerObject, x, y)), default: null)_ If you'd like to override the default market tag (svg:circle) to something different (like an image), you can use this callback function to append to the markerObject your custom implementation (see below example). x and y are coordinates in pixels of the marker.
+    - `markers.customTag:` _(function(markerObject)), default: null)_ This is more advanced feature. If you'd like to override the default market tag (svg:circle) to something different (like an image), you can use this callback function to append to the markerObject your custom implementation (see below example). x and y are coordinates in pixels of the marker.
+    - `markers.attrX:` _(string, default: 'cx')_ Attribute to position the marker on the X-Axis
+    - `markers.attrY:` _(string, default: 'cy')_ Attribute to position the marker on the Y-Axis
+    - `markers.attrXDelta:` _(integer, default: 0)_ Left relative margin of the marker
+    - `markers.attrYDelta:` _(integer, default: 0)_ Top relative margin of the marker
     - `markers.tooltip:` _(function(d))_ Function that returns html that we would use as content for the tooltip. We recommend you to use the bootstrap popover. If we using groupBy, the parameter is going to be `groupedData`, otherwise it's `d` (check above on the naming conventions for more details).
     - `markers.attr:` _(object)_ Markers attributes (same naming as svg attributes).
         - `markers.attr.fill:` _(ScaledValue)_ Marker background color.
@@ -294,7 +282,7 @@ markers: {
   }
 },
 ```
-*Example (with custom tag):*
+*Example (with custom tag - Advanced feature):*
 
 
 ```js
@@ -382,9 +370,15 @@ If you want to add a table on your visualization:
 - `collapseRowsBy:` _([string, ...], default: null)_ Array of columns that we want to be collapsed.
 
 
-## Export SVG
+## Export as SVG
 
-Content TBD
+You can enable this feature to allow users download the map on their computer as SVG. However, you would need to set up a server endpoint that is going to allow users download the SVG file. The sample code for a PHP server is located in `/server/downloadSvg.php`
+
+Contribution are welcomed for implementations in other languages.
+
+## Credits
+ * Mohammed Elalj @melalj
+
 
 ## Contribute
 
