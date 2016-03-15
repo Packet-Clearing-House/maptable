@@ -17,7 +17,7 @@ export default class GeoMap {
     this.node = document.querySelector('#mt-map');
     if (!this.node) {
       this.node = document.createElement('div');
-      this.node.setAttribute('class', 'mt-map');
+      this.node.setAttribute('id', 'mt-map');
       this.maptable.node.insertBefore(this.node, this.maptable.node.firstChild);
     }
 
@@ -63,7 +63,8 @@ export default class GeoMap {
     // Add tooltip
     this.tooltipNode = d3.select(this.node)
       .append('div')
-      .attr('class', `mt-map-tooltip ${this.options.tooltipClass}`)
+      .attr('id', 'mt-map-tooltip')
+      .attr('class', this.options.tooltipClassName)
       .style('display', 'none');
 
     this.layerGlobal = this.svg.append('g').attr('class', 'mt-map-global');
@@ -355,8 +356,8 @@ export default class GeoMap {
 
     // Enter
     let markerObject = markerItem.enter();
-    if (this.options.markers.customMarker) {
-      markerObject = this.options.markers.customMarker(markerObject);
+    if (this.options.markers.customTag) {
+      markerObject = this.options.markers.customTag(markerObject);
     } else {
       markerObject = markerObject.append('svg:circle');
     }

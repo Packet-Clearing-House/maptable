@@ -117,7 +117,7 @@ this.d3.maptable = (function () {
       scaleZoom: [1, 10],
       fitContentMargin: 10,
       autoFitContent: false,
-      tooltipClass: 'popover bottom',
+      tooltipClassName: 'popover bottom',
       countries: {
         attr: {
           fill: '#FCFCFC',
@@ -317,7 +317,7 @@ this.d3.maptable = (function () {
       this.node = document.querySelector('#mt-map');
       if (!this.node) {
         this.node = document.createElement('div');
-        this.node.setAttribute('class', 'mt-map');
+        this.node.setAttribute('id', 'mt-map');
         this.maptable.node.insertBefore(this.node, this.maptable.node.firstChild);
       }
 
@@ -348,7 +348,7 @@ this.d3.maptable = (function () {
       }
 
       // Add tooltip
-      this.tooltipNode = d3.select(this.node).append('div').attr('class', 'mt-map-tooltip ' + this.options.tooltipClass).style('display', 'none');
+      this.tooltipNode = d3.select(this.node).append('div').attr('id', 'mt-map-tooltip').attr('class', this.options.tooltipClassName).style('display', 'none');
 
       this.layerGlobal = this.svg.append('g').attr('class', 'mt-map-global');
       this.layerCountries = this.layerGlobal.append('g').attr('class', 'mt-map-countries');
@@ -621,8 +621,8 @@ this.d3.maptable = (function () {
 
         // Enter
         var markerObject = markerItem.enter();
-        if (this.options.markers.customMarker) {
-          markerObject = this.options.markers.customMarker(markerObject);
+        if (this.options.markers.customTag) {
+          markerObject = this.options.markers.customTag(markerObject);
         } else {
           markerObject = markerObject.append('svg:circle');
         }
@@ -828,7 +828,7 @@ this.d3.maptable = (function () {
       this.node = document.querySelector('#mt-filters');
       if (!this.node) {
         this.node = document.createElement('div');
-        this.node.setAttribute('class', 'mt-filters');
+        this.node.setAttribute('id', 'mt-filters');
         this.node.setAttribute('class', 'panel panel-default');
         this.maptable.node.appendChild(this.node);
       }

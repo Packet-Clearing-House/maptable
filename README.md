@@ -247,6 +247,7 @@ watermark: {
 - `markers:` _(object, default: null)_ Add markers on the map.
     - `markers.groupBy:` _(function(d))_ Function that returns a string that we use to group markers on the dataset.
     - `markers.rollup:` _(function(groupedData))_ Function that returns a value that we would use for every marker. We will use it to set the radius of the markers.
+    - `markers.customTag:` _(function(markerObject, x, y)), default: null)_ If you'd like to override the default market tag (svg:circle) to something different (like an image), you can use this callback function to append to the markerObject your custom implementation (see below example). x and y are coordinates in pixels of the marker.
     - `markers.tooltip:` _(function(d))_ Function that returns html that we would use as content for the tooltip. We recommend you to use the bootstrap popover. If we using groupBy, the parameter is going to be `groupedData`, otherwise it's `d` (check above on the naming conventions for more details).
     - `markers.attr:` _(object)_ Markers attributes (same naming as svg attributes).
         - `markers.attr.fill:` _(ScaledValue)_ Marker background color.
@@ -254,7 +255,7 @@ watermark: {
         - `markers.attr.stroke:` _(ScaledValue)_ Marker border color.
         - `markers.attr.stroke-width:` _(ScaledValue)_ Marker border width.
 
-*Example:*
+*Example (grouping by value):*
 
 ```js
 markers: {
@@ -284,6 +285,24 @@ markers: {
     stroke: "#d9d9d9",
     "stroke-width": 0.5
   }
+},
+```
+*Example (with custom tag):*
+
+
+```js
+markers: {
+  className: 'starsMarker',
+  customTag: function(markerObject){
+    return markerObject.append("svg:image")
+      .attr("xlink:href", "https://www.pch.net/assets/img/star.svg")
+      .attr("width", "13")
+      .attr("height", "27");
+  },
+  attrX: 'x',
+  attrY: 'y',
+  attrXDelta: -6,
+  attrYDelta: -13
 },
 ```
 

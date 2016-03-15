@@ -10,7 +10,7 @@ export default {
     scaleZoom: [1, 10],
     fitContentMargin: 10,
     autoFitContent: false,
-    tooltipClass: 'popover bottom',
+    tooltipClassName: 'popover bottom',
     countries: {
       attr: {
         fill: '#FCFCFC',
