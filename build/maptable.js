@@ -109,6 +109,7 @@ this.d3.maptable = (function () {
     map: {
       longitudeKey: 'longitude',
       latitudeKey: 'latitude',
+      countryCodeKey: 'country_code',
       zoom: true,
       legend: false,
       ratioFromWidth: 0.5,
@@ -395,13 +396,17 @@ this.d3.maptable = (function () {
     }, {
       key: 'loadGeometries',
       value: function loadGeometries() {
+        var _this = this;
+
         var dataGeometries = topojson.feature(this.jsonWorld, this.jsonWorld.objects.countries).features;
 
         // If we have data concerning that affect countries
         var dataCountries = [];
         var dataCountriesAssoc = {};
-        if (this.options.countries.groupBy) {
-          dataCountries = d3.nest().key(this.options.countries.groupBy).entries(this.maptable.data);
+        if (this.options.countryCodeKey) {
+          dataCountries = d3.nest().key(function (d) {
+            return d[_this.options.countryCodeKey];
+          }).entries(this.maptable.data);
 
           dataCountriesAssoc = {};
           dataCountries.forEach(function (val) {
@@ -600,7 +605,7 @@ this.d3.maptable = (function () {
     }, {
       key: 'updateMarkers',
       value: function updateMarkers() {
-        var _this = this;
+        var _this2 = this;
 
         var defaultGroupBy = function defaultGroupBy(a) {
           return a.longitude + ',' + a.latitude;
@@ -642,7 +647,7 @@ this.d3.maptable = (function () {
           Object.keys(this.options.markers.attr).forEach(function (key) {
             markerUpdate = markerUpdate.attr(key, function (datum) {
               if (!datum.prop) datum.prop = {};
-              datum.prop[key] = _this.getScaledValue(_this.options.markers, key, datum, dataMarkers);
+              datum.prop[key] = _this2.getScaledValue(_this2.options.markers, key, datum, dataMarkers);
               return datum.prop[key];
             });
           });
@@ -655,25 +660,27 @@ this.d3.maptable = (function () {
     }, {
       key: 'updateCountries',
       value: function updateCountries() {
-        var _this2 = this;
+        var _this3 = this;
 
         var that = this;
         if (this.options.countries.attr) {
           (function () {
             var dataCountries = [];
             var dataCountriesAssoc = {};
-            if (_this2.options.countries.groupBy) {
-              dataCountries = d3.nest().key(_this2.options.countries.groupBy).entries(_this2.maptable.data);
+            if (_this3.options.countryCodeKey) {
+              dataCountries = d3.nest().key(function (d) {
+                return d[_this3.options.countryCodeKey];
+              }).entries(_this3.maptable.data);
               for (var i = 0; i < dataCountries.length; i++) {
                 dataCountriesAssoc[dataCountries[i].key] = dataCountries[i].values;
               }
             }
 
             var countryItem = d3.selectAll('.mt-map-country').each(function (datum) {
-              var _this3 = this;
+              var _this4 = this;
 
               Object.keys(that.options.countries.attr).forEach(function (key) {
-                d3.select(_this3).attr(key, function () {
+                d3.select(_this4).attr(key, function () {
                   if (!datum.prop) datum.prop = {};
                   datum.prop[key] = that.getScaledValue(that.options.countries, key, datum, dataCountries);
                   return datum.prop[key];
@@ -681,20 +688,20 @@ this.d3.maptable = (function () {
               });
             });
 
-            if (_this2.legendObject && _this2.options.countries.attr.fill.min && _this2.options.countries.attr.fill.max) {
+            if (_this3.legendObject && _this3.options.countries.attr.fill.min && _this3.options.countries.attr.fill.max) {
               var domain = d3.extent(dataCountries, function (d) {
-                return _this2.options.countries.rollup(d.values);
+                return _this3.options.countries.rollup(d.values);
               });
-              _this2.legendObject.updateExtents(domain);
+              _this3.legendObject.updateExtents(domain);
               countryItem.on('mouseover', function (datum) {
-                return _this2.legendObject.indiceChange(datum.value);
+                return _this3.legendObject.indiceChange(datum.value);
               }).on('mouseout', function () {
-                return _this2.legendObject.indiceChange(NaN);
+                return _this3.legendObject.indiceChange(NaN);
               });
             }
 
-            if (_this2.options.countries.tooltip) {
-              _this2.activateTooltip(countryItem, _this2.options.countries.tooltip);
+            if (_this3.options.countries.tooltip) {
+              _this3.activateTooltip(countryItem, _this3.options.countries.tooltip);
             }
           })();
         }
@@ -713,14 +720,14 @@ this.d3.maptable = (function () {
     }, {
       key: 'updateTitle',
       value: function updateTitle() {
-        var _this4 = this;
+        var _this5 = this;
 
         if (this.options.title.content) {
           var showing = this.maptable.data.filter(function (d) {
-            return d[_this4.options.latitudeKey] !== 0;
+            return d[_this5.options.latitudeKey] !== 0;
           }).length;
           var total = this.maptable.rawData.filter(function (d) {
-            return d[_this4.options.latitudeKey] !== 0;
+            return d[_this5.options.latitudeKey] !== 0;
           }).length;
 
           var inlineFilters = '';
@@ -734,28 +741,28 @@ this.d3.maptable = (function () {
     }, {
       key: 'activateTooltip',
       value: function activateTooltip(target, tooltipContent, cb) {
-        var _this5 = this;
+        var _this6 = this;
 
         target.on('mousemove', function (d) {
-          var mousePosition = d3.mouse(_this5.svg.node()).map(function (v) {
+          var mousePosition = d3.mouse(_this6.svg.node()).map(function (v) {
             return parseInt(v, 10);
           });
 
-          _this5.tooltipNode.attr('style', 'display:block;').html(tooltipContent(d));
+          _this6.tooltipNode.attr('style', 'display:block;').html(tooltipContent(d));
 
-          var tooltipDelta = _this5.tooltipNode.node().offsetWidth / 2;
+          var tooltipDelta = _this6.tooltipNode.node().offsetWidth / 2;
           var mouseLeft = mousePosition[0] - tooltipDelta;
           var mouseTop = mousePosition[1] + 10 + document.getElementById('mt-map').offsetTop;
 
-          _this5.tooltipNode.attr('style', 'top:' + mouseTop + 'px;left:' + mouseLeft + 'px;display:block;').on('mouseout', function () {
-            return _this5.tooltipNode.style('display', 'none');
+          _this6.tooltipNode.attr('style', 'top:' + mouseTop + 'px;left:' + mouseLeft + 'px;display:block;').on('mouseout', function () {
+            return _this6.tooltipNode.style('display', 'none');
           });
 
           if (cb) {
-            _this5.tooltipNode.on('click', cb);
+            _this6.tooltipNode.on('click', cb);
           }
         }).on('mouseout', function () {
-          return _this5.tooltipNode.style('display', 'none');
+          return _this6.tooltipNode.style('display', 'none');
         });
       }
     }, {

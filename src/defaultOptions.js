@@ -2,6 +2,7 @@ export default {
   map: {
     longitudeKey: 'longitude',
     latitudeKey: 'latitude',
+    countryCodeKey: 'country_code',
     zoom: true,
     legend: false,
     ratioFromWidth: 0.5,

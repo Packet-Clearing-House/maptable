@@ -113,9 +113,9 @@ export default class GeoMap {
     // If we have data concerning that affect countries
     let dataCountries = [];
     let dataCountriesAssoc = {};
-    if (this.options.countries.groupBy) {
+    if (this.options.countryCodeKey) {
       dataCountries = d3.nest()
-      .key(this.options.countries.groupBy)
+      .key(d => d[this.options.countryCodeKey])
       .entries(this.maptable.data);
 
       dataCountriesAssoc = {};
@@ -396,9 +396,9 @@ export default class GeoMap {
     if (this.options.countries.attr) {
       let dataCountries = [];
       const dataCountriesAssoc = {};
-      if (this.options.countries.groupBy) {
+      if (this.options.countryCodeKey) {
         dataCountries = d3.nest()
-          .key(this.options.countries.groupBy)
+          .key(d => d[this.options.countryCodeKey])
           .entries(this.maptable.data);
         for (let i = 0; i < dataCountries.length; i++) {
           dataCountriesAssoc[dataCountries[i].key] = dataCountries[i].values;
