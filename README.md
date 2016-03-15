@@ -87,7 +87,7 @@ If you want to attach the data boundaries to the value of an attribute. For exam
 }
 ```
 
-## Adding a map
+## Declaring MapTable elements
 
 To use a map with your dataset, you need to provide the container of your visualization
 
