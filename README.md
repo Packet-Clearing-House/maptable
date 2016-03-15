@@ -2,14 +2,18 @@ MapTable
 ========
 
 Convert any dataset to a customizable set of components of Map, Filters and Table:
-- **Map** - A fully customizable SVG map which dynamically responds to filters
-- **Table** - A tabular representation of your dataset which can be sorted by header rows.
-- **Filters** - A pragmatically generated list of drop downs and input fields to drill down into your dataset
+- **Map** - A fully customizable SVG map which dynamically responds to filters and can be exported to a stand alone SVG for external consumption
+- **Table** - A tabular representation of your dataset which can be sorted by header rows. This also dynamically responds to filters.
+- **Filters** - A programmatically generated list of drop downs and input fields to drill down into your dataset
+
+[![MapTable in action](examples/img/ixpdir.small.png "MapTable in action")]
 
 ## Dependencies
 
-- MapTable requires [D3.js](https://d3js.org/) to work.
-- If you're expecting to use the `map` capability, you will also need to require [TopoJSON](https://github.com/mbostock/topojson).
+- [D3.js](https://d3js.org/) 
+- [TopoJSON](https://github.com/mbostock/topojson)*
+
+* - Only needed if you need a map
 
 ## Import MapTable in your project
 
