@@ -15,7 +15,7 @@ This library was originally conceived to render the [home page](https://pch.net)
 
 \* Only used if you need a map
 
-## Import MapTable in your project
+## Install
 
 ### Browser
 
@@ -46,7 +46,7 @@ If you want to style the MapTable elements with some existing styles, you can pr
 
 ### Bower
 
-If you're running [Bower](http://bower.io/), you can install maptable like this:
+If you're running [Bower](http://bower.io/), you can install maptable like this: 
 
 ```shell
 bower install --save maptable
@@ -61,9 +61,7 @@ Functions that have `d` as parameter, means that `d` is a dictionary that contai
 
 Functions that have `groupedData` as parameter, means that `groupedData` is a dictionary `{ key: 'groupedByKey', values: [ {...d...} ] }` that contain grouped data.
 
-## Types definition
-
-### ScaledValue
+## ScaledValue
 
 We use this type to change the attributes of markers and countries, depending on the data.
 
