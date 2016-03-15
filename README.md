@@ -10,7 +10,7 @@ Convert any dataset to a customizable set of components of Map, Filters and Tabl
 
 ## Dependencies
 
-- [D3.js](https://d3js.org/) 
+- [D3.js](https://d3js.org/)
 - TopoJSON*: [homepage](https://github.com/mbostock/topojson) or [download (cdnjs)](https://cdnjs.com/#q=topojson)
 
 \* Only used if you need a map
@@ -20,15 +20,17 @@ Convert any dataset to a customizable set of components of Map, Filters and Tabl
 ### Browser
 
 ```html
+<div class='vizContainer'></div>
+
 <script src="d3.min.js"></script>
-<script src="topojson.min.js"></script>
+<script src="topojson.min.js"></script> <!-- You can remove this line if you're not using the map -->
 <script src="maptable.min.js"></script>
 <script>
   d3.maptable('#vizContainer')
-    .json('http://foo.com/dataset.json')
-    .map(...)
-    .filters(...)
-    .table(...);
+    .csv('/examples/data/ixp.csv')
+    .map({ path: '/examples/maps/world-110m.json' }) // You can remove this line if you want to disable the map
+    .filters() // You can remove this line if you want to disable filters
+    .table(); // You can remove this line if you want to disable the table
 </script>
 ```
 MapTable is available on cdnjs.com. Remember though, cool kids concatenate their scripts to minimize http requests.
@@ -159,11 +161,11 @@ If you want to add a Map on your visualization:
 
 #### Options
 
-- `path:` _(string, required)_ URL of the TOPOJSON map, you can get them from Mike Bostock's repo: [world atlas](https://github.com/mbostock/world-atlas) and [us atlas](https://github.com/mbostock/us-atlas). 
+- `path:` _(string, **required**)_ URL of the TOPOJSON map, you can get them from Mike Bostock's repo: [world atlas](https://github.com/mbostock/world-atlas) and [us atlas](https://github.com/mbostock/us-atlas).
 *Example:* `path: "maps/world-110m-wo-antarctica.json",`
 - `zoom:` _(bool, default: true)_ Enable zoom on the map (when scrolling up/down on the map).
 *Example:* `zoom: true,`
-- `legend:` _(bool, default: false)_ Enable map legend (that would show the color scale with minimum and maximum datapoints per country). 
+- `legend:` _(bool, default: false)_ Enable map legend (that would show the color scale with minimum and maximum datapoints per country).
 *Example:* `legend: true,`
 - `title:` _(object, default: *see below*)_ Add a title within the map.
     - `title.bgColor:` _(string, default: '#000000')_ Title font size.
