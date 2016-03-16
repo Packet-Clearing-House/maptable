@@ -497,7 +497,7 @@ export default class GeoMap {
 
     const exportButton = document.createElement('button');
     exportButton.setAttribute('class', 'btn btn-xs btn-default');
-    exportButton.innerHTML = '<i class="glyphicon glyphicon-download-alt"></i> Download';
+    exportButton.innerHTML = 'Download';
     exportButton.addEventListener('click', this.exportSvg.bind(this));
     exportNode.appendChild(exportButton);
 
