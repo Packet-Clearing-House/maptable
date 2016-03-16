@@ -27,7 +27,7 @@ You can also browse other code samples and **examples** here:
 Here is minimum amount of HTML to render a MapTable with Map, Filter and Table.
 
 ```html
-<div class='vizContainer'></div>
+<div id='vizContainer'></div>
 
 <script src="d3.min.js"></script> <!-- You can import it from cdnjs.com or bower-->
 <script src="topojson.min.js"></script> <!-- You can remove this line if you're not using the map --> <!-- You can import it from cdnjs.com or bower -->
@@ -37,7 +37,7 @@ Here is minimum amount of HTML to render a MapTable with Map, Filter and Table.
               .csv('/examples/data/ixp.csv')
               .map({ path: '/examples/maps/world-110m.json' }) // You can remove this line if you want to disable the map
               .filters() // You can remove this line if you want to disable filters
-              .table(); // You can remove this line if you want to disable the table
+              .table() // You can remove this line if you want to disable the table
               .render(); // This is important to render the visualization
 </script>
 ```
