@@ -250,13 +250,14 @@ watermark: {
 },
 ```
 - `markers:` _(object, default: null)_ Add markers on the map.
-    - `markers.rollup:` _(function(groupedData))_ Function that returns a value that we would use for every marker. We will use it to set the radius of the markers for example.
+    - `markers.groupBy:` _(function(d))_ Function that returns a string that we use to group markers on the dataset. Example: `function(d) { return d.city + ', ' + d.country; }`.
+    - `markers.rollup:` _(function(groupedData))_ Function that returns a value that we would use for every marker (example: count, mean, max, min) grouped by on how it's specified on the option `markers.groupBy`. We will use it to set the radius of the markers for example.
     - `markers.customTag:` _(function(markerObject)), default: null)_ This is more advanced feature. If you'd like to override the default market tag (svg:circle) to something different (like an image), you can use this callback function to append to the markerObject your custom implementation (see below example). x and y are coordinates in pixels of the marker.
     - `markers.attrX:` _(string, default: 'cx')_ Attribute to position the marker on the X-Axis
     - `markers.attrY:` _(string, default: 'cy')_ Attribute to position the marker on the Y-Axis
     - `markers.attrXDelta:` _(integer, default: 0)_ Left relative margin of the marker
     - `markers.attrYDelta:` _(integer, default: 0)_ Top relative margin of the marker
-    - `markers.tooltip:` _(function(d))_ Function that returns html that we would use as content for the tooltip. We recommend you to use the bootstrap popover. If we using groupBy, the parameter is going to be `groupedData`, otherwise it's `d` (check above on the naming conventions for more details).
+    - `markers.tooltip:` _(function(d))_ Function that returns html that we would use as content for the tooltip. We recommend you to use the bootstrap popover. If we using rollupoption, the parameter is going to be `groupedData`, otherwise it's `d` (check above on the naming conventions for more details).
     - `markers.attr:` _(object)_ Markers attributes (same naming as svg attributes).
         - `markers.attr.fill:` _(ScaledValue)_ Marker background color.
         - `markers.attr.r:` _(ScaledValue)_ Marker radius.
@@ -267,6 +268,9 @@ watermark: {
 
 ```js
 markers: {
+  groupBy: function(a) {
+    return a.city + ", " + a.country;
+  },
   rollup: function(a) {
     return a.length;
   },
