@@ -109,21 +109,37 @@ this.d3.maptable = (function () {
     map: {
       longitudeKey: 'longitude',
       latitudeKey: 'latitude',
+      countryCodeKey: 'country_code',
       zoom: true,
       legend: false,
       ratioFromWidth: 0.5,
       scaleHeight: 1.0,
       scaleZoom: [1, 10],
       fitContentMargin: 10,
-      autoFitContent: true,
-      tooltipClass: 'popover bottom',
+      autoFitContent: false,
+      tooltipClassName: 'popover bottom',
+      countries: {
+        attr: {
+          fill: '#FCFCFC',
+          stroke: '#CCC',
+          'stroke-width': 0.5
+        }
+      },
+      markers: {
+        attr: {
+          r: 4,
+          fill: 'blue',
+          stroke: '#CCC',
+          'stroke-width': 0.5
+        }
+      },
       title: {
         fontSize: 12,
         fontFamily: 'Helevetica, Arial, Sans-Serif'
       }
     },
     table: {
-      class: 'table table-striped table-bordered',
+      className: 'table table-striped table-bordered',
       collapseRowsBy: []
     }
   };
@@ -301,7 +317,7 @@ this.d3.maptable = (function () {
       this.node = document.querySelector('#mt-map');
       if (!this.node) {
         this.node = document.createElement('div');
-        this.node.setAttribute('class', 'mt-map');
+        this.node.setAttribute('id', 'mt-map');
         this.maptable.node.insertBefore(this.node, this.maptable.node.firstChild);
       }
 
@@ -316,10 +332,12 @@ this.d3.maptable = (function () {
       this.maptable.rawData.forEach(function (d) {
         d.longitude = parseFloat(d[that.options.longitudeKey]);
         d.latitude = parseFloat(d[that.options.latitudeKey]);
-        var coord = that.projection([d.longitude, d.latitude]);
+        var coord = [0, 0];
+        if (!isNaN(d.longitude) && !isNaN(d.latitude)) {
+          coord = that.projection([d.longitude, d.latitude]);
+        }
         d.x = coord[0];
         d.y = coord[1];
-        return d;
       });
 
       this.zoomListener = d3.behavior.zoom().scaleExtent(this.options.scaleZoom).on('zoom', this.rescale.bind(this));
@@ -330,7 +348,7 @@ this.d3.maptable = (function () {
       }
 
       // Add tooltip
-      this.tooltipNode = d3.select(this.node).append('div').attr('class', 'mt-map-tooltip ' + this.options.tooltipClass).style('display', 'none');
+      this.tooltipNode = d3.select(this.node).append('div').attr('id', 'mt-map-tooltip').attr('class', this.options.tooltipClassName).style('display', 'none');
 
       this.layerGlobal = this.svg.append('g').attr('class', 'mt-map-global');
       this.layerCountries = this.layerGlobal.append('g').attr('class', 'mt-map-countries');
@@ -378,13 +396,17 @@ this.d3.maptable = (function () {
     }, {
       key: 'loadGeometries',
       value: function loadGeometries() {
+        var _this = this;
+
         var dataGeometries = topojson.feature(this.jsonWorld, this.jsonWorld.objects.countries).features;
 
         // If we have data concerning that affect countries
         var dataCountries = [];
         var dataCountriesAssoc = {};
-        if (this.options.countries.groupBy) {
-          dataCountries = d3.nest().key(this.options.countries.groupBy).entries(this.maptable.data);
+        if (this.options.countryCodeKey) {
+          dataCountries = d3.nest().key(function (d) {
+            return d[_this.options.countryCodeKey];
+          }).entries(this.maptable.data);
 
           dataCountriesAssoc = {};
           dataCountries.forEach(function (val) {
@@ -583,13 +605,13 @@ this.d3.maptable = (function () {
     }, {
       key: 'updateMarkers',
       value: function updateMarkers() {
-        var _this = this;
+        var _this2 = this;
 
         var defaultGroupBy = function defaultGroupBy(a) {
           return a.longitude + ',' + a.latitude;
         };
         var dataMarkers = d3.nest().key(this.options.markers.groupBy ? this.options.markers.groupBy : defaultGroupBy).entries(this.maptable.data).filter(function (d) {
-          return d.values[0].latitude !== 0;
+          return d.values[0].x !== 0;
         });
 
         var markerItem = this.layerMarkers.selectAll('.mt-map-marker').data(dataMarkers);
@@ -599,8 +621,8 @@ this.d3.maptable = (function () {
 
         // Enter
         var markerObject = markerItem.enter();
-        if (this.options.markers.customMarker) {
-          markerObject = this.options.markers.customMarker(markerObject);
+        if (this.options.markers.customTag) {
+          markerObject = this.options.markers.customTag(markerObject);
         } else {
           markerObject = markerObject.append('svg:circle');
         }
@@ -625,7 +647,7 @@ this.d3.maptable = (function () {
           Object.keys(this.options.markers.attr).forEach(function (key) {
             markerUpdate = markerUpdate.attr(key, function (datum) {
               if (!datum.prop) datum.prop = {};
-              datum.prop[key] = _this.getScaledValue(_this.options.markers, key, datum, dataMarkers);
+              datum.prop[key] = _this2.getScaledValue(_this2.options.markers, key, datum, dataMarkers);
               return datum.prop[key];
             });
           });
@@ -638,25 +660,27 @@ this.d3.maptable = (function () {
     }, {
       key: 'updateCountries',
       value: function updateCountries() {
-        var _this2 = this;
+        var _this3 = this;
 
         var that = this;
         if (this.options.countries.attr) {
           (function () {
             var dataCountries = [];
             var dataCountriesAssoc = {};
-            if (_this2.options.countries.groupBy) {
-              dataCountries = d3.nest().key(_this2.options.countries.groupBy).entries(_this2.maptable.data);
+            if (_this3.options.countryCodeKey) {
+              dataCountries = d3.nest().key(function (d) {
+                return d[_this3.options.countryCodeKey];
+              }).entries(_this3.maptable.data);
               for (var i = 0; i < dataCountries.length; i++) {
                 dataCountriesAssoc[dataCountries[i].key] = dataCountries[i].values;
               }
             }
 
             var countryItem = d3.selectAll('.mt-map-country').each(function (datum) {
-              var _this3 = this;
+              var _this4 = this;
 
               Object.keys(that.options.countries.attr).forEach(function (key) {
-                d3.select(_this3).attr(key, function () {
+                d3.select(_this4).attr(key, function () {
                   if (!datum.prop) datum.prop = {};
                   datum.prop[key] = that.getScaledValue(that.options.countries, key, datum, dataCountries);
                   return datum.prop[key];
@@ -664,20 +688,20 @@ this.d3.maptable = (function () {
               });
             });
 
-            if (_this2.legendObject && _this2.options.countries.attr.fill.min && _this2.options.countries.attr.fill.max) {
+            if (_this3.legendObject && _this3.options.countries.attr.fill.min && _this3.options.countries.attr.fill.max) {
               var domain = d3.extent(dataCountries, function (d) {
-                return _this2.options.countries.rollup(d.values);
+                return _this3.options.countries.rollup(d.values);
               });
-              _this2.legendObject.updateExtents(domain);
+              _this3.legendObject.updateExtents(domain);
               countryItem.on('mouseover', function (datum) {
-                return _this2.legendObject.indiceChange(datum.value);
+                return _this3.legendObject.indiceChange(datum.value);
               }).on('mouseout', function () {
-                return _this2.legendObject.indiceChange(NaN);
+                return _this3.legendObject.indiceChange(NaN);
               });
             }
 
-            if (_this2.options.countries.tooltip) {
-              _this2.activateTooltip(countryItem, _this2.options.countries.tooltip);
+            if (_this3.options.countries.tooltip) {
+              _this3.activateTooltip(countryItem, _this3.options.countries.tooltip);
             }
           })();
         }
@@ -688,20 +712,22 @@ this.d3.maptable = (function () {
         this.updateMarkers();
         this.updateCountries();
         this.updateTitle();
-        this.fitContent();
-        this.rescale();
+        if (this.options.autoFitContent) {
+          this.fitContent();
+          this.rescale();
+        }
       }
     }, {
       key: 'updateTitle',
       value: function updateTitle() {
-        var _this4 = this;
+        var _this5 = this;
 
         if (this.options.title.content) {
           var showing = this.maptable.data.filter(function (d) {
-            return d[_this4.options.latitudeKey] !== 0;
+            return d[_this5.options.latitudeKey] !== 0;
           }).length;
           var total = this.maptable.rawData.filter(function (d) {
-            return d[_this4.options.latitudeKey] !== 0;
+            return d[_this5.options.latitudeKey] !== 0;
           }).length;
 
           var inlineFilters = '';
@@ -715,28 +741,28 @@ this.d3.maptable = (function () {
     }, {
       key: 'activateTooltip',
       value: function activateTooltip(target, tooltipContent, cb) {
-        var _this5 = this;
+        var _this6 = this;
 
         target.on('mousemove', function (d) {
-          var mousePosition = d3.mouse(_this5.svg.node()).map(function (v) {
+          var mousePosition = d3.mouse(_this6.svg.node()).map(function (v) {
             return parseInt(v, 10);
           });
 
-          _this5.tooltipNode.attr('style', 'display:block;').html(tooltipContent(d));
+          _this6.tooltipNode.attr('style', 'display:block;').html(tooltipContent(d));
 
-          var tooltipDelta = _this5.tooltipNode.node().offsetWidth / 2;
+          var tooltipDelta = _this6.tooltipNode.node().offsetWidth / 2;
           var mouseLeft = mousePosition[0] - tooltipDelta;
           var mouseTop = mousePosition[1] + 10 + document.getElementById('mt-map').offsetTop;
 
-          _this5.tooltipNode.attr('style', 'top:' + mouseTop + 'px;left:' + mouseLeft + 'px;display:block;').on('mouseout', function () {
-            return _this5.tooltipNode.style('display', 'none');
+          _this6.tooltipNode.attr('style', 'top:' + mouseTop + 'px;left:' + mouseLeft + 'px;display:block;').on('mouseout', function () {
+            return _this6.tooltipNode.style('display', 'none');
           });
 
           if (cb) {
-            _this5.tooltipNode.on('click', cb);
+            _this6.tooltipNode.on('click', cb);
           }
         }).on('mouseout', function () {
-          return _this5.tooltipNode.style('display', 'none');
+          return _this6.tooltipNode.style('display', 'none');
         });
       }
     }, {
@@ -762,7 +788,7 @@ this.d3.maptable = (function () {
 
         var exportButton = document.createElement('button');
         exportButton.setAttribute('class', 'btn btn-xs btn-default');
-        exportButton.innerHTML = '<i class="glyphicon glyphicon-download-alt"></i> Download';
+        exportButton.innerHTML = 'Download';
         exportButton.addEventListener('click', this.exportSvg.bind(this));
         exportNode.appendChild(exportButton);
 
@@ -802,7 +828,7 @@ this.d3.maptable = (function () {
       this.node = document.querySelector('#mt-filters');
       if (!this.node) {
         this.node = document.createElement('div');
-        this.node.setAttribute('class', 'mt-filters');
+        this.node.setAttribute('id', 'mt-filters');
         this.node.setAttribute('class', 'panel panel-default');
         this.maptable.node.appendChild(this.node);
       }
@@ -1194,7 +1220,7 @@ this.d3.maptable = (function () {
 
       this.maptable = maptable;
       this.options = options;
-      this.currentSorting = { key: null, mode: 'desc' };
+      this.currentSorting = { key: Object.keys(this.maptable.data[0])[0], mode: 'desc' };
 
       this.node = document.querySelector('#mt-table');
       if (!this.node) {
@@ -1446,7 +1472,9 @@ this.d3.maptable = (function () {
       table: null
     };
 
-    maptable.map = function (mapOptions) {
+    maptable.map = function () {
+      var mapOptions = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+
       if (!topojson) {
         throw new Error('Maptable requires topojson.js');
       }
@@ -1482,7 +1510,9 @@ this.d3.maptable = (function () {
       return maptable;
     };
 
-    maptable.table = function (tableOptions) {
+    maptable.table = function () {
+      var tableOptions = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+
       options.table = tableOptions;
       return maptable;
     };

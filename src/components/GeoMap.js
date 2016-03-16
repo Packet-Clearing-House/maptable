@@ -17,7 +17,7 @@ export default class GeoMap {
     this.node = document.querySelector('#mt-map');
     if (!this.node) {
       this.node = document.createElement('div');
-      this.node.setAttribute('class', 'mt-map');
+      this.node.setAttribute('id', 'mt-map');
       this.maptable.node.insertBefore(this.node, this.maptable.node.firstChild);
     }
 
@@ -42,10 +42,12 @@ export default class GeoMap {
     this.maptable.rawData.forEach(d => {
       d.longitude = parseFloat(d[that.options.longitudeKey]);
       d.latitude = parseFloat(d[that.options.latitudeKey]);
-      const coord = that.projection([d.longitude, d.latitude]);
+      let coord = [0, 0];
+      if (!isNaN(d.longitude) && !isNaN(d.latitude)) {
+        coord = that.projection([d.longitude, d.latitude]);
+      }
       d.x = coord[0];
       d.y = coord[1];
-      return d;
     });
 
     this.zoomListener = d3.behavior
@@ -61,7 +63,8 @@ export default class GeoMap {
     // Add tooltip
     this.tooltipNode = d3.select(this.node)
       .append('div')
-      .attr('class', `mt-map-tooltip ${this.options.tooltipClass}`)
+      .attr('id', 'mt-map-tooltip')
+      .attr('class', this.options.tooltipClassName)
       .style('display', 'none');
 
     this.layerGlobal = this.svg.append('g').attr('class', 'mt-map-global');
@@ -111,9 +114,9 @@ export default class GeoMap {
     // If we have data concerning that affect countries
     let dataCountries = [];
     let dataCountriesAssoc = {};
-    if (this.options.countries.groupBy) {
+    if (this.options.countryCodeKey) {
       dataCountries = d3.nest()
-      .key(this.options.countries.groupBy)
+      .key(d => d[this.options.countryCodeKey])
       .entries(this.maptable.data);
 
       dataCountriesAssoc = {};
@@ -337,7 +340,7 @@ export default class GeoMap {
       .key(this.options.markers.groupBy ? this.options.markers.groupBy : defaultGroupBy)
       .entries(this.maptable.data)
       .filter(d => {
-        return d.values[0].latitude !== 0;
+        return d.values[0].x !== 0;
       });
 
     const markerItem = this.layerMarkers
@@ -353,8 +356,8 @@ export default class GeoMap {
 
     // Enter
     let markerObject = markerItem.enter();
-    if (this.options.markers.customMarker) {
-      markerObject = this.options.markers.customMarker(markerObject);
+    if (this.options.markers.customTag) {
+      markerObject = this.options.markers.customTag(markerObject);
     } else {
       markerObject = markerObject.append('svg:circle');
     }
@@ -394,9 +397,9 @@ export default class GeoMap {
     if (this.options.countries.attr) {
       let dataCountries = [];
       const dataCountriesAssoc = {};
-      if (this.options.countries.groupBy) {
+      if (this.options.countryCodeKey) {
         dataCountries = d3.nest()
-          .key(this.options.countries.groupBy)
+          .key(d => d[this.options.countryCodeKey])
           .entries(this.maptable.data);
         for (let i = 0; i < dataCountries.length; i++) {
           dataCountriesAssoc[dataCountries[i].key] = dataCountries[i].values;
@@ -434,8 +437,10 @@ export default class GeoMap {
     this.updateMarkers();
     this.updateCountries();
     this.updateTitle();
-    this.fitContent();
-    this.rescale();
+    if (this.options.autoFitContent) {
+      this.fitContent();
+      this.rescale();
+    }
   }
 
   updateTitle() {
@@ -492,7 +497,7 @@ export default class GeoMap {
 
     const exportButton = document.createElement('button');
     exportButton.setAttribute('class', 'btn btn-xs btn-default');
-    exportButton.innerHTML = '<i class="glyphicon glyphicon-download-alt"></i> Download';
+    exportButton.innerHTML = 'Download';
     exportButton.addEventListener('click', this.exportSvg.bind(this));
     exportNode.appendChild(exportButton);
 

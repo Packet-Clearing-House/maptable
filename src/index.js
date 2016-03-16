@@ -15,7 +15,7 @@ d3.maptable = function (target) {
     table: null,
   };
 
-  maptable.map = function (mapOptions) {
+  maptable.map = function (mapOptions = {}) {
     if (!topojson) {
       throw new Error('Maptable requires topojson.js');
     }
@@ -49,7 +49,7 @@ d3.maptable = function (target) {
     return maptable;
   };
 
-  maptable.table = function (tableOptions) {
+  maptable.table = function (tableOptions = {}) {
     options.table = tableOptions;
     return maptable;
   };

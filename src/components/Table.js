@@ -4,7 +4,7 @@ export default class Table {
   constructor(maptable, options) {
     this.maptable = maptable;
     this.options = options;
-    this.currentSorting = { key: null, mode: 'desc' };
+    this.currentSorting = { key: Object.keys(this.maptable.data[0])[0], mode: 'desc' };
 
     this.node = document.querySelector('#mt-table');
     if (!this.node) {

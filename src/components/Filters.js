@@ -24,7 +24,7 @@ export default class Filters {
     this.node = document.querySelector('#mt-filters');
     if (!this.node) {
       this.node = document.createElement('div');
-      this.node.setAttribute('class', 'mt-filters');
+      this.node.setAttribute('id', 'mt-filters');
       this.node.setAttribute('class', 'panel panel-default');
       this.maptable.node.appendChild(this.node);
     }
