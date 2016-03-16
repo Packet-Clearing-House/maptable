@@ -34,7 +34,7 @@ Here is minimum amount of HTML to render a MapTable with Map, Filter and Table.
               .csv('/examples/data/ixp.csv')
               .map({ path: '/examples/maps/world-110m.json' }) // You can remove this line if you want to disable the map
               .filters() // You can remove this line if you want to disable filters
-              .table(); // You can remove this line if you want to disable the table
+              .table() // You can remove this line if you want to disable the table
               .render(); // This is important to render the visualization
 </script>
 ```
