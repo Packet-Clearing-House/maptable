@@ -6,9 +6,14 @@ This library was originally conceived to render the [home page](https://pch.net)
 - **Table** - A tabular representation of your dataset which can be sorted by header rows. This also dynamically responds to filters.
 - **Filters** - A programmatically generated list of drop downs and input fields to drill down into your dataset
 
-[Demo →](http://packet-clearing-house.github.io/maptable/)
+Below a **screenshot** of MapTable in action:
 
 ![MapTable in action](examples/img/ixpdir.small.png "MapTable in action")
+
+You can also browse other code samples and **examples** here:
+  - blocks1
+  - blocks2
+  - blocks3
 
 ## Dependencies
 
@@ -17,18 +22,16 @@ This library was originally conceived to render the [home page](https://pch.net)
 
 \* Only used if you need a map
 
-## Install
-
-### Browser
+## <a name="render"></a>Install
 
 Here is minimum amount of HTML to render a MapTable with Map, Filter and Table.
 
 ```html
 <div class='vizContainer'></div>
 
-<script src="d3.min.js"></script> <!-- You can import it from cdnjs.com -->
-<script src="topojson.min.js"></script> <!-- You can remove this line if you're not using the map --> <!-- You can import it from cdnjs.com -->
-<script src="maptable.min.js"></script> <!-- You can import it from cdnjs.com -->
+<script src="d3.min.js"></script> <!-- You can import it from cdnjs.com or bower-->
+<script src="topojson.min.js"></script> <!-- You can remove this line if you're not using the map --> <!-- You can import it from cdnjs.com or bower -->
+<script src="maptable.min.js"></script> <!-- You can import it from cdnjs.com or bower -->
 <script>
   var viz = d3.maptable('#vizContainer')
               .csv('/examples/data/ixp.csv')
@@ -45,53 +48,6 @@ If you want to style the MapTable elements with some existing styles, you can pr
 ```html
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 <link rel="stylesheet" href="/maptable.css">
-```
-
-### Bower
-
-If you're running [Bower](http://bower.io/), you can install maptable like this:
-
-```shell
-bower install --save maptable
-```
-Notable files are: `build/maptable.min.js` `build/maptable.css`
-
-## Naming conventions
-
-For clarity, we define `viz` as the variable that instantiate Maptable.
-
-Functions that have `d` as parameter, means that `d` is a dictionary that contain data for one row.
-
-Functions that have `groupedData` as parameter, means that `groupedData` is a dictionary `{ key: 'groupedByKey', values: [ {...d...} ] }` that contain grouped data.
-
-## ScaledValue
-
-We use this type to change the attributes of markers and countries.
-
-It can be static value, for example a hex color for `countries.attr.fill = '#FFFFFF'`.
-
-Or if the value of the attribute is depending on the data, the expected value would be an object as explained below.
-
-For example, for the map options on `countries.attr.fill`, if we want to have countries background color to be related to a scale from green to red, and be white if the country don't have any related data. The value should be:
-
-```js
-{
-  min: 'green',
-  max: 'red',
-  empty: 'white',
-}
-```
-
-If you want to attach the data boundaries to the value of an attribute. For example, for the map options on `markers.attr.r`, if we want to have markers radius to be related to a scale from minimum value and the maximum value, but also transform the value following a function. The value should be:
-
-```js
-{
-  min: 'minValue',
-  max: 'maxValue',
-  transform: function (val) {
-    return Math.sqrt(val);
-  },
-}
 ```
 
 ## Declaring MapTable elements
@@ -120,19 +76,30 @@ You instantiate the MapTable library into the `viz` variable based on the `#vizC
 </script>
 ```
 
+The MapTable `viz` declaration in the above example is a chain of functions. The possible functions that you can use are:
+- [viz.json(jsonPath)](#viz-json) with `jsonPath` as string
+- [viz.csv(csvPath)](#viz-csv) with `csvPath` as string
+- [viz.tsv(tsvPath)](#viz-tsv) with `tsvPath` as string
+- [viz.columns(columnDetails)](#columns-details) with `columnDetails` as a JS dictionary. You can add/remove it of you want to customize your columns or create virtual columns based on the data.
+- [viz.map(mapOptions)](#map) with `mapOptions` as a JS dictionary. You can add/remove it of you want a map on your visualization.
+- [viz.filters(filtersOptions)](#filters) with `filtersOptions` as a JS dictionary. You can add/remove it of you want filters on your visualization.
+- [viz.table(tableOptions)](#table) with `tableOptions` as a JS dictionary. You can add/remove it of you want a table on your visualization.
+- [viz.render()](#render) that closes the chain and renders the visualization. Don't forget this!
+
+
 ### Import datasets
 
 Datasets can be defined by using one of the these three sources:
 
-\# `viz.json(url)`
+<a name="viz-json">\#</a> `viz.json(url)`
 
 Import JSON file at the specified url with the mime type "application/json".
 
-\# `viz.csv(url)`
+<a name="viz-csv">\#</a> `viz.csv(url)`
 
 Import CSV file at the specified url with the mime type "text/csv".
 
-\# `viz.tsv(url)`
+<a name="viz-tsv">\#</a> `viz.tsv(url)`
 
 Import TSV file at the specified url with the mime type "text/tab-separated-values".
 
@@ -153,7 +120,7 @@ You can also edit these keys name using the map options `longitudeKey`, `latitud
 
 By default, MapTable imports all the columns and detects their format automatically. As well, you can customize behaviors of specific columns and create virtual columns.
 
-\# `viz.columns(columnsDetails)`
+\# `viz.columns(columnDetails)` with `columnDetails` as a JS dictionary. You can add/remove it of you want to customize your columns or create virtual columns based on the data.
 
 #### columnsDetails format
 
@@ -165,7 +132,7 @@ By default, MapTable imports all the columns and detects their format automatica
         - `dropdown`: exact match using a dropdown
         - `number`: filter using comparison (≥, ≤, between ....)
         - `custom`: custom format that we will define with the option `dataFormat`
-   - `dataFormat:` _(function(d))_ Used only when `type` is _custom_. Function that return the new formatted data.
+   - `dataFormat:` _(function(d))_ Used only when `type` is _custom_. Function that return the new formatted data. Used to programmatically sort a column or filter rows.
    - `cellContent:` _(function(d))_ Function that return what we will show on the table cell.
 
 *Example (adding `nowrap` and `type` to the `region` column key):*
@@ -178,11 +145,48 @@ By default, MapTable imports all the columns and detects their format automatica
 })
 ```
 
+## Naming conventions
+
+For the below examples, we define `viz` as the variable that loads MapTable.
+
+Functions that have `d` as parameter, means that `d` is a JS dictionary that contains data for one row.
+
+Functions that have `groupedData` as parameter, means that `groupedData` is a JS dictionary `{ key: 'groupedByKey', values: [ {d}, ... ] }` that contains the key that have been used to group the data, and the matching values related to that grouping.
+
+## ScaledValue
+
+We use this type to change the attributes of markers and countries.
+
+It can be static value, for example a hex color for `countries.attr.fill = '#FFFFFF'`.
+
+Or if the value of the attribute is depending on the data, the expected value would be an object as explained on the below example.
+
+For example, if we want to have countries background color to be related to a scale from green to red, and be white if the country don't have any related data. The value of `countries.attr.fill` would be:
+
+```js
+{
+  min: 'green',
+  max: 'red',
+  empty: 'white',
+}
+```
+
+If you want to attach the data boundaries to the value of an attribute, you may set as values for min and max as `minValue` and `maxValue`. For example, if we want to have markers radius to be related to a scale from minimum value and the maximum value, but also transform the value following a function. The value for the map options on `markers.attr.r` would be:
+
+```js
+{
+  min: 'minValue',
+  max: 'maxValue',
+  transform: function (val) {
+    return Math.sqrt(val);
+  },
+}
+```
+
+
 ### Map
 
-If you want to add a Map on your visualization:
-
-\# `viz.map(options)`
+\#`viz.map(mapOptions)` with `mapOptions` as a JS dictionary. You can add/remove it of you want a map on your visualization.
 
 #### Options
 
@@ -209,7 +213,7 @@ title: {
     else if (countShown < countTotal) out = 'Showing <tspan font-weight="bold">' + countShown + '</tspan> IXP from <tspan font-weight="bold">' + countTotal + "</tspan>";
     else out = '<tspan font-weight="bold">' + countTotal + "</tspan> IXP shown";
 
-    if (c !== '') out += " — " + filtersDescription;
+    if (filtersDescription !== '') out += " — " + filtersDescription;
     return out;
   },
   source: function() {
@@ -246,8 +250,7 @@ watermark: {
 },
 ```
 - `markers:` _(object, default: null)_ Add markers on the map.
-    - `markers.groupBy:` _(function(d))_ Function that returns a string that we use to group markers on the dataset.
-    - `markers.rollup:` _(function(groupedData))_ Function that returns a value that we would use for every marker. We will use it to set the radius of the markers.
+    - `markers.rollup:` _(function(groupedData))_ Function that returns a value that we would use for every marker. We will use it to set the radius of the markers for example.
     - `markers.customTag:` _(function(markerObject)), default: null)_ This is more advanced feature. If you'd like to override the default market tag (svg:circle) to something different (like an image), you can use this callback function to append to the markerObject your custom implementation (see below example). x and y are coordinates in pixels of the marker.
     - `markers.attrX:` _(string, default: 'cx')_ Attribute to position the marker on the X-Axis
     - `markers.attrY:` _(string, default: 'cy')_ Attribute to position the marker on the Y-Axis
@@ -264,9 +267,6 @@ watermark: {
 
 ```js
 markers: {
-  groupBy: function(a) {
-    return a.city + ", " + a.country;
-  },
   rollup: function(a) {
     return a.length;
   },
@@ -355,9 +355,7 @@ countries: {
 
 ## Filters
 
-If you want to add filters on your visualization:
-
-\# `viz.filters(options)`
+\# `viz.filters(options)` with `filtersOptions` as a JS dictionary. You can add/remove it of you want filters on your visualization.
 
 ### Options
 
@@ -367,7 +365,7 @@ If you want to add filters on your visualization:
 
 If you want to add a table on your visualization:
 
-\# `viz.table(options)`
+\# `viz.table(tableOptions)` with `tableOptions` as a JS dictionary. You can add/remove it of you want a table on your visualization.
 
 ### Options
 
@@ -382,12 +380,14 @@ If you want to add a table on your visualization:
 
 ## Export as SVG
 
-You can enable this feature to allow users download the map on their computer as SVG. However, you would need to set up a server endpoint that is going to allow users download the SVG file. The sample code for a PHP server is located in `/server/downloadSvg.php`
+You can enable this feature to allow users download the map on their computer as SVG. However, you would need to set up a server endpoint that is going to allow users download the SVG file.
 
-Contribution are welcomed for implementations in other languages.
+The sample code for a PHP server is located in `/server/downloadSvg.php`. Contributions are welcomed for implementations of in other languages.
 
 ## Credits
- * Mohammed Elalj @melalj
+
+  * Mohammed Elalj [@melalj](https://github.com/melalj) - Author
+  * Ashley Jones [@Ths2-9Y-LqJt6](https://github.com/Ths2-9Y-LqJt6) - Testing
 
 
 ## Contribute
@@ -396,5 +396,5 @@ You are welcomed to fork the project and make pull requests.
 
 ## Todo
 
- * [ ] Top priority! Write unit tests
+ * [ ] Write unit tests 🙏
  * [ ] Improve documentation
