@@ -191,9 +191,6 @@ If you want to attach the data boundaries to the value of an attribute, you may 
 #### Options
 
 - `path:` _(string, **required**)_ URL of the TOPOJSON map, you can get them from Mike Bostock's repo: [world atlas](https://github.com/mbostock/world-atlas) and [us atlas](https://github.com/mbostock/us-atlas).
-
-*Example:* `path: "maps/world-110m-wo-antarctica.json",`
-
 - `zoom:` _(bool, default: true)_ Enable zoom on the map (when scrolling up/down on the map).
 - `legend:` _(bool, default: false)_ Enable map legend (that would show the color scale with minimum and maximum datapoints per country).
 - `title:` _(object, default: *see below*)_ Add a title within the map.
@@ -250,7 +247,7 @@ watermark: {
 },
 ```
 - `markers:` _(object, default: null)_ Add markers on the map.
-    - `markers.groupBy:` _(function(d))_ Function that returns a string that we use to group markers on the dataset. Example: `function(d) { return d.city + ', ' + d.country; }`.
+    - `markers.groupBy:` _(function(d))_ Function that returns a string that we use to group markers on the dataset.
     - `markers.rollup:` _(function(groupedData))_ Function that returns a value that we would use for every marker (example: count, mean, max, min) grouped by on how it's specified on the option `markers.groupBy`. We will use it to set the radius of the markers for example.
     - `markers.customTag:` _(function(markerObject)), default: null)_ This is more advanced feature. If you'd like to override the default market tag (svg:circle) to something different (like an image), you can use this callback function to append to the markerObject your custom implementation (see below example). x and y are coordinates in pixels of the marker.
     - `markers.attrX:` _(string, default: 'cx')_ Attribute to position the marker on the X-Axis
@@ -386,7 +383,7 @@ If you want to add a table on your visualization:
 
 You can enable this feature to allow users download the map on their computer as SVG. However, you would need to set up a server endpoint that is going to allow users download the SVG file.
 
-The sample code for a PHP server is located in `/server/downloadSvg.php`. Contributions are welcomed for implementations of in other languages.
+The sample code for a PHP server is located in `/server/exportSvg.php`. Contributions are welcomed for implementations of in other languages.
 
 ## Credits
 
