@@ -15,23 +15,28 @@
     var viz = d3.maptable('#vizContainer')
     .json('table.json')
     .columns({
+      position: {
+        filterMethod: 'dropdown',
+      },
+      office: {
+        filterMethod: 'dropdown',
+      },
       start_date: {
-        type: 'custom',
-        inputType: 'date',
-        dataFormat: function(d) {
-          return new Date(d.start_date);
+        filterMethod: 'compare',
+        filterInputType: 'date',
+        dataParse: function(val) {
+          return new Date(val).getTime();
         }
       },
       salary: {
-        type: 'number',
-        inputType: 'date',
-        dataFormat: function(d) {
-          return d.salary.replace(/[^0-9]+/g, '');
+        filterMethod: 'compare',
+        filterInputType: 'number',
+        dataParse: function(val) {
+          return parseInt(val.replace(/[^0-9]+/g, ''), 10);
         }
       },
       links: {
-        type: 'virtual',
-        cellContent: function(d) {
+        virtual: function(d) {
           return '<a href="#' + d.extn+ '">Link</a>';
         }
       }

@@ -104,8 +104,8 @@ export default class Table {
               uniqueCollapsedRows[columnKey] &&
               uniqueCollapsedRows[columnKey] === row[columnKey]
             )) {
-            if (typeof (column.cellContent) === 'function') {
-              tds += column.cellContent(row);
+            if (column.isVirtual) {
+              tds += column.virtual(row);
             } else {
               if (row[columnKey] && row[columnKey] !== 'null') tds += row[columnKey];
             }
@@ -121,19 +121,19 @@ export default class Table {
 
   applySort() {
     const d3SortMode = (this.currentSorting.mode === 'asc') ? d3.ascending : d3.descending;
-    const filterOptions = this.maptable.columnDetails[this.currentSorting.key];
+    const columnDetails = this.maptable.columnDetails[this.currentSorting.key];
     this.maptable.data = this.maptable.data.sort((a, b) => {
       let el1 = a[this.currentSorting.key];
       let el2 = b[this.currentSorting.key];
-      if (filterOptions.type === 'virtual' && filterOptions.cellContent) {
-        el2 = filterOptions.cellContent(a);
-        el2 = filterOptions.cellContent(b);
-      } else if (filterOptions.type === 'number') {
+      if (columnDetails.dataParse) {
+        el1 = columnDetails.dataParse(el1);
+        el2 = columnDetails.dataParse(el2);
+      } else if (columnDetails.virtual) {
+        el2 = columnDetails.virtual(a);
+        el2 = columnDetails.virtual(b);
+      } else if (columnDetails.filterType === 'compare') {
         el1 = parseInt(el1, 10);
         el2 = parseInt(el2, 10);
-      } else if (filterOptions.dataFormat) {
-        el1 = filterOptions.dataFormat(el1);
-        el2 = filterOptions.dataFormat(el2);
       } else {
         el1 = el1.toLowerCase();
         el2 = el2.toLowerCase();

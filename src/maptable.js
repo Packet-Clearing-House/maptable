@@ -71,17 +71,23 @@ export default class MapTable {
     const defaultColumns = {};
 
     Object.keys(that.rawData[0]).forEach(k => {
-      let columnType = 'field';
       const patternNumber = /^\d+$/;
-      if (patternNumber.test(that.rawData[0][k])) {
-        columnType = 'number';
-      }
+      const isNumber = (patternNumber.test(that.rawData[0][k]));
       defaultColumns[k] = {
         title: utils.keyToTile(k),
-        type: columnType,
+        filterMethod: (isNumber) ? 'compare' : 'field',
+        filterInputType: (isNumber) ? 'number' : 'text',
         sorting: true,
       };
+      if (isNumber) {
+        defaultColumns[k].dataParse = (val) => parseInt(val, 10);
+      }
     });
     that.columnDetails = utils.extendRecursive(defaultColumns, this.options.columns);
+
+    // add isVirtual to columns details
+    Object.keys(that.columnDetails).forEach(k => {
+      that.columnDetails[k].isVirtual = (typeof (that.columnDetails[k].virtual) === 'function');
+    });
   }
 }

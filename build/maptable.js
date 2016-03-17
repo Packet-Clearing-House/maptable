@@ -935,32 +935,32 @@ this.d3.maptable = (function () {
           var element = filtersChildren[i];
           var filterName = element.querySelector('.mt-filter-name').value;
 
-          var filterOptions = this.maptable.columnDetails[filterName];
+          var columnDetails = this.maptable.columnDetails[filterName];
 
           var line = '';
 
-          if (filterOptions.type === 'number' || filterOptions.type === 'custom') {
+          if (columnDetails.filterMethod === 'compare') {
             var filterRangeSelect = element.querySelector('.mt-filter-range');
             if (filterRangeSelect.value !== 'any') {
               if (filterRangeSelect.value === 'BETWEEN') {
                 var filterValueMin = element.querySelector('.mt-filter-value-min').value;
                 var filterValueMax = element.querySelector('.mt-filter-value-max').value;
                 if (filterValueMin === '' || filterValueMax === '') continue;
-                line += filterOptions.title + ' is between ';
+                line += columnDetails.title + ' is between ';
                 line += '<tspan font-weight="bold">' + filterValueMin + '</tspan> and\n              <tspan font-weight="bold">' + filterValueMax + '</tspan>';
               } else {
-                var filterValue = element.querySelector('.mt-filter-value').value;
+                var filterValue = element.querySelector('.mt-filter-value-min').value;
                 if (filterValue === '') continue;
-                line += filterOptions.title + ' is ';
+                line += columnDetails.title + ' is ';
                 line += filterRangeSelect.options[filterRangeSelect.selectedIndex].text;
                 line += '<tspan font-weight="bold">' + filterValue + '</tspan>';
               }
             }
-          } else if (filterOptions.type === 'field' || filterOptions.type === 'dropdown') {
+          } else if (columnDetails.filterMethod === 'field' || columnDetails.filterMethod === 'dropdown') {
             var _filterValue = element.querySelector('.mt-filter-value').value;
             if (_filterValue === '') continue;
-            var separatorWord = filterOptions.type === 'field' ? 'contains' : 'is';
-            line += filterOptions.title + ' ' + separatorWord + '\n          <tspan font-weight="bold">' + _filterValue + '</tspan>';
+            var separatorWord = columnDetails.filterMethod === 'field' ? 'contains' : 'is';
+            line += columnDetails.title + ' ' + separatorWord + '\n          <tspan font-weight="bold">' + _filterValue + '</tspan>';
           }
           outputArray.push(line);
         }
@@ -975,7 +975,7 @@ this.d3.maptable = (function () {
 
         var possibleFilters = this.getPossibleFilters();
 
-        var filterOptions = this.maptable.columnDetails[filterName];
+        var columnDetails = this.maptable.columnDetails[filterName];
 
         var rowNode = document.createElement('div');
         rowNode.setAttribute('class', 'mt-filter-row');
@@ -1017,12 +1017,12 @@ this.d3.maptable = (function () {
 
         // Filter verb
         var filterVerb = document.createElement('span');
-        filterVerb.innerText = filterOptions.type === 'field' ? ' contains ' : ' is ';
+        filterVerb.innerText = columnDetails.filterMethod === 'field' ? ' contains ' : ' is ';
         rowNode.appendChild(filterVerb);
 
         // Filter range
         var filterRange = null;
-        if (filterOptions.type !== 'field' && filterOptions.type !== 'dropdown') {
+        if (columnDetails.filterMethod !== 'field' && columnDetails.filterMethod !== 'dropdown') {
           filterRange = document.createElement('select');
           filterRange.setAttribute('class', 'mt-filter-range form-control form-control-inline');
           utils.appendOptions(filterRange, ['any', '=', '≠', '<', '>', '≤', '≥', 'BETWEEN'].map(function (v) {
@@ -1042,15 +1042,11 @@ this.d3.maptable = (function () {
         filterValue.style.display = 'inline-block';
         filterValue.setAttribute('class', 'mt-filter-value-container');
 
-        if (filterOptions.type === 'number' || filterOptions.type === 'custom') {
+        if (columnDetails.filterMethod === 'compare') {
           ['min', 'max'].forEach(function (val, i) {
             var filterInput = document.createElement('input');
             filterInput.setAttribute('class', 'form-control form-control-inline mt-filter-value-' + val);
-            if (filterOptions.type) {
-              filterInput.setAttribute('type', filterOptions.type);
-            } else {
-              filterInput.setAttribute('type', 'text');
-            }
+            filterInput.setAttribute('type', columnDetails.filterInputType);
             filterInput.addEventListener('keyup', _this2.maptable.render.bind(_this2.maptable));
             filterInput.addEventListener('change', _this2.maptable.render.bind(_this2.maptable));
             filterValue.appendChild(filterInput);
@@ -1062,14 +1058,14 @@ this.d3.maptable = (function () {
               filterValue.appendChild(filterValueAnd);
             }
           });
-        } else if (filterOptions.type === 'field') {
+        } else if (columnDetails.filterMethod === 'field') {
           var filterInput = document.createElement('input');
           filterInput.setAttribute('class', 'form-control form-control-inline mt-filter-value');
           filterInput.setAttribute('type', 'text');
           filterInput.addEventListener('keyup', this.maptable.render.bind(this.maptable));
           filterInput.addEventListener('change', this.maptable.render.bind(this.maptable));
           filterValue.appendChild(filterInput);
-        } else if (filterOptions.type === 'dropdown') {
+        } else if (columnDetails.filterMethod === 'dropdown') {
           var filterSelect = document.createElement('select');
           filterSelect.setAttribute('class', 'form-control form-control-inline mt-filter-value');
 
@@ -1104,10 +1100,12 @@ this.d3.maptable = (function () {
           rowNode.querySelector('.mt-filter-value-container').style.display = 'inline-block';
           if (filterRange.value === 'BETWEEN') {
             rowNode.querySelector('.mt-filter-value-min').style.display = 'inline-block';
+            rowNode.querySelector('.mt-filter-value-and').style.display = 'inline-block';
             rowNode.querySelector('.mt-filter-value-max').style.display = 'inline-block';
           } else {
-            rowNode.querySelector('.mt-filter-value-max').style.display = 'none';
+            rowNode.querySelector('.mt-filter-value-min').style.display = 'inline-block';
             rowNode.querySelector('.mt-filter-value-and').style.display = 'none';
+            rowNode.querySelector('.mt-filter-value-max').style.display = 'none';
           }
         }
       }
@@ -1119,59 +1117,47 @@ this.d3.maptable = (function () {
         return Object.keys(this.maptable.columnDetails).map(function (k) {
           return Object.assign({ key: k }, _this3.maptable.columnDetails[k]);
         }).filter(function (v) {
-          return _this3.activeColumns.indexOf(v.key) !== -1 && (except && except === v.key || _this3.criteria.indexOf(v.key) === -1 && v.type && v.type !== 'virtual');
+          return _this3.activeColumns.indexOf(v.key) !== -1 && (except && except === v.key || _this3.criteria.indexOf(v.key) === -1 && v.filterMethod && !v.isVirtual);
         });
       }
     }, {
       key: 'filterData',
       value: function filterData() {
-        var _this4 = this;
-
+        var that = this;
         this.maptable.data = this.maptable.rawData.filter(function (d) {
           var rowNodes = document.querySelectorAll('.mt-filter-row');
           for (var i = 0; i < rowNodes.length; i++) {
             var rowNode = rowNodes[i];
             var filterName = rowNode.getAttribute('data-mt-filter-name');
-            var filterOptions = _this4.maptable.columnDetails[filterName];
-            var fmt = filterOptions.dataFormat; // shortcut
+            var columnDetails = that.maptable.columnDetails[filterName];
+            var fmt = columnDetails.dataParse; // shortcut
 
-            if (filterOptions.type === 'dropdown') {
+            if (columnDetails.filterMethod === 'dropdown') {
               var filterValue = rowNode.querySelector('.mt-filter-value').value;
               if (filterValue === '') continue;
               if (d[filterName] !== filterValue) return false;
-            } else if (filterOptions.type === 'field') {
+            } else if (columnDetails.filterMethod === 'field') {
               var _filterValue2 = rowNode.querySelector('.mt-filter-value').value;
               if (_filterValue2 === '') continue;
               return d[filterName].toLowerCase().indexOf(_filterValue2.toLowerCase()) !== -1;
-            } else if (filterOptions.type === 'number' || filterOptions.type === 'custom') {
+            } else if (columnDetails.filterMethod === 'compare') {
               var filterRange = rowNode.querySelector('.mt-filter-range').value;
               if (filterRange === 'BETWEEN') {
                 var filterValueMin = rowNode.querySelector('.mt-filter-value-min').value;
                 var filterValueMax = rowNode.querySelector('.mt-filter-value-max').value;
                 if (filterValueMin === '' || filterValueMax === '') continue;
-
-                if (filterOptions.type === 'custom' && fmt) {
-                  if (fmt) {
-                    if (fmt(d[filterName]) < fmt(filterValueMin) || fmt(d[filterName]) > fmt(filterValueMax)) {
-                      return false;
-                    }
-                  }
-                } else {
-                  if (parseInt(d[filterName], 10) < parseInt(filterValueMin, 10) || parseInt(d[filterName], 10) > parseInt(filterValueMax, 10)) {
-                    return false;
-                  }
+                if (fmt && (fmt(d[filterName]) < fmt(filterValueMin) || fmt(d[filterName]) > fmt(filterValueMax))) {
+                  return false;
+                } else if (parseInt(d[filterName], 10) < parseInt(filterValueMin, 10) || parseInt(d[filterName], 10) > parseInt(filterValueMax, 10)) {
+                  return false;
                 }
               } else {
-                var _filterValue3 = rowNode.querySelector('.mt-filter-value').value;
+                var _filterValue3 = rowNode.querySelector('.mt-filter-value-min').value;
                 if (_filterValue3 === '') continue;
-                if (filterOptions.type === 'custom' && fmt) {
-                  if (!utils.rangeToBool(fmt(d[filterName]), filterRange, fmt(_filterValue3))) {
-                    return false;
-                  }
-                } else {
-                  if (!utils.rangeToBool(d[filterName], filterRange, _filterValue3)) {
-                    return false;
-                  }
+                if (fmt && !utils.rangeToBool(fmt(d[filterName]), filterRange, fmt(_filterValue3))) {
+                  return false;
+                } else if (!fmt && !utils.rangeToBool(d[filterName], filterRange, _filterValue3)) {
+                  return false;
                 }
               }
             }
@@ -1312,8 +1298,8 @@ this.d3.maptable = (function () {
             tds += '>';
 
             if (!(_this2.options.collapseRowsBy.indexOf(columnKey) !== -1 && uniqueCollapsedRows[columnKey] && uniqueCollapsedRows[columnKey] === row[columnKey])) {
-              if (typeof column.cellContent === 'function') {
-                tds += column.cellContent(row);
+              if (column.isVirtual) {
+                tds += column.virtual(row);
               } else {
                 if (row[columnKey] && row[columnKey] !== 'null') tds += row[columnKey];
               }
@@ -1332,19 +1318,19 @@ this.d3.maptable = (function () {
         var _this3 = this;
 
         var d3SortMode = this.currentSorting.mode === 'asc' ? d3.ascending : d3.descending;
-        var filterOptions = this.maptable.columnDetails[this.currentSorting.key];
+        var columnDetails = this.maptable.columnDetails[this.currentSorting.key];
         this.maptable.data = this.maptable.data.sort(function (a, b) {
           var el1 = a[_this3.currentSorting.key];
           var el2 = b[_this3.currentSorting.key];
-          if (filterOptions.type === 'virtual' && filterOptions.cellContent) {
-            el2 = filterOptions.cellContent(a);
-            el2 = filterOptions.cellContent(b);
-          } else if (filterOptions.type === 'number') {
+          if (columnDetails.dataParse) {
+            el1 = columnDetails.dataParse(el1);
+            el2 = columnDetails.dataParse(el2);
+          } else if (columnDetails.virtual) {
+            el2 = columnDetails.virtual(a);
+            el2 = columnDetails.virtual(b);
+          } else if (columnDetails.filterType === 'compare') {
             el1 = parseInt(el1, 10);
             el2 = parseInt(el2, 10);
-          } else if (filterOptions.dataFormat) {
-            el1 = filterOptions.dataFormat(el1);
-            el2 = filterOptions.dataFormat(el2);
           } else {
             el1 = el1.toLowerCase();
             el2 = el2.toLowerCase();
@@ -1451,18 +1437,26 @@ this.d3.maptable = (function () {
         var defaultColumns = {};
 
         Object.keys(that.rawData[0]).forEach(function (k) {
-          var columnType = 'field';
           var patternNumber = /^\d+$/;
-          if (patternNumber.test(that.rawData[0][k])) {
-            columnType = 'number';
-          }
+          var isNumber = patternNumber.test(that.rawData[0][k]);
           defaultColumns[k] = {
             title: utils.keyToTile(k),
-            type: columnType,
+            filterMethod: isNumber ? 'compare' : 'field',
+            filterInputType: isNumber ? 'number' : 'text',
             sorting: true
           };
+          if (isNumber) {
+            defaultColumns[k].dataParse = function (val) {
+              return parseInt(val, 10);
+            };
+          }
         });
         that.columnDetails = utils.extendRecursive(defaultColumns, this.options.columns);
+
+        // add isVirtual to columns details
+        Object.keys(that.columnDetails).forEach(function (k) {
+          that.columnDetails[k].isVirtual = typeof that.columnDetails[k].virtual === 'function';
+        });
       }
     }]);
     return MapTable;

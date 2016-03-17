@@ -117,33 +117,34 @@ export default class Filters {
       const element = filtersChildren[i];
       const filterName = element.querySelector('.mt-filter-name').value;
 
-      const filterOptions = this.maptable.columnDetails[filterName];
+      const columnDetails = this.maptable.columnDetails[filterName];
 
       let line = '';
 
-      if (filterOptions.type === 'number' || filterOptions.type === 'custom') {
+      if (columnDetails.filterMethod === 'compare') {
         const filterRangeSelect = element.querySelector('.mt-filter-range');
         if (filterRangeSelect.value !== 'any') {
           if (filterRangeSelect.value === 'BETWEEN') {
             const filterValueMin = element.querySelector('.mt-filter-value-min').value;
             const filterValueMax = element.querySelector('.mt-filter-value-max').value;
             if (filterValueMin === '' || filterValueMax === '') continue;
-            line += `${filterOptions.title} is between `;
+            line += `${columnDetails.title} is between `;
             line += `<tspan font-weight="bold">${filterValueMin}</tspan> and
               <tspan font-weight="bold">${filterValueMax}</tspan>`;
           } else {
-            const filterValue = element.querySelector('.mt-filter-value').value;
+            const filterValue = element.querySelector('.mt-filter-value-min').value;
             if (filterValue === '') continue;
-            line += `${filterOptions.title} is `;
+            line += `${columnDetails.title} is `;
             line += filterRangeSelect.options[filterRangeSelect.selectedIndex].text;
             line += `<tspan font-weight="bold">${filterValue}</tspan>`;
           }
         }
-      } else if (filterOptions.type === 'field' || filterOptions.type === 'dropdown') {
+      } else if (columnDetails.filterMethod === 'field' ||
+        columnDetails.filterMethod === 'dropdown') {
         const filterValue = element.querySelector('.mt-filter-value').value;
         if (filterValue === '') continue;
-        const separatorWord = (filterOptions.type === 'field') ? 'contains' : 'is';
-        line += `${filterOptions.title} ${separatorWord}
+        const separatorWord = (columnDetails.filterMethod === 'field') ? 'contains' : 'is';
+        line += `${columnDetails.title} ${separatorWord}
           <tspan font-weight="bold">${filterValue}</tspan>`;
       }
       outputArray.push(line);
@@ -156,7 +157,7 @@ export default class Filters {
 
     const possibleFilters = this.getPossibleFilters();
 
-    const filterOptions = this.maptable.columnDetails[filterName];
+    const columnDetails = this.maptable.columnDetails[filterName];
 
     const rowNode = document.createElement('div');
     rowNode.setAttribute('class', 'mt-filter-row');
@@ -198,12 +199,12 @@ export default class Filters {
 
     // Filter verb
     const filterVerb = document.createElement('span');
-    filterVerb.innerText = (filterOptions.type === 'field') ? ' contains ' : ' is ';
+    filterVerb.innerText = (columnDetails.filterMethod === 'field') ? ' contains ' : ' is ';
     rowNode.appendChild(filterVerb);
 
     // Filter range
     let filterRange = null;
-    if (filterOptions.type !== 'field' && filterOptions.type !== 'dropdown') {
+    if (columnDetails.filterMethod !== 'field' && columnDetails.filterMethod !== 'dropdown') {
       filterRange = document.createElement('select');
       filterRange.setAttribute('class', 'mt-filter-range form-control form-control-inline');
       utils.appendOptions(filterRange, ['any', '=', '≠', '<', '>', '≤', '≥', 'BETWEEN'].map(v => {
@@ -223,16 +224,12 @@ export default class Filters {
     filterValue.style.display = 'inline-block';
     filterValue.setAttribute('class', 'mt-filter-value-container');
 
-    if (filterOptions.type === 'number' || filterOptions.type === 'custom') {
+    if (columnDetails.filterMethod === 'compare') {
       ['min', 'max'].forEach((val, i) => {
         const filterInput = document.createElement('input');
         filterInput.setAttribute('class',
           `form-control form-control-inline mt-filter-value-${val}`);
-        if (filterOptions.type) {
-          filterInput.setAttribute('type', filterOptions.type);
-        } else {
-          filterInput.setAttribute('type', 'text');
-        }
+        filterInput.setAttribute('type', columnDetails.filterInputType);
         filterInput.addEventListener('keyup', this.maptable.render.bind(this.maptable));
         filterInput.addEventListener('change', this.maptable.render.bind(this.maptable));
         filterValue.appendChild(filterInput);
@@ -244,14 +241,14 @@ export default class Filters {
           filterValue.appendChild(filterValueAnd);
         }
       });
-    } else if (filterOptions.type === 'field') {
+    } else if (columnDetails.filterMethod === 'field') {
       const filterInput = document.createElement('input');
       filterInput.setAttribute('class', 'form-control form-control-inline mt-filter-value');
       filterInput.setAttribute('type', 'text');
       filterInput.addEventListener('keyup', this.maptable.render.bind(this.maptable));
       filterInput.addEventListener('change', this.maptable.render.bind(this.maptable));
       filterValue.appendChild(filterInput);
-    } else if (filterOptions.type === 'dropdown') {
+    } else if (columnDetails.filterMethod === 'dropdown') {
       const filterSelect = document.createElement('select');
       filterSelect.setAttribute('class', 'form-control form-control-inline mt-filter-value');
 
@@ -285,10 +282,12 @@ export default class Filters {
       rowNode.querySelector('.mt-filter-value-container').style.display = 'inline-block';
       if (filterRange.value === 'BETWEEN') {
         rowNode.querySelector('.mt-filter-value-min').style.display = 'inline-block';
+        rowNode.querySelector('.mt-filter-value-and').style.display = 'inline-block';
         rowNode.querySelector('.mt-filter-value-max').style.display = 'inline-block';
       } else {
-        rowNode.querySelector('.mt-filter-value-max').style.display = 'none';
+        rowNode.querySelector('.mt-filter-value-min').style.display = 'inline-block';
         rowNode.querySelector('.mt-filter-value-and').style.display = 'none';
+        rowNode.querySelector('.mt-filter-value-max').style.display = 'none';
       }
     }
   }
@@ -300,59 +299,53 @@ export default class Filters {
         return (this.activeColumns.indexOf(v.key) !== -1) &&
         (
           (except && except === v.key) ||
-          (this.criteria.indexOf(v.key) === -1 && v.type && v.type !== 'virtual')
+          (this.criteria.indexOf(v.key) === -1 && v.filterMethod && !v.isVirtual)
         );
       });
   }
 
   filterData() {
+    const that = this;
     this.maptable.data = this.maptable.rawData.filter(d => {
       const rowNodes = document.querySelectorAll('.mt-filter-row');
       for (let i = 0; i < rowNodes.length; i++) {
         const rowNode = rowNodes[i];
         const filterName = rowNode.getAttribute('data-mt-filter-name');
-        const filterOptions = this.maptable.columnDetails[filterName];
-        const fmt = filterOptions.dataFormat; // shortcut
+        const columnDetails = that.maptable.columnDetails[filterName];
+        const fmt = columnDetails.dataParse; // shortcut
 
-        if (filterOptions.type === 'dropdown') {
+        if (columnDetails.filterMethod === 'dropdown') {
           const filterValue = rowNode.querySelector('.mt-filter-value').value;
           if (filterValue === '') continue;
           if (d[filterName] !== filterValue) return false;
-        } else if (filterOptions.type === 'field') {
+        } else if (columnDetails.filterMethod === 'field') {
           const filterValue = rowNode.querySelector('.mt-filter-value').value;
           if (filterValue === '') continue;
           return (d[filterName].toLowerCase().indexOf(filterValue.toLowerCase()) !== -1);
-        } else if (filterOptions.type === 'number' || filterOptions.type === 'custom') {
+        } else if (columnDetails.filterMethod === 'compare') {
           const filterRange = rowNode.querySelector('.mt-filter-range').value;
           if (filterRange === 'BETWEEN') {
             const filterValueMin = rowNode.querySelector('.mt-filter-value-min').value;
             const filterValueMax = rowNode.querySelector('.mt-filter-value-max').value;
             if (filterValueMin === '' || filterValueMax === '') continue;
-
-            if (filterOptions.type === 'custom' && fmt) {
-              if (fmt) {
-                if (fmt(d[filterName]) < fmt(filterValueMin) ||
-                  fmt(d[filterName]) > fmt(filterValueMax)) {
-                  return false;
-                }
-              }
-            } else {
-              if (parseInt(d[filterName], 10) < parseInt(filterValueMin, 10) ||
-                  parseInt(d[filterName], 10) > parseInt(filterValueMax, 10)) {
-                return false;
-              }
+            if (fmt &&
+              (fmt(d[filterName]) < fmt(filterValueMin) ||
+                fmt(d[filterName]) > fmt(filterValueMax))
+            ) {
+              return false;
+            } else if (
+              parseInt(d[filterName], 10) < parseInt(filterValueMin, 10) ||
+              parseInt(d[filterName], 10) > parseInt(filterValueMax, 10)
+            ) {
+              return false;
             }
           } else {
-            const filterValue = rowNode.querySelector('.mt-filter-value').value;
+            const filterValue = rowNode.querySelector('.mt-filter-value-min').value;
             if (filterValue === '') continue;
-            if (filterOptions.type === 'custom' && fmt) {
-              if (!utils.rangeToBool(fmt(d[filterName]), filterRange, fmt(filterValue))) {
-                return false;
-              }
-            } else {
-              if (!utils.rangeToBool(d[filterName], filterRange, filterValue)) {
-                return false;
-              }
+            if (fmt && !utils.rangeToBool(fmt(d[filterName]), filterRange, fmt(filterValue))) {
+              return false;
+            } else if (!fmt && !utils.rangeToBool(d[filterName], filterRange, filterValue)) {
+              return false;
             }
           }
         }
