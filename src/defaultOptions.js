@@ -2,9 +2,9 @@ export default {
   map: {
     longitudeKey: 'longitude',
     latitudeKey: 'latitude',
-    countryCodeKey: 'country_code',
+    countryIdentifierKey: 'country_code',
+    countryIdentifierType: 'iso-a2',
     zoom: true,
-    legend: false,
     ratioFromWidth: 0.5,
     scaleHeight: 1.0,
     scaleZoom: [1, 10],
@@ -12,11 +12,13 @@ export default {
     autoFitContent: false,
     tooltipClassName: 'popover bottom',
     countries: {
+      legend: false,
       attr: {
         fill: '#FCFCFC',
         stroke: '#CCC',
         'stroke-width': 0.5,
       },
+      tooltipClassName: 'mt-map-tooltip popover bottom',
     },
     markers: {
       attr: {
@@ -25,6 +27,7 @@ export default {
         stroke: '#CCC',
         'stroke-width': 0.5,
       },
+      tooltipClassName: 'mt-map-tooltip popover bottom',
     },
     title: {
       fontSize: 12,

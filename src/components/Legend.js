@@ -6,7 +6,7 @@ export default class Legend {
       .append('g')
       .attr('id', 'mt-map-legend')
       .attr('transform',
-        `translate(${(this.map.getWidth() - 300)}, ${(this.map.getHeight() - 60)})`);
+        `translate(${(this.map.getWidth() - 350)}, ${(this.map.getHeight() - 60)})`);
 
     this.buildScale();
     this.buildIndice();
@@ -93,8 +93,8 @@ export default class Legend {
   updateExtents(domain) {
     document.getElementById('mt-map-legend').style.opacity = (domain[0] === domain[1]) ? 0 : 1;
     if (document.getElementById('mt-map-legend-min')) {
-      this.node.select('#mt-map-legend-min').text(domain[0]);
-      this.node.select('#mt-map-legend-max').text(domain[1]);
+      this.node.select('#mt-map-legend-min').text(Math.round(domain[0]));
+      this.node.select('#mt-map-legend-max').text(Math.round(domain[1]));
     }
   }
 
@@ -105,7 +105,7 @@ export default class Legend {
     } else {
       const maxValue = parseInt(this.node.select('#mt-map-legend-max').text(), 10);
       const positionDelta = (val / maxValue) * 220;
-      this.node.select('#mt-map-legend-indice text').text(val);
+      this.node.select('#mt-map-legend-indice text').text(Math.round(val));
       this.node.select('#mt-map-legend-indice')
         .attr('style', 'display:block')
         .attr('transform', `translate(${(36 + positionDelta)},15)`);

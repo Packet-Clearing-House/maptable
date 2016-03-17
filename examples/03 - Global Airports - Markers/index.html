@@ -14,10 +14,23 @@
 
 <script>
     var viz = d3.maptable('#vizContainer')
-    .json('https://www.pch.net/ixp/locations')
-    .map({ path: 'https://www.pch.net/assets/data/countries.topo.json' })
+    .csv('global_airports.csv')
+    .map({
+      path: 'ne_110m_admin_0_countries.json',
+      autoFitContent: true,
+      markers: {
+        attr: {
+          r: {
+            min: 1,
+            max: 10,
+            rollup: function(groupedData) {
+              return groupedData.length;
+            }
+          },
+        }
+      }
+    })
     .filters()
-    .table()
     .render();
 </script>
 

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/maptable.css">
+</head>
+<body>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.16/d3.min.js" charset="utf-8"></script>
+<script src="/maptable.js"></script>
+
+<div id="vizContainer" class='container'></div>
+
+<script>
+    var viz = d3.maptable('#vizContainer')
+    .json('table.json')
+    .columns({
+      start_date: {
+        type: 'custom',
+        inputType: 'date',
+        dataFormat: function(d) {
+          return new Date(d.start_date);
+        }
+      },
+      salary: {
+        type: 'number',
+        inputType: 'date',
+        dataFormat: function(d) {
+          return d.salary.replace(/[^0-9]+/g, '');
+        }
+      },
+      links: {
+        type: 'virtual',
+        cellContent: function(d) {
+          return '<a href="#' + d.extn+ '">Link</a>';
+        }
+      }
+    })
+    .filters({
+      show: ['name', 'position', 'office', 'salary', 'start_date']
+    })
+    .table({
+      show: ['name', 'position', 'office', 'salary', 'start_date', 'links']
+    })
+    .render();
+</script>
+
+
+</body>
+</html>

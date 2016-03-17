@@ -131,7 +131,7 @@ By default, MapTable imports all the columns and detects their format automatica
         - `field`: filter by keyword
         - `dropdown`: exact match using a dropdown
         - `number`: filter using comparison (≥, ≤, between ....)
-        - `custom`: custom format that we will define with the option `dataFormat`
+        - `virtual`: column that doesn't exists in the dataset, but we want add it to the table or filters.
    - `dataFormat:` _(function(d))_ Used only when `type` is _custom_. Function that return the new formatted data. Used to programmatically sort a column or filter rows.
    - `cellContent:` _(function(d))_ Function that return what we will show on the table cell.
 
@@ -165,9 +165,14 @@ For example, if we want to have countries background color to be related to a sc
 
 ```js
 {
-  min: 'green',
-  max: 'red',
-  empty: 'white',
+  min: 'green', // Color for the minimum value
+  max: 'red', // Color for the maximum value
+  empty: 'white', // Color if no value is affected for that country or marker
+  legend: true, // Works only for the countries.attr.fill at the moment (contributions are welcome)
+  rollup: function (values) { // What is the value that we're attaching to the country / and attribute  
+    // values is an array that contains rows that match that country or marker
+    return values.length; // for example here the count of row, it could be also the mean, sum...
+  }
 }
 ```
 
@@ -191,8 +196,9 @@ If you want to attach the data boundaries to the value of an attribute, you may 
 #### Options
 
 - `path:` _(string, **required**)_ URL of the TOPOJSON map, you can get them from Mike Bostock's repo: [world atlas](https://github.com/mbostock/world-atlas) and [us atlas](https://github.com/mbostock/us-atlas).
+- `width:` _(integer, default:'window.innerWidth')_ Map Width.
+- `height:` _(integer, default:'window.innerHeight')_ Map Height.
 - `zoom:` _(bool, default: true)_ Enable zoom on the map (when scrolling up/down on the map).
-- `legend:` _(bool, default: false)_ Enable map legend (that would show the color scale with minimum and maximum datapoints per country).
 - `title:` _(object, default: *see below*)_ Add a title within the map.
     - `title.bgColor:` _(string, default: '#000000')_ Title font size.
     - `title.fontSize:` _(integer, default: 12)_ Title font size.
@@ -225,7 +231,12 @@ title: {
 - `fitContentMargin:` _(integer, default: 10)_ Padding in pixels to leave when we filter on a specific area.
 - `tooltipClass:` _(string, default: 'popover bottom')_ Class name of the tooltip (we're using bootstrap).
 - `ratioFromWidth:` _(float, default: 0.5)_ Ratio between the height and the width: height/width, used to deduce the height from the the width.
-- `countryCodeKey:` _(string, default: 'country_code')_ Column name of the ISO_3166-1_alpha-3 country code (from the dataset).
+- `countryIdentifierKey:` _(string, default: 'country_code')_ Column name of country identifier (from the dataset). It goes as pair with the option `countryIdentifierType`.
+- `countryIdentifierType:` _(string, default: 'iso_a2')_ Country identifier type that we're using to attach data to countries on the map. The available types are:
+  - `iso_a2` (default): [ISO_3166-1_alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) country code format
+  - `iso_a3`: [ISO_3166-1_alpha-3](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-3) country code format
+  - `name`: Country name that came from the GeoJSON map file.
+  - `continent`: Continent name that came from the GeoJSON map file.
 - `longitudeKey:` _(string, default: 'longitude')_ Column name of the longitude (from the dataset).
 - `latitudeKey:` _(string, default: 'latitude')_ Column name of the latitude (from the dataset).
 - `exportSvg:` _(string, default: null)_ URL endpoint to download the current visualization as SVG. Read more on the section export SVG. (more details on a the section "Export as SVG")
@@ -247,8 +258,6 @@ watermark: {
 },
 ```
 - `markers:` _(object, default: null)_ Add markers on the map.
-    - `markers.groupBy:` _(function(d))_ Function that returns a string that we use to group markers on the dataset.
-    - `markers.rollup:` _(function(groupedData))_ Function that returns a value that we would use for every marker (example: count, mean, max, min) grouped by on how it's specified on the option `markers.groupBy`. We will use it to set the radius of the markers for example.
     - `markers.customTag:` _(function(markerObject)), default: null)_ This is more advanced feature. If you'd like to override the default market tag (svg:circle) to something different (like an image), you can use this callback function to append to the markerObject your custom implementation (see below example). x and y are coordinates in pixels of the marker.
     - `markers.attrX:` _(string, default: 'cx')_ Attribute to position the marker on the X-Axis
     - `markers.attrY:` _(string, default: 'cy')_ Attribute to position the marker on the Y-Axis
@@ -399,3 +408,5 @@ You are welcomed to fork the project and make pull requests.
 
  * [ ] Write unit tests 🙏
  * [ ] Improve documentation
+ * [ ] Have multiple legends depending on the attribute
+ * [ ] Legend transformation (if we used the log scale)

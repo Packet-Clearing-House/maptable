@@ -61,10 +61,16 @@ export default class GeoMap {
     }
 
     // Add tooltip
-    this.tooltipNode = d3.select(this.node)
+    this.tooltipMarkersNode = d3.select(this.node)
       .append('div')
-      .attr('id', 'mt-map-tooltip')
-      .attr('class', this.options.tooltipClassName)
+      .attr('id', 'mt-map-markers-tooltip')
+      .attr('class', `mt-map-tooltip ${this.options.markers.tooltipClassName}`)
+      .style('display', 'none');
+
+    this.tooltipCountriesNode = d3.select(this.node)
+      .append('div')
+      .attr('id', 'mt-map-countries-tooltip')
+      .attr('class', `mt-map-tooltip ${this.options.countries.tooltipClassName}`)
       .style('display', 'none');
 
     this.layerGlobal = this.svg.append('g').attr('class', 'mt-map-global');
@@ -108,46 +114,150 @@ export default class GeoMap {
   }
 
   loadGeometries() {
-    const dataGeometries = topojson.feature(this.jsonWorld,
+    // We pre-simplify the topojson
+    topojson.presimplify(this.jsonWorld);
+
+    // Data geometry
+    this.dataCountries = topojson.feature(this.jsonWorld,
       this.jsonWorld.objects.countries).features;
 
-    // If we have data concerning that affect countries
-    let dataCountries = [];
-    let dataCountriesAssoc = {};
-    if (this.options.countryCodeKey) {
-      dataCountries = d3.nest()
-      .key(d => d[this.options.countryCodeKey])
-      .entries(this.maptable.data);
+    this.layerCountries
+      .selectAll('.mt-map-country')
+        .data(this.dataCountries)
+        .enter()
+        .insert('path')
+        .attr('class', 'mt-map-country')
+        .attr('d', d3.geo.path().projection(this.projection));
 
-      dataCountriesAssoc = {};
-      dataCountries.forEach(val => {
-        dataCountriesAssoc[val.key] = dataCountries.values;
+    this.legendCountry = {};
+
+    if (this.options.countries.attr.fill &&
+        this.options.countries.attr.fill.legend &&
+        this.options.countries.attr.fill.min &&
+        this.options.countries.attr.fill.max) {
+      this.legendCountry.fill = new Legend(this);
+    }
+
+    this.render();
+  }
+
+  updateCountries() {
+    // Data from user input
+    const dataByCountry = d3.nest()
+          .key(d => d[this.options.countryIdentifierKey])
+          .entries(this.maptable.data);
+
+    // We merge both data
+    this.dataCountries.forEach(geoDatum => {
+      geoDatum.key = geoDatum.properties[this.options.countryIdentifierType];
+      const matchedCountry = dataByCountry.filter(uDatum => {
+        return uDatum.key === geoDatum.key;
       });
-    }
-    // Put dataCountries into dataGeometries if available
-    for (let i = 0; i < dataGeometries.length; i++) {
-      dataGeometries[i].key = dataGeometries[i].id;
-      dataGeometries[i].values = [];
-    }
+      geoDatum.values = (matchedCountry.length === 0) ? [] : matchedCountry[0].values;
+      geoDatum.attr = {};
+      geoDatum.rollupValue = {};
+    });
 
-    // Create countries
-    this.layerCountries.selectAll('.mt-map-country')
-      .data(dataGeometries)
-      .enter()
-      .insert('path')
-      .attr('class', 'mt-map-country')
-      .attr('d', d3.geo.path().projection(this.projection));
+    // We calculate attributes values
+    Object.keys(this.options.countries.attr).forEach(k => {
+      this.setAttrValues(k, this.options.countries.attr[k], this.dataCountries);
+    });
 
-    if (this.legendObject &&
-          this.options.countries.attr.fill.min &&
-          this.options.countries.attr.fill.max) {
-      this.legendObject = new Legend(this);
+    // Update SVG
+    const countryItem = d3.selectAll('.mt-map-country').each(function (d) {
+      const targetPath = this;
+      Object.keys(d.attr).forEach(key => {
+        d3.select(targetPath).attr(key, d.attr[key]);
+      });
+    });
+
+    // Update Legend
+    Object.keys(this.options.countries.attr).forEach(attrKey => {
+      const attrValue = this.options.countries.attr[attrKey];
+      if (typeof (attrValue) === 'object' && attrValue.legend) {
+        const scaleDomain = d3.extent(this.dataCountries, d => d.rollupValue[attrKey]);
+        this.legendCountry[attrKey].updateExtents(scaleDomain);
+
+        // When we mouseover the legend, it should highlight the indice selected
+        countryItem.on('mouseover', (d) => {
+          this.legendCountry[attrKey].indiceChange(d.rollupValue[attrKey]);
+        })
+        .on('mouseout', () => {
+          this.legendCountry[attrKey].indiceChange(NaN);
+        });
+      }
+    });
+
+    // Update Tooltip
+    if (this.options.countries.tooltip) {
+      this.activateTooltip(countryItem, this.tooltipCountriesNode, this.options.countries.tooltip);
     }
-    // Countries
-    this.updateCountries();
+  }
 
-    // Markers
-    this.updateMarkers();
+  updateMarkers() {
+    const defaultGroupBy = a => `${a.longitude},${a.latitude}`;
+
+    this.dataMarkers = d3.nest()
+      .key(defaultGroupBy)
+      .entries(this.maptable.data)
+      .filter(d => {
+        return d.values[0].x !== 0;
+      });
+
+    // We merge both data
+    this.dataMarkers.forEach(d => {
+      d.attr = {};
+      d.rollupValue = {};
+    });
+
+    // We calculate attributes values
+    Object.keys(this.options.markers.attr).forEach(k => {
+      this.setAttrValues(k, this.options.markers.attr[k], this.dataMarkers);
+    });
+
+    // Enter
+    const markerItem = this.layerMarkers
+      .selectAll('.mt-map-marker')
+      .data(this.dataMarkers);
+    let markerObject = markerItem.enter();
+    if (this.options.markers.customTag) {
+      markerObject = this.options.markers.customTag(markerObject);
+    } else {
+      markerObject = markerObject.append('svg:circle');
+    }
+    const markerClassName = (this.options.markers.className) ?
+      this.options.markers.className : '';
+
+    markerObject.attr('class', `mt-map-marker ${markerClassName}`);
+
+    // Exit
+    markerItem.exit().transition()
+      .attr('r', 0)
+      .attr('fill', '#eee')
+      .style('opacity', 0)
+      .remove();
+
+    // Update
+    const attrX = (this.options.markers.attrX) ? this.options.markers.attrX : 'cx';
+    const attrY = (this.options.markers.attrY) ? this.options.markers.attrY : 'cy';
+
+    const attrXDelta = (this.options.markers.attrXDelta) ? this.options.markers.attrXDelta : 0;
+    const attrYDelta = (this.options.markers.attrYDelta) ? this.options.markers.attrYDelta : 0;
+
+    const markerUpdate = markerItem
+      .attr(attrX, d => d.values[0].x + attrXDelta)
+      .attr(attrY, d => d.values[0].y + attrYDelta);
+
+    d3.selectAll('.mt-map-marker').each(function (d) {
+      const targetPath = this;
+      Object.keys(d.attr).forEach(key => {
+        d3.select(targetPath).attr(key, d.attr[key]);
+      });
+    });
+
+    if (this.options.markers.tooltip) {
+      this.activateTooltip(markerUpdate, this.tooltipMarkersNode, this.options.markers.tooltip);
+    }
   }
 
   fitContent() {
@@ -262,181 +372,92 @@ export default class GeoMap {
       `translate(${this.transX}, ${this.transY})scale(${this.scale})`);
 
     // Hide tooltip
-    that.tooltipNode.attr('style', 'display:none;');
+    that.tooltipCountriesNode.attr('style', 'display:none;');
+    that.tooltipMarkersNode.attr('style', 'display:none;');
 
     // Rescale markers size
     if (this.options.markers) {
       // markers
       d3.selectAll('.mt-map-marker').each(function (d) {
         // stroke
-        if (d.prop['stroke-width']) {
-          d3.select(this).attr('stroke-width', d.prop['stroke-width'] / that.scaleAttributes());
+        if (d.attr['stroke-width']) {
+          d3.select(this).attr('stroke-width', d.attr['stroke-width'] / that.scaleAttributes());
         }
         // radius
-        if (d.prop.r) {
-          d3.select(this).attr('r', d.prop.r / that.scaleAttributes());
+        if (d.attr.r) {
+          d3.select(this).attr('r', d.attr.r / that.scaleAttributes());
         }
       });
     }
 
     // Rescale Country stroke-width
-    d3.selectAll('.mt-map-country').each(function (d) {
-      // stroke
-      if (d.prop['stroke-width']) {
-        d3.select(this).attr('stroke-width', d.prop['stroke-width'] / that.scaleAttributes());
-      }
-    });
+    d3.selectAll('.mt-map-country').style('stroke-width',
+      this.options.countries.attr['stroke-width'] / this.scale);
   }
 
-  getScaledValue(obj, key, datum, data) {
-    if (typeof (obj.attr[key]) === 'object') {
-      if (!obj.rollup) {
-        throw new Error(`MaptTable: rollup property is not defined for ${key}`);
-      }
-      const range = Object.assign({}, obj.attr[key]); // We clone the property to keep this pure!
-      if (!range.min || !range.max) {
-        throw new Error(`MaptTable: You should provide values for 'min' and 'max' for ${key}`);
-      }
-      const domain = d3.extent(data, d => obj.rollup(d.values));
-
-      if (range.min === 'minValue') {
-        range.min = domain[0];
-      }
-      if (range.max === 'maxValue') {
-        range.max = domain[1];
-      }
-
-      if (typeof (range.transform) === 'function') {
-        range.min = range.transform(range.min);
-        range.max = range.transform(range.max);
-      }
-
-      // Dynamic value
-      const scale = d3.scale.linear()
-        .domain(domain)
-        .range([range.min, range.max]);
-
-      const filteredData = data.filter(d => d.key === datum.key);
-
-      if (!filteredData.length) {
-        if (typeof (range.empty) !== 'undefined') {
-          return range.empty;
-        }
-        throw new Error(`MapTable: no empty property found for ${key}`);
-      }
-      datum.value = obj.rollup(filteredData[0].values);
-      return scale(datum.value);
-    }
-    if (typeof (obj.attr[key]) === 'number' || typeof (obj.attr[key]) === 'string') {
+  setAttrValues(attrKey, attrValue, dataset) {
+    if (typeof (attrValue) === 'number' || typeof (attrValue) === 'string') {
       // Static value
-      return obj.attr[key];
-    }
-    throw new Error(`Maptable: Invalid value for ${key}`);
-  }
+      dataset.forEach(d => {
+        d.attr[attrKey] = attrValue;
+      });
+    } else if (typeof (attrValue) === 'object') {
+      // Dynamic value
+      if (!attrValue.rollup) {
+        throw new Error(`MapTable: rollup property is not defined for attr.${attrKey}`);
+      }
+      if (!attrValue.min || !attrValue.max) {
+        throw new Error(`MapTable: You should provide values 'min' & 'max' for attr.${attrKey}`);
+      }
 
-  updateMarkers() {
-    const defaultGroupBy = a => `${a.longitude},${a.latitude}`;
-    const dataMarkers = d3.nest()
-      .key(this.options.markers.groupBy ? this.options.markers.groupBy : defaultGroupBy)
-      .entries(this.maptable.data)
-      .filter(d => {
-        return d.values[0].x !== 0;
+      dataset.forEach(d => {
+        d.rollupValue[attrKey] = attrValue.rollup(d.values);
       });
 
-    const markerItem = this.layerMarkers
-      .selectAll('.mt-map-marker')
-      .data(dataMarkers);
+      const scaleDomain = d3.extent(dataset, d => d.rollupValue[attrKey]);
+      if (attrValue.transform) {
+        scaleDomain[0] = attrValue.transform(scaleDomain[0]);
+        scaleDomain[1] = attrValue.transform(scaleDomain[1]);
+      }
 
-    // Exit
-    markerItem.exit().transition()
-      .attr('r', 0)
-      .attr('fill', '#eee')
-      .style('opacity', 0)
-      .remove();
+      let minValue = attrValue.min;
+      let maxValue = attrValue.max;
 
-    // Enter
-    let markerObject = markerItem.enter();
-    if (this.options.markers.customTag) {
-      markerObject = this.options.markers.customTag(markerObject);
-    } else {
-      markerObject = markerObject.append('svg:circle');
-    }
-    const markerClassName = (this.options.markers.className) ?
-      this.options.markers.className : '';
+      if (attrValue.min === 'minValue') {
+        minValue = scaleDomain[0];
+      }
+      if (attrValue.max === 'maxValue') {
+        maxValue = scaleDomain[1];
+      }
 
-    markerObject.attr('class', `mt-map-marker ${markerClassName}`);
+      const scaleFunction = d3.scale.linear()
+        .domain(scaleDomain)
+        .range([minValue, maxValue]);
 
-    const attrX = (this.options.markers.attrX) ? this.options.markers.attrX : 'cx';
-    const attrY = (this.options.markers.attrY) ? this.options.markers.attrY : 'cy';
-
-    const attrXDelta = (this.options.markers.attrXDelta) ? this.options.markers.attrXDelta : 0;
-    const attrYDelta = (this.options.markers.attrYDelta) ? this.options.markers.attrYDelta : 0;
-
-    // Update
-    let markerUpdate = markerItem
-      .attr(attrX, d => d.values[0].x + attrXDelta)
-      .attr(attrY, d => d.values[0].y + attrYDelta);
-
-    if (this.options.markers.attr) {
-      Object.keys(this.options.markers.attr).forEach(key => {
-        markerUpdate = markerUpdate.attr(key, datum => {
-          if (!datum.prop) datum.prop = {};
-          datum.prop[key] = this.getScaledValue(this.options.markers, key, datum, dataMarkers);
-          return datum.prop[key];
-        });
-      });
-    }
-
-    if (this.options.markers.tooltip) {
-      this.activateTooltip(markerUpdate, this.options.markers.tooltip);
-    }
-  }
-
-  updateCountries() {
-    const that = this;
-    if (this.options.countries.attr) {
-      let dataCountries = [];
-      const dataCountriesAssoc = {};
-      if (this.options.countryCodeKey) {
-        dataCountries = d3.nest()
-          .key(d => d[this.options.countryCodeKey])
-          .entries(this.maptable.data);
-        for (let i = 0; i < dataCountries.length; i++) {
-          dataCountriesAssoc[dataCountries[i].key] = dataCountries[i].values;
+      dataset.forEach(d => {
+        let scaledValue;
+        if (!d.values.length || isNaN(d.rollupValue[attrKey])) {
+          if (typeof (attrValue.empty) === 'undefined') {
+            throw new Error(`MapTable: no empty property found for attr.${attrKey}`);
+          }
+          scaledValue = attrValue.empty;
+        } else {
+          const originalValueRaw = d.rollupValue[attrKey];
+          const originalValue = (attrValue.transform) ?
+            attrValue.transform(originalValueRaw) : originalValueRaw;
+          scaledValue = scaleFunction(originalValue);
         }
-      }
-
-      const countryItem = d3.selectAll('.mt-map-country')
-        .each(function (datum) {
-          Object.keys(that.options.countries.attr).forEach(key => {
-            d3.select(this).attr(key, () => {
-              if (!datum.prop) datum.prop = {};
-              datum.prop[key] = that.getScaledValue(that.options.countries, key,
-                 datum, dataCountries);
-              return datum.prop[key];
-            });
-          });
-        });
-
-      if (this.legendObject &&
-            this.options.countries.attr.fill.min &&
-            this.options.countries.attr.fill.max) {
-        const domain = d3.extent(dataCountries, d => this.options.countries.rollup(d.values));
-        this.legendObject.updateExtents(domain);
-        countryItem.on('mouseover', (datum) => this.legendObject.indiceChange(datum.value))
-        .on('mouseout', () => this.legendObject.indiceChange(NaN));
-      }
-
-      if (this.options.countries.tooltip) {
-        this.activateTooltip(countryItem, this.options.countries.tooltip);
-      }
+        d.attr[attrKey] = scaledValue;
+      });
+    } else {
+      throw new Error(`Maptable: Invalid value for ${attrKey}`);
     }
   }
 
   render() {
-    this.updateMarkers();
-    this.updateCountries();
-    this.updateTitle();
+    if (this.options.markers) this.updateMarkers();
+    if (this.options.countries) this.updateCountries();
+    if (this.options.title) this.updateTitle();
     if (this.options.autoFitContent) {
       this.fitContent();
       this.rescale();
@@ -458,23 +479,22 @@ export default class GeoMap {
     }
   }
 
-  activateTooltip(target, tooltipContent, cb) {
+  activateTooltip(target, tooltipNode, tooltipContent, cb) {
     target.on('mousemove', d => {
       const mousePosition = d3.mouse(this.svg.node()).map(v => parseInt(v, 10));
 
-      this.tooltipNode.attr('style', 'display:block;').html(tooltipContent(d));
-
-      const tooltipDelta = this.tooltipNode.node().offsetWidth / 2;
+      const tooltipDelta = tooltipNode.node().offsetWidth / 2;
       const mouseLeft = (mousePosition[0] - tooltipDelta);
       const mouseTop = (mousePosition[1] + 10 + document.getElementById('mt-map').offsetTop);
 
-      this.tooltipNode.attr('style', `top:${mouseTop}px;left:${mouseLeft}px;display:block;`)
-        .on('mouseout', () => this.tooltipNode.style('display', 'none'));
+      tooltipNode.attr('style', `top:${mouseTop}px;left:${mouseLeft}px;display:block;`)
+        .html(tooltipContent(d))
+        .on('mouseout', () => tooltipNode.style('display', 'none'));
 
       if (cb) {
-        this.tooltipNode.on('click', cb);
+        tooltipNode.on('click', cb);
       }
-    }).on('mouseout', () => this.tooltipNode.style('display', 'none'));
+    }).on('mouseout', () => tooltipNode.style('display', 'none'));
   }
 
   exportSvg() {

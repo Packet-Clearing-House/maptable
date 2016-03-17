@@ -10,10 +10,11 @@
 .mt-map-country:hover{
   opacity:0.9;
 }
+
 .mt-map-tooltip {
   color: #222;
   background-color:rgba(255,255,255,0.9);
-  min-width:300px;
+  min-width:100px;
   max-width:300px;
   position: absolute;
 }

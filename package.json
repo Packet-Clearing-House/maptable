@@ -1,6 +1,6 @@
 {
   "name": "Maptable",
-  "version": "2.0.0",
+  "version": "1.0.0",
   "description": "Visualization tool that transforms data to Map or/and Table (with filters)",
   "main": "build/maptable.min.js",
   "homepage": "https://github.com/Packet-Clearing-House/maptable",

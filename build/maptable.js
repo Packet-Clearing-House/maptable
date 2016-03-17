@@ -109,9 +109,9 @@ this.d3.maptable = (function () {
     map: {
       longitudeKey: 'longitude',
       latitudeKey: 'latitude',
-      countryCodeKey: 'country_code',
+      countryIdentifierKey: 'country_code',
+      countryIdentifierType: 'iso-a2',
       zoom: true,
-      legend: false,
       ratioFromWidth: 0.5,
       scaleHeight: 1.0,
       scaleZoom: [1, 10],
@@ -119,11 +119,13 @@ this.d3.maptable = (function () {
       autoFitContent: false,
       tooltipClassName: 'popover bottom',
       countries: {
+        legend: false,
         attr: {
           fill: '#FCFCFC',
           stroke: '#CCC',
           'stroke-width': 0.5
-        }
+        },
+        tooltipClassName: 'mt-map-tooltip popover bottom'
       },
       markers: {
         attr: {
@@ -131,7 +133,8 @@ this.d3.maptable = (function () {
           fill: 'blue',
           stroke: '#CCC',
           'stroke-width': 0.5
-        }
+        },
+        tooltipClassName: 'mt-map-tooltip popover bottom'
       },
       title: {
         fontSize: 12,
@@ -150,7 +153,7 @@ this.d3.maptable = (function () {
 
       this.map = map;
       // Create Legend
-      this.node = this.map.svg.append('g').attr('id', 'mt-map-legend').attr('transform', 'translate(' + (this.map.getWidth() - 300) + ', ' + (this.map.getHeight() - 60) + ')');
+      this.node = this.map.svg.append('g').attr('id', 'mt-map-legend').attr('transform', 'translate(' + (this.map.getWidth() - 350) + ', ' + (this.map.getHeight() - 60) + ')');
 
       this.buildScale();
       this.buildIndice();
@@ -185,8 +188,8 @@ this.d3.maptable = (function () {
       value: function updateExtents(domain) {
         document.getElementById('mt-map-legend').style.opacity = domain[0] === domain[1] ? 0 : 1;
         if (document.getElementById('mt-map-legend-min')) {
-          this.node.select('#mt-map-legend-min').text(domain[0]);
-          this.node.select('#mt-map-legend-max').text(domain[1]);
+          this.node.select('#mt-map-legend-min').text(Math.round(domain[0]));
+          this.node.select('#mt-map-legend-max').text(Math.round(domain[1]));
         }
       }
     }, {
@@ -197,7 +200,7 @@ this.d3.maptable = (function () {
         } else {
           var maxValue = parseInt(this.node.select('#mt-map-legend-max').text(), 10);
           var positionDelta = val / maxValue * 220;
-          this.node.select('#mt-map-legend-indice text').text(val);
+          this.node.select('#mt-map-legend-indice text').text(Math.round(val));
           this.node.select('#mt-map-legend-indice').attr('style', 'display:block').attr('transform', 'translate(' + (36 + positionDelta) + ',15)');
         }
       }
@@ -348,7 +351,9 @@ this.d3.maptable = (function () {
       }
 
       // Add tooltip
-      this.tooltipNode = d3.select(this.node).append('div').attr('id', 'mt-map-tooltip').attr('class', this.options.tooltipClassName).style('display', 'none');
+      this.tooltipMarkersNode = d3.select(this.node).append('div').attr('id', 'mt-map-markers-tooltip').attr('class', 'mt-map-tooltip ' + this.options.markers.tooltipClassName).style('display', 'none');
+
+      this.tooltipCountriesNode = d3.select(this.node).append('div').attr('id', 'mt-map-countries-tooltip').attr('class', 'mt-map-tooltip ' + this.options.countries.tooltipClassName).style('display', 'none');
 
       this.layerGlobal = this.svg.append('g').attr('class', 'mt-map-global');
       this.layerCountries = this.layerGlobal.append('g').attr('class', 'mt-map-countries');
@@ -396,40 +401,141 @@ this.d3.maptable = (function () {
     }, {
       key: 'loadGeometries',
       value: function loadGeometries() {
+        // We pre-simplify the topojson
+        topojson.presimplify(this.jsonWorld);
+
+        // Data geometry
+        this.dataCountries = topojson.feature(this.jsonWorld, this.jsonWorld.objects.countries).features;
+
+        this.layerCountries.selectAll('.mt-map-country').data(this.dataCountries).enter().insert('path').attr('class', 'mt-map-country').attr('d', d3.geo.path().projection(this.projection));
+
+        this.legendCountry = {};
+
+        if (this.options.countries.attr.fill && this.options.countries.attr.fill.legend && this.options.countries.attr.fill.min && this.options.countries.attr.fill.max) {
+          this.legendCountry.fill = new Legend(this);
+        }
+
+        this.render();
+      }
+    }, {
+      key: 'updateCountries',
+      value: function updateCountries() {
         var _this = this;
 
-        var dataGeometries = topojson.feature(this.jsonWorld, this.jsonWorld.objects.countries).features;
+        // Data from user input
+        var dataByCountry = d3.nest().key(function (d) {
+          return d[_this.options.countryIdentifierKey];
+        }).entries(this.maptable.data);
 
-        // If we have data concerning that affect countries
-        var dataCountries = [];
-        var dataCountriesAssoc = {};
-        if (this.options.countryCodeKey) {
-          dataCountries = d3.nest().key(function (d) {
-            return d[_this.options.countryCodeKey];
-          }).entries(this.maptable.data);
-
-          dataCountriesAssoc = {};
-          dataCountries.forEach(function (val) {
-            dataCountriesAssoc[val.key] = dataCountries.values;
+        // We merge both data
+        this.dataCountries.forEach(function (geoDatum) {
+          geoDatum.key = geoDatum.properties[_this.options.countryIdentifierType];
+          var matchedCountry = dataByCountry.filter(function (uDatum) {
+            return uDatum.key === geoDatum.key;
           });
-        }
-        // Put dataCountries into dataGeometries if available
-        for (var i = 0; i < dataGeometries.length; i++) {
-          dataGeometries[i].key = dataGeometries[i].id;
-          dataGeometries[i].values = [];
-        }
+          geoDatum.values = matchedCountry.length === 0 ? [] : matchedCountry[0].values;
+          geoDatum.attr = {};
+          geoDatum.rollupValue = {};
+        });
 
-        // Create countries
-        this.layerCountries.selectAll('.mt-map-country').data(dataGeometries).enter().insert('path').attr('class', 'mt-map-country').attr('d', d3.geo.path().projection(this.projection));
+        // We calculate attributes values
+        Object.keys(this.options.countries.attr).forEach(function (k) {
+          _this.setAttrValues(k, _this.options.countries.attr[k], _this.dataCountries);
+        });
 
-        if (this.legendObject && this.options.countries.attr.fill.min && this.options.countries.attr.fill.max) {
-          this.legendObject = new Legend(this);
+        // Update SVG
+        var countryItem = d3.selectAll('.mt-map-country').each(function (d) {
+          var targetPath = this;
+          Object.keys(d.attr).forEach(function (key) {
+            d3.select(targetPath).attr(key, d.attr[key]);
+          });
+        });
+
+        // Update Legend
+        Object.keys(this.options.countries.attr).forEach(function (attrKey) {
+          var attrValue = _this.options.countries.attr[attrKey];
+          if ((typeof attrValue === 'undefined' ? 'undefined' : babelHelpers.typeof(attrValue)) === 'object' && attrValue.legend) {
+            var scaleDomain = d3.extent(_this.dataCountries, function (d) {
+              return d.rollupValue[attrKey];
+            });
+            _this.legendCountry[attrKey].updateExtents(scaleDomain);
+
+            // When we mouseover the legend, it should highlight the indice selected
+            countryItem.on('mouseover', function (d) {
+              _this.legendCountry[attrKey].indiceChange(d.rollupValue[attrKey]);
+            }).on('mouseout', function () {
+              _this.legendCountry[attrKey].indiceChange(NaN);
+            });
+          }
+        });
+
+        // Update Tooltip
+        if (this.options.countries.tooltip) {
+          this.activateTooltip(countryItem, this.tooltipCountriesNode, this.options.countries.tooltip);
         }
-        // Countries
-        this.updateCountries();
+      }
+    }, {
+      key: 'updateMarkers',
+      value: function updateMarkers() {
+        var _this2 = this;
 
-        // Markers
-        this.updateMarkers();
+        var defaultGroupBy = function defaultGroupBy(a) {
+          return a.longitude + ',' + a.latitude;
+        };
+
+        this.dataMarkers = d3.nest().key(defaultGroupBy).entries(this.maptable.data).filter(function (d) {
+          return d.values[0].x !== 0;
+        });
+
+        // We merge both data
+        this.dataMarkers.forEach(function (d) {
+          d.attr = {};
+          d.rollupValue = {};
+        });
+
+        // We calculate attributes values
+        Object.keys(this.options.markers.attr).forEach(function (k) {
+          _this2.setAttrValues(k, _this2.options.markers.attr[k], _this2.dataMarkers);
+        });
+
+        // Enter
+        var markerItem = this.layerMarkers.selectAll('.mt-map-marker').data(this.dataMarkers);
+        var markerObject = markerItem.enter();
+        if (this.options.markers.customTag) {
+          markerObject = this.options.markers.customTag(markerObject);
+        } else {
+          markerObject = markerObject.append('svg:circle');
+        }
+        var markerClassName = this.options.markers.className ? this.options.markers.className : '';
+
+        markerObject.attr('class', 'mt-map-marker ' + markerClassName);
+
+        // Exit
+        markerItem.exit().transition().attr('r', 0).attr('fill', '#eee').style('opacity', 0).remove();
+
+        // Update
+        var attrX = this.options.markers.attrX ? this.options.markers.attrX : 'cx';
+        var attrY = this.options.markers.attrY ? this.options.markers.attrY : 'cy';
+
+        var attrXDelta = this.options.markers.attrXDelta ? this.options.markers.attrXDelta : 0;
+        var attrYDelta = this.options.markers.attrYDelta ? this.options.markers.attrYDelta : 0;
+
+        var markerUpdate = markerItem.attr(attrX, function (d) {
+          return d.values[0].x + attrXDelta;
+        }).attr(attrY, function (d) {
+          return d.values[0].y + attrYDelta;
+        });
+
+        d3.selectAll('.mt-map-marker').each(function (d) {
+          var targetPath = this;
+          Object.keys(d.attr).forEach(function (key) {
+            d3.select(targetPath).attr(key, d.attr[key]);
+          });
+        });
+
+        if (this.options.markers.tooltip) {
+          this.activateTooltip(markerUpdate, this.tooltipMarkersNode, this.options.markers.tooltip);
+        }
       }
     }, {
       key: 'fitContent',
@@ -528,190 +634,94 @@ this.d3.maptable = (function () {
         this.layerGlobal.attr('transform', 'translate(' + this.transX + ', ' + this.transY + ')scale(' + this.scale + ')');
 
         // Hide tooltip
-        that.tooltipNode.attr('style', 'display:none;');
+        that.tooltipCountriesNode.attr('style', 'display:none;');
+        that.tooltipMarkersNode.attr('style', 'display:none;');
 
         // Rescale markers size
         if (this.options.markers) {
           // markers
           d3.selectAll('.mt-map-marker').each(function (d) {
             // stroke
-            if (d.prop['stroke-width']) {
-              d3.select(this).attr('stroke-width', d.prop['stroke-width'] / that.scaleAttributes());
+            if (d.attr['stroke-width']) {
+              d3.select(this).attr('stroke-width', d.attr['stroke-width'] / that.scaleAttributes());
             }
             // radius
-            if (d.prop.r) {
-              d3.select(this).attr('r', d.prop.r / that.scaleAttributes());
+            if (d.attr.r) {
+              d3.select(this).attr('r', d.attr.r / that.scaleAttributes());
             }
           });
         }
 
         // Rescale Country stroke-width
-        d3.selectAll('.mt-map-country').each(function (d) {
-          // stroke
-          if (d.prop['stroke-width']) {
-            d3.select(this).attr('stroke-width', d.prop['stroke-width'] / that.scaleAttributes());
-          }
-        });
+        d3.selectAll('.mt-map-country').style('stroke-width', this.options.countries.attr['stroke-width'] / this.scale);
       }
     }, {
-      key: 'getScaledValue',
-      value: function getScaledValue(obj, key, datum, data) {
-        if (babelHelpers.typeof(obj.attr[key]) === 'object') {
-          if (!obj.rollup) {
-            throw new Error('MaptTable: rollup property is not defined for ' + key);
-          }
-          var range = Object.assign({}, obj.attr[key]); // We clone the property to keep this pure!
-          if (!range.min || !range.max) {
-            throw new Error('MaptTable: You should provide values for \'min\' and \'max\' for ' + key);
-          }
-          var domain = d3.extent(data, function (d) {
-            return obj.rollup(d.values);
-          });
-
-          if (range.min === 'minValue') {
-            range.min = domain[0];
-          }
-          if (range.max === 'maxValue') {
-            range.max = domain[1];
-          }
-
-          if (typeof range.transform === 'function') {
-            range.min = range.transform(range.min);
-            range.max = range.transform(range.max);
-          }
-
-          // Dynamic value
-          var scale = d3.scale.linear().domain(domain).range([range.min, range.max]);
-
-          var filteredData = data.filter(function (d) {
-            return d.key === datum.key;
-          });
-
-          if (!filteredData.length) {
-            if (typeof range.empty !== 'undefined') {
-              return range.empty;
-            }
-            throw new Error('MapTable: no empty property found for ' + key);
-          }
-          datum.value = obj.rollup(filteredData[0].values);
-          return scale(datum.value);
-        }
-        if (typeof obj.attr[key] === 'number' || typeof obj.attr[key] === 'string') {
+      key: 'setAttrValues',
+      value: function setAttrValues(attrKey, attrValue, dataset) {
+        if (typeof attrValue === 'number' || typeof attrValue === 'string') {
           // Static value
-          return obj.attr[key];
-        }
-        throw new Error('Maptable: Invalid value for ' + key);
-      }
-    }, {
-      key: 'updateMarkers',
-      value: function updateMarkers() {
-        var _this2 = this;
-
-        var defaultGroupBy = function defaultGroupBy(a) {
-          return a.longitude + ',' + a.latitude;
-        };
-        var dataMarkers = d3.nest().key(this.options.markers.groupBy ? this.options.markers.groupBy : defaultGroupBy).entries(this.maptable.data).filter(function (d) {
-          return d.values[0].x !== 0;
-        });
-
-        var markerItem = this.layerMarkers.selectAll('.mt-map-marker').data(dataMarkers);
-
-        // Exit
-        markerItem.exit().transition().attr('r', 0).attr('fill', '#eee').style('opacity', 0).remove();
-
-        // Enter
-        var markerObject = markerItem.enter();
-        if (this.options.markers.customTag) {
-          markerObject = this.options.markers.customTag(markerObject);
-        } else {
-          markerObject = markerObject.append('svg:circle');
-        }
-        var markerClassName = this.options.markers.className ? this.options.markers.className : '';
-
-        markerObject.attr('class', 'mt-map-marker ' + markerClassName);
-
-        var attrX = this.options.markers.attrX ? this.options.markers.attrX : 'cx';
-        var attrY = this.options.markers.attrY ? this.options.markers.attrY : 'cy';
-
-        var attrXDelta = this.options.markers.attrXDelta ? this.options.markers.attrXDelta : 0;
-        var attrYDelta = this.options.markers.attrYDelta ? this.options.markers.attrYDelta : 0;
-
-        // Update
-        var markerUpdate = markerItem.attr(attrX, function (d) {
-          return d.values[0].x + attrXDelta;
-        }).attr(attrY, function (d) {
-          return d.values[0].y + attrYDelta;
-        });
-
-        if (this.options.markers.attr) {
-          Object.keys(this.options.markers.attr).forEach(function (key) {
-            markerUpdate = markerUpdate.attr(key, function (datum) {
-              if (!datum.prop) datum.prop = {};
-              datum.prop[key] = _this2.getScaledValue(_this2.options.markers, key, datum, dataMarkers);
-              return datum.prop[key];
-            });
+          dataset.forEach(function (d) {
+            d.attr[attrKey] = attrValue;
           });
-        }
-
-        if (this.options.markers.tooltip) {
-          this.activateTooltip(markerUpdate, this.options.markers.tooltip);
-        }
-      }
-    }, {
-      key: 'updateCountries',
-      value: function updateCountries() {
-        var _this3 = this;
-
-        var that = this;
-        if (this.options.countries.attr) {
+        } else if ((typeof attrValue === 'undefined' ? 'undefined' : babelHelpers.typeof(attrValue)) === 'object') {
           (function () {
-            var dataCountries = [];
-            var dataCountriesAssoc = {};
-            if (_this3.options.countryCodeKey) {
-              dataCountries = d3.nest().key(function (d) {
-                return d[_this3.options.countryCodeKey];
-              }).entries(_this3.maptable.data);
-              for (var i = 0; i < dataCountries.length; i++) {
-                dataCountriesAssoc[dataCountries[i].key] = dataCountries[i].values;
-              }
+            // Dynamic value
+            if (!attrValue.rollup) {
+              throw new Error('MapTable: rollup property is not defined for attr.' + attrKey);
+            }
+            if (!attrValue.min || !attrValue.max) {
+              throw new Error('MapTable: You should provide values \'min\' & \'max\' for attr.' + attrKey);
             }
 
-            var countryItem = d3.selectAll('.mt-map-country').each(function (datum) {
-              var _this4 = this;
-
-              Object.keys(that.options.countries.attr).forEach(function (key) {
-                d3.select(_this4).attr(key, function () {
-                  if (!datum.prop) datum.prop = {};
-                  datum.prop[key] = that.getScaledValue(that.options.countries, key, datum, dataCountries);
-                  return datum.prop[key];
-                });
-              });
+            dataset.forEach(function (d) {
+              d.rollupValue[attrKey] = attrValue.rollup(d.values);
             });
 
-            if (_this3.legendObject && _this3.options.countries.attr.fill.min && _this3.options.countries.attr.fill.max) {
-              var domain = d3.extent(dataCountries, function (d) {
-                return _this3.options.countries.rollup(d.values);
-              });
-              _this3.legendObject.updateExtents(domain);
-              countryItem.on('mouseover', function (datum) {
-                return _this3.legendObject.indiceChange(datum.value);
-              }).on('mouseout', function () {
-                return _this3.legendObject.indiceChange(NaN);
-              });
+            var scaleDomain = d3.extent(dataset, function (d) {
+              return d.rollupValue[attrKey];
+            });
+            if (attrValue.transform) {
+              scaleDomain[0] = attrValue.transform(scaleDomain[0]);
+              scaleDomain[1] = attrValue.transform(scaleDomain[1]);
             }
 
-            if (_this3.options.countries.tooltip) {
-              _this3.activateTooltip(countryItem, _this3.options.countries.tooltip);
+            var minValue = attrValue.min;
+            var maxValue = attrValue.max;
+
+            if (attrValue.min === 'minValue') {
+              minValue = scaleDomain[0];
             }
+            if (attrValue.max === 'maxValue') {
+              maxValue = scaleDomain[1];
+            }
+
+            var scaleFunction = d3.scale.linear().domain(scaleDomain).range([minValue, maxValue]);
+
+            dataset.forEach(function (d) {
+              var scaledValue = void 0;
+              if (!d.values.length || isNaN(d.rollupValue[attrKey])) {
+                if (typeof attrValue.empty === 'undefined') {
+                  throw new Error('MapTable: no empty property found for attr.' + attrKey);
+                }
+                scaledValue = attrValue.empty;
+              } else {
+                var originalValueRaw = d.rollupValue[attrKey];
+                var originalValue = attrValue.transform ? attrValue.transform(originalValueRaw) : originalValueRaw;
+                scaledValue = scaleFunction(originalValue);
+              }
+              d.attr[attrKey] = scaledValue;
+            });
           })();
+        } else {
+          throw new Error('Maptable: Invalid value for ' + attrKey);
         }
       }
     }, {
       key: 'render',
       value: function render() {
-        this.updateMarkers();
-        this.updateCountries();
-        this.updateTitle();
+        if (this.options.markers) this.updateMarkers();
+        if (this.options.countries) this.updateCountries();
+        if (this.options.title) this.updateTitle();
         if (this.options.autoFitContent) {
           this.fitContent();
           this.rescale();
@@ -720,14 +730,14 @@ this.d3.maptable = (function () {
     }, {
       key: 'updateTitle',
       value: function updateTitle() {
-        var _this5 = this;
+        var _this3 = this;
 
         if (this.options.title.content) {
           var showing = this.maptable.data.filter(function (d) {
-            return d[_this5.options.latitudeKey] !== 0;
+            return d[_this3.options.latitudeKey] !== 0;
           }).length;
           var total = this.maptable.rawData.filter(function (d) {
-            return d[_this5.options.latitudeKey] !== 0;
+            return d[_this3.options.latitudeKey] !== 0;
           }).length;
 
           var inlineFilters = '';
@@ -740,29 +750,27 @@ this.d3.maptable = (function () {
       }
     }, {
       key: 'activateTooltip',
-      value: function activateTooltip(target, tooltipContent, cb) {
-        var _this6 = this;
+      value: function activateTooltip(target, tooltipNode, tooltipContent, cb) {
+        var _this4 = this;
 
         target.on('mousemove', function (d) {
-          var mousePosition = d3.mouse(_this6.svg.node()).map(function (v) {
+          var mousePosition = d3.mouse(_this4.svg.node()).map(function (v) {
             return parseInt(v, 10);
           });
 
-          _this6.tooltipNode.attr('style', 'display:block;').html(tooltipContent(d));
-
-          var tooltipDelta = _this6.tooltipNode.node().offsetWidth / 2;
+          var tooltipDelta = tooltipNode.node().offsetWidth / 2;
           var mouseLeft = mousePosition[0] - tooltipDelta;
           var mouseTop = mousePosition[1] + 10 + document.getElementById('mt-map').offsetTop;
 
-          _this6.tooltipNode.attr('style', 'top:' + mouseTop + 'px;left:' + mouseLeft + 'px;display:block;').on('mouseout', function () {
-            return _this6.tooltipNode.style('display', 'none');
+          tooltipNode.attr('style', 'top:' + mouseTop + 'px;left:' + mouseLeft + 'px;display:block;').html(tooltipContent(d)).on('mouseout', function () {
+            return tooltipNode.style('display', 'none');
           });
 
           if (cb) {
-            _this6.tooltipNode.on('click', cb);
+            tooltipNode.on('click', cb);
           }
         }).on('mouseout', function () {
-          return _this6.tooltipNode.style('display', 'none');
+          return tooltipNode.style('display', 'none');
         });
       }
     }, {
