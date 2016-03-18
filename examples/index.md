@@ -1,0 +1,7 @@
+- [/00 - Basic/](Basic with Map, Filters and Table - minimal options)
+- [/01 - Table with filters/](Only Table and filters - sorting, virtual columns)
+- [/02 - GDP by countries/](GDP by countries - legend, title, tooltip, scaled color for countries)
+- [/03 - Global Airports - Markers/](Global Airport Markers with filters - +6000 rows, markers grouped by city, tooltip)
+- [/04 - Global Airports - Countries/](Global Airport by Countries - +6000 rows, Log scale for country colors, tooltip)
+- [/05 - IXP Dir/](IXP Directory - Map, Filters, Table, Legend, Watermark, virtual columns, dataParse, markers grouped by city, tooltip...)
+- [/06 - Basic with custom markers/](Basic Map - custom markers)
