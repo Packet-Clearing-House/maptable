@@ -10,7 +10,10 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/1.6.20/topojson.min.js"></script>
 <script src="/maptable.js"></script>
 
-<div id="vizContainer" class='container'></div>
+<div id="vizContainer" class='container'>
+  <div id='mt-filters' class='panel panel-default'></div>
+  <div id='mt-map'></div>
+</div>
 
 <script>
     var viz = d3.maptable('#vizContainer')

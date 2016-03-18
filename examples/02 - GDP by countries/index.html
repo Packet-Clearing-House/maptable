@@ -20,6 +20,21 @@
       zoom: false,
       countryIdentifierKey: 'Country Code',
       countryIdentifierType: 'iso_a3',
+      title: {
+        bgColor: "#F5F5F5",
+        fontSize: "11",
+        content: function(countShown, countTotal, filtersDescription) {
+          if (countShown === 0 || countTotal === 0) out = "No data shown";
+          else if (countShown < countTotal) out = 'Showing <tspan font-weight="bold">' + countShown + '</tspan> from <tspan font-weight="bold">' + countTotal + "</tspan>";
+          else out = '<tspan font-weight="bold">' + countTotal + "</tspan> shown";
+
+          if (filtersDescription !== '') out += " — " + filtersDescription;
+          return out;
+        },
+        source: function() {
+          return 'Source: <a xlink:href="http://www.example.com" target="_blank"><tspan font-weight="bold">example.com</tspan></a>';
+        }
+      },
       countries: {
         attr: {
           fill: {

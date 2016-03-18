@@ -358,7 +358,6 @@ this.d3.maptable = (function () {
       this.layerGlobal = this.svg.append('g').attr('class', 'mt-map-global');
       this.layerCountries = this.layerGlobal.append('g').attr('class', 'mt-map-countries');
       this.layerMarkers = this.layerGlobal.append('g').attr('class', 'mt-map-markers');
-      this.loadGeometries();
 
       // Add Watermark
       if (this.options.watermark) {
@@ -374,6 +373,9 @@ this.d3.maptable = (function () {
       if (this.options.exportSvg) {
         this.addExportSvgCapability();
       }
+
+      // Let's build things
+      this.loadGeometries();
     }
 
     babelHelpers.createClass(GeoMap, [{
@@ -760,7 +762,7 @@ this.d3.maptable = (function () {
 
           var tooltipDelta = tooltipNode.node().offsetWidth / 2;
           var mouseLeft = mousePosition[0] - tooltipDelta;
-          var mouseTop = mousePosition[1] + 10 + document.getElementById('mt-map').offsetTop;
+          var mouseTop = mousePosition[1] + 10;
 
           tooltipNode.attr('style', 'top:' + mouseTop + 'px;left:' + mouseLeft + 'px;display:block;').html(tooltipContent(d)).on('mouseout', function () {
             return tooltipNode.style('display', 'none');
@@ -1298,7 +1300,9 @@ this.d3.maptable = (function () {
             tds += '>';
 
             if (!(_this2.options.collapseRowsBy.indexOf(columnKey) !== -1 && uniqueCollapsedRows[columnKey] && uniqueCollapsedRows[columnKey] === row[columnKey])) {
-              if (column.isVirtual) {
+              if (column.cellContent) {
+                tds += column.cellContent(row);
+              } else if (column.virtual) {
                 tds += column.virtual(row);
               } else {
                 if (row[columnKey] && row[columnKey] !== 'null') tds += row[columnKey];
@@ -1369,6 +1373,7 @@ this.d3.maptable = (function () {
       this.options = options;
 
       this.node = document.querySelector(target);
+      this.node.setAttribute('style', 'position:relative;');
 
       if (this.options.data.type === 'json') {
         d3.json(this.options.data.path, this.loadData.bind(this));

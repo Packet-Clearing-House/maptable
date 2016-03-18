@@ -9,6 +9,7 @@ export default class MapTable {
     this.options = options;
 
     this.node = document.querySelector(target);
+    this.node.setAttribute('style', 'position:relative;');
 
     if (this.options.data.type === 'json') {
       d3.json(this.options.data.path, this.loadData.bind(this));

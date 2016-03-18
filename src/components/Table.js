@@ -104,7 +104,9 @@ export default class Table {
               uniqueCollapsedRows[columnKey] &&
               uniqueCollapsedRows[columnKey] === row[columnKey]
             )) {
-            if (column.isVirtual) {
+            if (column.cellContent) {
+              tds += column.cellContent(row);
+            } else if (column.virtual) {
               tds += column.virtual(row);
             } else {
               if (row[columnKey] && row[columnKey] !== 'null') tds += row[columnKey];

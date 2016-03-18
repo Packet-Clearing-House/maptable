@@ -76,7 +76,6 @@ export default class GeoMap {
     this.layerGlobal = this.svg.append('g').attr('class', 'mt-map-global');
     this.layerCountries = this.layerGlobal.append('g').attr('class', 'mt-map-countries');
     this.layerMarkers = this.layerGlobal.append('g').attr('class', 'mt-map-markers');
-    this.loadGeometries();
 
     // Add Watermark
     if (this.options.watermark) {
@@ -92,6 +91,9 @@ export default class GeoMap {
     if (this.options.exportSvg) {
       this.addExportSvgCapability();
     }
+
+    // Let's build things
+    this.loadGeometries();
   }
 
   scaleAttributes() {
@@ -485,7 +487,7 @@ export default class GeoMap {
 
       const tooltipDelta = tooltipNode.node().offsetWidth / 2;
       const mouseLeft = (mousePosition[0] - tooltipDelta);
-      const mouseTop = (mousePosition[1] + 10 + document.getElementById('mt-map').offsetTop);
+      const mouseTop = (mousePosition[1] + 10);
 
       tooltipNode.attr('style', `top:${mouseTop}px;left:${mouseLeft}px;display:block;`)
         .html(tooltipContent(d))

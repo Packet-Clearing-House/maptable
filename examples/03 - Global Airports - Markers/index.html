@@ -19,6 +19,19 @@
       path: 'ne_110m_admin_0_countries.json',
       autoFitContent: true,
       markers: {
+        tooltip: function(a) {
+          out = '<div class="arrow"></div>';
+          if (a.values.length === 0) {
+            out += '<h3 class="popover-title"> ' + a.key + '</h3>';
+            out += '<div class="popover-content">N/A</div>';
+          } else {
+            out += '<h3 class="popover-title"> ' + a.values[0].city + ', ' + a.values[0].country + '</h3>';
+            out += '<div class="popover-content">';
+            for (i = 0; i < a.values.length; i++) out += " • " + a.values[i].name + "<br>";
+            out += "</div>";
+          }
+          return out;
+        },
         attr: {
           r: {
             min: 1,

@@ -6,14 +6,18 @@ This library was originally conceived to render the [home page](https://pch.net)
 - **Table** - A tabular representation of your dataset which can be sorted by header rows. This also dynamically responds to filters.
 - **Filters** - A programmatically generated list of drop downs and input fields to drill down into your dataset
 
-Below a **screenshot** of MapTable in action:
+Below a **screenshot** of MapTable in action with minimal configuration:
 
-![MapTable in action](examples/img/ixpdir.small.png "MapTable in action")
+![MapTable in action](screenshots/example_basic.png "MapTable in action - Basic example")
 
 You can also browse other code samples and **examples** here:
-  - blocks1
-  - blocks2
-  - blocks3
+  - Basic (Map, Filters, Table) with minimal options
+  - Only Table and filters (sorting, virtual columns)
+  - GDP by countries (legend, title, tooltip, scaled color for countries)
+  - Global Airport Markers with filters (+6000 rows, markers grouped by city, tooltip)
+  - Global Airport by Countries (+6000 rows, Log scale for country colors, tooltip)
+  - IXP Directory (Map, Filters, Table, Legend, Watermark, virtual columns, dataParse, markers grouped by city, tooltip...)
+  - Basic Map with custom filters
 
 ## Dependencies
 
@@ -63,7 +67,7 @@ The default order of the 3 components is `Map`, `Filters` and `Table`. If you wa
 ```html
 <div id='vizContainer'>
   <div id='mt-map'></div>
-  <div id='mt-filters'></div>
+  <div id='mt-filters' class='panel panel-default'></div>
   <div id='mt-table'></div>
 </div>
 ```
@@ -103,18 +107,58 @@ Import CSV file at the specified url with the mime type "text/csv".
 
 Import TSV file at the specified url with the mime type "text/tab-separated-values".
 
+### Map datasets
+
+To plot lands and countries on the map, we're using TopoJSON library. The map can be generated through this tool: [topojson-map-generator](https://github.com/melalj/topojson-map-generator).
+
 ### Dataset requirements
 
-In order to plot your dataset on a map, there are minimum set of columns needed. They are `latitude`, `longitude` for your markers coordinates, and `country_code` for the countries that are in [ISO_3166-1_alpha-3](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-3#Officially_assigned_code_elements) format:
+In order to plot your dataset on a map, there are minimum set of columns needed.
+
+If you're planning to add markers on your map, you would need to provide `latitude`, `longitude` of your markers. You can also edit these keys name using the map options `longitudeKey`, `latitudeKey`.
 
 ```json
 [
-    {"longitude":"13.23000", "latitude":"-8.85000", "country_code":"ANG"},
-    {"longitude":"168.32000", "latitude":"-17.75000", "country_code":"VUT"},
+    {"longitude": "13.23000", "latitude": "-8.85000"},
+    {"longitude": "168.32000", "latitude": "-17.75000"},
 ]
 ```
 
-You can also edit these keys name using the map options `longitudeKey`, `latitudeKey` and `countryCodeKey`
+If you're planing to add country related information, you should provide consistent country information on your dataset from the TopJSON file.
+You should provide at least one of these types on your mapOptions:
+- `countryIdentifierKey:` _(string, default: 'country_code')_ Column name of country identifier (from the dataset). It goes as pair with the option `countryIdentifierType`.
+- `countryIdentifierType:` _(string, default: 'iso_a2')_ Country identifier type that we're using to attach data to countries on the map. The available types are:
+  - `iso_a2` (default): [ISO_3166-1_alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) country code format
+  - `iso_a3`: [ISO_3166-1_alpha-3](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-3) country code format
+  - `name`: Country name that came from the GeoJSON map file.
+  - `continent`: Continent name that came from the GeoJSON map file.
+
+For example for this dataset:
+
+```json
+[
+  {"country_code": "MAR", "Country Name": "Morocco", "bar": "foo"},
+  {"country_code": "FRA", "Country Name": "France", "bar": "foo"},
+]
+```
+
+You would use these options:
+
+```js
+{
+  countryIdentifierKey: 'country_code',
+  countryIdentifierType: 'iso_a3'
+}
+```
+
+or
+
+```js
+{
+  countryIdentifierKey: 'Country Name',
+  countryIdentifierType: 'name'
+}
+```
 
 ### Columns details
 
@@ -127,20 +171,21 @@ By default, MapTable imports all the columns and detects their format automatica
 - `<PUT_YOUR_COLUMN_KEY>:` _(Object)_ Provide the columns key here to apply the options below to it. If this key is not defined in yoru dataset, then it will be dynamically added as virtual column:
     - `nowrap:` _(bool, default: false)_ When present, it specifies that the content inside a that column should not wrap.
     - `title:` _(string, default: columnKey)_ What we show as column name in filters and table.
-    - `type:` _(string, default: 'field')_ Column format type, used for filtering. Available options:
+    - `filterMethod:` _(string, default: 'field')_ Column format type, used for filtering. Available options:
         - `field`: filter by keyword
         - `dropdown`: exact match using a dropdown
-        - `number`: filter using comparison (≥, ≤, between ....)
-        - `virtual`: column that doesn't exists in the dataset, but we want add it to the table or filters.
-   - `dataFormat:` _(function(d))_ Used only when `type` is _custom_. Function that return the new formatted data. Used to programmatically sort a column or filter rows.
-   - `cellContent:` _(function(d))_ Function that return what we will show on the table cell.
+        - `compare`: filter using comparison (≥, ≤, between ....)
+   - `virtual`: _(function(d), default: null)_ To create a new column that doesn't exists in the dataset, and we'd like to show it on the table or filters. You can also use it if you want to transform an existing column.
+   - `cellContent`: _(function(d), default: null)_ Function that transforms an existing content using other rows. (for example to change the color depending on the data).
+   - `dataParse:` _(function(d), default: null)_ Function that return the formatted data used to sort and compare cells.
+   - `filterInputType:` _(string, default: 'text')_ HTML input type that we're using for the filters for that specific column (e.g. date, number, tel ...)
 
 *Example (adding `nowrap` and `type` to the `region` column key):*
 ```js
 .columns({
   region: {
     nowrap: true,
-    type: 'dropdown'
+    filterMethod: 'dropdown'
   }
 })
 ```
@@ -195,7 +240,7 @@ If you want to attach the data boundaries to the value of an attribute, you may 
 
 #### Options
 
-- `path:` _(string, **required**)_ URL of the TOPOJSON map, you can get them from Mike Bostock's repo: [world atlas](https://github.com/mbostock/world-atlas) and [us atlas](https://github.com/mbostock/us-atlas).
+- `path:` _(string, **required**)_ URL of the TOPOJSON map, you can get them from Mike Bostock's repo: [world atlas](https://github.com/mbostock/world-atlas) and [us atlas](https://github.com/mbostock/us-atlas). Or use [this tool](https://github.com/melalj/topojson-map-generator) to generate these files as we did on the examples.
 - `width:` _(integer, default:'window.innerWidth')_ Map Width.
 - `height:` _(integer, default:'window.innerHeight')_ Map Height.
 - `zoom:` _(bool, default: true)_ Enable zoom on the map (when scrolling up/down on the map).
@@ -212,15 +257,15 @@ title: {
   bgColor: "#F5F5F5",
   fontSize: "11",
   content: function(countShown, countTotal, filtersDescription) {
-    if (countShown === 0 || countTotal === 0) out = "No IXP shown";
-    else if (countShown < countTotal) out = 'Showing <tspan font-weight="bold">' + countShown + '</tspan> IXP from <tspan font-weight="bold">' + countTotal + "</tspan>";
-    else out = '<tspan font-weight="bold">' + countTotal + "</tspan> IXP shown";
+    if (countShown === 0 || countTotal === 0) out = "No data shown";
+    else if (countShown < countTotal) out = 'Showing <tspan font-weight="bold">' + countShown + '</tspan> from <tspan font-weight="bold">' + countTotal + "</tspan>";
+    else out = '<tspan font-weight="bold">' + countTotal + "</tspan> shown";
 
     if (filtersDescription !== '') out += " — " + filtersDescription;
     return out;
   },
   source: function() {
-    return 'Source: <a xlink:href="http://www.pch.net/" target="_blank"><tspan font-weight="bold">pch.net</tspan></a>';
+    return 'Source: <a xlink:href="http://www.example.com" target="_blank"><tspan font-weight="bold">example.com</tspan></a>';
   }
 },
 ```
@@ -229,7 +274,6 @@ title: {
 - `scaleHeight:` _(float, default: 1.0)_ Ratio to scale the map height.
 - `autoFitContent:` _(bool, default: true)_ Enable auto zoom to focus on the active markers.
 - `fitContentMargin:` _(integer, default: 10)_ Padding in pixels to leave when we filter on a specific area.
-- `tooltipClass:` _(string, default: 'popover bottom')_ Class name of the tooltip (we're using bootstrap).
 - `ratioFromWidth:` _(float, default: 0.5)_ Ratio between the height and the width: height/width, used to deduce the height from the the width.
 - `countryIdentifierKey:` _(string, default: 'country_code')_ Column name of country identifier (from the dataset). It goes as pair with the option `countryIdentifierType`.
 - `countryIdentifierType:` _(string, default: 'iso_a2')_ Country identifier type that we're using to attach data to countries on the map. The available types are:
@@ -250,7 +294,7 @@ title: {
 *Example:*
 ```js
 watermark: {
-  src: 'https://www.pch.net/assets/img/pch_logo.svg',
+  src: 'https://example.com/image.svg',
   width: 130,
   height: 60,
   position: "bottom left",
@@ -263,8 +307,9 @@ watermark: {
     - `markers.attrY:` _(string, default: 'cy')_ Attribute to position the marker on the Y-Axis
     - `markers.attrXDelta:` _(integer, default: 0)_ Left relative margin of the marker
     - `markers.attrYDelta:` _(integer, default: 0)_ Top relative margin of the marker
-    - `markers.tooltip:` _(function(d))_ Function that returns html that we would use as content for the tooltip. We recommend you to use the bootstrap popover. If we using rollupoption, the parameter is going to be `groupedData`, otherwise it's `d` (check above on the naming conventions for more details).
-    - `markers.attr:` _(object)_ Markers attributes (same naming as svg attributes).
+    - `markers.tooltipClassName:` _(string, default: 'mt-map-tooltip popover bottom')_ Class name of the tooltip used for markers (we're using bootstrap).
+    - `markers.tooltip:` _(function(groupedData))_ Function that returns html that we would use as content for the tooltip. We recommend you to use the bootstrap popover..
+    - `markers.attr:` _(object)_ Markers attributes (same naming as SVG attributes).
         - `markers.attr.fill:` _(ScaledValue)_ Marker background color.
         - `markers.attr.r:` _(ScaledValue)_ Marker radius.
         - `markers.attr.stroke:` _(ScaledValue)_ Marker border color.
@@ -274,12 +319,6 @@ watermark: {
 
 ```js
 markers: {
-  groupBy: function(a) {
-    return a.city + ", " + a.country;
-  },
-  rollup: function(a) {
-    return a.length;
-  },
   tooltip: function(a) {
     out = '<div class="arrow"></div>';
     out += '<span class="badge pull-right"> ' + a.values.length + '</span><h3 class="popover-title"> ' + a.key + '</h3>';
@@ -294,6 +333,9 @@ markers: {
       max: "maxValue",
       transform: function(v) {
         return 3 * Math.sqrt(v);
+      },
+      rollup: function(values) {
+        return values.length;
       },
     },
     fill: "yellow",
@@ -310,7 +352,7 @@ markers: {
   className: 'starsMarker',
   customTag: function(markerObject){
     return markerObject.append("svg:image")
-      .attr("xlink:href", "https://www.pch.net/assets/img/star.svg")
+      .attr("xlink:href", "https://www.example.com/star.svg")
       .attr("width", "13")
       .attr("height", "27");
   },
@@ -334,21 +376,15 @@ markers: {
 
 ```js
 countries: {
-  rollup: function(a) {
-    return a.length;
-  },
   tooltip: function(a) {
-    out = '<div class="tooltip-arrow"></div>';
-    out += '<div class="tooltip-inner">';
-    out += 'In ' + a.key + " PCH serves " + a.values.length + " IXP";
-    if(a.values.length > 1){
-      out += "s";
+    out = '<div class="arrow"></div>';
+    if (a.values.length === 0) {
+      out += '<h3 class="popover-title"> ' + a.key + '</h3>';
+      out += '<div class="popover-content">N/A</div>';
+    } else {
+      out += '<h3 class="popover-title"> ' + a.values[0]['country_name'] + '</h3>';
+      out += '<div class="popover-content">' + a.values.length + '</div>';
     }
-    out += ": <hr>";
-    for(i=0; i< a.values.length; i++){
-      out += a.values[i].name + "<br>";
-    }
-    out += "</div>";
     return out;
   },
   attr: {
@@ -356,6 +392,9 @@ countries: {
       min: "#a9b6c2",
       max: "#6c89a3",
       empty: "#f9f9f9",
+      rollup: function(values) {
+        return values.length;
+      },
     },
     stroke: "#d9d9d9",
     "stroke-width": 0.5
@@ -379,13 +418,15 @@ If you want to add a table on your visualization:
 
 ### Options
 
-- `className:` _(string, default: 'table table-striped table-bordered')_ Table class name
 - `show:` _([string, ...], default: null)_ Set the order and the columns that we want to see in the table.
+- `className:` _(string, default: 'table table-striped table-bordered')_ Table class name
 - `rowClassName:` _(function(d), default: null)_ Function that returns the row class name depending on its content. Useful to highlight rows.
 - `defaultSorting:` _(object, default: see below)_ How we sort things on the table.
     - `defaultSorting.key:` _(string, default: <first column shown>)_ default sorting on which column.
     - `defaultSorting.mode:` _(string, default: 'asc')_ sorting mode: `asc` for ascending, `desc` for descending.
 - `collapseRowsBy:` _([string, ...], default: null)_ Array of columns that we want to be collapsed.
+
+![collapseRowsBy](screenshots/collapseRowsBy.png "collapseRowsBy")
 
 
 ## Export as SVG
@@ -399,14 +440,33 @@ The sample code for a PHP server is located in `/server/exportSvg.php`. Contribu
   * Mohammed Elalj [@melalj](https://github.com/melalj) - Author
   * Ashley Jones [@Ths2-9Y-LqJt6](https://github.com/Ths2-9Y-LqJt6) - Testing
 
-
 ## Contribute
 
 You are welcomed to fork the project and make pull requests.
 
-## Todo
+### Set up your development environment
 
+#### Requirements
+
+- [NodeJs](http://www.nodejs.org), type `npm -v` on your terminal to check if you have it.
+- Gulp `npm install -g gulp`
+- Bower `npm install -g bower`
+
+#### Getting Started
+
+1. Run `npm install` to install dependencies
+2. Run `bower install` to download Browser Javascript libraries
+3. Run `gulp` to start the local dev environment on [http://localhost:5000](http://localhost:5000)
+4. To have production ready files, run: `gulp dist`. All built files are located in the folder `/build/`
+5. Enjoy 🍻
+
+### Todo
+
+ * [x] Publish v1
  * [ ] Write unit tests 🙏
- * [ ] Improve documentation
+ * [ ] Improve documentation (spell, formulation, emoji...)
+ * [ ] Secondary sorting
+ * [ ] Append SVG filters to the map and use then as styling
+ * [ ] Legend gradient transformation (if we used the log scale)
  * [ ] Have multiple legends depending on the attribute
- * [ ] Legend transformation (if we used the log scale)
+ * [ ] Legend marker radius
