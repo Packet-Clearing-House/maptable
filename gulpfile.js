@@ -11,6 +11,8 @@ var compressJs = require('gulp-uglify');
 var rimraf = require('gulp-rimraf');
 
 var rename = require('gulp-rename');
+var jeditor = require('gulp-json-editor');
+var _ = require('underscore');
 
 var reload = browserSync.reload;
 
@@ -18,9 +20,9 @@ var reload = browserSync.reload;
 gulp.task('browser-sync', function() {
   browserSync.init({
     server: {
-      baseDir: ["./examples", "./build"]
+      baseDir: ["./examples", "./dev"]
     },
-    files: ['./examples/**/*.*', './build/**/*.*'],
+    files: ['./examples/**/*.*', './dev/**/*.*'],
     browser: 'google chrome',
     port: 5000,
   });
@@ -28,47 +30,81 @@ gulp.task('browser-sync', function() {
 
 // Watch
 gulp.task('watch', function() {
-  gulp.watch('src/**/*.js', ['build:js']);
+  gulp.watch('src/**/*.js', ['build:js:dev']);
 });
 
-// Javascript VENDOR
-gulp.task('build:js', function() {
- return rollup.rollup({
-   entry: './src/index.js',
-   plugins: [
-		 babel({ runtimeHelpers: true })
-	 ]
- }).then( function ( bundle ) {
-   bundle.write({
-     format: 'iife',
-     moduleName: 'd3.maptable',
-     globals: {
-       d3: 'd3',
-       topojson: 'topojson'
-    },
-    sourceMap: true,
-    dest: './build/maptable.js'
-   });
-   browserSync.reload();
- });
+// Javascript
+function buildJs(dest) {
+  return rollup.rollup({
+    entry: './src/index.js',
+    plugins: [
+      babel({ runtimeHelpers: true })
+    ]
+  }).then( function ( bundle ) {
+    bundle.write({
+      format: 'iife',
+      moduleName: 'd3.maptable',
+      globals: {
+        d3: 'd3',
+        topojson: 'topojson'
+     },
+     sourceMap: true,
+     dest: dest + '/maptable.js'
+    });
+    browserSync.reload();
+  });
+}
+
+// Build for distribution
+gulp.task('build:js:dist', function() {
+ return buildJs('./dist');
+});
+
+// Build for developmeent environment
+gulp.task('build:js:dev', function() {
+ return buildJs('./dev');
 });
 
 // Compression
 gulp.task('compress:js', function() {
-  return gulp.src('build/*.js')
+  return gulp.src('dist/*.js')
     .pipe(compressJs())
     .pipe(rename({
       suffix: '.min'
     }))
-    .pipe(gulp.dest('./build'));
+    .pipe(gulp.dest('./dist'));
+});
+
+// Bower
+gulp.task('bower', function () {
+  return gulp.src('./package.json')
+    .pipe(rename('bower.json'))
+    .pipe(jeditor(function (json) {
+      return _.pick(json, [
+        'name',
+        'version',
+        'description',
+        'main',
+        'keywords',
+        'author',
+        'license',
+        'dependencies'
+      ]);
+    }))
+    .pipe(gulp.dest('.'));
 });
 
 // Clean
-gulp.task('clean:js', function() {
-   return gulp.src('./build/*.js', { read: false })
+gulp.task('clean:js:dist', function() {
+   return gulp.src('./dist/*.js', { read: false })
+		.pipe(rimraf({ force: true }));
+});
+
+gulp.task('clean:js:dev', function() {
+   return gulp.src('./dev/*.js', { read: false })
 		.pipe(rimraf({ force: true }));
 });
 
 
-gulp.task('default', gulpSequence('clean:js', 'build:js', 'browser-sync', 'watch'));
-gulp.task('dist', gulpSequence('clean:js', 'build:js', 'compress:js'));
+gulp.task('default', gulpSequence('clean:js:dev', 'build:js:dev', 'browser-sync', 'watch'));
+gulp.task('dist', gulpSequence('clean:js:dist', 'build:js:dist', 'compress:js', 'bower'));
