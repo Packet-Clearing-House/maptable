@@ -364,7 +364,7 @@ markers: {
 ```
 
 - `countries:` _(object, default: null)_ Add countries on the map.
-    - `countries.rollup:` _(function(groupedData))_ Function that returns a value that we would use for every country.
+    - `countries.rollup:` _(function(groupedData))_ Function that returns a value that we would use for every country. By default it return the count of groupedData.
     - `countries.tooltip:` _(function(groupedData))_ Function that returns html that we would use as content for the tooltip. We recommend you to use the bootstrap popover. The parameter is `groupedData` (check above on the naming conventions for more details).
     - `countries.attr:` _(object)_ Markers attributes (same naming as svg attributes).
             - `countries.attr.fill:` _(ScaledValue)_ Marker background color.

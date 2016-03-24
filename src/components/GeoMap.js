@@ -406,7 +406,7 @@ export default class GeoMap {
     } else if (typeof (attrValue) === 'object') {
       // Dynamic value
       if (!attrValue.rollup) {
-        throw new Error(`MapTable: rollup property is not defined for attr.${attrKey}`);
+        attrValue.rollup = (d) => d.length;
       }
       if (!attrValue.min || !attrValue.max) {
         throw new Error(`MapTable: You should provide values 'min' & 'max' for attr.${attrKey}`);

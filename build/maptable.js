@@ -110,7 +110,7 @@ this.d3.maptable = (function () {
       longitudeKey: 'longitude',
       latitudeKey: 'latitude',
       countryIdentifierKey: 'country_code',
-      countryIdentifierType: 'iso-a2',
+      countryIdentifierType: 'iso_a2',
       zoom: true,
       ratioFromWidth: 0.5,
       scaleHeight: 1.0,
@@ -669,7 +669,9 @@ this.d3.maptable = (function () {
           (function () {
             // Dynamic value
             if (!attrValue.rollup) {
-              throw new Error('MapTable: rollup property is not defined for attr.' + attrKey);
+              attrValue.rollup = function (d) {
+                return d.length;
+              };
             }
             if (!attrValue.min || !attrValue.max) {
               throw new Error('MapTable: You should provide values \'min\' & \'max\' for attr.' + attrKey);
