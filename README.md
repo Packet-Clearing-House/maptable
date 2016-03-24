@@ -111,6 +111,8 @@ Import TSV file at the specified url with the mime type "text/tab-separated-valu
 
 To plot lands and countries on the map, we're using TopoJSON library. The map can be generated through this tool: [topojson-map-generator](https://github.com/melalj/topojson-map-generator).
 
+You can browse a [list of maps](https://github.com/melalj/topojson-map-generator/tree/master/maps) that you can use.
+
 ### Dataset requirements
 
 In order to plot your dataset on a map, there are minimum set of columns needed.
