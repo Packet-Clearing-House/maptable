@@ -3,7 +3,7 @@ export default {
     longitudeKey: 'longitude',
     latitudeKey: 'latitude',
     countryIdentifierKey: 'country_code',
-    countryIdentifierType: 'iso-a2',
+    countryIdentifierType: 'iso_a2',
     zoom: true,
     ratioFromWidth: 0.5,
     scaleHeight: 1.0,
