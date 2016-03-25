@@ -3,5 +3,4 @@
 - [GDP by countries - legend, title, tooltip, scaled color for countries](./02 - GDP by countries/)
 - [Global Airport Markers with filters - +6000 rows, markers grouped by city, tooltip](./03 - Global Airports - Markers/)
 - [Global Airport by Countries - +6000 rows, Log scale for country colors, tooltip](./04 - Global Airports - Countries/)
-- [IXP Directory - Map, Filters, Table, Legend, Watermark, virtual columns, dataParse, markers grouped by city, tooltip...](./05 - IXP Dir/)
-- [Basic Map - custom markers](./06 - Basic with custom markers/)
+- [Basic Map - custom markers](./05 - Basic with custom markers/)

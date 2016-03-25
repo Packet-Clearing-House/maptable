@@ -11,13 +11,13 @@ Below a **screenshot** of MapTable in action with minimal configuration:
 ![MapTable in action](examples/00 - Basic/preview.png "MapTable in action - Basic example")
 
 You can also browse other code samples and **examples** here:
-  - [Basic with Map, Filters and Table - minimal options](./examples/00 - Basic/)
-  - [Only Table and filters - sorting, virtual columns](./examples/01 - Table with filters/)
-  - [GDP by countries - legend, title, tooltip, scaled color for countries](./examples/02 - GDP by countries/)
-  - [Global Airport Markers with filters - +6000 rows, markers grouped by city, tooltip](./examples/03 - Global Airports - Markers/)
-  - [Global Airport by Countries - +6000 rows, Log scale for country colors, tooltip](./examples/04 - Global Airports - Countries/)
-  - [IXP Directory - Map, Filters, Table, Legend, Watermark, virtual columns, dataParse, markers grouped by city, tooltip...](./examples/05 - IXP Dir/)
-  - [Basic Map - custom markers](./examples/06 - Basic with custom markers/)
+- [Basic with Map, Filters and Table - minimal options](./examples/00 - Basic/)
+- [Only Table and filters - sorting, virtual columns](./examples/01 - Table with filters/)
+- [GDP by countries - legend, title, tooltip, scaled color for countries](./examples/02 - GDP by countries/)
+- [Global Airport Markers with filters - +6000 rows, markers grouped by city, tooltip](./examples/03 - Global Airports - Markers/)
+- [Global Airport by Countries - +6000 rows, Log scale for country colors, tooltip](./examples/04 - Global Airports - Countries/)
+- [Basic Map - custom markers](./examples/05 - Basic with custom markers/)
+
 
 ## Dependencies
 
