@@ -25,9 +25,6 @@ fi
 VERSION=$(ruby update_version.rb $1)
 echo "Upgrading to version $VERSION"
 
-# Call gulp clean to empty the dist folder
-gulp clean
-
 # Call gulp dist to create the distribution of the code, which also calls bower to create the bower file
 gulp dist
 
