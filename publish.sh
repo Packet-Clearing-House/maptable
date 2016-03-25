@@ -1,12 +1,13 @@
 BRANCH=`git rev-parse --abbrev-ref HEAD`
 
-if [[ $BRANCH == "master" ]]; then
+if [[ $BRANCH != "master" ]]; then
   echo "You should publish on master"
+  exit 1
 fi
 
-# Credits https://github.com/benmanbs/javascript-skeleton/
+# Edit From https://github.com/benmanbs/javascript-skeleton/
 # Make sure a version type is passed in
-if [[ -z "$1" || ( "$1" != "patch" && "$1" && "minor" && "$1" && "major" ) ]]
+if [[ -z "$1" || ( "$1" != "patch" && "$1" != "minor" && "$1" !=  "major" ) ]]
 then
   echo "Please call this with one of the following version options: patch, minor, major"
   exit 1
