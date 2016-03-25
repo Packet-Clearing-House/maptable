@@ -29,6 +29,10 @@ echo "Upgrading to version $VERSION"
 # Call gulp dist to create the distribution of the code, which also calls bower to create the bower file
 gulp dist
 
+# Publish github pages
+cp -R dist/maptable.min.js site/maptable.min.js
+cp -R dist/maptable.css site/maptable.css
+
 # Push the change to the version numbers in the json files
 git commit -a -m "updated to version $VERSION"
 git push origin
@@ -37,8 +41,8 @@ git push origin
 git tag -a $VERSION -m "released $VERSION"
 git push origin $VERSION
 
-# Publish github pages
-git push origin `git subtree split --prefix dist gh-pages`:gh-pages --force
+# Update gh-pages
+git subtree push --prefix site origin gh-pages
 
 # Publish on npm
 npm publish ./
