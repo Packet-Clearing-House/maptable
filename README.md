@@ -8,16 +8,16 @@ This library was originally conceived to render the [home page](https://pch.net)
 
 Below a **screenshot** of MapTable in action with minimal configuration:
 
-![MapTable in action](examples/00 - Basic/preview.png "MapTable in action - Basic example")
+![MapTable in action](./examples/00 - Basic/preview.png "MapTable in action - Basic example")
 
 You can also browse other code samples and **examples** here:
-- [Basic with Map, Filters and Table - minimal options](./examples/00 - Basic/)
-- [Only Table and filters - sorting, virtual columns](./examples/01 - Table with filters/)
-- [GDP by countries - legend, title, tooltip, scaled color for countries](./examples/02 - GDP by countries/)
-- [Global Airport Markers with filters - +6000 rows, markers grouped by city, tooltip](./examples/03 - Global Airports - Markers/)
-- [Global Airport by Countries - +6000 rows, Log scale for country colors, tooltip](./examples/04 - Global Airports - Countries/)
-- [Basic Map - custom markers](./examples/05 - Basic with custom markers/)
-
+  - [Basic with Map, Filters and Table - minimal options](./examples/00 - Basic/)
+  - [Only Table and filters - sorting, virtual columns](./examples/01 - Table with filters/)
+  - [GDP by countries - legend, title, tooltip, scaled color for countries](./examples/02 - GDP by countries/)
+  - [Global Airport Markers with filters - +6000 rows, markers grouped by city, tooltip](./examples/03 - Global Airports - Markers/)
+  - [Global Airport by Countries - +6000 rows, Log scale for country colors, tooltip](./examples/04 - Global Airports - Countries/)
+  - [IXP Directory - Map, Filters, Table, Legend, Watermark, virtual columns, dataParse, markers grouped by city, tooltip...](./examples/05 - IXP Dir/)
+  - [Basic Map - custom markers](./examples/06 - Basic with custom markers/)
 
 ## Dependencies
 
@@ -110,8 +110,6 @@ Import TSV file at the specified url with the mime type "text/tab-separated-valu
 ### Map datasets
 
 To plot lands and countries on the map, we're using TopoJSON library. The map can be generated through this tool: [topojson-map-generator](https://github.com/melalj/topojson-map-generator).
-
-You can browse a [list of maps](https://github.com/melalj/topojson-map-generator/tree/master/maps) that you can use.
 
 ### Dataset requirements
 
@@ -366,7 +364,7 @@ markers: {
 ```
 
 - `countries:` _(object, default: null)_ Add countries on the map.
-    - `countries.rollup:` _(function(groupedData))_ Function that returns a value that we would use for every country. By default it return the count of groupedData.
+    - `countries.rollup:` _(function(groupedData))_ Function that returns a value that we would use for every country.
     - `countries.tooltip:` _(function(groupedData))_ Function that returns html that we would use as content for the tooltip. We recommend you to use the bootstrap popover. The parameter is `groupedData` (check above on the naming conventions for more details).
     - `countries.attr:` _(object)_ Markers attributes (same naming as svg attributes).
             - `countries.attr.fill:` _(ScaledValue)_ Marker background color.
@@ -427,9 +425,6 @@ If you want to add a table on your visualization:
     - `defaultSorting.key:` _(string, default: <first column shown>)_ default sorting on which column.
     - `defaultSorting.mode:` _(string, default: 'asc')_ sorting mode: `asc` for ascending, `desc` for descending.
 - `collapseRowsBy:` _([string, ...], default: null)_ Array of columns that we want to be collapsed.
-
-![collapseRowsBy](examples/05 - IXP Dir/collapseRowsBy.png "collapseRowsBy")
-
 
 ## Export as SVG
 
