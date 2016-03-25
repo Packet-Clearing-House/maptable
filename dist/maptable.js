@@ -68,24 +68,27 @@ this.d3.maptable = (function () {
     return true;
   }
 
-  function extendRecursive(obj1, obj2) {
-    if (!obj1) obj1 = {};
-    if (!obj2) obj2 = {};
-    Object.keys(obj2).forEach(function (p) {
-      try {
-        // Property in destination object set; update its value.
-        if (obj2[p].constructor === Object) {
-          obj1[p] = extendRecursive(obj1[p], obj2[p]);
-        } else {
-          obj1[p] = obj2[p];
-        }
-      } catch (e) {
-        // Property in destination object not set; create it and set its value.
-        obj1[p] = obj2[p];
-      }
-    });
+  function extendRecursive() {
+    var dst = {};
+    var src = void 0;
+    var p = void 0;
+    var args = [].splice.call(arguments, 0);
 
-    return obj1;
+    while (args.length > 0) {
+      src = args.splice(0, 1)[0];
+      if (toString.call(src) === '[object Object]') {
+        for (p in src) {
+          if (src.hasOwnProperty(p)) {
+            if (toString.call(src[p]) === '[object Object]') {
+              dst[p] = extendRecursive(dst[p] || {}, src[p]);
+            } else {
+              dst[p] = src[p];
+            }
+          }
+        }
+      }
+    }
+    return dst;
   }
 
   function keyToTile(k) {
