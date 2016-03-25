@@ -92,6 +92,15 @@ export default class GeoMap {
       this.addExportSvgCapability();
     }
 
+    // AutoResize
+    if (!this.options.width) {
+      window.addEventListener('resize', () => {
+        this.svg.attr('width', this.getWidth());
+        this.svg.attr('height', this.getHeight());
+        this.rescale();
+      });
+    }
+
     // Let's build things
     this.loadGeometries();
   }

@@ -8,6 +8,8 @@ var babel = require('rollup-plugin-babel');
 var browserSync = require('browser-sync');
 
 var compressJs = require('gulp-uglify');
+var compressCss = require('gulp-cssnano');
+
 var rimraf = require('gulp-rimraf');
 
 var rename = require('gulp-rename');
@@ -31,6 +33,7 @@ gulp.task('browser-sync', function() {
 // Watch
 gulp.task('watch', function() {
   gulp.watch('src/**/*.js', ['build:js:dev']);
+  gulp.watch('src/*.css', ['build:css:dev']);
 });
 
 // Javascript
@@ -75,6 +78,20 @@ gulp.task('compress:js', function() {
     .pipe(gulp.dest('./dist'));
 });
 
+// CSS
+function buildCss(dest) {
+  return gulp.src('./src/*.css')
+  .pipe(compressCss())
+  .pipe(gulp.dest(dest))
+  .pipe(reload({stream:true}));
+}
+gulp.task('build:css:dev', function() {
+  return buildCss('./dev');
+});
+gulp.task('build:css:dist', function() {
+  return buildCss('./dist');
+});
+
 // Bower
 gulp.task('bower', function () {
   return gulp.src('./package.json')
@@ -106,5 +123,5 @@ gulp.task('clean:js:dev', function() {
 });
 
 
-gulp.task('default', gulpSequence('clean:js:dev', 'build:js:dev', 'browser-sync', 'watch'));
-gulp.task('dist', gulpSequence('clean:js:dist', 'build:js:dist', 'compress:js', 'bower'));
+gulp.task('default', gulpSequence('clean:js:dev', ['build:js:dev', 'build:css:dev'], 'browser-sync', 'watch'));
+gulp.task('dist', gulpSequence('clean:js:dist', ['build:js:dist', 'build:css:dist'], 'compress:js', 'bower'));
