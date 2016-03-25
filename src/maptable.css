@@ -10,10 +10,11 @@
 .mt-map-country:hover{
   opacity:0.9;
 }
+
 .mt-map-tooltip {
   color: #222;
   background-color:rgba(255,255,255,0.9);
-  min-width:300px;
+  min-width:100px;
   max-width:300px;
   position: absolute;
 }
@@ -45,14 +46,14 @@
 #mt-filters-new{
   margin: 10px 10px;
 }
-.mt-filters-element{
+.mt-filter-row{
   margin: 10px 10px;
   padding-bottom: 10px;
   border-bottom: 1px solid #DDD;
   color:#AAA;
 }
 
-.mt-filters-element span{
+.mt-filter-row span{
   font-size: 14px;
   font-weight: 500;
   color: #333;
@@ -60,4 +61,18 @@
   line-height: 34px;
   padding-left:4px;
   padding-right:4px;
+}
+#mt-map{
+  position: relative;
+}
+#mt-map:hover #mt-map-export{
+  opacity: 1;
+  transition: opacity 0.5s linear;
+}
+#mt-map-export {
+  position: absolute;
+  top: 10px;
+  right:10px;
+  opacity: 0;
+  transition: opacity 0.5s linear;
 }

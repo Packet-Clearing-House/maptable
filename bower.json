@@ -1,0 +1,12 @@
+{
+  "name": "Maptable",
+  "version": "1.1.0",
+  "description": "Visualization tool that transforms data to Map or/and Table (with filters)",
+  "main": "dist/maptable.min.js",
+  "author": {
+    "name": "Mohammed Elalj",
+    "email": "mohammed@pch.net",
+    "url": "https://www.pch.net"
+  },
+  "license": "MIT"
+}

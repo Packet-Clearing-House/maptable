@@ -1,0 +1,4 @@
+gulpfile.js
+.eslintrc
+build/**/*.js
+node_modules
