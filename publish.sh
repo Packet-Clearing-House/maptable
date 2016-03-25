@@ -37,6 +37,9 @@ git push origin
 git tag -a $VERSION -m "released $VERSION"
 git push origin $VERSION
 
+# Publish github pages
+git push origin `git subtree split --prefix dist gh-pages`:gh-pages --force
+
 # Publish on npm
 npm publish ./
 
