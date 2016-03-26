@@ -6,18 +6,11 @@ This library was originally conceived to render the [home page](https://pch.net)
 - **Table** - A tabular representation of your dataset which can be sorted by header rows. This also dynamically responds to filters.
 - **Filters** - A programmatically generated list of drop downs and input fields to drill down into your dataset
 
-Below a **screenshot** of MapTable in action with minimal configuration:
-
-![MapTable in action](./examples/00 - Basic/preview.png "MapTable in action - Basic example")
-
 You can also browse other code samples and **examples** here:
-  - [Basic with Map, Filters and Table - minimal options](./examples/00 - Basic/)
-  - [Only Table and filters - sorting, virtual columns](./examples/01 - Table with filters/)
-  - [GDP by countries - legend, title, tooltip, scaled color for countries](./examples/02 - GDP by countries/)
-  - [Global Airport Markers with filters - +6000 rows, markers grouped by city, tooltip](./examples/03 - Global Airports - Markers/)
-  - [Global Airport by Countries - +6000 rows, Log scale for country colors, tooltip](./examples/04 - Global Airports - Countries/)
-  - [IXP Directory - Map, Filters, Table, Legend, Watermark, virtual columns, dataParse, markers grouped by city, tooltip...](./examples/05 - IXP Dir/)
-  - [Basic Map - custom markers](./examples/06 - Basic with custom markers/)
+
+[<img src="https://gist.githubusercontent.com/melalj/cc130ad4072a2f52a5aa/raw/2abcdff5cc84e71dd40552be68e5ae747dcd9a5d/thumbnail.png">](https://bl.ocks.org/melalj/cc130ad4072a2f52a5aa) [<img src="https://gist.githubusercontent.com/melalj/ef85eb677583647daf52/raw/127e36862c4cfae6e7039023a8a449cc043f6837/thumbnail.png">](https://bl.ocks.org/melalj/ef85eb677583647daf52) [<img src="https://gist.githubusercontent.com/melalj/2394323e478dca231128/raw/a43dadbb67e8ecb335a92f2210ae59f109f25fd6/thumbnail.png">](https://bl.ocks.org/melalj/2394323e478dca231128)
+
+[<img src="https://gist.githubusercontent.com/melalj/772c8a846a3f308e9358/raw/b8b39512d91b56ce4383cfd5a491083ff3f1b42f/thumbnail.png">](https://bl.ocks.org/melalj/772c8a846a3f308e9358) [<img src="https://gist.githubusercontent.com/melalj/07be61a538509b8e4a7e/raw/5565adb3e2a88162c6ecaa55dc7472a085ddb0d2/thumbnail.png">](https://bl.ocks.org/melalj/07be61a538509b8e4a7e) [<img src="https://gist.githubusercontent.com/melalj/1aa4dd90b4561deb8de6/raw/dbb70a32eeba5c366b9a4c4641fb2d104a26f6cb/thumbnail.png">](https://bl.ocks.org/melalj/1aa4dd90b4561deb8de6)
 
 ## Dependencies
 
