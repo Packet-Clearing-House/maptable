@@ -1,6 +1,0 @@
-- [Basic with Map, Filters and Table - minimal options](./00 - Basic/)
-- [Only Table and filters - sorting, virtual columns](./01 - Table with filters/)
-- [GDP by countries - legend, title, tooltip, scaled color for countries](./02 - GDP by countries/)
-- [Global Airport Markers with filters - +6000 rows, markers grouped by city, tooltip](./03 - Global Airports - Markers/)
-- [Global Airport by Countries - +6000 rows, Log scale for country colors, tooltip](./04 - Global Airports - Countries/)
-- [Basic Map - custom markers](./05 - Basic with custom markers/)
