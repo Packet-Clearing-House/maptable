@@ -2,7 +2,7 @@
   "name": "maptable",
   "version": "1.0.1",
   "description": "Visualization tool that transforms data to Map or/and Table (with filters)",
-  "main": "dist/maptable.min.js",
+  "main": "dist/maptable.js",
   "author": {
     "name": "Mohammed Elalj",
     "email": "mohammed@pch.net",

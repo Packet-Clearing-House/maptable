@@ -22,10 +22,10 @@ var reload = browserSync.reload;
 gulp.task('browser-sync', function() {
   browserSync.init({
     server: {
-      baseDir: ["./examples", "./dev"]
+      baseDir: ["./examples", "./dev", "./dist"]
     },
-    files: ['./examples/**/*.*', './dev/**/*.*'],
-    browser: 'google chrome',
+    files: ['./examples/**/*.*', './dev/**/*.*','./dist/**/*.*',  ],
+    browser: ['google-chrome'],
     port: 5000,
   });
 });

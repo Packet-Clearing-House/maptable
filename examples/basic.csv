@@ -1,0 +1,117 @@
+country,region,city,longitude,latitude
+Angola,Africa,Luanda,13.23,-8.85
+Egypt,Africa,Cairo,31.4,30.13
+Gambia,Africa,Serrekunda,-16.6666,13.43637
+Kenya,Africa,Nairobi,36.82,-1.32
+Malawi,Africa,Blantyre,35,-15.78333
+Mozambique,Africa,Maputo,32.57,-25.92
+Namibia,Africa,Windhoek,17.08514,-22.56429
+Nigeria,Africa,Lagos,3.35,6.55
+Rwanda,Africa,Kigali,30.12,-1.97
+South Africa,Africa,Cape Town,18.6,-33.98
+South Africa,Africa,Cape Town,18.6,-33.98
+South Africa,Africa,Durban,30.95,-29.97
+South Africa,Africa,Durban,30.95,-29.97
+South Africa,Africa,Johannesburg,28.23,-26.13
+Sudan,Africa,Khartoum,32.58693,15.60214
+Tanzania,Africa,Arusha,36.62,-3.33
+Tanzania,Africa,Dar es Salaam,39.2,-6.87
+Tunisia,Africa,Enfidha,10.37935,36.1344
+Tunisia,Africa,Tunis,10.16596,36.81881
+Australia,Asia-Pacific,Perth,115.95,-31.93
+Australia,Asia-Pacific,Sydney,151.17999,-33.95
+Australia,Asia-Pacific,Sydney,151.17999,-33.95
+Bangladesh,Asia-Pacific,Dhaka,90.38,23.77
+China,Asia-Pacific,Hong Kong,114.18,22.33
+India,Asia-Pacific,Mumbai,72.8,19
+Indonesia,Asia-Pacific,Jakarta,106.82944,-6.17444
+Indonesia,Asia-Pacific,Jakarta,106.82944,-6.17444
+Indonesia,Asia-Pacific,Jakarta,106.82944,-6.17444
+Japan,Asia-Pacific,Tokyo,139.78,35.55
+Japan,Asia-Pacific,Tokyo,139.78,35.55
+Korea,Asia-Pacific,Seoul,126.93,37.5
+Malaysia,Asia-Pacific,Kuala Lumpur,101.7,3.13
+Nepal,Asia-Pacific,Kathmandu,85.37,27.7
+New Zealand,Asia-Pacific,Auckland,174.8,-37.02
+New Zealand,Asia-Pacific,Wellington,174.8,-41.33
+Philippines,Asia-Pacific,Manila,120.95,14.58
+Singapore,Asia-Pacific,Singapore,103.98,1.37
+Singapore,Asia-Pacific,Singapore,103.98,1.37
+Singapore,Asia-Pacific,Singapore,103.98,1.37
+Vanuatu,Asia-Pacific,Port Vila,168.32,-17.75
+Austria,Europe,Klagenfurt,14.33,46.65
+Austria,Europe,Vienna,16.37,48.2
+Bahrain,Europe,Manama,50.65,26.27
+Bulgaria,Europe,Sofia,23.38,42.65
+Bulgaria,Europe,Sofia,23.38,42.65
+Bulgaria,Europe,Sofia,23.38,42.65
+Czech Republic,Europe,Prague,14.43,50.08
+Estonia,Europe,Tallinn,24.8,59.35
+Finland,Europe,Tampere,23.58,61.42
+France,Europe,Lyon,4.95,45.72
+France,Europe,Paris,2.33,48.8
+France,Europe,Paris,2.33,48.8
+France,Europe,Paris,2.33,48.8
+Germany,Europe,Berlin,13.52,52.38
+Germany,Europe,Berlin,13.52,52.38
+Germany,Europe,Düsseldorf,6.76,51.28
+Germany,Europe,Frankfurt,8.68,50.12
+Germany,Europe,Frankfurt,8.68,50.12
+Germany,Europe,Hamburg,10.03,53.55
+Germany,Europe,Munich,11.7,48.13
+Ireland,Europe,Dublin,-6.25,53.33
+Italy,Europe,Torino,7.65,45.22
+Lebanon,Europe,Beirut,35.48,33.82
+Netherlands,Europe,Amsterdam,4.77,52.3
+Netherlands,Europe,Amsterdam,4.77,52.3
+Poland,Europe,Warsaw,21,52.23
+Sweden,Europe,Stockholm,18.05,59.33
+Switzerland,Europe,Zurich,8.53,47.48
+Turkey,Europe,Istanbul,28.82,40.97
+Ukraine,Europe,Kiev,30.45,50.4
+United Arab Emirates,Europe,Dubai,55.33,25.25
+United Kingdom,Europe,Leeds,-1.55,53.8
+United Kingdom,Europe,London,-0.45,51.48
+United Kingdom,Europe,London,-0.45,51.48
+United Kingdom,Europe,Manchester,-2.27,53.35
+Argentina,Latin America,Buenos Aires,-58.42,-34.57
+Argentina,Latin America,Córdoba,-64.1858,-31.4036
+Argentina,Latin America,Neuquén,-68.1333,-38.9333
+Bolivia,Latin America,La Paz,-68.15,-16.5
+Brazil,Latin America,São Paulo,-46.65,-23.62
+Costa Rica,Latin America,San Jose,-84.083,9.93504
+Dominica,Latin America,Roseau,-61.4,15.3
+Grenada,Latin America,St. Georges,-61.74995,12.05363
+Haiti,Latin America,Port au Prince,-72.3,18.57
+Jamaica,Latin America,Kingston,-76.78,17.93
+Trinidad and Tobago,Latin America,Barataria,-61.46287,10.64688
+Canada,North America,Calgary,-114.0669,51.0544
+Canada,North America,Halifax,-63.61,44.67
+Canada,North America,Montreal,-73.75,45.47
+Canada,North America,Ottawa,-75.72,45.4
+Canada,North America,Toronto,-79.4,43.67
+Canada,North America,Winnipeg,-97.15,49.8833
+Canada,North America,Winnipeg,-97.15,49.8833
+Mexico,North America,Mexico DF,-99.13408,19.41894
+Puerto Rico,North America,San Juan,-66.11,18.47
+United States,North America,Ashburn,-77.46,39.02
+United States,North America,Atlanta,-84.4,33.86
+United States,North America,Boston,-71.03,42.37
+United States,North America,Chicago,-87.65,41.85
+United States,North America,Indianapolis,-86.10947,39.77511
+United States,North America,Jacksonville,-81.65565,30.33218
+United States,North America,Los Angeles,-118.25,33.97
+United States,North America,Los Angeles,-118.25,33.97
+United States,North America,Los Angeles,-118.25,33.97
+United States,North America,Miami,-80.29,25.83
+United States,North America,New York,-74,40.75
+United States,North America,New York,-74,40.75
+United States,North America,New York,-74,40.75
+United States,North America,New York,-74,40.75
+United States,North America,Palo Alto,-122.15,37.44
+United States,North America,Portland,-122.68,45.52
+United States,North America,Reno,-119.76983,39.46926
+United States,North America,San Diego,-117.16,32.72
+United States,North America,San Francisco,-122.43,37.78
+United States,North America,Seattle,-122.33,47.61
+United States,North America,Seattle,-122.33,47.61
