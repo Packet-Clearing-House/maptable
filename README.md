@@ -2,7 +2,34 @@ MapTable
 ========
 
 ## Table of Contents
-{:toc}
+* [Introduction](#introduction)
+* [Dependencies](#dependencies)
+* [Declaring MapTable elements](#declaring-maptable-elements)
+* [Import datasets](#import-datasets)
+* [Map datasets](#map-datasets)
+* [Declaring MapTable elements](#declaring-maptable-elements)
+  * [Import datasets](#import-datasets)
+  *	[Map datasets](#map-datasets)
+  *	[Dataset requirements](#dataset-requirements)
+  *	[Columns details](#columns-details)
+    *		[columnsDetails format](#columnsdetails-format)
+* [Naming conventions](#naming-conventions)
+* [ScaledValue](#scaledvalue)
+  *	[Map](#map)
+    *		[Options](#options)
+* [Filters](#filters)
+  *	[Options](#options-1)
+* [Table](#table)
+  *	[Options](#options-2)
+* [Export as SVG](#export-as-svg)
+  *	[Credits](#credits)
+* [Contribute](#contribute)
+  * 	[Set up your development environment](#set-up-your-development-environment)
+    * 		[Requirements](#requirements)
+  * 	[Getting Started](#getting-started)
+  * 	[Todo](#todo)
+* [Release History](#release-history)
+
 
 ## Introduction
 
@@ -465,3 +492,13 @@ You are welcomed to fork the project and make pull requests.
  * [ ] Legend gradient transformation (if we used the log scale)
  * [ ] Have multiple legends depending on the attribute
  * [ ] Legend marker radius
+
+
+## Release History
+* Version 1.0.0 ?
+* Version 1.0.1 Mar 25 2016
+    * First Full featured release
+* Version 1.0.2 May 16 2016
+    * Fix dev environment for Ubuntu
+    * Restore ``example`` directory for use with development
+    * Fix some npm packaging breakage
