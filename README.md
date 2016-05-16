@@ -1,6 +1,11 @@
 MapTable
 ========
 
+## Table of Contents
+{:toc}
+
+## Introduction
+
 This library was originally conceived to render the [home page](https://pch.net) and next generation of [IXP directory](https://pch.net/ixpdir) for Packet Clearing House ([PCH](https://pch.net)). It's primary function is to convert any dataset to a customizable set of components of Map, Filters and Table:
 - **Map** - A fully customizable SVG map which dynamically responds to filters and can be exported to a stand alone SVG for external consumption
 - **Table** - A tabular representation of your dataset which can be sorted by header rows. This also dynamically responds to filters.
