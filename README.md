@@ -477,10 +477,11 @@ You are welcomed to fork the project and make pull requests.
 #### Getting Started
 
 1. Run `npm install` to install dependencies
-2. Run `bower install` to download Browser Javascript libraries
-3. Run `gulp` to start the local dev environment on [http://localhost:5000](http://localhost:5000)
-4. To have production ready files, run: `gulp dist`. All built files are located in the folder `/build/`
-5. Enjoy 🍻
+1. Run `bower install` to download Browser Javascript libraries
+1. Run `gulp` to start the local dev environment on [http://localhost:5000](http://localhost:5000)
+1. Edit files in `./dev` and they will be automatically compiled to `./src`
+1. To have production ready files, run: `gulp dist`. All built files are located in the folder `./dist`
+1. Enjoy 🍻
 
 ### Todo
 
@@ -495,10 +496,11 @@ You are welcomed to fork the project and make pull requests.
 
 
 ## Release History
-* Version 1.0.0 ?
+* Version 1.0.0
+  * Initial commit
 * Version 1.0.1 Mar 25 2016
-    * First Full featured release
+  * First Full featured release
 * Version 1.0.2 May 16 2016
-    * Fix dev environment for Ubuntu
-    * Restore ``example`` directory for use with development
-    * Fix some npm packaging breakage
+  * Fix dev environment for Ubuntu
+  * Restore ``example`` directory for use with development
+  * Fix some npm packaging breakage
