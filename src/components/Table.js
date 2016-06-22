@@ -38,7 +38,7 @@ export default class Table {
       .enter()
       .append('tr')
       .selectAll('th')
-      .data(this.activeColumns.map(k => Object.assign({ key: k }, this.maptable.columnDetails[k])))
+      .data(this.activeColumns.map(k => utils.extendRecursive({ key: k }, this.maptable.columnDetails[k])))
       .enter()
       .append('th')
       .attr('class', d => {
