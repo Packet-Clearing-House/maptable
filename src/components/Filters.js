@@ -322,7 +322,9 @@ export default class Filters {
       } else if (columnDetails.filterMethod === 'field') {
         const filterValue = rowNode.querySelector('.mt-filter-value').value;
         if (filterValue === '') continue;
-        return (d[filterName].toLowerCase().indexOf(filterValue.toLowerCase()) !== -1);
+        if (d[filterName].toLowerCase().indexOf(filterValue.toLowerCase()) === -1) {
+          matched = false;
+        }
       } else if (columnDetails.filterMethod === 'compare') {
         const filterRange = rowNode.querySelector('.mt-filter-range').value;
         if (filterRange === 'BETWEEN') {
@@ -351,9 +353,7 @@ export default class Filters {
         }
       }
     }
-    if (d[filterName].toLowerCase().indexOf(filterValue.toLowerCase()) !== -1) {
-      matched = false;
-    }
+    return matched;
   });
   }
 
