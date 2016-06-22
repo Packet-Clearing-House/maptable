@@ -307,51 +307,54 @@ export default class Filters {
   filterData() {
     const that = this;
     this.maptable.data = this.maptable.rawData.filter(d => {
-      const rowNodes = document.querySelectorAll('.mt-filter-row');
-      for (let i = 0; i < rowNodes.length; i++) {
-        const rowNode = rowNodes[i];
-        const filterName = rowNode.getAttribute('data-mt-filter-name');
-        const columnDetails = that.maptable.columnDetails[filterName];
-        const fmt = columnDetails.dataParse; // shortcut
+          const rowNodes = document.querySelectorAll('.mt-filter-row');
+    let matched = true;
+    for (let i = 0; i < rowNodes.length && matched; i++) {
+      const rowNode = rowNodes[i];
+      const filterName = rowNode.getAttribute('data-mt-filter-name');
+      const columnDetails = that.maptable.columnDetails[filterName];
+      const fmt = columnDetails.dataParse; // shortcut
 
-        if (columnDetails.filterMethod === 'dropdown') {
-          const filterValue = rowNode.querySelector('.mt-filter-value').value;
-          if (filterValue === '') continue;
-          if (d[filterName] !== filterValue) return false;
-        } else if (columnDetails.filterMethod === 'field') {
-          const filterValue = rowNode.querySelector('.mt-filter-value').value;
-          if (filterValue === '') continue;
-          return (d[filterName].toLowerCase().indexOf(filterValue.toLowerCase()) !== -1);
-        } else if (columnDetails.filterMethod === 'compare') {
-          const filterRange = rowNode.querySelector('.mt-filter-range').value;
-          if (filterRange === 'BETWEEN') {
-            const filterValueMin = rowNode.querySelector('.mt-filter-value-min').value;
-            const filterValueMax = rowNode.querySelector('.mt-filter-value-max').value;
-            if (filterValueMin === '' || filterValueMax === '') continue;
-            if (fmt &&
+      if (columnDetails.filterMethod === 'dropdown') {
+        const filterValue = rowNode.querySelector('.mt-filter-value').value;
+        if (filterValue === '') continue;
+        if (d[filterName] !== filterValue) matched = false;
+      } else if (columnDetails.filterMethod === 'field') {
+        const filterValue = rowNode.querySelector('.mt-filter-value').value;
+        if (filterValue === '') continue;
+        if (d[filterName].toLowerCase().indexOf(filterValue.toLowerCase()) === -1) {
+          matched = false;
+        }
+      } else if (columnDetails.filterMethod === 'compare') {
+        const filterRange = rowNode.querySelector('.mt-filter-range').value;
+        if (filterRange === 'BETWEEN') {
+          const filterValueMin = rowNode.querySelector('.mt-filter-value-min').value;
+          const filterValueMax = rowNode.querySelector('.mt-filter-value-max').value;
+          if (filterValueMin === '' || filterValueMax === '') continue;
+          if (fmt &&
               (fmt(d[filterName]) < fmt(filterValueMin) ||
-                fmt(d[filterName]) > fmt(filterValueMax))
-            ) {
-              return false;
-            } else if (
+              fmt(d[filterName]) > fmt(filterValueMax))
+          ) {
+            matched = false;
+          } else if (
               parseInt(d[filterName], 10) < parseInt(filterValueMin, 10) ||
               parseInt(d[filterName], 10) > parseInt(filterValueMax, 10)
-            ) {
-              return false;
-            }
-          } else {
-            const filterValue = rowNode.querySelector('.mt-filter-value-min').value;
-            if (filterValue === '') continue;
-            if (fmt && !utils.rangeToBool(fmt(d[filterName]), filterRange, fmt(filterValue))) {
-              return false;
-            } else if (!fmt && !utils.rangeToBool(d[filterName], filterRange, filterValue)) {
-              return false;
-            }
+          ) {
+            matched = false;
+          }
+        } else {
+          const filterValue = rowNode.querySelector('.mt-filter-value-min').value;
+          if (filterValue === '') continue;
+          if (fmt && !utils.rangeToBool(fmt(d[filterName]), filterRange, fmt(filterValue))) {
+            matched = false;
+          } else if (!fmt && !utils.rangeToBool(d[filterName], filterRange, filterValue)) {
+            matched = false;
           }
         }
       }
-      return true;
-    });
+    }
+    return matched;
+  });
   }
 
   refresh() {
