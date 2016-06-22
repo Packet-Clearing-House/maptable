@@ -25,7 +25,6 @@ gulp.task('browser-sync', function() {
       baseDir: ["./examples", "./dev"]
     },
     files: ['./examples/**/*.*', './dev/**/*.*'],
-    browser: 'google chrome',
     port: 5000,
   });
 });

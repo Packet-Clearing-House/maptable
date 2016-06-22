@@ -1,7 +1,7 @@
 /* eslint no-unused-vars: 0 */
 import utils from './utils';
 import defaultOptions from './defaultOptions';
-import MapTable from './MapTable';
+import MapTable from './maptable';
 
 d3.maptable = function (target) {
   let maptableObject;

@@ -1,6 +1,38 @@
 MapTable
 ========
 
+## Table of Contents
+* [Introduction](#introduction)
+* [Dependencies](#dependencies)
+* [Declaring MapTable elements](#declaring-maptable-elements)
+* [Import datasets](#import-datasets)
+* [Map datasets](#map-datasets)
+* [Declaring MapTable elements](#declaring-maptable-elements)
+  * [Import datasets](#import-datasets)
+  *	[Map datasets](#map-datasets)
+  *	[Dataset requirements](#dataset-requirements)
+  *	[Columns details](#columns-details)
+    *		[columnsDetails format](#columnsdetails-format)
+* [Naming conventions](#naming-conventions)
+* [ScaledValue](#scaledvalue)
+  *	[Map](#map)
+    *		[Options](#options)
+* [Filters](#filters)
+  *	[Options](#options-1)
+* [Table](#table)
+  *	[Options](#options-2)
+* [Export as SVG](#export-as-svg)
+  *	[Credits](#credits)
+* [Contribute](#contribute)
+  * 	[Set up your development environment](#set-up-your-development-environment)
+    * 		[Requirements](#requirements)
+  * 	[Getting Started](#getting-started)
+  * 	[Todo](#todo)
+* [Release History](#release-history)
+
+
+## Introduction
+
 This library was originally conceived to render the [home page](https://pch.net) and next generation of [IXP directory](https://pch.net/ixpdir) for Packet Clearing House ([PCH](https://pch.net)). It's primary function is to convert any dataset to a customizable set of components of Map, Filters and Table:
 - **Map** - A fully customizable SVG map which dynamically responds to filters and can be exported to a stand alone SVG for external consumption
 - **Table** - A tabular representation of your dataset which can be sorted by header rows. This also dynamically responds to filters.
@@ -438,17 +470,22 @@ You are welcomed to fork the project and make pull requests.
 
 #### Requirements
 
-- [NodeJs](http://www.nodejs.org), type `npm -v` on your terminal to check if you have it.
-- Gulp `npm install -g gulp`
-- Bower `npm install -g bower`
+Install any items with "sudo":
+
+- [NodeJs](http://www.nodejs.org), type `npm -v` on your terminal to check if you have it.  node.js 4 and npm 2 versions or higher required. 
+- Gulp `sudo npm install -g gulp`
+- Bower `sudo npm install -g bower`
 
 #### Getting Started
 
+Run these commands as your unprivileged user you're doing your development as:
+
 1. Run `npm install` to install dependencies
-2. Run `bower install` to download Browser Javascript libraries
-3. Run `gulp` to start the local dev environment on [http://localhost:5000](http://localhost:5000)
-4. To have production ready files, run: `gulp dist`. All built files are located in the folder `/build/`
-5. Enjoy 🍻
+1. Run `bower install` to download Browser Javascript libraries
+1. Run `gulp` to start the local dev environment on [http://localhost:5000](http://localhost:5000)
+1. Edit files in `./dev` and they will be automatically compiled to `./src`
+1. To have production ready files, run: `gulp dist`. All built files are located in the folder `./dist`
+1. Enjoy 🍻
 
 ### Todo
 
@@ -460,3 +497,14 @@ You are welcomed to fork the project and make pull requests.
  * [ ] Legend gradient transformation (if we used the log scale)
  * [ ] Have multiple legends depending on the attribute
  * [ ] Legend marker radius
+
+
+## Release History
+* Version 1.0.0
+  * Initial commit
+* Version 1.0.1 Mar 25 2016
+  * First Full featured release
+* Version 1.0.2 May 16 2016
+  * Fix dev environment for Ubuntu
+  * Restore ``example`` directory for use with development
+  * Fix some npm packaging breakage
