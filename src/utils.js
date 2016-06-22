@@ -36,6 +36,7 @@ function extendRecursive() {
   let src;
   let p;
   const args = [].splice.call(arguments, 0);
+  var toString = ({}).toString;
 
   while (args.length > 0) {
     src = args.splice(0, 1)[0];

@@ -294,7 +294,7 @@ export default class Filters {
 
   getPossibleFilters(except) {
     return Object.keys(this.maptable.columnDetails)
-      .map(k => Object.assign({ key: k }, this.maptable.columnDetails[k]))
+      .map(k => utils.extendRecursive({ key: k }, this.maptable.columnDetails[k]))
       .filter(v => {
         return (this.activeColumns.indexOf(v.key) !== -1) &&
         (
