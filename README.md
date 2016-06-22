@@ -470,7 +470,7 @@ You are welcomed to fork the project and make pull requests.
 
 #### Requirements
 
-- [NodeJs](http://www.nodejs.org), type `npm -v` on your terminal to check if you have it.
+- [NodeJs](http://www.nodejs.org), type `npm -v` on your terminal to check if you have it. Versions node.js 5 and npm 2 required. 
 - Gulp `npm install -g gulp`
 - Bower `npm install -g bower`
 
