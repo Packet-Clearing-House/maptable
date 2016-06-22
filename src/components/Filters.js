@@ -95,7 +95,7 @@ export default class Filters {
 
   remove(filterName) {
     const rowNode = document.querySelector(`[data-mt-filter-name="${filterName}"]`);
-    if (rowNode) rowNode.remove();
+    if (rowNode) rowNode.parentNode.removeChild(rowNode);
     const filterIndex = this.criteria.indexOf(filterName);
     this.criteria.splice(filterIndex, 1);
     this.maptable.render();
