@@ -2,39 +2,6 @@ this.d3 = this.d3 || {};
 this.d3.maptable = (function () {
   'use strict';
 
-  var babelHelpers = {};
-  babelHelpers.typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
-    return typeof obj;
-  } : function (obj) {
-    return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj;
-  };
-
-  babelHelpers.classCallCheck = function (instance, Constructor) {
-    if (!(instance instanceof Constructor)) {
-      throw new TypeError("Cannot call a class as a function");
-    }
-  };
-
-  babelHelpers.createClass = function () {
-    function defineProperties(target, props) {
-      for (var i = 0; i < props.length; i++) {
-        var descriptor = props[i];
-        descriptor.enumerable = descriptor.enumerable || false;
-        descriptor.configurable = true;
-        if ("value" in descriptor) descriptor.writable = true;
-        Object.defineProperty(target, descriptor.key, descriptor);
-      }
-    }
-
-    return function (Constructor, protoProps, staticProps) {
-      if (protoProps) defineProperties(Constructor.prototype, protoProps);
-      if (staticProps) defineProperties(Constructor, staticProps);
-      return Constructor;
-    };
-  }();
-
-  babelHelpers;
-
   function appendOptions(select, options, defaultValue) {
     options.forEach(function (f) {
       // Filter select
@@ -73,6 +40,7 @@ this.d3.maptable = (function () {
     var src = void 0;
     var p = void 0;
     var args = [].splice.call(arguments, 0);
+    var toString = {}.toString;
 
     while (args.length > 0) {
       src = args.splice(0, 1)[0];
@@ -150,9 +118,39 @@ this.d3.maptable = (function () {
     }
   };
 
+  var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
+    return typeof obj;
+  } : function (obj) {
+    return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj;
+  };
+
+  var classCallCheck = function (instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+      throw new TypeError("Cannot call a class as a function");
+    }
+  };
+
+  var createClass = function () {
+    function defineProperties(target, props) {
+      for (var i = 0; i < props.length; i++) {
+        var descriptor = props[i];
+        descriptor.enumerable = descriptor.enumerable || false;
+        descriptor.configurable = true;
+        if ("value" in descriptor) descriptor.writable = true;
+        Object.defineProperty(target, descriptor.key, descriptor);
+      }
+    }
+
+    return function (Constructor, protoProps, staticProps) {
+      if (protoProps) defineProperties(Constructor.prototype, protoProps);
+      if (staticProps) defineProperties(Constructor, staticProps);
+      return Constructor;
+    };
+  }();
+
   var Legend = function () {
     function Legend(map) {
-      babelHelpers.classCallCheck(this, Legend);
+      classCallCheck(this, Legend);
 
       this.map = map;
       // Create Legend
@@ -162,7 +160,7 @@ this.d3.maptable = (function () {
       this.buildIndice();
     }
 
-    babelHelpers.createClass(Legend, [{
+    createClass(Legend, [{
       key: 'buildScale',
       value: function buildScale() {
         var legendGradient = this.node.append('defs').append('linearGradient').attr('id', 'mt-map-legend-gradient').attr('x1', '0%').attr('y1', '0%').attr('x2', '100%').attr('y2', '0%');
@@ -213,7 +211,7 @@ this.d3.maptable = (function () {
 
   var Legend$1 = function () {
     function Legend(map, options) {
-      babelHelpers.classCallCheck(this, Legend);
+      classCallCheck(this, Legend);
 
       this.map = map;
       this.src = options.src;
@@ -243,7 +241,7 @@ this.d3.maptable = (function () {
       }
     }
 
-    babelHelpers.createClass(Legend, [{
+    createClass(Legend, [{
       key: 'buildWatermark',
       value: function buildWatermark() {
         var _this = this;
@@ -310,7 +308,7 @@ this.d3.maptable = (function () {
     function GeoMap(maptable, options, jsonWorld) {
       var _this = this;
 
-      babelHelpers.classCallCheck(this, GeoMap);
+      classCallCheck(this, GeoMap);
 
       var that = this;
       this.maptable = maptable;
@@ -392,7 +390,7 @@ this.d3.maptable = (function () {
       this.loadGeometries();
     }
 
-    babelHelpers.createClass(GeoMap, [{
+    createClass(GeoMap, [{
       key: 'scaleAttributes',
       value: function scaleAttributes() {
         return Math.pow(this.scale, 2 / 3);
@@ -470,7 +468,7 @@ this.d3.maptable = (function () {
         // Update Legend
         Object.keys(this.options.countries.attr).forEach(function (attrKey) {
           var attrValue = _this2.options.countries.attr[attrKey];
-          if ((typeof attrValue === 'undefined' ? 'undefined' : babelHelpers.typeof(attrValue)) === 'object' && attrValue.legend) {
+          if ((typeof attrValue === 'undefined' ? 'undefined' : _typeof(attrValue)) === 'object' && attrValue.legend) {
             var scaleDomain = d3.extent(_this2.dataCountries, function (d) {
               return d.rollupValue[attrKey];
             });
@@ -679,7 +677,7 @@ this.d3.maptable = (function () {
           dataset.forEach(function (d) {
             d.attr[attrKey] = attrValue;
           });
-        } else if ((typeof attrValue === 'undefined' ? 'undefined' : babelHelpers.typeof(attrValue)) === 'object') {
+        } else if ((typeof attrValue === 'undefined' ? 'undefined' : _typeof(attrValue)) === 'object') {
           (function () {
             // Dynamic value
             if (!attrValue.rollup) {
@@ -830,7 +828,7 @@ this.d3.maptable = (function () {
     function Filters(maptable, options) {
       var _this = this;
 
-      babelHelpers.classCallCheck(this, Filters);
+      classCallCheck(this, Filters);
 
       this.maptable = maptable;
       this.options = options;
@@ -899,7 +897,7 @@ this.d3.maptable = (function () {
       this.node.appendChild(filtersBodyNode);
     }
 
-    babelHelpers.createClass(Filters, [{
+    createClass(Filters, [{
       key: 'add',
       value: function add() {
         var possibleFilters = this.getPossibleFilters();
@@ -929,7 +927,7 @@ this.d3.maptable = (function () {
       key: 'remove',
       value: function remove(filterName) {
         var rowNode = document.querySelector('[data-mt-filter-name="' + filterName + '"]');
-        if (rowNode) rowNode.remove();
+        if (rowNode) rowNode.parentNode.removeChild(rowNode);
         var filterIndex = this.criteria.indexOf(filterName);
         this.criteria.splice(filterIndex, 1);
         this.maptable.render();
@@ -1133,7 +1131,7 @@ this.d3.maptable = (function () {
         var _this3 = this;
 
         return Object.keys(this.maptable.columnDetails).map(function (k) {
-          return Object.assign({ key: k }, _this3.maptable.columnDetails[k]);
+          return utils.extendRecursive({ key: k }, _this3.maptable.columnDetails[k]);
         }).filter(function (v) {
           return _this3.activeColumns.indexOf(v.key) !== -1 && (except && except === v.key || _this3.criteria.indexOf(v.key) === -1 && v.filterMethod && !v.isVirtual);
         });
@@ -1144,7 +1142,8 @@ this.d3.maptable = (function () {
         var that = this;
         this.maptable.data = this.maptable.rawData.filter(function (d) {
           var rowNodes = document.querySelectorAll('.mt-filter-row');
-          for (var i = 0; i < rowNodes.length; i++) {
+          var matched = true;
+          for (var i = 0; i < rowNodes.length && matched; i++) {
             var rowNode = rowNodes[i];
             var filterName = rowNode.getAttribute('data-mt-filter-name');
             var columnDetails = that.maptable.columnDetails[filterName];
@@ -1153,11 +1152,13 @@ this.d3.maptable = (function () {
             if (columnDetails.filterMethod === 'dropdown') {
               var filterValue = rowNode.querySelector('.mt-filter-value').value;
               if (filterValue === '') continue;
-              if (d[filterName] !== filterValue) return false;
+              if (d[filterName] !== filterValue) matched = false;
             } else if (columnDetails.filterMethod === 'field') {
               var _filterValue2 = rowNode.querySelector('.mt-filter-value').value;
               if (_filterValue2 === '') continue;
-              return d[filterName].toLowerCase().indexOf(_filterValue2.toLowerCase()) !== -1;
+              if (d[filterName].toLowerCase().indexOf(_filterValue2.toLowerCase()) === -1) {
+                matched = false;
+              }
             } else if (columnDetails.filterMethod === 'compare') {
               var filterRange = rowNode.querySelector('.mt-filter-range').value;
               if (filterRange === 'BETWEEN') {
@@ -1165,22 +1166,22 @@ this.d3.maptable = (function () {
                 var filterValueMax = rowNode.querySelector('.mt-filter-value-max').value;
                 if (filterValueMin === '' || filterValueMax === '') continue;
                 if (fmt && (fmt(d[filterName]) < fmt(filterValueMin) || fmt(d[filterName]) > fmt(filterValueMax))) {
-                  return false;
+                  matched = false;
                 } else if (parseInt(d[filterName], 10) < parseInt(filterValueMin, 10) || parseInt(d[filterName], 10) > parseInt(filterValueMax, 10)) {
-                  return false;
+                  matched = false;
                 }
               } else {
                 var _filterValue3 = rowNode.querySelector('.mt-filter-value-min').value;
                 if (_filterValue3 === '') continue;
                 if (fmt && !utils.rangeToBool(fmt(d[filterName]), filterRange, fmt(_filterValue3))) {
-                  return false;
+                  matched = false;
                 } else if (!fmt && !utils.rangeToBool(d[filterName], filterRange, _filterValue3)) {
-                  return false;
+                  matched = false;
                 }
               }
             }
           }
-          return true;
+          return matched;
         });
       }
     }, {
@@ -1228,7 +1229,7 @@ this.d3.maptable = (function () {
     function Table(maptable, options) {
       var _this = this;
 
-      babelHelpers.classCallCheck(this, Table);
+      classCallCheck(this, Table);
 
       this.maptable = maptable;
       this.options = options;
@@ -1260,7 +1261,7 @@ this.d3.maptable = (function () {
       }
 
       this.header.selectAll('tr').data([1]).enter().append('tr').selectAll('th').data(this.activeColumns.map(function (k) {
-        return Object.assign({ key: k }, _this.maptable.columnDetails[k]);
+        return utils.extendRecursive({ key: k }, _this.maptable.columnDetails[k]);
       })).enter().append('th').attr('class', function (d) {
         var output = d.sorting ? 'mt-table-sortable' : '';
         output += d.nowrap ? ' nowrap' : '';
@@ -1284,7 +1285,7 @@ this.d3.maptable = (function () {
       }
     }
 
-    babelHelpers.createClass(Table, [{
+    createClass(Table, [{
       key: 'render',
       value: function render() {
         var _this2 = this;
@@ -1384,7 +1385,7 @@ this.d3.maptable = (function () {
 
   var MapTable = function () {
     function MapTable(target, options) {
-      babelHelpers.classCallCheck(this, MapTable);
+      classCallCheck(this, MapTable);
 
       this.options = options;
 
@@ -1400,7 +1401,7 @@ this.d3.maptable = (function () {
       }
     }
 
-    babelHelpers.createClass(MapTable, [{
+    createClass(MapTable, [{
       key: 'loadData',
       value: function loadData(err, data) {
         var _this = this;

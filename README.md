@@ -500,11 +500,15 @@ Run these commands as your unprivileged user you're doing your development as:
 
 
 ## Release History
-* Version 1.0.0
-  * Initial commit
+* Version 1.1 June 22 2016
+  * IE11 works (#7)
+  * multi-filter works (#15)
+  * ``gulp dist`` to merger all prior work to dist (#18)
+* Version 1.0.2 May 16 2016
+  * Fix dev environment for Ubuntu (#11)
+  * Restore ``example`` directory for use with development (#11)
+  * Fix some npm packaging breakage (#11)
 * Version 1.0.1 Mar 25 2016
   * First Full featured release
-* Version 1.0.2 May 16 2016
-  * Fix dev environment for Ubuntu
-  * Restore ``example`` directory for use with development
-  * Fix some npm packaging breakage
+* Version 1.0.0
+  * Initial commit
