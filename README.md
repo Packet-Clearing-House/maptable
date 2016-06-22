@@ -470,11 +470,15 @@ You are welcomed to fork the project and make pull requests.
 
 #### Requirements
 
+Install any items with "sudo":
+
 - [NodeJs](http://www.nodejs.org), type `npm -v` on your terminal to check if you have it.  node.js 4 and npm 2 versions or higher required. 
-- Gulp `npm install -g gulp`
-- Bower `npm install -g bower`
+- Gulp `sudo npm install -g gulp`
+- Bower `sudo npm install -g bower`
 
 #### Getting Started
+
+Run these commands as your unprivileged user you're doing your development as:
 
 1. Run `npm install` to install dependencies
 1. Run `bower install` to download Browser Javascript libraries
