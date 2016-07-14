@@ -29,6 +29,10 @@ export default class MapTable {
     this.data = data.slice(); // we clone data, so that we can filter it
     // Map
     if (this.options.map) {
+      // Map wrapper
+      const mapWrapper = document.createElement('div');
+      mapWrapper.setAttribute('class', 'mt-map-container');
+      this.node.insertBefore(mapWrapper, this.node.firstChild);
       d3.json(this.options.map.path, (errGeoMap, jsonWorld) => {
         if (errGeoMap) {
           throw errGeoMap;
