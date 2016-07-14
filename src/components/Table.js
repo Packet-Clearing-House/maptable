@@ -148,8 +148,6 @@ export default class Table {
     this.currentSorting.key = columnKey;
     if (columnKey === this.currentSorting.key) {
       this.currentSorting.mode = (this.currentSorting.mode === 'asc') ? 'desc' : 'asc';
-    } else if (columnMode) {
-      this.currentSorting.mode = columnMode;
     } else {
       this.currentSorting.mode = 'asc';
     }
