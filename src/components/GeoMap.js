@@ -16,9 +16,13 @@ export default class GeoMap {
 
     this.node = document.querySelector('#mt-map');
     if (!this.node) {
+      // Map wrapper
+      const mapWrapper = document.querySelector('.mt-map-container');
+
+      // Map
       this.node = document.createElement('div');
       this.node.setAttribute('id', 'mt-map');
-      this.maptable.node.insertBefore(this.node, this.maptable.node.firstChild);
+      mapWrapper.appendChild(this.node);
     }
 
     this.svg = d3.select(this.node)
@@ -27,10 +31,6 @@ export default class GeoMap {
       .attr('viewBox', `0 0 ${this.getWidth()} ${this.getHeight()}`)
       .attr('width', this.getWidth())
       .attr('height', this.getHeight());
-
-    // Resize parent div
-    d3.select(this.node)
-      .attr('style', `height:${this.getHeight()}px`);
 
     this.projection = d3.geo.equirectangular()
       .translate([this.getWidth() / 2, this.getHeight() / (2 * this.options.scaleHeight)])
