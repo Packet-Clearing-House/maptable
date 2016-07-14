@@ -69,7 +69,8 @@ export default class Filters {
     this.node.appendChild(filtersBodyNode);
   }
 
-  add() {
+  add(evt) {
+    evt.preventDefault();
     const possibleFilters = this.getPossibleFilters();
 
     if (possibleFilters.length === 0) {
