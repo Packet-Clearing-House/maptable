@@ -459,8 +459,8 @@ The sample code for a PHP server is located in `/server/exportSvg.php`. Contribu
 
 ## Credits
 
-  * Mohammed Elalj [@melalj](https://github.com/melalj) - Author
-  * Ashley Jones [@Ths2-9Y-LqJt6](https://github.com/Ths2-9Y-LqJt6) - Testing
+  * Mohammed Elalj [@melalj](https://github.com/melalj) - Author, Architect, JS Guru
+  * Ashley Jones [@Ths2-9Y-LqJt6](https://github.com/Ths2-9Y-LqJt6) - Feature Requester, QA, Love, Release Engineer
 
 ## Contribute
 
@@ -493,21 +493,25 @@ Run these commands as your unprivileged user you're doing your development as:
  * [ ] Write unit tests 🙏
  * [ ] Improve documentation (spell, formulation, emoji...)
  * [ ] Secondary sorting
- * [ ] Append SVG filters to the map and use then as styling
+ * [ ] Append SVG filters to the map and use them as styling
  * [ ] Legend gradient transformation (if we used the log scale)
  * [ ] Have multiple legends depending on the attribute
  * [ ] Legend marker radius
 
 
 ## Release History
+* Version 1.1.1 July 14 2016
+  * Tweak sorting when clicking column headers - [PR #23](https://github.com/Packet-Clearing-House/maptable/pull/23)
+  * Scrolling up when we click on New filter - [Issue #20](https://github.com/Packet-Clearing-House/maptable/issues/20)
+  * Fix poor render on first load - [PR #22](https://github.com/Packet-Clearing-House/maptable/pull/22)
 * Version 1.1 June 22 2016
-  * IE11 works (#7)
-  * multi-filter works (#15)
-  * ``gulp dist`` to merger all prior work to dist (#18)
+  * IE11 works - [Issue #7](https://github.com/Packet-Clearing-House/maptable/issues/7)
+  * multi-filter works - [Issue #15](https://github.com/Packet-Clearing-House/maptable/issues/15)
+  * ``gulp dist`` to merger all prior work to dist - [Issue #18](https://github.com/Packet-Clearing-House/maptable/issues/18)
 * Version 1.0.2 May 16 2016
-  * Fix dev environment for Ubuntu (#11)
-  * Restore ``example`` directory for use with development (#11)
-  * Fix some npm packaging breakage (#11)
+  * Fix dev environment for Ubuntu - [Issue #11](https://github.com/Packet-Clearing-House/maptable/issues/11)
+  * Restore ``example`` directory for use with development - [Issue #11](https://github.com/Packet-Clearing-House/maptable/issues/11)
+  * Fix some npm packaging breakage - [Issue #11](https://github.com/Packet-Clearing-House/maptable/issues/11)
 * Version 1.0.1 Mar 25 2016
   * First Full featured release
 * Version 1.0.0

@@ -322,15 +322,16 @@ this.d3.maptable = (function () {
 
       this.node = document.querySelector('#mt-map');
       if (!this.node) {
+        // Map wrapper
+        var mapWrapper = document.querySelector('.mt-map-container');
+
+        // Map
         this.node = document.createElement('div');
         this.node.setAttribute('id', 'mt-map');
-        this.maptable.node.insertBefore(this.node, this.maptable.node.firstChild);
+        mapWrapper.appendChild(this.node);
       }
 
       this.svg = d3.select(this.node).append('svg').attr('id', 'mt-map-svg').attr('viewBox', '0 0 ' + this.getWidth() + ' ' + this.getHeight()).attr('width', this.getWidth()).attr('height', this.getHeight());
-
-      // Resize parent div
-      d3.select(this.node).attr('style', 'height:' + this.getHeight() + 'px');
 
       this.projection = d3.geo.equirectangular().translate([this.getWidth() / 2, this.getHeight() / (2 * this.options.scaleHeight)]).scale(this.getWidth() / 640 * 100).rotate([-12, 0]).precision(0.1);
 
@@ -899,7 +900,8 @@ this.d3.maptable = (function () {
 
     createClass(Filters, [{
       key: 'add',
-      value: function add() {
+      value: function add(evt) {
+        evt.preventDefault();
         var possibleFilters = this.getPossibleFilters();
 
         if (possibleFilters.length === 0) {
@@ -1365,8 +1367,6 @@ this.d3.maptable = (function () {
         this.currentSorting.key = columnKey;
         if (columnKey === this.currentSorting.key) {
           this.currentSorting.mode = this.currentSorting.mode === 'asc' ? 'desc' : 'asc';
-        } else if (columnMode) {
-          this.currentSorting.mode = columnMode;
         } else {
           this.currentSorting.mode = 'asc';
         }
@@ -1414,6 +1414,10 @@ this.d3.maptable = (function () {
         this.data = data.slice(); // we clone data, so that we can filter it
         // Map
         if (this.options.map) {
+          // Map wrapper
+          var mapWrapper = document.createElement('div');
+          mapWrapper.setAttribute('class', 'mt-map-container');
+          this.node.insertBefore(mapWrapper, this.node.firstChild);
           d3.json(this.options.map.path, function (errGeoMap, jsonWorld) {
             if (errGeoMap) {
               throw errGeoMap;
