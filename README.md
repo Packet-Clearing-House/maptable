@@ -1,8 +1,23 @@
 MapTable
 ========
 
+[![GitHub stars](https://img.shields.io/github/stars/Packet-Clearing-House/maptable.svg?style=social&label=Star&maxAge=2592000)]() [![GitHub release](https://img.shields.io/github/release/Packet-Clearing-House/maptable.svg?maxAge=2592000)]() [![GitHub issues](https://img.shields.io/github/issues/badges/Packet-Clearing-House/maptable.svg?maxAge=2592000)]() [![license](https://img.shields.io/github/license/Packet-Clearing-House/maptable.svg?maxAge=2592000)]()
+
+This library was originally conceived to render the [home page](https://pch.net) and next generation of [IXP directory](https://www.pch.net/ixp/dir) for Packet Clearing House ([PCH](https://pch.net)).
+
+It's primary function is to convert any dataset to a customizable set of components of Map, Filters and Table:
+- **Map** - A fully customizable SVG map which dynamically responds to filters and can be exported to a stand alone SVG for external consumption
+- **Table** - A tabular representation of your dataset which can be sorted by header rows. This also dynamically responds to filters.
+- **Filters** - A programmatically generated list of drop downs and input fields to drill down into your dataset
+
+You can also browse other code samples and **examples** here:
+
+[<img src="https://gist.githubusercontent.com/melalj/cc130ad4072a2f52a5aa/raw/2abcdff5cc84e71dd40552be68e5ae747dcd9a5d/thumbnail.png">](https://bl.ocks.org/melalj/cc130ad4072a2f52a5aa) [<img src="https://gist.githubusercontent.com/melalj/ef85eb677583647daf52/raw/127e36862c4cfae6e7039023a8a449cc043f6837/thumbnail.png">](https://bl.ocks.org/melalj/ef85eb677583647daf52) [<img src="https://gist.githubusercontent.com/melalj/2394323e478dca231128/raw/a43dadbb67e8ecb335a92f2210ae59f109f25fd6/thumbnail.png">](https://bl.ocks.org/melalj/2394323e478dca231128)
+
+[<img src="https://gist.githubusercontent.com/melalj/772c8a846a3f308e9358/raw/b8b39512d91b56ce4383cfd5a491083ff3f1b42f/thumbnail.png">](https://bl.ocks.org/melalj/772c8a846a3f308e9358) [<img src="https://gist.githubusercontent.com/melalj/07be61a538509b8e4a7e/raw/5565adb3e2a88162c6ecaa55dc7472a085ddb0d2/thumbnail.png">](https://bl.ocks.org/melalj/07be61a538509b8e4a7e) [<img src="https://gist.githubusercontent.com/melalj/1aa4dd90b4561deb8de6/raw/dbb70a32eeba5c366b9a4c4641fb2d104a26f6cb/thumbnail.png">](https://bl.ocks.org/melalj/1aa4dd90b4561deb8de6)
+
+
 ## Table of Contents
-* [Introduction](#introduction)
 * [Dependencies](#dependencies)
 * [Declaring MapTable elements](#declaring-maptable-elements)
 * [Import datasets](#import-datasets)
@@ -29,20 +44,6 @@ MapTable
   * 	[Getting Started](#getting-started)
   * 	[Todo](#todo)
 * [Release History](#release-history)
-
-
-## Introduction
-
-This library was originally conceived to render the [home page](https://pch.net) and next generation of [IXP directory](https://pch.net/ixpdir) for Packet Clearing House ([PCH](https://pch.net)). It's primary function is to convert any dataset to a customizable set of components of Map, Filters and Table:
-- **Map** - A fully customizable SVG map which dynamically responds to filters and can be exported to a stand alone SVG for external consumption
-- **Table** - A tabular representation of your dataset which can be sorted by header rows. This also dynamically responds to filters.
-- **Filters** - A programmatically generated list of drop downs and input fields to drill down into your dataset
-
-You can also browse other code samples and **examples** here:
-
-[<img src="https://gist.githubusercontent.com/melalj/cc130ad4072a2f52a5aa/raw/2abcdff5cc84e71dd40552be68e5ae747dcd9a5d/thumbnail.png">](https://bl.ocks.org/melalj/cc130ad4072a2f52a5aa) [<img src="https://gist.githubusercontent.com/melalj/ef85eb677583647daf52/raw/127e36862c4cfae6e7039023a8a449cc043f6837/thumbnail.png">](https://bl.ocks.org/melalj/ef85eb677583647daf52) [<img src="https://gist.githubusercontent.com/melalj/2394323e478dca231128/raw/a43dadbb67e8ecb335a92f2210ae59f109f25fd6/thumbnail.png">](https://bl.ocks.org/melalj/2394323e478dca231128)
-
-[<img src="https://gist.githubusercontent.com/melalj/772c8a846a3f308e9358/raw/b8b39512d91b56ce4383cfd5a491083ff3f1b42f/thumbnail.png">](https://bl.ocks.org/melalj/772c8a846a3f308e9358) [<img src="https://gist.githubusercontent.com/melalj/07be61a538509b8e4a7e/raw/5565adb3e2a88162c6ecaa55dc7472a085ddb0d2/thumbnail.png">](https://bl.ocks.org/melalj/07be61a538509b8e4a7e) [<img src="https://gist.githubusercontent.com/melalj/1aa4dd90b4561deb8de6/raw/dbb70a32eeba5c366b9a4c4641fb2d104a26f6cb/thumbnail.png">](https://bl.ocks.org/melalj/1aa4dd90b4561deb8de6)
 
 ## Dependencies
 
@@ -472,7 +473,7 @@ You are welcomed to fork the project and make pull requests.
 
 Install any items with "sudo":
 
-- [NodeJs](http://www.nodejs.org), type `npm -v` on your terminal to check if you have it.  node.js 4 and npm 2 versions or higher required. 
+- [NodeJs](http://www.nodejs.org), type `npm -v` on your terminal to check if you have it.  node.js 4 and npm 2 versions or higher required.
 - Gulp `sudo npm install -g gulp`
 - Bower `sudo npm install -g bower`
 
