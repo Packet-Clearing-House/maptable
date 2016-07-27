@@ -1,7 +1,7 @@
 MapTable
 ========
 
-[![GitHub stars](https://img.shields.io/github/stars/Packet-Clearing-House/maptable.svg?style=social&label=Star&maxAge=2592000)]() [![GitHub release](https://img.shields.io/github/release/Packet-Clearing-House/maptable.svg?maxAge=2592000)]() [![GitHub issues](https://img.shields.io/github/issues/badges/Packet-Clearing-House/maptable.svg?maxAge=2592000)]() [![license](https://img.shields.io/github/license/Packet-Clearing-House/maptable.svg?maxAge=2592000)]()
+[![GitHub stars](https://img.shields.io/github/stars/Packet-Clearing-House/maptable.svg?style=social&label=Star&maxAge=2592000)]() [![GitHub release](https://img.shields.io/github/release/Packet-Clearing-House/maptable.svg?maxAge=2592000)]() [![license](https://img.shields.io/github/license/Packet-Clearing-House/maptable.svg?maxAge=2592000)]()
 
 This library was originally conceived to render the [home page](https://pch.net) and next generation of [IXP directory](https://www.pch.net/ixp/dir) for Packet Clearing House ([PCH](https://pch.net)).
 
