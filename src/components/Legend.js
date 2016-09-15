@@ -22,9 +22,23 @@ export default class Legend {
       .attr('x2', '100%')
       .attr('y2', '0%');
 
-    legendGradient.append('stop')
-    .attr('offset', '0%')
-    .attr('style', `stop-color:${this.map.options.countries.attr.fill.min};stop-opacity:1`);
+    if (this.map.options.countries.attr.fill.minNegative &&
+        this.map.options.countries.attr.fill.maxNegative) {
+      legendGradient.append('stop')
+          .attr('offset', '0%')
+          .attr('style', `stop-color:${this.map.options.countries.attr.fill.maxNegative};stop-opacity:1`);
+
+      legendGradient.append('stop')
+          .attr('offset', '49%')
+          .attr('style', `stop-color:${this.map.options.countries.attr.fill.minNegative};stop-opacity:1`);
+      legendGradient.append('stop')
+          .attr('offset', '50%')
+          .attr('style', `stop-color:${this.map.options.countries.attr.fill.min};stop-opacity:1`);
+    } else {
+      legendGradient.append('stop')
+          .attr('offset', '0%')
+          .attr('style', `stop-color:${this.map.options.countries.attr.fill.min};stop-opacity:1`);
+    }
 
     legendGradient.append('stop')
     .attr('offset', '100%')

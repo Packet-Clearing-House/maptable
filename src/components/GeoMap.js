@@ -186,7 +186,7 @@ export default class GeoMap {
     Object.keys(this.options.countries.attr).forEach(attrKey => {
       const attrValue = this.options.countries.attr[attrKey];
       if (typeof (attrValue) === 'object' && attrValue.legend) {
-        const scaleDomain = d3.extent(this.dataCountries, d => d.rollupValue[attrKey]);
+        const scaleDomain = d3.extent(this.dataCountries, d => Number(d.rollupValue[attrKey]));
         this.legendCountry[attrKey].updateExtents(scaleDomain);
 
         // When we mouseover the legend, it should highlight the indice selected
@@ -411,7 +411,7 @@ export default class GeoMap {
       // Static value
       dataset.forEach(d => {
         d.attr[attrKey] = attrValue;
-      });
+    });
     } else if (typeof (attrValue) === 'object') {
       // Dynamic value
       if (!attrValue.rollup) {
@@ -423,9 +423,9 @@ export default class GeoMap {
 
       dataset.forEach(d => {
         d.rollupValue[attrKey] = attrValue.rollup(d.values);
-      });
+    });
 
-      const scaleDomain = d3.extent(dataset, d => d.rollupValue[attrKey]);
+      const scaleDomain = d3.extent(dataset, d => Number(d.rollupValue[attrKey]));
       if (attrValue.transform) {
         scaleDomain[0] = attrValue.transform(scaleDomain[0]);
         scaleDomain[1] = attrValue.transform(scaleDomain[1]);
@@ -434,32 +434,44 @@ export default class GeoMap {
       let minValue = attrValue.min;
       let maxValue = attrValue.max;
 
-      if (attrValue.min === 'minValue') {
-        minValue = scaleDomain[0];
-      }
-      if (attrValue.max === 'maxValue') {
-        maxValue = scaleDomain[1];
+
+      // check for negative color declorations
+      var useNegative = false;
+      if ((attrValue.maxNegative && !attrValue.minNegative) ||
+          (!attrValue.maxNegative && attrValue.minNegative)) {
+        throw new Error(`MapTable: maxNegative or minNegative undefined. Please declare both.`);
+      } else if (attrValue.maxNegative && attrValue.minNegative){
+        useNegative = true;
       }
 
       const scaleFunction = d3.scale.linear()
-        .domain(scaleDomain)
-        .range([minValue, maxValue]);
+          .domain(scaleDomain)
+          .range([attrValue.min, attrValue.max]);
+
+      const scaleNegativeFunction = d3.scale.linear()
+          .domain(scaleDomain)
+          .range([attrValue.minNegative, attrValue.maxNegative]);
 
       dataset.forEach(d => {
         let scaledValue;
-        if (!d.values.length || isNaN(d.rollupValue[attrKey])) {
-          if (typeof (attrValue.empty) === 'undefined') {
-            throw new Error(`MapTable: no empty property found for attr.${attrKey}`);
-          }
-          scaledValue = attrValue.empty;
-        } else {
-          const originalValueRaw = d.rollupValue[attrKey];
-          const originalValue = (attrValue.transform) ?
+      if (!d.values.length || isNaN(d.rollupValue[attrKey])) {
+        if (typeof (attrValue.empty) === 'undefined') {
+          throw new Error(`MapTable: no empty property found for attr.${attrKey}`);
+        }
+        scaledValue = attrValue.empty;
+      } else {
+        const originalValueRaw = d.rollupValue[attrKey];
+        const originalValue = (attrValue.transform) ?
             attrValue.transform(originalValueRaw) : originalValueRaw;
+        if (useNegative && originalValue < 0){
+          scaledValue = scaleNegativeFunction(originalValue);
+          console.log('use NEG! ' + originalValue + ' scaledValue: ' + scaledValue);
+        } else {
           scaledValue = scaleFunction(originalValue);
         }
-        d.attr[attrKey] = scaledValue;
-      });
+      }
+      d.attr[attrKey] = scaledValue;
+    });
     } else {
       throw new Error(`Maptable: Invalid value for ${attrKey}`);
     }
