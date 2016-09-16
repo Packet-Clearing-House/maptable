@@ -450,7 +450,7 @@ export default class GeoMap {
 
       const scaleNegativeFunction = d3.scale.linear()
           .domain(scaleDomain)
-          .range([attrValue.minNegative, attrValue.maxNegative]);
+          .range([attrValue.maxNegative, attrValue.minNegative]);
 
       dataset.forEach(d => {
         let scaledValue;
@@ -465,7 +465,6 @@ export default class GeoMap {
             attrValue.transform(originalValueRaw) : originalValueRaw;
         if (useNegative && originalValue < 0){
           scaledValue = scaleNegativeFunction(originalValue);
-          console.log('use NEG! ' + originalValue + ' scaledValue: ' + scaledValue);
         } else {
           scaledValue = scaleFunction(originalValue);
         }
