@@ -434,15 +434,19 @@ export default class GeoMap {
       let minValue = attrValue.min;
       let maxValue = attrValue.max;
 
+      if (attrValue.min === 'minValue') {
+        minValue = scaleDomain[0];
+      }
+      if (attrValue.max === 'maxValue') {
+        maxValue = scaleDomain[1];
+      }
 
-      // check for negative color declorations
-      var useNegative = false;
+      // check for negative color declarations
       if ((attrValue.maxNegative && !attrValue.minNegative) ||
           (!attrValue.maxNegative && attrValue.minNegative)) {
         throw new Error(`MapTable: maxNegative or minNegative undefined. Please declare both.`);
-      } else if (attrValue.maxNegative && attrValue.minNegative){
-        useNegative = true;
       }
+      const useNegative = (attrValue.maxNegative && attrValue.minNegative);
 
       const scaleFunction = d3.scale.linear()
           .domain(scaleDomain)
@@ -454,23 +458,23 @@ export default class GeoMap {
 
       dataset.forEach(d => {
         let scaledValue;
-      if (!d.values.length || isNaN(d.rollupValue[attrKey])) {
-        if (typeof (attrValue.empty) === 'undefined') {
-          throw new Error(`MapTable: no empty property found for attr.${attrKey}`);
-        }
-        scaledValue = attrValue.empty;
-      } else {
-        const originalValueRaw = d.rollupValue[attrKey];
-        const originalValue = (attrValue.transform) ?
-            attrValue.transform(originalValueRaw) : originalValueRaw;
-        if (useNegative && originalValue < 0){
-          scaledValue = scaleNegativeFunction(originalValue);
+        if (!d.values.length || isNaN(d.rollupValue[attrKey])) {
+          if (typeof (attrValue.empty) === 'undefined') {
+            throw new Error(`MapTable: no empty property found for attr.${attrKey}`);
+          }
+          scaledValue = attrValue.empty;
         } else {
-          scaledValue = scaleFunction(originalValue);
+          const originalValueRaw = d.rollupValue[attrKey];
+          const originalValue = (attrValue.transform) ?
+              attrValue.transform(originalValueRaw) : originalValueRaw;
+          if (useNegative && originalValue < 0){
+            scaledValue = scaleNegativeFunction(originalValue);
+          } else {
+            scaledValue = scaleFunction(originalValue);
+          }
         }
-      }
-      d.attr[attrKey] = scaledValue;
-    });
+        d.attr[attrKey] = scaledValue;
+      });
     } else {
       throw new Error(`Maptable: Invalid value for ${attrKey}`);
     }
