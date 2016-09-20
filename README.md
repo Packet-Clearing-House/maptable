@@ -393,11 +393,17 @@ markers: {
     - `countries.rollup:` _(function(groupedData))_ Function that returns a value that we would use for every country.
     - `countries.tooltip:` _(function(groupedData))_ Function that returns html that we would use as content for the tooltip. We recommend you to use the bootstrap popover. The parameter is `groupedData` (check above on the naming conventions for more details).
     - `countries.attr:` _(object)_ Markers attributes (same naming as svg attributes).
-            - `countries.attr.fill:` _(ScaledValue)_ Marker background color.
-            - `countries.attr.r:` _(ScaledValue)_ Marker radius.
-            - `countries.attr.stroke:` _(ScaledValue)_ Marker border color.
-            - `countries.attr.stroke-width:` _(ScaledValue)_ Marker border width.
-
+        - `countries.attr.fill:` _(ScaledValue)_ Marker background color.
+        - `countries.attr.r:` _(ScaledValue)_ Marker radius.
+        - `countries.attr.stroke:` _(ScaledValue)_ Marker border color.
+        - `countries.attr.stroke-width:` _(ScaledValue)_ Marker border width.
+        - `countries.attr.min:` _(ScaledValue)_ Color for the minimum value
+        - `countries.attr.max:` _(ScaledValue)_ Color for the maximum value
+        - `countries.attr.minNegative:` _(ScaledValue, optional)_ Color for the minimum (closest to 0)negative value. Use this and ``maxNegative`` if you want to show different colors on the map for negative values.  It is optional.
+        - `countries.attr.maxNegative:` _(ScaledValue, optional)_ Color for the maximum (farthest from 0) negative.
+        - `countries.attr.empty` _(ScaledValue)_ Color if no value is affected for that country
+        - `countries.attr.legend:` _(bool, default: false)_ show or hide the legend
+        - `countries.attr.rollup:` _(function(groupedData), default: values.length)_ Function for the values we're attaching to the country and attribute. return value needs to be an array that contains rows that match that country or marker. Defaults to ``values.length``, the  count of matching countries
 *Example*
 
 ```js
