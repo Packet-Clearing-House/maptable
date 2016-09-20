@@ -1,5 +1,6 @@
 export default class Legend {
   constructor(map) {
+    this.legendWidth = 220;
     this.map = map;
     // Create Legend
     this.node = this.map.svg
@@ -8,11 +9,10 @@ export default class Legend {
       .attr('transform',
         `translate(${(this.map.getWidth() - 350)}, ${(this.map.getHeight() - 60)})`);
 
-    this.buildScale();
     this.buildIndice();
   }
 
-  buildScale() {
+  buildScale(domain) {
     const legendGradient = this.node
     .append('defs')
     .append('linearGradient')
@@ -22,9 +22,28 @@ export default class Legend {
       .attr('x2', '100%')
       .attr('y2', '0%');
 
-    legendGradient.append('stop')
-    .attr('offset', '0%')
-    .attr('style', `stop-color:${this.map.options.countries.attr.fill.min};stop-opacity:1`);
+    if (this.map.options.countries.attr.fill.minNegative &&
+        this.map.options.countries.attr.fill.maxNegative ) {
+
+      // todo - maybe watch for domain[0] < 0 && domain[1] < 0? fall back to normal min & max?
+      let midPercentNegative = Math.round(((0 - domain[0])/(domain[1] - domain[0])) * 100);
+      let midPercentPositive = midPercentNegative + 1;
+
+      legendGradient.append('stop')
+          .attr('offset', '0%')
+          .attr('style', `stop-color:${this.map.options.countries.attr.fill.maxNegative};stop-opacity:1`);
+
+      legendGradient.append('stop')
+          .attr('offset', midPercentNegative + '%')
+          .attr('style', `stop-color:${this.map.options.countries.attr.fill.minNegative};stop-opacity:1`);
+      legendGradient.append('stop')
+          .attr('offset', midPercentPositive + '%')
+          .attr('style', `stop-color:${this.map.options.countries.attr.fill.min};stop-opacity:1`);
+    } else {
+      legendGradient.append('stop')
+          .attr('offset', '0%')
+          .attr('style', `stop-color:${this.map.options.countries.attr.fill.min};stop-opacity:1`);
+    }
 
     legendGradient.append('stop')
     .attr('offset', '100%')
@@ -33,7 +52,7 @@ export default class Legend {
     this.node.append('rect')
       .attr('x', 40)
       .attr('y', 0)
-      .attr('width', 220)
+      .attr('width', this.legendWidth)
       .attr('height', 15)
       .attr('fill', 'url(#mt-map-legend-gradient)');
   }
@@ -95,6 +114,9 @@ export default class Legend {
     if (document.getElementById('mt-map-legend-min')) {
       this.node.select('#mt-map-legend-min').text(Math.round(domain[0]));
       this.node.select('#mt-map-legend-max').text(Math.round(domain[1]));
+
+      // pass in the min and max (domain) to the legend
+      this.buildScale(domain);
     }
   }
 
@@ -104,7 +126,8 @@ export default class Legend {
         .attr('style', 'display:none');
     } else {
       const maxValue = parseInt(this.node.select('#mt-map-legend-max').text(), 10);
-      const positionDelta = (val / maxValue) * 220;
+      const minValue = parseInt(this.node.select('#mt-map-legend-min').text(), 10);
+      let positionDelta = Math.round((0 - (minValue - val) /(maxValue - minValue)) * this.legendWidth);
       this.node.select('#mt-map-legend-indice text').text(Math.round(val));
       this.node.select('#mt-map-legend-indice')
         .attr('style', 'display:block')
