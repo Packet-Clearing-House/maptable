@@ -152,24 +152,36 @@ this.d3.maptable = (function () {
     function Legend(map) {
       classCallCheck(this, Legend);
 
+      this.legendWidth = 220;
       this.map = map;
       // Create Legend
       this.node = this.map.svg.append('g').attr('id', 'mt-map-legend').attr('transform', 'translate(' + (this.map.getWidth() - 350) + ', ' + (this.map.getHeight() - 60) + ')');
 
-      this.buildScale();
       this.buildIndice();
     }
 
     createClass(Legend, [{
       key: 'buildScale',
-      value: function buildScale() {
+      value: function buildScale(domain) {
         var legendGradient = this.node.append('defs').append('linearGradient').attr('id', 'mt-map-legend-gradient').attr('x1', '0%').attr('y1', '0%').attr('x2', '100%').attr('y2', '0%');
 
-        legendGradient.append('stop').attr('offset', '0%').attr('style', 'stop-color:' + this.map.options.countries.attr.fill.min + ';stop-opacity:1');
+        if (this.map.options.countries.attr.fill.minNegative && this.map.options.countries.attr.fill.maxNegative) {
+
+          // todo - maybe watch for domain[0] < 0 && domain[1] < 0? fall back to normal min & max?
+          var midPercentNegative = Math.round((0 - domain[0]) / (domain[1] - domain[0]) * 100);
+          var midPercentPositive = midPercentNegative + 1;
+
+          legendGradient.append('stop').attr('offset', '0%').attr('style', 'stop-color:' + this.map.options.countries.attr.fill.maxNegative + ';stop-opacity:1');
+
+          legendGradient.append('stop').attr('offset', midPercentNegative + '%').attr('style', 'stop-color:' + this.map.options.countries.attr.fill.minNegative + ';stop-opacity:1');
+          legendGradient.append('stop').attr('offset', midPercentPositive + '%').attr('style', 'stop-color:' + this.map.options.countries.attr.fill.min + ';stop-opacity:1');
+        } else {
+          legendGradient.append('stop').attr('offset', '0%').attr('style', 'stop-color:' + this.map.options.countries.attr.fill.min + ';stop-opacity:1');
+        }
 
         legendGradient.append('stop').attr('offset', '100%').attr('style', 'stop-color:' + this.map.options.countries.attr.fill.max + ';stop-opacity:1');
 
-        this.node.append('rect').attr('x', 40).attr('y', 0).attr('width', 220).attr('height', 15).attr('fill', 'url(#mt-map-legend-gradient)');
+        this.node.append('rect').attr('x', 40).attr('y', 0).attr('width', this.legendWidth).attr('height', 15).attr('fill', 'url(#mt-map-legend-gradient)');
       }
     }, {
       key: 'buildIndice',
@@ -191,6 +203,9 @@ this.d3.maptable = (function () {
         if (document.getElementById('mt-map-legend-min')) {
           this.node.select('#mt-map-legend-min').text(Math.round(domain[0]));
           this.node.select('#mt-map-legend-max').text(Math.round(domain[1]));
+
+          // pass in the min and max (domain) to the legend
+          this.buildScale(domain);
         }
       }
     }, {
@@ -200,7 +215,8 @@ this.d3.maptable = (function () {
           this.node.select('#mt-map-legend-indice').attr('style', 'display:none');
         } else {
           var maxValue = parseInt(this.node.select('#mt-map-legend-max').text(), 10);
-          var positionDelta = val / maxValue * 220;
+          var minValue = parseInt(this.node.select('#mt-map-legend-min').text(), 10);
+          var positionDelta = Math.round((0 - (minValue - val) / (maxValue - minValue)) * this.legendWidth);
           this.node.select('#mt-map-legend-indice text').text(Math.round(val));
           this.node.select('#mt-map-legend-indice').attr('style', 'display:block').attr('transform', 'translate(' + (36 + positionDelta) + ',15)');
         }
@@ -471,7 +487,7 @@ this.d3.maptable = (function () {
           var attrValue = _this2.options.countries.attr[attrKey];
           if ((typeof attrValue === 'undefined' ? 'undefined' : _typeof(attrValue)) === 'object' && attrValue.legend) {
             var scaleDomain = d3.extent(_this2.dataCountries, function (d) {
-              return d.rollupValue[attrKey];
+              return Number(d.rollupValue[attrKey]);
             });
             _this2.legendCountry[attrKey].updateExtents(scaleDomain);
 
@@ -695,7 +711,7 @@ this.d3.maptable = (function () {
             });
 
             var scaleDomain = d3.extent(dataset, function (d) {
-              return d.rollupValue[attrKey];
+              return Number(d.rollupValue[attrKey]);
             });
             if (attrValue.transform) {
               scaleDomain[0] = attrValue.transform(scaleDomain[0]);
@@ -712,7 +728,20 @@ this.d3.maptable = (function () {
               maxValue = scaleDomain[1];
             }
 
-            var scaleFunction = d3.scale.linear().domain(scaleDomain).range([minValue, maxValue]);
+            // check for negative color declarations
+            if (attrValue.maxNegative && !attrValue.minNegative || !attrValue.maxNegative && attrValue.minNegative) {
+              throw new Error('MapTable: maxNegative or minNegative undefined. Please declare both.');
+            }
+            var useNegative = attrValue.maxNegative && attrValue.minNegative;
+            var scaleFunction = void 0;
+            var scaleNegativeFunction = void 0;
+            if (useNegative) {
+              scaleFunction = d3.scale.linear().domain([0, scaleDomain[1]]).range([attrValue.min, attrValue.max]);
+
+              scaleNegativeFunction = d3.scale.linear().domain([scaleDomain[0], 0]).range([attrValue.maxNegative, attrValue.minNegative]);
+            } else {
+              scaleFunction = d3.scale.linear().domain(scaleDomain).range([attrValue.min, attrValue.max]);
+            }
 
             dataset.forEach(function (d) {
               var scaledValue = void 0;
@@ -724,7 +753,11 @@ this.d3.maptable = (function () {
               } else {
                 var originalValueRaw = d.rollupValue[attrKey];
                 var originalValue = attrValue.transform ? attrValue.transform(originalValueRaw) : originalValueRaw;
-                scaledValue = scaleFunction(originalValue);
+                if (useNegative && originalValue < 0) {
+                  scaledValue = scaleNegativeFunction(originalValue);
+                } else {
+                  scaledValue = scaleFunction(originalValue);
+                }
               }
               d.attr[attrKey] = scaledValue;
             });

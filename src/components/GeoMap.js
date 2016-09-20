@@ -447,14 +447,21 @@ export default class GeoMap {
         throw new Error(`MapTable: maxNegative or minNegative undefined. Please declare both.`);
       }
       const useNegative = (attrValue.maxNegative && attrValue.minNegative);
+      let scaleFunction;
+      let scaleNegativeFunction;
+      if (useNegative) {
+        scaleFunction = d3.scale.linear()
+            .domain([0, scaleDomain[1]])
+            .range([attrValue.min, attrValue.max]);
 
-      const scaleFunction = d3.scale.linear()
-          .domain(scaleDomain)
-          .range([attrValue.min, attrValue.max]);
-
-      const scaleNegativeFunction = d3.scale.linear()
-          .domain(scaleDomain)
-          .range([attrValue.maxNegative, attrValue.minNegative]);
+        scaleNegativeFunction = d3.scale.linear()
+            .domain([scaleDomain[0], 0])
+            .range([attrValue.maxNegative, attrValue.minNegative]);
+      } else {
+        scaleFunction = d3.scale.linear()
+            .domain(scaleDomain)
+            .range([attrValue.min, attrValue.max]);
+      }
 
       dataset.forEach(d => {
         let scaledValue;

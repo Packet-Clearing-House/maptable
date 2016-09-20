@@ -399,7 +399,7 @@ markers: {
         - `countries.attr.stroke-width:` _(ScaledValue)_ Marker border width.
         - `countries.attr.min:` _(ScaledValue)_ Color for the minimum value
         - `countries.attr.max:` _(ScaledValue)_ Color for the maximum value
-        - `countries.attr.minNegative:` _(ScaledValue, optional)_ Color for the minimum (closest to 0)negative value. Use this and ``maxNegative`` if you want to show different colors on the map for negative values.  It is optional.
+        - `countries.attr.minNegative:` _(ScaledValue, optional)_ Color for the minimum (closest to 0) negative value. Use this and ``maxNegative`` if you want to show different colors on the map for negative values.  It is optional.
         - `countries.attr.maxNegative:` _(ScaledValue, optional)_ Color for the maximum (farthest from 0) negative.
         - `countries.attr.empty` _(ScaledValue)_ Color if no value is affected for that country
         - `countries.attr.legend:` _(bool, default: false)_ show or hide the legend
@@ -466,8 +466,8 @@ The sample code for a PHP server is located in `/server/exportSvg.php`. Contribu
 
 ## Credits
 
-  * Mohammed Elalj [@melalj](https://github.com/melalj) - Author, Architect, JS Guru
-  * Ashley Jones [@Ths2-9Y-LqJt6](https://github.com/Ths2-9Y-LqJt6) - Feature Requester, QA, Love, Release Engineer
+  * Mohammed Elalj [@melalj](https://github.com/melalj) - Original Author & Lead Architect
+  * Ashley Jones [@Ths2-9Y-LqJt6](https://github.com/Ths2-9Y-LqJt6) - Feature Requester & Deliverer, QA, Love, Release Engineer
 
 ## Contribute
 
@@ -507,6 +507,10 @@ Run these commands as your unprivileged user you're doing your development as:
 
 
 ## Release History
+* Version 1.2 September 20 2016
+  * Allow custom colors for negative values - [PR #29](https://github.com/Packet-Clearing-House/maptable/pull/29)
+  * Correctly render legend markers - [Issue #27](https://github.com/Packet-Clearing-House/maptable/issues/27)
+  * Fix ``countries.attr`` documentation add add new ``minNegative`` and ``maxNegative`` docs.
 * Version 1.1.1 July 14 2016
   * Tweak sorting when clicking column headers - [PR #23](https://github.com/Packet-Clearing-House/maptable/pull/23)
   * Scrolling up when we click on New filter - [Issue #20](https://github.com/Packet-Clearing-House/maptable/issues/20)
