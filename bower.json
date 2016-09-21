@@ -1,6 +1,6 @@
 {
   "name": "maptable",
-  "version": "1.2",
+  "version": "1.2.1",
   "description": "Visualization tool that transforms data to Map or/and Table (with filters)",
   "main": "dist/maptable.min.js",
   "author": {
