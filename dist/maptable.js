@@ -736,11 +736,11 @@ this.d3.maptable = (function () {
             var scaleFunction = void 0;
             var scaleNegativeFunction = void 0;
             if (useNegative) {
-              scaleFunction = d3.scale.linear().domain([0, scaleDomain[1]]).range([attrValue.min, attrValue.max]);
+              scaleFunction = d3.scale.linear().domain([0, scaleDomain[1]]).range([minValue, maxValue]);
 
               scaleNegativeFunction = d3.scale.linear().domain([scaleDomain[0], 0]).range([attrValue.maxNegative, attrValue.minNegative]);
             } else {
-              scaleFunction = d3.scale.linear().domain(scaleDomain).range([attrValue.min, attrValue.max]);
+              scaleFunction = d3.scale.linear().domain(scaleDomain).range([minValue, maxValue]);
             }
 
             dataset.forEach(function (d) {
