@@ -1,7 +1,7 @@
 MapTable
 ========
 
-[![GitHub stars](https://img.shields.io/github/stars/Packet-Clearing-House/maptable.svg?style=social&label=Star&maxAge=2592001)]() [![GitHub release](https://img.shields.io/github/release/Packet-Clearing-House/maptable.svg?maxAge=2592002)]() [![license](https://img.shields.io/github/license/Packet-Clearing-House/maptable.svg?maxAge=2592001)]()
+[![GitHub stars](https://img.shields.io/github/stars/Packet-Clearing-House/maptable.svg?style=social&label=Star&maxAge=2592003)]() [![GitHub release](https://img.shields.io/github/release/Packet-Clearing-House/maptable.svg?maxAge=2592003)]() [![license](https://img.shields.io/github/license/Packet-Clearing-House/maptable.svg?maxAge=2592004)]()
 
 This library was originally conceived to render the [home page](https://pch.net) and next generation of [IXP directory](https://www.pch.net/ixp/dir) for Packet Clearing House ([PCH](https://pch.net)).
 
@@ -507,6 +507,8 @@ Run these commands as your unprivileged user you're doing your development as:
 
 
 ## Release History
+* Version 1.3 September 26 2016
+  * Allow fancier math on country values in ``map.countries.attr.fill.transform()`` in GeoMap.js - [Issue #32](https://github.com/Packet-Clearing-House/maptable/issues/32)
 * Version 1.2.1 September 21 2016
   * Fix bad use of ``attrValue`` in GeoMap.js - [Issue #30](https://github.com/Packet-Clearing-House/maptable/issues/30)
 * Version 1.2 September 20 2016
