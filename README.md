@@ -408,7 +408,7 @@ markers: {
         - `countries.attr.empty` _(ScaledValue)_ Color if no value is affected for that country
         - `countries.attr.legend:` _(bool, default: false)_ show or hide the legend
         - `countries.attr.rollup:` _(function(groupedData), default: values.length)_ Function for the values we're attaching to the country and attribute. return value needs to be an array that contains rows that match that country or marker. Defaults to ``values.length``, the  count of matching countries
-        - `countries.attr.transform:` _(function(value, allRows), default: value)_ Function for changing the value for the current country.  Can be simply ``Math.log(value)`` or use more advanced logic to iterate over allRows to calculate relative values like percentile.
+        - `countries.attr.transform:` _(function(value, allRows), default: value)_ Function for changing the value for the current country.  Can simply only accept value ``transform(value)`` to do a simple ``Math.log(value)`` call or be defined to use more advanced logic with ``transform(value, allRows)`` and then iterate over ``allRows`` (all rows from your csv/tsv/json) to calculate relative values like percentile.
 *Example*
 
 ```js
