@@ -342,7 +342,7 @@ watermark: {
         - `markers.attr.r.max:` _(ScaledValue)_ Maximum radius.
         - `markers.attr.r.min:` _(ScaledValue)_ Minimum radius
         - `markers.attr.r.rollup:` _(function(groupedData), default: values.length)_ Function for the values we're attaching to the radius. Defaults to ``values.length``
-        - `markers.attr.r.transform:` _(function(value), default: value)_ Function for changing the value for radius of the marker (eg ``Math.log(value)``)
+        - `markers.attr.r.transform:` _(function(value, allRows), default: value)_ Function for changing the value for the current radius.  Can simply only accept value ``transform(value)`` to do a simple ``Math.log(value)`` call or be defined to use more advanced logic with ``transform(value, allRows)`` and then iterate over ``allRows`` (all rows from your csv/tsv/json) to calculate relative values like percentile.
         - `markers.attr.stroke:` _(ScaledValue)_ Marker border color.
         - `markers.attr.stroke-width:` _(ScaledValue)_ Marker border width.
 
