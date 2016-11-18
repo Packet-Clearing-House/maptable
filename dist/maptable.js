@@ -689,6 +689,8 @@ this.d3.maptable = (function () {
     }, {
       key: 'setAttrValues',
       value: function setAttrValues(attrKey, attrValue, dataset) {
+        var _this4 = this;
+
         if (typeof attrValue === 'number' || typeof attrValue === 'string') {
           // Static value
           dataset.forEach(function (d) {
@@ -709,7 +711,6 @@ this.d3.maptable = (function () {
             dataset.forEach(function (d) {
               d.rollupValue[attrKey] = attrValue.rollup(d.values);
             });
-
             var scaleDomain = d3.extent(dataset, function (d) {
               return Number(d.rollupValue[attrKey]);
             });
@@ -752,7 +753,7 @@ this.d3.maptable = (function () {
                 scaledValue = attrValue.empty;
               } else {
                 var originalValueRaw = d.rollupValue[attrKey];
-                var originalValue = attrValue.transform ? attrValue.transform(originalValueRaw) : originalValueRaw;
+                var originalValue = attrValue.transform ? attrValue.transform(originalValueRaw, _this4.maptable.rawData) : originalValueRaw;
                 if (useNegative && originalValue < 0) {
                   scaledValue = scaleNegativeFunction(originalValue);
                 } else {
@@ -780,14 +781,14 @@ this.d3.maptable = (function () {
     }, {
       key: 'updateTitle',
       value: function updateTitle() {
-        var _this4 = this;
+        var _this5 = this;
 
         if (this.options.title.content) {
           var showing = this.maptable.data.filter(function (d) {
-            return d[_this4.options.latitudeKey] !== 0;
+            return d[_this5.options.latitudeKey] !== 0;
           }).length;
           var total = this.maptable.rawData.filter(function (d) {
-            return d[_this4.options.latitudeKey] !== 0;
+            return d[_this5.options.latitudeKey] !== 0;
           }).length;
 
           var inlineFilters = '';
@@ -801,10 +802,10 @@ this.d3.maptable = (function () {
     }, {
       key: 'activateTooltip',
       value: function activateTooltip(target, tooltipNode, tooltipContent, cb) {
-        var _this5 = this;
+        var _this6 = this;
 
         target.on('mousemove', function (d) {
-          var mousePosition = d3.mouse(_this5.svg.node()).map(function (v) {
+          var mousePosition = d3.mouse(_this6.svg.node()).map(function (v) {
             return parseInt(v, 10);
           });
 

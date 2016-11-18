@@ -424,7 +424,6 @@ export default class GeoMap {
       dataset.forEach(d => {
         d.rollupValue[attrKey] = attrValue.rollup(d.values);
     });
-
       const scaleDomain = d3.extent(dataset, d => Number(d.rollupValue[attrKey]));
       if (attrValue.transform) {
         scaleDomain[0] = attrValue.transform(scaleDomain[0]);
@@ -473,7 +472,7 @@ export default class GeoMap {
         } else {
           const originalValueRaw = d.rollupValue[attrKey];
           const originalValue = (attrValue.transform) ?
-              attrValue.transform(originalValueRaw) : originalValueRaw;
+              attrValue.transform(originalValueRaw, this.maptable.rawData) : originalValueRaw;
           if (useNegative && originalValue < 0){
             scaledValue = scaleNegativeFunction(originalValue);
           } else {

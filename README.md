@@ -1,7 +1,7 @@
 MapTable
 ========
 
-[![GitHub stars](https://img.shields.io/github/stars/Packet-Clearing-House/maptable.svg?style=social&label=Star&maxAge=2592001)]() [![GitHub release](https://img.shields.io/github/release/Packet-Clearing-House/maptable.svg?maxAge=2592002)]() [![license](https://img.shields.io/github/license/Packet-Clearing-House/maptable.svg?maxAge=2592001)]()
+[![GitHub stars](https://img.shields.io/github/stars/Packet-Clearing-House/maptable.svg?style=social&label=Star&maxAge=2592003)]() [![GitHub release](https://img.shields.io/github/release/Packet-Clearing-House/maptable.svg?maxAge=2592003)]() [![license](https://img.shields.io/github/license/Packet-Clearing-House/maptable.svg?maxAge=2592004)]()
 
 This library was originally conceived to render the [home page](https://pch.net) and next generation of [IXP directory](https://www.pch.net/ixp/dir) for Packet Clearing House ([PCH](https://pch.net)).
 
@@ -333,11 +333,16 @@ watermark: {
     - `markers.attrY:` _(string, default: 'cy')_ Attribute to position the marker on the Y-Axis
     - `markers.attrXDelta:` _(integer, default: 0)_ Left relative margin of the marker
     - `markers.attrYDelta:` _(integer, default: 0)_ Top relative margin of the marker
+    - `markers.groupby:` _(function(groupedData))_ Given groupedData (the current row), function that returns a value that we group markers by.
+    - `markers.rollup:` _(function(groupedData))_ Given groupedData (the current row), function that returns a value that we would use for every marker.
     - `markers.tooltipClassName:` _(string, default: 'mt-map-tooltip popover bottom')_ Class name of the tooltip used for markers (we're using bootstrap).
     - `markers.tooltip:` _(function(groupedData))_ Function that returns html that we would use as content for the tooltip. We recommend you to use the bootstrap popover..
     - `markers.attr:` _(object)_ Markers attributes (same naming as SVG attributes).
         - `markers.attr.fill:` _(ScaledValue)_ Marker background color.
-        - `markers.attr.r:` _(ScaledValue)_ Marker radius.
+        - `markers.attr.r.max:` _(ScaledValue)_ Maximum radius.
+        - `markers.attr.r.min:` _(ScaledValue)_ Minimum radius
+        - `markers.attr.r.rollup:` _(function(groupedData), default: values.length)_ Function for the values we're attaching to the radius. Defaults to ``values.length``
+        - `markers.attr.r.transform:` _(function(value, allRows), default: value)_ Function for changing the value for the current radius.  Can simply only accept value ``transform(value)`` to do a simple ``Math.log(value)`` call or be defined to use more advanced logic with ``transform(value, allRows)`` and then iterate over ``allRows`` (all rows from your csv/tsv/json) to calculate relative values like percentile.
         - `markers.attr.stroke:` _(ScaledValue)_ Marker border color.
         - `markers.attr.stroke-width:` _(ScaledValue)_ Marker border width.
 
@@ -390,7 +395,6 @@ markers: {
 ```
 
 - `countries:` _(object, default: null)_ Add countries on the map.
-    - `countries.rollup:` _(function(groupedData))_ Function that returns a value that we would use for every country.
     - `countries.tooltip:` _(function(groupedData))_ Function that returns html that we would use as content for the tooltip. We recommend you to use the bootstrap popover. The parameter is `groupedData` (check above on the naming conventions for more details).
     - `countries.attr:` _(object)_ Markers attributes (same naming as svg attributes).
         - `countries.attr.fill:` _(ScaledValue)_ Marker background color.
@@ -404,6 +408,7 @@ markers: {
         - `countries.attr.empty` _(ScaledValue)_ Color if no value is affected for that country
         - `countries.attr.legend:` _(bool, default: false)_ show or hide the legend
         - `countries.attr.rollup:` _(function(groupedData), default: values.length)_ Function for the values we're attaching to the country and attribute. return value needs to be an array that contains rows that match that country or marker. Defaults to ``values.length``, the  count of matching countries
+        - `countries.attr.transform:` _(function(value, allRows), default: value)_ Function for changing the value for the current country.  Can simply only accept value ``transform(value)`` to do a simple ``Math.log(value)`` call or be defined to use more advanced logic with ``transform(value, allRows)`` and then iterate over ``allRows`` (all rows from your csv/tsv/json) to calculate relative values like percentile.
 *Example*
 
 ```js
@@ -507,6 +512,8 @@ Run these commands as your unprivileged user you're doing your development as:
 
 
 ## Release History
+* Version 1.3 September 26 2016
+  * Allow fancier math on country values in ``map.countries.attr.fill.transform()`` in GeoMap.js - [Issue #32](https://github.com/Packet-Clearing-House/maptable/issues/32)
 * Version 1.2.1 September 21 2016
   * Fix bad use of ``attrValue`` in GeoMap.js - [Issue #30](https://github.com/Packet-Clearing-House/maptable/issues/30)
 * Version 1.2 September 20 2016
