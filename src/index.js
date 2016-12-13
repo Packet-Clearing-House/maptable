@@ -69,6 +69,11 @@ d3.maptable = function (target) {
       throw new Error('MapTable: target not found');
     }
 
+    if (options.heatmap) {
+      if (!options.map) throw new Error('MapTable: Cannot have a heatmap without a map');
+      options.map.countries = null;
+    }
+
     if (!options.data || !options.data.path) {
       throw new Error('MapTable: Please provide the path for your dataset json|csv|tsv');
     }

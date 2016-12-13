@@ -16,7 +16,10 @@
 <script>
     var viz = d3.maptable('#vizContainer')
             .json('dir_data.json')
-            .map({ path: 'ne_110m_admin_0_countries.json' })
+            .map({
+              path: 'ne_110m_admin_0_countries.json',
+              filterCountries: (country) => country.id !== 'AQ',
+            })
             .heatmap({
               opacityScale: 2.5,
               maxMagnitude: 180,

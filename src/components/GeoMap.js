@@ -4,13 +4,15 @@ import Watermark from './Watermark';
 // Used the name GeoMap instead of Map to avoid collision with the native Map class of JS
 export default class GeoMap {
   constructor(maptable, options, jsonWorld) {
-    const that = this;
+    const self = this;
     this.maptable = maptable;
     this.scale = 1;
     this.transX = 0;
     this.transY = 0;
 
     this.options = options;
+
+    this.heatmap = this.maptable.options.heatmap;
 
     this.jsonWorld = jsonWorld;
 
@@ -38,13 +40,15 @@ export default class GeoMap {
       .rotate([-12, 0])
       .precision(0.1);
 
+    this.path = d3.geo.path().projection(this.projection);
+
     // Add coordinates to rawData
     this.maptable.rawData.forEach(d => {
-      d.longitude = parseFloat(d[that.options.longitudeKey]);
-      d.latitude = parseFloat(d[that.options.latitudeKey]);
+      d.longitude = parseFloat(d[self.options.longitudeKey]);
+      d.latitude = parseFloat(d[self.options.latitudeKey]);
       let coord = [0, 0];
       if (!isNaN(d.longitude) && !isNaN(d.latitude)) {
-        coord = that.projection([d.longitude, d.latitude]);
+        coord = self.projection([d.longitude, d.latitude]);
       }
       d.x = coord[0];
       d.y = coord[1];
@@ -67,15 +71,18 @@ export default class GeoMap {
       .attr('class', `mt-map-tooltip ${this.options.markers.tooltipClassName}`)
       .style('display', 'none');
 
-    this.tooltipCountriesNode = d3.select(this.node)
-      .append('div')
-      .attr('id', 'mt-map-countries-tooltip')
-      .attr('class', `mt-map-tooltip ${this.options.countries.tooltipClassName}`)
-      .style('display', 'none');
+    if (this.options.countries) {
+      this.tooltipCountriesNode = d3.select(this.node)
+        .append('div')
+        .attr('id', 'mt-map-countries-tooltip')
+        .attr('class', `mt-map-tooltip ${this.options.countries.tooltipClassName}`)
+        .style('display', 'none');
+    }
 
     this.layerGlobal = this.svg.append('g').attr('class', 'mt-map-global');
     this.layerCountries = this.layerGlobal.append('g').attr('class', 'mt-map-countries');
     this.layerMarkers = this.layerGlobal.append('g').attr('class', 'mt-map-markers');
+    this.layerHeatmap = this.layerGlobal.append('g').attr('class', 'mt-map-heatmap');
 
     // Add Watermark
     if (this.options.watermark) {
@@ -125,21 +132,80 @@ export default class GeoMap {
   }
 
   loadGeometries() {
-    // We pre-simplify the topojson
-    topojson.presimplify(this.jsonWorld);
+    // We filter world data
+    if (this.options.filterCountries) {
+      this.jsonWorld.objects.countries.geometries = this.jsonWorld.objects.countries
+        .geometries.filter(this.options.filterCountries);
+    }
 
-    // Data geometry
+    // Build countries
+    if (this.options.countries) this.buildCountries();
+
+    // Build heatmap
+    if (this.heatmap) this.buildHeatmap();
+
+    this.render();
+  }
+
+  buildHeatmap() {
+    const lands = topojson.merge(this.jsonWorld, this.jsonWorld.objects.countries.geometries);
+    if (!this.heatmap.disableMask) {
+      this.maskHeatmap = this.layerHeatmap.append('defs')
+        .append('clipPath')
+        .attr('id', 'mt-heatmap-mask');
+
+      this.maskHeatmap
+          .datum(lands)
+          .append('path')
+          .attr('class', 'mt-heatmap-mask-paths')
+          .attr('fill', '#000')
+          .attr('d', this.path);
+    }
+
+    this.bandingsHeatmap = this.layerHeatmap.append('g').attr('class', 'mt-heatmap-bandings');
+
+    if (!this.heatmap.disableMask) {
+      this.bandingsHeatmap = this.bandingsHeatmap.attr('clip-path', 'url(#mt-heatmap-mask)');
+    }
+
+    if (!this.heatmap.disableBorders) {
+      const borders = topojson.mesh(this.jsonWorld,
+        this.jsonWorld.objects.countries, (a, b) => a !== b);
+
+      this.bordersHeatmap = this.layerHeatmap
+          .append('g')
+          .attr('class', 'mt-heatmap-borders');
+
+      this.bordersHeatmap.selectAll('path.mt-heatmap-borders-paths')
+        .data([lands, borders])
+        .enter()
+        .append('path')
+        .attr('class', 'mt-heatmap-borders-paths')
+        .attr('fill', 'transparent')
+        .attr('stroke-width', '1')
+        .attr('stroke', '#000')
+        .attr('style', 'opacity: 0.1')
+        .attr('d', this.path);
+    }
+  }
+
+  updateHeatmap() {
+  }
+
+  buildCountries() {
     this.dataCountries = topojson.feature(this.jsonWorld,
       this.jsonWorld.objects.countries).features;
 
+    // Build country paths
     this.layerCountries
       .selectAll('.mt-map-country')
         .data(this.dataCountries)
         .enter()
         .insert('path')
         .attr('class', 'mt-map-country')
-        .attr('d', d3.geo.path().projection(this.projection));
+        .attr('d', this.path);
 
+    // Build Country Legend
     this.legendCountry = {};
 
     if (this.options.countries.attr.fill &&
@@ -148,8 +214,6 @@ export default class GeoMap {
         this.options.countries.attr.fill.max) {
       this.legendCountry.fill = new Legend(this);
     }
-
-    this.render();
   }
 
   updateCountries() {
@@ -200,7 +264,7 @@ export default class GeoMap {
     });
 
     // Update Tooltip
-    if (this.options.countries.tooltip) {
+    if (this.options.countries && this.options.countries.tooltip) {
       this.activateTooltip(countryItem, this.tooltipCountriesNode, this.options.countries.tooltip);
     }
   }
@@ -350,7 +414,7 @@ export default class GeoMap {
   }
 
   rescale() {
-    const that = this;
+    const self = this;
     if (d3.event && d3.event.translate) {
       this.scale = d3.event.scale;
       this.transX = (this.scale === 1) ? 0 : d3.event.translate[0];
@@ -383,8 +447,8 @@ export default class GeoMap {
       `translate(${this.transX}, ${this.transY})scale(${this.scale})`);
 
     // Hide tooltip
-    that.tooltipCountriesNode.attr('style', 'display:none;');
-    that.tooltipMarkersNode.attr('style', 'display:none;');
+    if (self.tooltipCountriesNode) self.tooltipCountriesNode.attr('style', 'display:none;');
+    if (self.tooltipMarkersNode) self.tooltipMarkersNode.attr('style', 'display:none;');
 
     // Rescale markers size
     if (this.options.markers) {
@@ -392,18 +456,25 @@ export default class GeoMap {
       d3.selectAll('.mt-map-marker').each(function (d) {
         // stroke
         if (d.attr['stroke-width']) {
-          d3.select(this).attr('stroke-width', d.attr['stroke-width'] / that.scaleAttributes());
+          d3.select(this).attr('stroke-width', d.attr['stroke-width'] / self.scaleAttributes());
         }
         // radius
         if (d.attr.r) {
-          d3.select(this).attr('r', d.attr.r / that.scaleAttributes());
+          d3.select(this).attr('r', d.attr.r / self.scaleAttributes());
         }
       });
     }
 
     // Rescale Country stroke-width
-    d3.selectAll('.mt-map-country').style('stroke-width',
-      this.options.countries.attr['stroke-width'] / this.scale);
+    if (this.options.countries) {
+      d3.selectAll('.mt-map-country').style('stroke-width',
+        this.options.countries.attr['stroke-width'] / this.scale);
+    }
+
+    // Rescale heatmap borders
+    if (this.bordersHeatmap) {
+      d3.selectAll('.mt-heatmap-borders-paths').style('stroke-width', 1 / this.scale);
+    }
   }
 
   setAttrValues(attrKey, attrValue, dataset) {
@@ -490,6 +561,7 @@ export default class GeoMap {
     if (this.options.markers) this.updateMarkers();
     if (this.options.countries) this.updateCountries();
     if (this.options.title) this.updateTitle();
+    if (this.heatmap) this.updateHeatmap();
     if (this.options.autoFitContent) {
       this.fitContent();
       this.rescale();
