@@ -29,8 +29,13 @@ export default class MapTable {
       throw err;
     }
     this.rawData = data;
+
+    if (this.options.data.preFilter) {
+      this.rawData = this.rawData.filter(this.options.data.preFilter);
+    }
+
     this.setColumnDetails();
-    this.data = data.slice(); // we clone data, so that we can filter it
+    this.data = this.rawData.slice(); // we clone data, so that we can filter it
     // Map
     if (this.options.map) {
       // Map wrapper

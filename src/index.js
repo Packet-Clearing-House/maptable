@@ -26,21 +26,24 @@ d3.maptable = function (target) {
     return maptable;
   };
 
-  maptable.json = function (jsonPath) {
+  maptable.json = function (jsonPath, preFilter) {
     options.data.type = 'json';
     options.data.path = jsonPath;
+    options.data.preFilter = preFilter;
     return maptable;
   };
 
-  maptable.csv = function (csvPath) {
+  maptable.csv = function (csvPath, preFilter) {
     options.data.type = 'csv';
     options.data.path = csvPath;
+    options.data.preFilter = preFilter;
     return maptable;
   };
 
-  maptable.tsv = function (tsvPath) {
+  maptable.tsv = function (tsvPath, preFilter) {
     options.data.type = 'tsv';
     options.data.path = tsvPath;
+    options.data.preFilter = preFilter;
     return maptable;
   };
 

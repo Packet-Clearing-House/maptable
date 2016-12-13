@@ -209,7 +209,10 @@ export default class GeoMap {
       })
       .attr('stroke-width', '1')
       .attr('fill', (r) => {
-        const opacity = this.heatmapOpacityScale(r);
+        let opacity = this.heatmapOpacityScale(r);
+        if (this.options.heatmap.opacityWeight) {
+          opacity = opacity * this.options.heatmap.opacityWeight(point, this.maptable.data);
+        }
         return `rgba(${this.options.heatmap.bandingsColorRGB}, ${opacity})`;
       });
     });
