@@ -49,11 +49,6 @@ d3.maptable = function (target) {
     return maptable;
   };
 
-  maptable.heatmap = function (heatmapOptions = {}) {
-    options.heatmap = heatmapOptions;
-    return maptable;
-  };
-
   maptable.table = function (tableOptions = {}) {
     options.table = tableOptions;
     return maptable;
@@ -67,11 +62,6 @@ d3.maptable = function (target) {
   maptable.render = function () {
     if (typeof(target) !== 'string' || !document.querySelector(target)) {
       throw new Error('MapTable: target not found');
-    }
-
-    if (options.heatmap) {
-      if (!options.map) throw new Error('MapTable: Cannot have a heatmap without a map');
-      options.map.countries = null;
     }
 
     if (!options.data || !options.data.path) {

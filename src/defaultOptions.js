@@ -20,6 +20,17 @@ export default {
       },
       tooltipClassName: 'mt-map-tooltip popover bottom',
     },
+    heatmap: {
+      maxMagnitude: 180,
+      stepMagnitude: 30,
+      bandingsColorRGB: '255, 0, 0',
+      maxOpacity: (count) => 0.00403 * count + 0.3040,
+      mask: true,
+      borders: {
+        opacity: 0.1,
+        color: '#000',
+      },
+    },
     markers: {
       attr: {
         r: 4,

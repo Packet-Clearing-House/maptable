@@ -12,8 +12,6 @@ export default class GeoMap {
 
     this.options = options;
 
-    this.heatmap = this.maptable.options.heatmap;
-
     this.jsonWorld = jsonWorld;
 
     this.node = document.querySelector('#mt-map');
@@ -81,8 +79,8 @@ export default class GeoMap {
 
     this.layerGlobal = this.svg.append('g').attr('class', 'mt-map-global');
     this.layerCountries = this.layerGlobal.append('g').attr('class', 'mt-map-countries');
-    this.layerMarkers = this.layerGlobal.append('g').attr('class', 'mt-map-markers');
     this.layerHeatmap = this.layerGlobal.append('g').attr('class', 'mt-map-heatmap');
+    this.layerMarkers = this.layerGlobal.append('g').attr('class', 'mt-map-markers');
 
     // Add Watermark
     if (this.options.watermark) {
@@ -142,14 +140,22 @@ export default class GeoMap {
     if (this.options.countries) this.buildCountries();
 
     // Build heatmap
-    if (this.heatmap) this.buildHeatmap();
+    if (this.options.heatmap) this.buildHeatmap();
 
     this.render();
   }
 
   buildHeatmap() {
+    // Get opacity scale
+    const maxOpacity = this.options.heatmap.maxOpacity(this.maptable.data.length)
+      / this.maptable.data.length;
+    this.heatmapOpacityScale = d3.scale.linear()
+      .domain([10, this.options.heatmap.maxMagnitude])
+      .range([maxOpacity, 0]);
+
+    // Build vectors
     const lands = topojson.merge(this.jsonWorld, this.jsonWorld.objects.countries.geometries);
-    if (!this.heatmap.disableMask) {
+    if (!this.options.heatmap.disableMask) {
       this.maskHeatmap = this.layerHeatmap.append('defs')
         .append('clipPath')
         .attr('id', 'mt-heatmap-mask');
@@ -158,17 +164,16 @@ export default class GeoMap {
           .datum(lands)
           .append('path')
           .attr('class', 'mt-heatmap-mask-paths')
-          .attr('fill', '#000')
           .attr('d', this.path);
     }
 
     this.bandingsHeatmap = this.layerHeatmap.append('g').attr('class', 'mt-heatmap-bandings');
 
-    if (!this.heatmap.disableMask) {
+    if (!this.options.heatmap.disableMask) {
       this.bandingsHeatmap = this.bandingsHeatmap.attr('clip-path', 'url(#mt-heatmap-mask)');
     }
 
-    if (!this.heatmap.disableBorders) {
+    if (!this.options.heatmap.borders) {
       const borders = topojson.mesh(this.jsonWorld,
         this.jsonWorld.objects.countries, (a, b) => a !== b);
 
@@ -182,14 +187,32 @@ export default class GeoMap {
         .append('path')
         .attr('class', 'mt-heatmap-borders-paths')
         .attr('fill', 'transparent')
-        .attr('stroke-width', '1')
-        .attr('stroke', '#000')
-        .attr('style', 'opacity: 0.1')
+        .attr('stroke-width', this.options.heatmap.borders.stroke)
+        .attr('stroke', this.options.heatmap.borders.color)
+        .attr('style', `opacity: ${this.options.heatmap.borders.opacity}`)
         .attr('d', this.path);
     }
   }
 
   updateHeatmap() {
+    this.maptable.data.forEach((point, i) => {
+      const coord = [point.longitude, point.latitude];
+      this.bandingsHeatmap.append('g')
+      .attr('id', `mt-heatmap-bandings-${i}`)
+      .selectAll(`#mt-heatmap-bandings-${i} path`)
+      .data(d3.range(10, this.options.heatmap.maxMagnitude, this.options.heatmap.stepMagnitude))
+      .enter()
+      .append('path')
+      .attr('class', '.mt-heatmap-bandings-paths')
+      .attr('d', (r) => {
+        return this.path(d3.geo.circle().origin(coord).angle(r - 0.01)());
+      })
+      .attr('stroke-width', '1')
+      .attr('fill', (r) => {
+        const opacity = this.heatmapOpacityScale(r);
+        return `rgba(${this.options.heatmap.bandingsColorRGB}, ${opacity})`;
+      });
+    });
   }
 
   buildCountries() {
@@ -472,8 +495,9 @@ export default class GeoMap {
     }
 
     // Rescale heatmap borders
-    if (this.bordersHeatmap) {
-      d3.selectAll('.mt-heatmap-borders-paths').style('stroke-width', 1 / this.scale);
+    if (this.options.heatmap && this.options.heatmap.borders) {
+      d3.selectAll('.mt-heatmap-borders-paths').style('stroke-width',
+        this.options.heatmap.borders.stroke / this.scale);
     }
   }
 
@@ -482,7 +506,7 @@ export default class GeoMap {
       // Static value
       dataset.forEach(d => {
         d.attr[attrKey] = attrValue;
-    });
+      });
     } else if (typeof (attrValue) === 'object') {
       // Dynamic value
       if (!attrValue.rollup) {
@@ -561,7 +585,7 @@ export default class GeoMap {
     if (this.options.markers) this.updateMarkers();
     if (this.options.countries) this.updateCountries();
     if (this.options.title) this.updateTitle();
-    if (this.heatmap) this.updateHeatmap();
+    if (this.options.heatmap) this.updateHeatmap();
     if (this.options.autoFitContent) {
       this.fitContent();
       this.rescale();

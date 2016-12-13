@@ -17,12 +17,11 @@
     var viz = d3.maptable('#vizContainer')
             .json('dir_data.json')
             .map({
+              longitudeKey: 'lon',
+              latitudeKey: 'lat',
               path: 'ne_110m_admin_0_countries.json',
               filterCountries: (country) => country.id !== 'AQ',
-            })
-            .heatmap({
-              opacityScale: 2.5,
-              maxMagnitude: 180,
+              heatmap: {},
             })
             .render();
 </script>
