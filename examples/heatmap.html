@@ -21,7 +21,17 @@
               latitudeKey: 'lat',
               path: 'ne_110m_admin_0_countries.json',
               filterCountries: (country) => country.id !== 'AQ',
-              heatmap: {},
+              heatmap: {
+                borders: {
+                  opacity: 0.2,
+                },
+              },
+              markers: {
+                attr: {
+                  fill: '#FF0000',
+                  r: '3'
+                }
+              }
             })
             .render();
 </script>

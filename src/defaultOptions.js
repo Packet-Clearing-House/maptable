@@ -27,6 +27,7 @@ export default {
       maxOpacity: (count) => 0.00403 * count + 0.3040,
       mask: true,
       borders: {
+        stroke: 1,
         opacity: 0.1,
         color: '#000',
       },

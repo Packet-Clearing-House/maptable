@@ -18,6 +18,10 @@ export default class MapTable {
     } else if (this.options.data.type === 'tsv') {
       d3.tsv(this.options.data.path, this.loadData.bind(this));
     }
+
+    if (this.options.map && this.options.map.heatmap) {
+      delete this.options.map.countries;
+    }
   }
 
   loadData(err, data) {

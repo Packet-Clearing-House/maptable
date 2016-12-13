@@ -146,13 +146,6 @@ export default class GeoMap {
   }
 
   buildHeatmap() {
-    // Get opacity scale
-    const maxOpacity = this.options.heatmap.maxOpacity(this.maptable.data.length)
-      / this.maptable.data.length;
-    this.heatmapOpacityScale = d3.scale.linear()
-      .domain([10, this.options.heatmap.maxMagnitude])
-      .range([maxOpacity, 0]);
-
     // Build vectors
     const lands = topojson.merge(this.jsonWorld, this.jsonWorld.objects.countries.geometries);
     if (!this.options.heatmap.disableMask) {
@@ -169,11 +162,11 @@ export default class GeoMap {
 
     this.bandingsHeatmap = this.layerHeatmap.append('g').attr('class', 'mt-heatmap-bandings');
 
-    if (!this.options.heatmap.disableMask) {
+    if (this.options.heatmap.mask) {
       this.bandingsHeatmap = this.bandingsHeatmap.attr('clip-path', 'url(#mt-heatmap-mask)');
     }
 
-    if (!this.options.heatmap.borders) {
+    if (this.options.heatmap.borders) {
       const borders = topojson.mesh(this.jsonWorld,
         this.jsonWorld.objects.countries, (a, b) => a !== b);
 
@@ -195,6 +188,13 @@ export default class GeoMap {
   }
 
   updateHeatmap() {
+    // Get opacity scale
+    const maxOpacity = this.options.heatmap.maxOpacity(this.maptable.data.length)
+      / this.maptable.data.length;
+    this.heatmapOpacityScale = d3.scale.linear()
+      .domain([10, this.options.heatmap.maxMagnitude])
+      .range([maxOpacity, 0]);
+
     this.maptable.data.forEach((point, i) => {
       const coord = [point.longitude, point.latitude];
       this.bandingsHeatmap.append('g')
