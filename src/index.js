@@ -49,6 +49,11 @@ d3.maptable = function (target) {
     return maptable;
   };
 
+  maptable.heatmap = function (heatmapOptions = {}) {
+    options.heatmap = heatmapOptions;
+    return maptable;
+  };
+
   maptable.table = function (tableOptions = {}) {
     options.table = tableOptions;
     return maptable;
