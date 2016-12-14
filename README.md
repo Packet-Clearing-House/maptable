@@ -451,6 +451,7 @@ countries: {
     - `heatmap.stepMagnitude:` _(integer, default: 30)_ The magnitude that separates two concentrated circles on the heatmap.
     - `heatmap.bandingsColorRGB:` _(string, default: "255, 0, 0")_ The color in RGB of the concentrated circles.
     - `heatmap.maxOpacity:` _(function(count), default: (count) => 0.00403 * count + 0.3040)_ The function that calculate the maximum opacity in the central circle of the bandings per location.
+    - `heatmap.opacityWeight:` _(function(row, dataset), default: null_ A function that outputs a weight that is used as multiplicator for the opacity.
     - `heatmap.mask:` _(bool, default: true)_ Mask the heatmap with countries
     - `heatmap.borders:` _(object)_ Enable country borders. Set to `false` to disable it.
     - `heatmap.borders.stroke:` _(integer, default: 1)_ Country border stroke width.
@@ -465,6 +466,13 @@ heatmap: {
   bandingsColorRGB: '255, 0, 0',
   maxOpacity: (count) => 0.00403 * count + 0.3040,
   mask: true,
+  opacityWeight: (d, dataset) => {
+    var extents = d3.extent(dataset, d => parseInt(d.traffic, 10));
+    var scale = d3.scale.log()
+      .domain(extents)
+      .range([0.2, 1]);
+    return scale(parseInt(d.traffic, 10));
+  },
   borders: {
     stroke: 1,
     opacity: 0.1,
