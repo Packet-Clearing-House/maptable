@@ -444,6 +444,33 @@ countries: {
     "stroke-width": 0.5
   },
 },
+
+```
+- `heatmap:` _(object, default: null)_ Add a heatmap on the map - we use concentrated circles (bandings) on every location in the dataset.
+    - `heatmap.maxMagnitude:` _(integer, default: 180)_ The maximum magnitude in degree of the circles. The unit is in degrees( minimum 10 and maximum 180).
+    - `heatmap.stepMagnitude:` _(integer, default: 30)_ The magnitude that separates two concentrated circles on the heatmap.
+    - `heatmap.bandingsColorRGB:` _(string, default: "255, 0, 0")_ The color in RGB of the concentrated circles.
+    - `heatmap.maxOpacity:` _(function(count), default: (count) => 0.00403 * count + 0.3040)_ The function that calculate the maximum opacity in the central circle of the bandings per location.
+    - `heatmap.mask:` _(bool, default: true)_ All countries mask on the heatmap.
+    - `heatmap.borders:` _(object)_ Enable country borders. Set to `false` to disable it.
+    - `heatmap.borders.stroke:` _(integer, default: 1)_ Country border stroke width.
+    - `heatmap.borders.opacity:` _(integer, default: 0.1)_ Country border stroke opacity.
+    - `heatmap.borders.color:` _(string, default: "#000")_ Country border stroke color.
+
+*Example*
+```js
+heatmap: {
+  maxMagnitude: 180,
+  stepMagnitude: 30,
+  bandingsColorRGB: '255, 0, 0',
+  maxOpacity: (count) => 0.00403 * count + 0.3040,
+  mask: true,
+  borders: {
+    stroke: 1,
+    opacity: 0.1,
+    color: '#000',
+  },
+},
 ```
 
 ## Filters
