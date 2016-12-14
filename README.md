@@ -107,15 +107,22 @@ You instantiate the MapTable library into the `viz` variable based on the `#vizC
 ```
 
 The MapTable `viz` declaration in the above example is a chain of functions. The possible functions that you can use are:
-- [viz.json(jsonPath)](#viz-json) with `jsonPath` as string
-- [viz.csv(csvPath)](#viz-csv) with `csvPath` as string
-- [viz.tsv(tsvPath)](#viz-tsv) with `tsvPath` as string
+- [viz.json(jsonPath\[, preFilter\])](#viz-json) with `jsonPath` as string and `preFilter` as function that filters the dataset upfront.
+- [viz.csv(csvPath\[, preFilter\])](#viz-csv) with `csvPath` as string and `preFilter`.
+- [viz.tsv(tsvPath\[, preFilter\])](#viz-tsv) with `tsvPath` as string and `preFilter`.
 - [viz.columns(columnDetails)](#columns-details) with `columnDetails` as a JS dictionary. You can add/remove it of you want to customize your columns or create virtual columns based on the data.
 - [viz.map(mapOptions)](#map) with `mapOptions` as a JS dictionary. You can add/remove it of you want a map on your visualization.
 - [viz.filters(filtersOptions)](#filters) with `filtersOptions` as a JS dictionary. You can add/remove it of you want filters on your visualization.
 - [viz.table(tableOptions)](#table) with `tableOptions` as a JS dictionary. You can add/remove it of you want a table on your visualization.
 - [viz.render()](#render) that closes the chain and renders the visualization. Don't forget this!
 
+*Example with preFilter*
+```js
+var viz = d3.maptable('#vizContainer')
+        .json('dir_data.json', (d) => parseInt(d.traffic) > 0)
+        .map({ path: 'ne_110m_admin_0_countries.json' })
+        .render();
+```
 
 ### Import datasets
 
