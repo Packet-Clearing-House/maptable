@@ -472,7 +472,7 @@ export default class GeoMap {
         } else {
           const originalValueRaw = d.rollupValue[attrKey];
           const originalValue = (attrValue.transform) ?
-              attrValue.transform(originalValueRaw, this.maptable.rawData) : originalValueRaw;
+              attrValue.transform(originalValueRaw, this.maptable.data) : originalValueRaw;
           if (useNegative && originalValue < 0){
             scaledValue = scaleNegativeFunction(originalValue);
           } else {

@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="bootstrap.min.css">
+    <link rel="stylesheet" href="maptable.css">
+    <title>MapTable: Basic with Map, Filters and Table - minimal options</title>
+</head>
+<body>
+
+<script src="d3.min.js" charset="utf-8"></script>
+<script src="topojson.min.js"></script>
+<script src="maptable.js"></script>
+<script src="https://www.pch.net/assets/js/vendor/jquery.js?2016-11-01"></script>
+<script src="https://www.pch.net/assets/js/pages/maptable.js"></script>
+
+<div id="vizContainer" class='container'></div>
+
+<script>
+var countKey = 'ctry';
+var ranks = null;
+var viz = d3.maptable('#vizContainer')
+		.json('https://www.pch.net/ixp/dir_data')
+		.map({
+			longitudeKey: 'lon',
+			latitudeKey: 'lat',
+			countryIdentifierKey: 'ctry',
+			countryIdentifierType: 'name',
+			path: 'https://www.pch.net/assets/data/countries.topo.json',
+			watermark: {
+				src: 'https://www.pch.net/assets/img/pch_logo.svg',
+				width: 130,
+				height: 60,
+				position: "bottom left",
+				style: "opacity:0.1"
+			},
+			title: {
+				bgColor: "white",
+				fontSize: "11",
+				content: function(countShown, countTotal, filtersDescription) {
+					if (countShown === 0 || countTotal === 0) out = "No IXPs shown";
+					else if (countShown < countTotal) out = 'Showing <tspan font-weight="bold">' +
+						countShown + '</tspan> IXPs from <tspan font-weight="bold">' +
+						countTotal + "</tspan>";
+					else out = '<tspan font-weight="bold">' + countTotal + "</tspan> IXPs shown";
+					if (filtersDescription !== '') out += " — " + filtersDescription;
+					return out;
+				},
+				source: function() {
+					return 'Source: <a xlink:href="http://www.pch.net/" target="_blank">' +
+						'<tspan font-weight="bold">pch.net</tspan></a>';
+				}
+			},
+			exportSvg: 'https://www.pch.net/svg/export',
+			markers: {
+				groupBy: function(a) {
+					return a.city + ", " + a.ctry;
+				},
+				rollup: function(a) {
+					return a.length;
+				},
+				attr: {
+					r: {
+						min: "minValue",
+						max: "maxValue",
+						transform: function(v) {
+							return 3 * Math.sqrt(v);
+						},
+						rollup: function(values) {
+							return values.length;
+						},
+					},
+					fill: "yellow",
+					stroke: "#d9d9d9",
+					"stroke-width": 0.5
+				},
+				tooltip: function(a) {
+					out = '<div class="arrow"></div>';
+					if (a.values.length > 4){
+						out += '<span class="pull-right"> ' + a.values.length + ' IXPs</span>';
+					}
+					out += '<h3 class="popover-title"> ' +
+						a.values[0].cit + ', ' + a.values[0].ctry + '</h3>';
+					out += '<div class="popover-content">';
+					for (i = 0; i < a.values.length; i++) out += a.values[i].name + "</br>";
+					out += "</div>";
+					return out;
+				},
+			},
+			countries: {
+				attr: { // todo min, max, empty, legend and rollup don't work
+					fill: {
+						min: "#B4C3D1",
+						max: "#043864",
+						empty: "#f9f9f9",
+						transform: function(val, rawValues) {
+							if (ranks == null && rawValues != undefined){
+								ranks = generateRanksFromMultipleRows(rawValues, countKey);
+							}
+							return getPercentile(val, ranks);
+						},
+						rollup: function(a) {
+							return a.length;
+						},
+					},
+					stroke: "#d9d9d9",
+					"stroke-width": 0.5
+				},
+			}
+		})
+		.filters({
+			show: ['reg', 'ctry', 'cit', 'name', 'pch', 'stat'],
+		})
+		.table({
+			show: ['reg', 'ctry', 'cit', 'name', 'prts','traf', 'ipv6', 'prfs', 'date', 'url'],
+			collapseRowsBy: ['reg'],
+			defaultSorting: {
+				key: "ctry"
+			},
+			rowClassName: function(d){
+				var thirtyDays = new Date().getTime() - (30 * 24 * 60 * 60 * 1000);
+				var rowDate = new Date(d.updt).getTime();
+				var recentClass = '';
+				var statusClass = '';
+				if (d.stat != 'Active'){
+					statusClass = 'inactive';
+				}
+				return statusClass + ' ' + recentClass;
+			}
+		})
+		.columns({
+			pch: {
+				title: 'PCH Present',
+				filterMethod: 'dropdown',
+			},
+			ipv6: {
+				title: 'IPv6',
+				filterMethod: 'dropdown',
+				// remove decimals so they sort correct
+				dataParse: function(val){
+					if (val != '' ) {
+						return val * 100;
+					} else {
+						return 0;
+					}
+				},
+			},
+			stat: {
+				title: 'Status',
+				filterMethod: 'dropdown',
+			},
+			cit: {
+				title: 'City',
+				filterMethod: 'dropdown',
+				cellContent: function(d){
+					return d.cit;
+				},
+			},
+			ctry: {
+				title: 'Country',
+				filterMethod: 'dropdown',
+			},
+			name: {
+				title: 'IXP Name',
+			},
+			prts: {
+				title: 'Participants',
+			},
+			traf: {
+				nowrap: true,
+				title: 'Traffic',
+			},
+			reg: {
+				nowrap: true,
+				filterMethod: 'dropdown',
+				title: 'Region',
+				cellContent: function (d){
+					return d.reg +' <span class="active_count">(' + d.regct + ')</span>';
+				}
+			},
+			prfs: {
+				title: 'Prefixes',
+			},
+			updt: {
+				inputType: "date",
+				type: "date",
+				title: 'Last Updated',
+			}
+		})
+		.render();
+</script>
+</body>
+</html>
