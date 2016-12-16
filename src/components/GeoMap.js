@@ -530,16 +530,17 @@ export default class GeoMap {
   }
 
   exportSvg() {
+    if (!saveAs) {
+      throw new Error('MapTable: Missing FileSaver.js library');
+    }
+
     // Get the d3js SVG element
     const svg = document.getElementById('mt-map-svg');
     // Extract the data as SVG text string
     const svgXml = (new XMLSerializer).serializeToString(svg);
 
-    // Submit the <FORM> to the server.
-    // The result will be an attachment file to download.
-    const form = document.getElementById('mt-map-svg-form');
-    form.querySelector('[name="data"]').value = svgXml;
-    form.submit();
+    const blob = new Blob([svgXml], { type: 'image/svg+xml' });
+    saveAs(blob, 'visualization.svg');
   }
 
   addExportSvgCapability() {
@@ -552,10 +553,5 @@ export default class GeoMap {
     exportButton.innerHTML = 'Download';
     exportButton.addEventListener('click', this.exportSvg.bind(this));
     exportNode.appendChild(exportButton);
-
-    const exportForm = document.createElement('div');
-    exportForm.innerHTML = `<form id="mt-map-svg-form" method="post"
-      action="${this.options.exportSvg}"><input type="hidden" name="data"></form>`;
-    exportNode.appendChild(exportForm);
   }
 }
