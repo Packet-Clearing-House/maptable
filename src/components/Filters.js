@@ -190,7 +190,7 @@ export default class Filters {
   }
 
   saveState() {
-    if (this.restoringState) return;
+    if (this.restoringState && this.options.map.saveState) return;
     const exportedCriteria = this.exportCriteria();
     const params = document.location.href.split('!mt-filters=');
     const defaultCriteria = (params[1]) ? params[1].split('!mt')[0] : null;

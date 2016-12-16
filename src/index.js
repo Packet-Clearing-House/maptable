@@ -68,6 +68,8 @@ d3.maptable = function (target) {
       throw new Error('MapTable: Please provide the path for your dataset json|csv|tsv');
     }
 
+    if (!options.filters) options.filters = null;
+
     const customOptions = utils.extendRecursive(defaultOptions, options);
     maptableObject = new MapTable(target, customOptions);
   };

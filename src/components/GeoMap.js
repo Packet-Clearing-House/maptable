@@ -4,7 +4,7 @@ import Watermark from './Watermark';
 // Used the name GeoMap instead of Map to avoid collision with the native Map class of JS
 export default class GeoMap {
   constructor(maptable, options, jsonWorld) {
-    const that = this;
+    const self = this;
     this.maptable = maptable;
     this.scale = 1;
     this.transX = 0;
@@ -41,11 +41,11 @@ export default class GeoMap {
 
     // Add coordinates to rawData
     this.maptable.rawData.forEach(d => {
-      d.longitude = parseFloat(d[that.options.longitudeKey]);
-      d.latitude = parseFloat(d[that.options.latitudeKey]);
+      d.longitude = parseFloat(d[self.options.longitudeKey]);
+      d.latitude = parseFloat(d[self.options.latitudeKey]);
       let coord = [0, 0];
       if (!isNaN(d.longitude) && !isNaN(d.latitude)) {
-        coord = that.projection([d.longitude, d.latitude]);
+        coord = self.projection([d.longitude, d.latitude]);
       }
       d.x = coord[0];
       d.y = coord[1];
@@ -273,6 +273,8 @@ export default class GeoMap {
     if (this.options.markers.tooltip) {
       this.activateTooltip(markerUpdate, this.tooltipMarkersNode, this.options.markers.tooltip);
     }
+
+    this.rescale();
   }
 
   fitContent() {
@@ -374,7 +376,7 @@ export default class GeoMap {
   }
 
   saveState() {
-    if (this.restoringState) return;
+    if (this.restoringState && this.options.map.saveState) return;
     const exportedCriteria = [this.scale, this.transX, this.transY];
     const params = document.location.href.split('!mt-zoom=');
     const defaultZoom = (params[1]) ? params[1].split('!mt')[0] : null;
@@ -387,7 +389,7 @@ export default class GeoMap {
   }
 
   rescale() {
-    const that = this;
+    const self = this;
     if (d3.event && d3.event.translate) {
       this.scale = d3.event.scale;
       this.transX = (this.scale === 1) ? 0 : d3.event.translate[0];
@@ -420,8 +422,8 @@ export default class GeoMap {
       `translate(${this.transX}, ${this.transY})scale(${this.scale})`);
 
     // Hide tooltip
-    that.tooltipCountriesNode.attr('style', 'display:none;');
-    that.tooltipMarkersNode.attr('style', 'display:none;');
+    self.tooltipCountriesNode.attr('style', 'display:none;');
+    self.tooltipMarkersNode.attr('style', 'display:none;');
 
     // Rescale markers size
     if (this.options.markers) {
@@ -429,11 +431,11 @@ export default class GeoMap {
       d3.selectAll('.mt-map-marker').each(function (d) {
         // stroke
         if (d.attr['stroke-width']) {
-          d3.select(this).attr('stroke-width', d.attr['stroke-width'] / that.scaleAttributes());
+          d3.select(this).attr('stroke-width', d.attr['stroke-width'] / self.scaleAttributes());
         }
         // radius
         if (d.attr.r) {
-          d3.select(this).attr('r', d.attr.r / that.scaleAttributes());
+          d3.select(this).attr('r', d.attr.r / self.scaleAttributes());
         }
       });
     }
