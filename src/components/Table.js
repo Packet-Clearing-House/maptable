@@ -60,6 +60,11 @@ export default class Table {
     } else {
       this.render();
     }
+
+    // On complete
+    if (this.options.onComplete.constructor === Function) {
+      this.options.onComplete.bind(this.maptable)();
+    }
   }
 
 

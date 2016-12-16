@@ -103,6 +103,11 @@ export default class GeoMap {
 
     // Let's build things
     this.loadGeometries();
+
+    // On complete
+    if (this.options.onComplete.constructor === Function) {
+      this.options.onComplete.bind(this.maptable)();
+    }
   }
 
   scaleAttributes() {
