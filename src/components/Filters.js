@@ -182,7 +182,7 @@ export default class Filters {
       try {
         this.setCriteria(JSON.parse(defaultCriteria));
       } catch (e) {
-        console.log(`Maptable: Invalid URL State ${e.message}`);
+        console.log(`Maptable: Invalid URL State for mt-filters ${e.message}`);
       }
     }
     this.restoringState = false;

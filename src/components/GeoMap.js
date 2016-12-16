@@ -9,6 +9,7 @@ export default class GeoMap {
     this.scale = 1;
     this.transX = 0;
     this.transY = 0;
+    this.restoringState = false;
 
     this.options = options;
 
@@ -103,6 +104,9 @@ export default class GeoMap {
 
     // Let's build things
     this.loadGeometries();
+
+    // Restore the state
+    this.restoreState();
   }
 
   scaleAttributes() {
@@ -278,7 +282,7 @@ export default class GeoMap {
       this.scale = 1;
       this.zoomListener.translate([this.transX, this.transY])
         .scale(this.scale);
-      return true;
+      return;
     }
     const hor = d3.extent(this.maptable.data, d => d.x);
     const ver = d3.extent(this.maptable.data, d => d.y);
@@ -349,6 +353,39 @@ export default class GeoMap {
     }
   }
 
+  restoreState() {
+    this.restoringState = true;
+    const params = document.location.href.split('!mt-zoom=');
+    const defaultZoomRaw = (params[1]) ? params[1].split('!mt')[0] : null;
+    if (defaultZoomRaw) {
+      try {
+        const defaultZoom = JSON.parse(defaultZoomRaw);
+        if (defaultZoom && defaultZoom.length === 3) {
+          this.zoomListener.scale(defaultZoom[0])
+          .translate([defaultZoom[1], defaultZoom[2]])
+          .event(this.svg);
+        }
+      } catch (e) {
+        console.log(`Maptable: Invalid URL State for mt-zoom ${e.message}`);
+      }
+    }
+    this.restoringState = false;
+    this.saveState();
+  }
+
+  saveState() {
+    if (this.restoringState) return;
+    const exportedCriteria = [this.scale, this.transX, this.transY];
+    const params = document.location.href.split('!mt-zoom=');
+    const defaultZoom = (params[1]) ? params[1].split('!mt')[0] : null;
+    let newUrl = document.location.href.replace(`!mt-zoom=${defaultZoom}`, '');
+    if (this.scale !== 1) {
+      if (newUrl.indexOf('#') === -1) newUrl += '#';
+      newUrl += `!mt-zoom=${JSON.stringify(exportedCriteria)}`;
+    }
+    window.history.pushState(null, null, newUrl);
+  }
+
   rescale() {
     const that = this;
     if (d3.event && d3.event.translate) {
@@ -404,6 +441,12 @@ export default class GeoMap {
     // Rescale Country stroke-width
     d3.selectAll('.mt-map-country').style('stroke-width',
       this.options.countries.attr['stroke-width'] / this.scale);
+
+    // save state
+    window.clearTimeout(this.saveStateTimeout);
+    this.saveStateTimeout = window.setTimeout(() => {
+      this.saveState();
+    }, 500);
   }
 
   setAttrValues(attrKey, attrValue, dataset) {
@@ -411,7 +454,7 @@ export default class GeoMap {
       // Static value
       dataset.forEach(d => {
         d.attr[attrKey] = attrValue;
-    });
+      });
     } else if (typeof (attrValue) === 'object') {
       // Dynamic value
       if (!attrValue.rollup) {
@@ -423,7 +466,7 @@ export default class GeoMap {
 
       dataset.forEach(d => {
         d.rollupValue[attrKey] = attrValue.rollup(d.values);
-    });
+      });
       const scaleDomain = d3.extent(dataset, d => Number(d.rollupValue[attrKey]));
       if (attrValue.transform) {
         scaleDomain[0] = attrValue.transform(scaleDomain[0]);
@@ -443,7 +486,7 @@ export default class GeoMap {
       // check for negative color declarations
       if ((attrValue.maxNegative && !attrValue.minNegative) ||
           (!attrValue.maxNegative && attrValue.minNegative)) {
-        throw new Error(`MapTable: maxNegative or minNegative undefined. Please declare both.`);
+        throw new Error('MapTable: maxNegative or minNegative undefined. Please declare both.');
       }
       const useNegative = (attrValue.maxNegative && attrValue.minNegative);
       let scaleFunction;
@@ -473,7 +516,7 @@ export default class GeoMap {
           const originalValueRaw = d.rollupValue[attrKey];
           const originalValue = (attrValue.transform) ?
               attrValue.transform(originalValueRaw, this.maptable.rawData) : originalValueRaw;
-          if (useNegative && originalValue < 0){
+          if (useNegative && originalValue < 0) {
             scaledValue = scaleNegativeFunction(originalValue);
           } else {
             scaledValue = scaleFunction(originalValue);
