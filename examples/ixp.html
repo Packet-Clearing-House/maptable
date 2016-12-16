@@ -17,7 +17,6 @@
 
 <script>
 var countKey = 'ctry';
-var ranks = null;
 var viz = d3.maptable('#vizContainer')
 		.json('https://www.pch.net/ixp/dir_data')
 		.map({
@@ -92,10 +91,8 @@ var viz = d3.maptable('#vizContainer')
 						min: "#B4C3D1",
 						max: "#043864",
 						empty: "#f9f9f9",
-						transform: function(val, rawValues) {
-							if (ranks == null && rawValues != undefined){
-								ranks = generateRanksFromMultipleRows(rawValues, countKey);
-							}
+						transform: function(val, dataset) {
+							ranks = generateRanksFromMultipleRows(dataset, countKey);
 							return getPercentile(val, ranks);
 						},
 						rollup: function(a) {

@@ -426,8 +426,8 @@ export default class GeoMap {
     });
       const scaleDomain = d3.extent(dataset, d => Number(d.rollupValue[attrKey]));
       if (attrValue.transform) {
-        scaleDomain[0] = attrValue.transform(scaleDomain[0]);
-        scaleDomain[1] = attrValue.transform(scaleDomain[1]);
+        scaleDomain[0] = attrValue.transform(scaleDomain[0], this.maptable.data);
+        scaleDomain[1] = attrValue.transform(scaleDomain[1], this.maptable.data);
       }
 
       let minValue = attrValue.min;
