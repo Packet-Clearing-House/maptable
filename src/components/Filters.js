@@ -168,7 +168,7 @@ export default class Filters {
             }
           }
         } else if (criterion[0] === 'field' || criterion[0] === 'dropdown') {
-          row.querySelector('.mt-filter-value').value = criterion[2];
+          row.querySelector('.mt-filter-value').value = unescape(criterion[2]);
         }
       }
     });
