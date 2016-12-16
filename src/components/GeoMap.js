@@ -1,5 +1,7 @@
 import Legend from './Legend';
 import Watermark from './Watermark';
+import utils from '../utils';
+import StackBlur from './StackBlur';
 
 // Used the name GeoMap instead of Map to avoid collision with the native Map class of JS
 export default class GeoMap {
@@ -151,19 +153,30 @@ export default class GeoMap {
     if (!this.options.heatmap.disableMask) {
       this.maskHeatmap = this.layerHeatmap.append('defs')
         .append('clipPath')
-        .attr('id', 'mt-heatmap-mask');
+        .attr('id', 'mt-map-heatmap-mask');
 
       this.maskHeatmap
           .datum(lands)
           .append('path')
-          .attr('class', 'mt-heatmap-mask-paths')
+          .attr('class', 'mt-map-heatmap-mask-paths')
           .attr('d', this.path);
     }
 
-    this.bandingsHeatmap = this.layerHeatmap.append('g').attr('class', 'mt-heatmap-bandings');
+    this.canvasHeatmap = d3.select(this.node)
+      .append('canvas')
+      .attr('id', 'mt-map-heatmap-canvas')
+      .attr('width', this.getWidth())
+      .attr('height', this.getHeight())
+      .attr('style', 'display: none;');
+
+    this.imgHeatmap = this.layerHeatmap
+      .append('image')
+      .attr('width', '100%')
+      .attr('height', '100%')
+      .attr('class', 'mt-map-heatmap-img');
 
     if (this.options.heatmap.mask) {
-      this.bandingsHeatmap = this.bandingsHeatmap.attr('clip-path', 'url(#mt-heatmap-mask)');
+      this.imgHeatmap = this.imgHeatmap.attr('clip-path', 'url(#mt-map-heatmap-mask)');
     }
 
     if (this.options.heatmap.borders) {
@@ -172,13 +185,13 @@ export default class GeoMap {
 
       this.bordersHeatmap = this.layerHeatmap
           .append('g')
-          .attr('class', 'mt-heatmap-borders');
+          .attr('class', 'mt-map-heatmap-borders');
 
-      this.bordersHeatmap.selectAll('path.mt-heatmap-borders-paths')
+      this.bordersHeatmap.selectAll('path.mt-map-heatmap-borders-paths')
         .data([lands, borders])
         .enter()
         .append('path')
-        .attr('class', 'mt-heatmap-borders-paths')
+        .attr('class', 'mt-map-heatmap-borders-paths')
         .attr('fill', 'transparent')
         .attr('stroke-width', this.options.heatmap.borders.stroke)
         .attr('stroke', this.options.heatmap.borders.color)
@@ -187,35 +200,38 @@ export default class GeoMap {
     }
   }
 
-  updateHeatmap() {
-    // Get opacity scale
-    const maxOpacity = this.options.heatmap.maxOpacity(this.maptable.data.length)
-      / this.maptable.data.length;
-    this.heatmapOpacityScale = d3.scale.linear()
-      .domain([10, this.options.heatmap.maxMagnitude])
-      .range([maxOpacity, 0]);
-
-    this.maptable.data.forEach((point, i) => {
+  getHeatmapData() {
+    const ctx = this.canvasHeatmap.node().getContext('2d');
+    const circles = d3.range(
+      this.options.heatmap.circles.min,
+      this.options.heatmap.circles.max,
+      this.options.heatmap.circles.step
+    );
+    const path = this.path.context(ctx);
+    const color = utils.hexToRgb(this.options.heatmap.circles.color);
+    const magnitudeScale = this.options.heatmap.circles.magnitudeScale.bind(this.maptable)();
+    const datumScale = this.options.heatmap.circles.datumScale ?
+      this.options.heatmap.circles.datumScale.bind(this.maptable)() : () => 1;
+    this.maptable.data.forEach((point) => {
       const coord = [point.longitude, point.latitude];
-      this.bandingsHeatmap.append('g')
-      .attr('id', `mt-heatmap-bandings-${i}`)
-      .selectAll(`#mt-heatmap-bandings-${i} path`)
-      .data(d3.range(10, this.options.heatmap.maxMagnitude, this.options.heatmap.stepMagnitude))
-      .enter()
-      .append('path')
-      .attr('class', '.mt-heatmap-bandings-paths')
-      .attr('d', (r) => {
-        return this.path(d3.geo.circle().origin(coord).angle(r - 0.01)());
-      })
-      .attr('stroke-width', '1')
-      .attr('fill', (r) => {
-        let opacity = this.heatmapOpacityScale(r);
-        if (this.options.heatmap.opacityWeight) {
-          opacity = opacity * this.options.heatmap.opacityWeight(point, this.maptable.data);
-        }
-        return `rgba(${this.options.heatmap.bandingsColorRGB}, ${opacity})`;
+      const scaleOpacityDatum = datumScale(point);
+      circles.forEach(m => {
+        ctx.beginPath();
+        path(d3.geo.circle().origin(coord).angle(m - 0.0001)());
+        const opacity = magnitudeScale(m) * scaleOpacityDatum;
+        ctx.fillStyle = `rgba(${color}, ${opacity})`;
+        ctx.fill();
+        ctx.closePath();
       });
     });
+    StackBlur.canvasRGBA(this.canvasHeatmap.node(), 0, 0, this.getWidth(),
+      this.getHeight(), this.options.heatmap.circles.blur);
+    return this.canvasHeatmap.node().toDataURL();
+  }
+
+  updateHeatmap() {
+    const dataUrl = this.getHeatmapData();
+    this.imgHeatmap.attr('xlink:href', dataUrl).attr('style', 'filter: blur(5px)');
   }
 
   buildCountries() {
@@ -499,7 +515,7 @@ export default class GeoMap {
 
     // Rescale heatmap borders
     if (this.options.heatmap && this.options.heatmap.borders) {
-      d3.selectAll('.mt-heatmap-borders-paths').style('stroke-width',
+      d3.selectAll('.mt-map-heatmap-borders-paths').style('stroke-width',
         this.options.heatmap.borders.stroke / this.scale);
     }
   }

@@ -15,32 +15,63 @@
 
 <script>
     var viz = d3.maptable('#vizContainer')
-            .json('dir_data.json', (d) => {
-              return parseInt(d.traf, 10) > 0;
-            })
+            .json('dir_data.json')
             .map({
               longitudeKey: 'lon',
               latitudeKey: 'lat',
               path: 'ne_110m_admin_0_countries.json',
               filterCountries: (country) => country.id !== 'AQ',
               heatmap: {
-                opacityWeight: (d, dataset) => {
-                  var extents = d3.extent(dataset, d => parseInt(d.traf, 10));
-                  var scale = d3.scale.log()
-                    .domain(extents)
-                    .range([0.2, 1]);
-                  return scale(parseInt(d.traf, 10));
+                mask: false,
+                circles: {
+                  min: 1,
+                  max: 90,
+                  step: 2,
+                  color: '#0000FF',
+                  blur: 4.0,
+                  magnitudeScale: function () {
+                    const maxOpacityScale = d3.scale.linear()
+                      .domain([1, 100])
+                      .range([0.7, 1.05]);
+                    const lengthDataset = this.data.filter(d => parseInt(d.traf, 10) > 0).length;
+                    const centralCircleOpacity = maxOpacityScale(lengthDataset) / lengthDataset;
+
+                    const scale = d3.scale.linear()
+                      .domain([
+                        this.options.map.heatmap.circles.min,
+                        this.options.map.heatmap.circles.max,
+                      ])
+                      .range([centralCircleOpacity, 0]);
+                    return (m) => scale(m);
+                  },
+                  datumScale: function () {
+                    const trafficExtents = d3.extent(this.data, d => parseInt(d.traf, 10));
+                    if (!trafficExtents[0]) trafficExtents[0] = 0.01;
+                    const scale = d3.scale.log()
+                      .domain(trafficExtents)
+                      .range([0.01, 1.0]);
+                    return (d) => scale(parseInt(d.traf, 10));
+                  },
                 },
-                maxOpacity: (count) => 0.006 * count + 0.3060,
-                maxMagnitude: 90,
                 borders: {
                   opacity: 0.2,
                 },
               },
               markers: {
                 attr: {
-                  fill: '#FF0000',
-                  r: '3'
+                  fill: "yellow",
+        					stroke: "#d9d9d9",
+        					"stroke-width": 0.5,
+                  r: {
+          					min: "minValue",
+          					max: "maxValue",
+          					transform: function(v) {
+          						return 3 * Math.sqrt(v);
+          					},
+          					rollup: function(values) {
+          						return values.length;
+          					},
+          				},
                 }
               }
             })

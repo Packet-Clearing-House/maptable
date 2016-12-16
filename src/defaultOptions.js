@@ -21,11 +21,29 @@ export default {
       tooltipClassName: 'mt-map-tooltip popover bottom',
     },
     heatmap: {
-      maxMagnitude: 180,
-      stepMagnitude: 30,
-      bandingsColorRGB: '255, 0, 0',
-      maxOpacity: (count) => 0.00403 * count + 0.3040,
       mask: true,
+      circles: {
+        min: 1,
+        max: 90,
+        step: 2,
+        color: '#FF0000',
+        blur: 4.0,
+        magnitudeScale: function () {
+          const maxOpacityScale = d3.scale.linear()
+            .domain([1, 100])
+            .range([0.7, 1.05]);
+          const lengthDataset = this.data.length;
+          const centralCircleOpacity = maxOpacityScale(lengthDataset) / lengthDataset;
+
+          const scale = d3.scale.linear()
+            .domain([
+              this.options.map.heatmap.circles.min,
+              this.options.map.heatmap.circles.max,
+            ])
+            .range([centralCircleOpacity, 0]);
+          return (m) => scale(m);
+        },
+      },
       borders: {
         stroke: 1,
         opacity: 0.1,

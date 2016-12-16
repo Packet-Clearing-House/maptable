@@ -31,12 +31,18 @@ function rangeToBool(el1, range, el2) {
   return true;
 }
 
+function hexToRgb(hex) {
+  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+  return result ?
+  `${parseInt(result[1], 16)}, ${parseInt(result[2], 16)}, ${parseInt(result[3], 16)}` : null;
+}
+
 function extendRecursive() {
   const dst = {};
   let src;
   let p;
   const args = [].splice.call(arguments, 0);
-  var toString = ({}).toString;
+  const toString = ({}).toString;
 
   while (args.length > 0) {
     src = args.splice(0, 1)[0];
@@ -65,9 +71,10 @@ function sanitizeKey(k) {
 }
 
 export default {
-  rangeToBool: rangeToBool,
-  appendOptions: appendOptions,
-  extendRecursive: extendRecursive,
-  sanitizeKey: sanitizeKey,
-  keyToTile: keyToTile,
+  rangeToBool,
+  appendOptions,
+  extendRecursive,
+  sanitizeKey,
+  keyToTile,
+  hexToRgb,
 };

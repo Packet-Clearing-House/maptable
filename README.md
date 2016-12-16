@@ -453,13 +453,16 @@ countries: {
 },
 
 ```
-- `heatmap:` _(object, default: null)_ Add a heatmap on the map - we use concentrated circles (bandings) on every location in the dataset.
-    - `heatmap.maxMagnitude:` _(integer, default: 180)_ The maximum magnitude in degree of the circles. The unit is in degrees ( minimum 10 and maximum 180).
-    - `heatmap.stepMagnitude:` _(integer, default: 30)_ The magnitude that separates two concentrated circles on the heatmap.
-    - `heatmap.bandingsColorRGB:` _(string, default: "255, 0, 0")_ The color in RGB of the concentrated circles.
-    - `heatmap.maxOpacity:` _(function(count), default: (count) => 0.00403 * count + 0.3040)_ The function that calculate the maximum opacity in the central circle of the bandings per location.
-    - `heatmap.opacityWeight:` _(function(row, dataset), default: null_ A function that outputs a weight that is used as multiplicator for the opacity.
+- `heatmap:` _(object, default: null)_ Add a heatmap on the map - we use concentrated circles on every location in the dataset.
     - `heatmap.mask:` _(bool, default: true)_ Mask the heatmap with countries
+    - `heatmap.circles:` _(object)_ Properties of the circles that makes the heatmap gradient
+    - `heatmap.circles.min:` _(integer, default: 1)_ The min earth magnitude of the circles. The unit is in degrees (minimum 1 and maximum 180).
+    - `heatmap.circles.max:` _(integer, default: 90)_ The maximum earth magnitude of the circles. The unit is in degrees (minimum 1 and maximum 180).
+    - `heatmap.circles.step:` _(integer, default: 2)_ The magnitude that separates two circles on the heatmap.
+    - `heatmap.circles.color:` _(string, default: "#FF0000")_ The color in HEX of the heatmap circles.
+    - `heatmap.circles.blur:` _(float, default: 4.0)_ Blur radius that we apply on the heatmap.
+    - `heatmap.circles.magnitudeScale:` _(function, returns function(magnitude))_ Returns an anonymous function that defines the opacity scale of every circle on the heatmap *based on the magnitude*. You may access the MapTable api using `this` (see example)
+    - `heatmap.circles.datumScale:` _(function, returns function(datum), default: not set)_ Returns an anonymous function that defines the opacity scale of every circle on the heatmap *based on the magnitude*. You may access the MapTable api using `this` (see example)
     - `heatmap.borders:` _(object)_ Enable country borders. Set to `false` to disable it.
     - `heatmap.borders.stroke:` _(integer, default: 1)_ Country border stroke width.
     - `heatmap.borders.opacity:` _(integer, default: 0.1)_ Country border stroke opacity.
@@ -468,17 +471,36 @@ countries: {
 *Example*
 ```js
 heatmap: {
-  maxMagnitude: 180,
-  stepMagnitude: 30,
-  bandingsColorRGB: '255, 0, 0',
-  maxOpacity: (count) => 0.00403 * count + 0.3040,
   mask: true,
-  opacityWeight: (d, dataset) => {
-    var extents = d3.extent(dataset, d => parseInt(d.traffic, 10));
-    var scale = d3.scale.log()
-      .domain(extents)
-      .range([0.2, 1]);
-    return scale(parseInt(d.traffic, 10));
+  circles: {
+    min: 1,
+    max: 90,
+    step: 2,
+    color: '#FF0000',
+    blur: 4.0,
+    magnitudeScale: function () {
+      const maxOpacityScale = d3.scale.linear()
+        .domain([1, 100])
+        .range([0.7, 1.05]);
+      const lengthDataset = this.data.filter(d => parseInt(d.traf, 10) > 0).length;
+      const centralCircleOpacity = maxOpacityScale(lengthDataset) / lengthDataset;
+
+      const scale = d3.scale.linear()
+        .domain([
+          this.options.map.heatmap.circles.min,
+          this.options.map.heatmap.circles.max,
+        ])
+        .range([centralCircleOpacity, 0]);
+      return (m) => scale(m);
+    },
+    datumScale: function () {
+      const trafficExtents = d3.extent(this.data, d => parseInt(d.traf, 10));
+      if (!trafficExtents[0]) trafficExtents[0] = 0.01;
+      const scale = d3.scale.log()
+        .domain(trafficExtents)
+        .range([0.01, 1.0]);
+      return (d) => scale(parseInt(d.traf, 10));
+    },
   },
   borders: {
     stroke: 1,
