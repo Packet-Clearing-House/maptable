@@ -114,7 +114,7 @@ The MapTable `viz` declaration in the above example is a chain of functions. The
 - [viz.map(mapOptions)](#map) with `mapOptions` as a JS dictionary. You can add/remove it of you want a map on your visualization.
 - [viz.filters(filtersOptions)](#filters) with `filtersOptions` as a JS dictionary. You can add/remove it of you want filters on your visualization.
 - [viz.table(tableOptions)](#table) with `tableOptions` as a JS dictionary. You can add/remove it of you want a table on your visualization.
-- [viz.render()](#render) that closes the chain and renders the visualization. Don't forget this!
+- [viz.render([onComplete])](#render) that closes the chain and renders the visualization. Don't forget this! It can take an optional callback function onComplete, that's executed when MapTable finishes rendering its components. For example if you have `function alertTest(){ alert('test!'); }` you would call it with `viz.render(alertTest)`.
 
 
 ### Import datasets
@@ -267,6 +267,7 @@ If you want to attach the data boundaries to the value of an attribute, you may 
 #### Options
 
 - `path:` _(string, **required**)_ URL of the TOPOJSON map, you can get them from Mike Bostock's repo: [world atlas](https://github.com/mbostock/world-atlas) and [us atlas](https://github.com/mbostock/us-atlas). Or use [this tool](https://github.com/melalj/topojson-map-generator) to generate these files as we did on the examples.
+- `onComplete:` _(function, default: null)_ Callback function when the map finished rendering.
 - `width:` _(integer, default:'window.innerWidth')_ Map Width.
 - `height:` _(integer, default:'window.innerHeight')_ Map Height.
 - `zoom:` _(bool, default: true)_ Enable zoom on the map (when scrolling up/down on the map).
@@ -456,6 +457,7 @@ If you want to add a table on your visualization:
 ### Options
 
 - `show:` _([string, ...], default: null)_ Set the order and the columns that we want to see in the table.
+- `onComplete:` _(function, default: null)_ Callback function when the table finished rendering.
 - `className:` _(string, default: 'table table-striped table-bordered')_ Table class name
 - `rowClassName:` _(function(d), default: null)_ Function that returns the row class name depending on its content. Useful to highlight rows.
 - `defaultSorting:` _(object, default: see below)_ How we sort things on the table.
