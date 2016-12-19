@@ -308,7 +308,7 @@ title: {
   - `continent`: Continent name that came from the GeoJSON map file.
 - `longitudeKey:` _(string, default: 'longitude')_ Column name of the longitude (from the dataset).
 - `latitudeKey:` _(string, default: 'latitude')_ Column name of the latitude (from the dataset).
-- `exportSvg:` _(bool, default: false)_ Show button to download the current visualization as SVG. You'll need to import [FileSaver.js](https://github.com/eligrey/FileSaver.js) to make it work
+- `exportSvg:` _(bool, default: false)_ Show button to download the current visualization as SVG. You'll need to  download [FileSaver.js](https://github.com/eligrey/FileSaver.js) and add a `<script src="filesaver.min.js">` to make it work. You may also use the [CDN version](https://cdnjs.com/libraries/FileSaver.js) in your `<script>` source.
 - `watermark:` _(object, default: null)_ Add a watermark within the map.
     - `watermark.src:` _(string)_ URL of the image (svg, png, jpg).
     - `watermark.width:` _(integer)_ Image width.
