@@ -75,7 +75,7 @@ export default class MapTable {
     }
 
     // On complete
-    if (this.options.onComplete.constructor === Function) {
+    if (this.options.onComplete && this.options.onComplete.constructor === Function) {
       this.options.onComplete.bind(this.maptable)();
     }
   }
