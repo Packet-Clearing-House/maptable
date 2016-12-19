@@ -8,8 +8,7 @@
 
   'globals': {
     'd3': true,
-    'topojson': true,
-    'saveAs': true
+    'topojson': true
   },
 
  'rules': {

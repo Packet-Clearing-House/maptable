@@ -530,7 +530,7 @@ export default class GeoMap {
   }
 
   exportSvg() {
-    if (!saveAs) {
+    if (!window.saveAs) {
       throw new Error('MapTable: Missing FileSaver.js library');
     }
 
@@ -540,7 +540,7 @@ export default class GeoMap {
     const svgXml = (new XMLSerializer).serializeToString(svg);
 
     const blob = new Blob([svgXml], { type: 'image/svg+xml' });
-    saveAs(blob, 'visualization.svg');
+    window.saveAs(blob, 'visualization.svg');
   }
 
   addExportSvgCapability() {
