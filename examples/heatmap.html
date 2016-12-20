@@ -20,7 +20,9 @@
               longitudeKey: 'lon',
               latitudeKey: 'lat',
               path: 'ne_110m_admin_0_countries.json',
-              filterCountries: (country) => country.id !== 'AQ',
+              filterCountries: function (country) {
+                  return country.id !== 'AQ';
+              },
               heatmap: {
                 mask: false,
                 circles: {
@@ -30,27 +32,33 @@
                   color: '#0000FF',
                   blur: 4.0,
                   magnitudeScale: function () {
-                    const maxOpacityScale = d3.scale.linear()
+                    var maxOpacityScale = d3.scale.linear()
                       .domain([1, 100])
                       .range([0.7, 1.05]);
-                    const lengthDataset = this.data.filter(d => parseInt(d.traf, 10) > 0).length;
-                    const centralCircleOpacity = maxOpacityScale(lengthDataset) / lengthDataset;
+                    var lengthDataset = this.data.filter(function(d) {
+                        return parseInt(d.traf, 10) > 0;
+                    }).length;
+                    var centralCircleOpacity = maxOpacityScale(lengthDataset) / lengthDataset;
 
-                    const scale = d3.scale.linear()
+                    var scale = d3.scale.linear()
                       .domain([
                         this.options.map.heatmap.circles.min,
                         this.options.map.heatmap.circles.max,
                       ])
                       .range([centralCircleOpacity, 0]);
-                    return (m) => scale(m);
+                    return function (m) { return scale(m) };
                   },
                   datumScale: function () {
-                    const trafficExtents = d3.extent(this.data, d => parseInt(d.traf, 10));
+                    var trafficExtents = d3.extent(this.data, function(d) {
+                      return parseInt(d.traf, 10);
+                    });
                     if (!trafficExtents[0]) trafficExtents[0] = 0.01;
-                    const scale = d3.scale.log()
+                    var scale = d3.scale.log()
                       .domain(trafficExtents)
                       .range([0.01, 1.0]);
-                    return (d) => scale(parseInt(d.traf, 10));
+                    return function (d) {
+                      return scale(parseInt(d.traf, 10));
+                    };
                   },
                 },
                 borders: {

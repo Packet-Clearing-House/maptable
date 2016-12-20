@@ -41,12 +41,16 @@ export default class MapTable {
       // Map wrapper
       const mapWrapper = document.createElement('div');
       mapWrapper.setAttribute('class', 'mt-map-container');
+      mapWrapper.innerHTML = '<div class="mt-loading">Loading...</div>';
       this.node.insertBefore(mapWrapper, this.node.firstChild);
+      mapWrapper.querySelector('.mt-loading').style.display = 'block';
       d3.json(this.options.map.path, (errGeoMap, jsonWorld) => {
         if (errGeoMap) {
           throw errGeoMap;
         }
         this.map = new GeoMap(this, this.options.map, jsonWorld);
+
+        mapWrapper.querySelector('.mt-loading').style.display = 'none';
 
         this.buildComponenents();
       });
