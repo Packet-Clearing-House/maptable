@@ -5,11 +5,7 @@ export default class Filters {
     this.maptable = maptable;
     this.options = options;
     this.criteria = [];
-    /**
-     *
-     * @type {boolean}
-     */
-    this.restoringState = false;
+    this.restoringState = false; // a flag to check if we are restoring the state or not
 
     if (this.options.show) {
       const arrayDiff = this.options.show.filter(i => {
@@ -75,8 +71,8 @@ export default class Filters {
   }
 
   /**
-   *
-   * @param evt
+   * Add a filter
+   * @param evt: Window Event Object
    */
   add(evt) {
     if (evt) evt.preventDefault();
@@ -112,7 +108,7 @@ export default class Filters {
   }
 
   /**
-   *
+   * Reset filters
    */
   reset() {
     const rowNodes = document.querySelectorAll('[data-mt-filter-name]');
@@ -124,10 +120,10 @@ export default class Filters {
   }
 
   /**
-   *
-   * @returns {{}}
+   * Export the current filters to an object
+   * @returns exportedFilters: Object - key => value that contain data about the current filters
    */
-  exportCriteria() {
+  exportFilters() {
     const output = {};
     const filtersChildren = document.querySelector('#mt-filters-elements').childNodes;
 
@@ -166,10 +162,10 @@ export default class Filters {
   }
 
   /**
-   *
-   * @param criteria
+   * Set the value for the current filters
+   * @param criteria - Object - same format as the exportedFilters
    */
-  setCriteria(criteria) {
+  setFilters(criteria) {
     this.reset();
     Object.keys(criteria).forEach(filterName => {
       this.add();
@@ -196,7 +192,7 @@ export default class Filters {
   }
 
   /**
-   *
+   * Restore state from the URL hash
    */
   restoreState() {
     this.restoringState = true;
@@ -204,7 +200,7 @@ export default class Filters {
     const defaultCriteria = (params[1]) ? params[1].split('!mt')[0] : null;
     if (defaultCriteria) {
       try {
-        this.setCriteria(JSON.parse(decodeURIComponent(defaultCriteria)));
+        this.setFilters(JSON.parse(decodeURIComponent(defaultCriteria)));
       } catch (e) {
         console.log(`Maptable: Invalid URL State for mt-filters ${e.message}`);
       }
@@ -213,24 +209,24 @@ export default class Filters {
   }
 
   /**
-   *
+   * Save teh state into the URL hash
    */
   saveState() {
     if (this.restoringState && this.options.filters.saveState) return;
-    const exportedCriteria = this.exportCriteria();
+    const exportedFilters = this.exportFilters();
     const params = document.location.href.split('!mt-filters=');
     const defaultCriteria = (params[1]) ? params[1].split('!mt')[0] : null;
     let newUrl = document.location.href.replace(`!mt-filters=${defaultCriteria}`, '');
-    if (Object.keys(exportedCriteria).length) {
+    if (Object.keys(exportedFilters).length) {
       if (newUrl.indexOf('#') === -1) newUrl += '#';
-      newUrl += `!mt-filters=${encodeURIComponent(JSON.stringify(exportedCriteria))}`;
+      newUrl += `!mt-filters=${encodeURIComponent(JSON.stringify(exportedFilters))}`;
     }
     window.history.pushState(null, null, newUrl);
   }
 
   /**
-   * 
-   * @returns {string}
+   *  Get a human readable description of the filters (used for the title)
+   * @returns {string} Human readable description
    */
   getDescription() {
     const outputArray = [];
