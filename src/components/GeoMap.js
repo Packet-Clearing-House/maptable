@@ -4,10 +4,10 @@ import Watermark from './Watermark';
 // Used the name GeoMap instead of Map to avoid collision with the native Map class of JS
 export default class GeoMap {
   /**
-   *
-   * @param maptable
-   * @param options
-   * @param jsonWorld
+   * Geo Mapping class constructor that will initiate the map drawing
+   * @param maptable: Maptable main Object
+   * @param options: options communicated to map
+   * @param jsonWorld: Object that contain TopoJSON dataset
    */
   constructor(maptable, options, jsonWorld) {
     const self = this;
@@ -364,45 +364,33 @@ export default class GeoMap {
   }
 
   /**
-   *
-   * @param s
-   * @param t
-   * @returns {{translate: *[], scale: *}}
+   * We encode a transaltion to be independent from the dimensions of the visualization
+   * @param originalTranslation: Array - original translation value (from screen)
+   * @returns encodedTranslation: Array - encoded translation
    */
-  adaptToEncoded(s, t) {
-    const newTx = t[0] / (s * this.getWidth());
+  encodeTranslation(originalTranslation) {
+    const newTx = originalTranslation[0] / (this.scale * this.getWidth());
 
-    const newTy = t[1] / (s * this.getHeight());
+    const newTy = originalTranslation[1] / (this.scale * this.getHeight());
 
-    const newS = s;
-
-    return {
-      translate: [newTx, newTy],
-      scale: newS,
-    };
+    return [newTx, newTy];
   }
 
   /**
-   *
-   * @param s
-   * @param t
-   * @returns {{translate: *[], scale: *}}
+   * We decode a translation to adapt it to the dimensions of the visualization
+   * @param encodedTranslation: Array - encoded translation
+   * @returns originalTranslation: Array - original translation value (from screen)
    */
-  adaptToScreen(s, t) {
-    const newTx = t[0] * this.getWidth() * s;
+  decodeTranslation(encodedTranslation) {
+    const newTx = encodedTranslation[0] * this.getWidth() * this.scale;
 
-    const newTy = t[1] * this.getHeight() * s;
+    const newTy = encodedTranslation[1] * this.getHeight() * this.scale;
 
-    const newS = s;
-
-    return {
-      translate: [newTx, newTy],
-      scale: newS,
-    };
+    return [newTx, newTy];
   }
 
   /**
-   *
+   * Restore state from the url hash
    */
   restoreState() {
     this.restoringState = true;
@@ -412,11 +400,12 @@ export default class GeoMap {
       try {
         const defaultZoom = JSON.parse(decodeURIComponent(defaultZoomRaw));
         if (defaultZoom && defaultZoom.length === 3) {
-          const encodedZoom = this.adaptToScreen(defaultZoom[0], [defaultZoom[1], defaultZoom[2]]);
-          this.scale = encodedZoom.scale;
-          this.translate = encodedZoom.translate;
-          this.zoomListener.scale(encodedZoom.scale)
-          .translate(encodedZoom.translate)
+          this.scale = defaultZoom[0];
+          const originalTranslation = this.decodeTranslation([defaultZoom[1], defaultZoom[2]]);
+          this.transX = originalTranslation[0];
+          this.transY = originalTranslation[1];
+          this.zoomListener.scale(defaultZoom[0])
+          .translate(originalTranslation)
           .event(this.svg);
         }
       } catch (e) {
@@ -427,13 +416,13 @@ export default class GeoMap {
   }
 
   /**
-   *
+   * Save state into the url hash
    */
   saveState() {
     if (this.restoringState && this.options.map.saveState) return;
-    const encodedZoom = this.adaptToEncoded(this.scale, [this.transX, this.transY]);
-    const exportedCriteria = [encodedZoom.scale, encodedZoom.translate[0],
-      encodedZoom.translate[1]];
+    const encodedTranslation = this.encodeTranslation([this.transX, this.transY]);
+    const exportedCriteria = [this.scale, encodedTranslation[0],
+      encodedTranslation[1]];
     const params = document.location.href.split('!mt-zoom=');
     const defaultZoom = (params[1]) ? params[1].split('!mt')[0] : null;
     let newUrl = document.location.href.replace(`!mt-zoom=${defaultZoom}`, '');
