@@ -105,11 +105,6 @@ export default class GeoMap {
     // Let's build things
     this.loadGeometries();
 
-    // Restore the state
-    this.restoreState();
-    window.addEventListener('hashchange', () => {
-      this.restoreState();
-    });
     // On complete
     if (this.options.onComplete && this.options.onComplete.constructor === Function) {
       this.options.onComplete.bind(this.maptable)();

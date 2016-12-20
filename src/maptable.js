@@ -57,7 +57,19 @@ export default class MapTable {
       this.table = new Table(this, this.options.table);
     }
 
+    // Render
     this.render();
+
+    // Restore state
+    this.restoreState();
+    window.addEventListener('hashchange', () => {
+      this.restoreState();
+    });
+  }
+
+  restoreState() {
+    if (this.filters) this.filters.restoreState();
+    if (this.map) this.map.restoreState();
   }
 
   render() {
