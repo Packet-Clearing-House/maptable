@@ -69,7 +69,11 @@ export default class Filters {
 
     this.node.appendChild(filtersBodyNode);
 
+    // Restore state
     this.restoreState();
+    window.addEventListener('hashchange', () => {
+      this.restoreState();
+    });
   }
 
   add(evt) {
@@ -106,10 +110,12 @@ export default class Filters {
   }
 
   reset() {
+    const rowNodes = document.querySelectorAll('[data-mt-filter-name]');
+    for (let i = 0; i < rowNodes.length; i++) {
+      rowNodes[i].parentNode.removeChild(rowNodes[i]);
+    }
     this.criteria = [];
-    this.container.innerHTML = '';
-    this.refresh();
-    this.maptable.map.reset();
+    this.maptable.render();
   }
 
   exportCriteria() {
@@ -151,6 +157,7 @@ export default class Filters {
   }
 
   setCriteria(criteria) {
+    this.reset();
     Object.keys(criteria).forEach(filterName => {
       this.add();
       const criterion = criteria[filterName];
@@ -172,6 +179,7 @@ export default class Filters {
         }
       }
     });
+    this.maptable.render();
   }
 
   restoreState() {
@@ -186,11 +194,10 @@ export default class Filters {
       }
     }
     this.restoringState = false;
-    this.saveState();
   }
 
   saveState() {
-    if (this.restoringState && this.options.map.saveState) return;
+    if (this.restoringState && this.options.filters.saveState) return;
     const exportedCriteria = this.exportCriteria();
     const params = document.location.href.split('!mt-filters=');
     const defaultCriteria = (params[1]) ? params[1].split('!mt')[0] : null;
@@ -449,7 +456,11 @@ export default class Filters {
       }
       return matched;
     });
-    this.saveState();
+    // save state
+    window.clearTimeout(this.saveStateTimeout);
+    this.saveStateTimeout = window.setTimeout(() => {
+      this.saveState();
+    }, 200);
   }
 
   refresh() {

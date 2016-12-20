@@ -107,6 +107,9 @@ export default class GeoMap {
 
     // Restore the state
     this.restoreState();
+    window.addEventListener('hashchange', () => {
+      this.restoreState();
+    });
   }
 
   scaleAttributes() {
@@ -401,7 +404,6 @@ export default class GeoMap {
       }
     }
     this.restoringState = false;
-    this.saveState();
   }
 
   saveState() {
