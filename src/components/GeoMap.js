@@ -110,6 +110,10 @@ export default class GeoMap {
     window.addEventListener('hashchange', () => {
       this.restoreState();
     });
+    // On complete
+    if (this.options.onComplete && this.options.onComplete.constructor === Function) {
+      this.options.onComplete.bind(this.maptable)();
+    }
   }
 
   scaleAttributes() {
@@ -504,8 +508,8 @@ export default class GeoMap {
       });
       const scaleDomain = d3.extent(dataset, d => Number(d.rollupValue[attrKey]));
       if (attrValue.transform) {
-        scaleDomain[0] = attrValue.transform(scaleDomain[0]);
-        scaleDomain[1] = attrValue.transform(scaleDomain[1]);
+        scaleDomain[0] = attrValue.transform(scaleDomain[0], this.maptable.data);
+        scaleDomain[1] = attrValue.transform(scaleDomain[1], this.maptable.data);
       }
 
       let minValue = attrValue.min;
@@ -550,7 +554,7 @@ export default class GeoMap {
         } else {
           const originalValueRaw = d.rollupValue[attrKey];
           const originalValue = (attrValue.transform) ?
-              attrValue.transform(originalValueRaw, this.maptable.rawData) : originalValueRaw;
+              attrValue.transform(originalValueRaw, this.maptable.data) : originalValueRaw;
           if (useNegative && originalValue < 0) {
             scaledValue = scaleNegativeFunction(originalValue);
           } else {

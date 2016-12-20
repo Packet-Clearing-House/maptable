@@ -38,7 +38,9 @@ export default class Table {
       .enter()
       .append('tr')
       .selectAll('th')
-      .data(this.activeColumns.map(k => utils.extendRecursive({ key: k }, this.maptable.columnDetails[k])))
+      .data(this.activeColumns.map(k => {
+        return utils.extendRecursive({ key: k }, this.maptable.columnDetails[k]);
+      }))
       .enter()
       .append('th')
       .attr('class', d => {
@@ -46,7 +48,9 @@ export default class Table {
         output += (d.nowrap) ? ' nowrap' : '';
         return output;
       })
-      .attr('style', d => (d.nowrap) ? 'white-space:nowrap;' : '')
+      .attr('style', d => {
+        return (d.nowrap) ? 'white-space:nowrap;' : '';
+      })
       .text(d => d.title)
       .attr('id', d => `column_header_${utils.sanitizeKey(d.key)}`)
       .on('click', d => {
@@ -59,6 +63,11 @@ export default class Table {
       this.sortColumn(this.options.defaultSorting.key, this.options.defaultSorting.mode);
     } else {
       this.render();
+    }
+
+    // On complete
+    if (this.options.onComplete && this.options.onComplete.constructor === Function) {
+      this.options.onComplete.bind(this.maptable)();
     }
   }
 
@@ -144,7 +153,7 @@ export default class Table {
     });
   }
 
-  sortColumn(columnKey, columnMode) {
+  sortColumn(columnKey) {
     this.currentSorting.key = columnKey;
     if (columnKey === this.currentSorting.key) {
       this.currentSorting.mode = (this.currentSorting.mode === 'asc') ? 'desc' : 'asc';
