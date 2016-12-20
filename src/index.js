@@ -71,6 +71,8 @@ d3.maptable = function (target) {
       throw new Error('MapTable: Please provide the path for your dataset json|csv|tsv');
     }
 
+    if (!options.map || !options.map.heatmap) options.map.heatmap = null;
+
     options.onComplete = onComplete;
 
     const customOptions = utils.extendRecursive(defaultOptions, options);
