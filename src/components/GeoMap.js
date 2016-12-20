@@ -95,7 +95,7 @@ export default class GeoMap {
     }
 
     // Add Export SVG Capability
-    if (this.options.exportSvg) {
+    if (this.options.exportSvgClient || this.options.exportSvg) {
       this.addExportSvgCapability();
     }
 
@@ -110,6 +110,11 @@ export default class GeoMap {
 
     // Let's build things
     this.loadGeometries();
+
+    // On complete
+    if (this.options.onComplete && this.options.onComplete.constructor === Function) {
+      this.options.onComplete.bind(this.maptable)();
+    }
   }
 
   scaleAttributes() {
@@ -384,7 +389,7 @@ export default class GeoMap {
       this.scale = 1;
       this.zoomListener.translate([this.transX, this.transY])
         .scale(this.scale);
-      return true;
+      return;
     }
     const hor = d3.extent(this.maptable.data, d => d.x);
     const ver = d3.extent(this.maptable.data, d => d.y);
@@ -537,11 +542,11 @@ export default class GeoMap {
 
       dataset.forEach(d => {
         d.rollupValue[attrKey] = attrValue.rollup(d.values);
-    });
+      });
       const scaleDomain = d3.extent(dataset, d => Number(d.rollupValue[attrKey]));
       if (attrValue.transform) {
-        scaleDomain[0] = attrValue.transform(scaleDomain[0]);
-        scaleDomain[1] = attrValue.transform(scaleDomain[1]);
+        scaleDomain[0] = attrValue.transform(scaleDomain[0], this.maptable.data);
+        scaleDomain[1] = attrValue.transform(scaleDomain[1], this.maptable.data);
       }
 
       let minValue = attrValue.min;
@@ -557,7 +562,7 @@ export default class GeoMap {
       // check for negative color declarations
       if ((attrValue.maxNegative && !attrValue.minNegative) ||
           (!attrValue.maxNegative && attrValue.minNegative)) {
-        throw new Error(`MapTable: maxNegative or minNegative undefined. Please declare both.`);
+        throw new Error('MapTable: maxNegative or minNegative undefined. Please declare both.');
       }
       const useNegative = (attrValue.maxNegative && attrValue.minNegative);
       let scaleFunction;
@@ -586,8 +591,8 @@ export default class GeoMap {
         } else {
           const originalValueRaw = d.rollupValue[attrKey];
           const originalValue = (attrValue.transform) ?
-              attrValue.transform(originalValueRaw, this.maptable.rawData) : originalValueRaw;
-          if (useNegative && originalValue < 0){
+              attrValue.transform(originalValueRaw, this.maptable.data) : originalValueRaw;
+          if (useNegative && originalValue < 0) {
             scaledValue = scaleNegativeFunction(originalValue);
           } else {
             scaledValue = scaleFunction(originalValue);
@@ -650,11 +655,17 @@ export default class GeoMap {
     // Extract the data as SVG text string
     const svgXml = (new XMLSerializer).serializeToString(svg);
 
-    // Submit the <FORM> to the server.
-    // The result will be an attachment file to download.
-    const form = document.getElementById('mt-map-svg-form');
-    form.querySelector('[name="data"]').value = svgXml;
-    form.submit();
+    if (this.options.exportSvgClient) {
+      if (!window.saveAs) {
+        throw new Error('MapTable: Missing FileSaver.js library');
+      }
+      const blob = new Blob([svgXml], { type: 'image/svg+xml' });
+      window.saveAs(blob, 'visualization.svg');
+    } else if (this.options.exportSvg) {
+      const form = document.getElementById('mt-map-svg-form');
+      form.querySelector('[name="data"]').value = svgXml;
+      form.submit();
+    }
   }
 
   addExportSvgCapability() {
@@ -668,9 +679,11 @@ export default class GeoMap {
     exportButton.addEventListener('click', this.exportSvg.bind(this));
     exportNode.appendChild(exportButton);
 
-    const exportForm = document.createElement('div');
-    exportForm.innerHTML = `<form id="mt-map-svg-form" method="post"
-      action="${this.options.exportSvg}"><input type="hidden" name="data"></form>`;
-    exportNode.appendChild(exportForm);
+    if (this.options.exportSvg) {
+      const exportForm = document.createElement('div');
+      exportForm.innerHTML = `<form id="mt-map-svg-form" method="post"
+  action="${this.options.exportSvg}"><input type="hidden" name="data"></form>`;
+      exportNode.appendChild(exportForm);
+    }
   }
 }

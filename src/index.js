@@ -62,7 +62,7 @@ d3.maptable = function (target) {
     return maptable;
   };
 
-  maptable.render = function () {
+  maptable.render = function (onComplete) {
     if (typeof(target) !== 'string' || !document.querySelector(target)) {
       throw new Error('MapTable: target not found');
     }
@@ -70,6 +70,8 @@ d3.maptable = function (target) {
     if (!options.data || !options.data.path) {
       throw new Error('MapTable: Please provide the path for your dataset json|csv|tsv');
     }
+
+    options.onComplete = onComplete;
 
     const customOptions = utils.extendRecursive(defaultOptions, options);
     maptableObject = new MapTable(target, customOptions);

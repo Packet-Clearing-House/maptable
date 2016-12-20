@@ -37,7 +37,7 @@ You can also browse other code samples and **examples** here:
 * [Table](#table)
   *	[Options](#options-2)
 * [Export as SVG](#export-as-svg)
-  *	[Credits](#credits)
+*	[Credits](#credits)
 * [Contribute](#contribute)
   * 	[Set up your development environment](#set-up-your-development-environment)
     * 		[Requirements](#requirements)
@@ -114,7 +114,7 @@ The MapTable `viz` declaration in the above example is a chain of functions. The
 - [viz.map(mapOptions)](#map) with `mapOptions` as a JS dictionary. You can add/remove it of you want a map on your visualization.
 - [viz.filters(filtersOptions)](#filters) with `filtersOptions` as a JS dictionary. You can add/remove it of you want filters on your visualization.
 - [viz.table(tableOptions)](#table) with `tableOptions` as a JS dictionary. You can add/remove it of you want a table on your visualization.
-- [viz.render()](#render) that closes the chain and renders the visualization. Don't forget this!
+- [viz.render([onComplete])](#render) that closes the chain and renders the visualization. Don't forget this! It can take an optional callback function onComplete, that's executed when MapTable finishes rendering its components. For example if you have `function alertTest(){ alert('test!'); }` you would call it with `viz.render(alertTest)`.
 
 *Example with preFilter*
 ```js
@@ -274,6 +274,7 @@ If you want to attach the data boundaries to the value of an attribute, you may 
 #### Options
 
 - `path:` _(string, **required**)_ URL of the TOPOJSON map, you can get them from Mike Bostock's repo: [world atlas](https://github.com/mbostock/world-atlas) and [us atlas](https://github.com/mbostock/us-atlas). Or use [this tool](https://github.com/melalj/topojson-map-generator) to generate these files as we did on the examples.
+- `onComplete:` _(function, default: null)_ Callback function when the map finished rendering.
 - `width:` _(integer, default:'window.innerWidth')_ Map Width.
 - `height:` _(integer, default:'window.innerHeight')_ Map Height.
 - `zoom:` _(bool, default: true)_ Enable zoom on the map (when scrolling up/down on the map).
@@ -324,6 +325,7 @@ title: {
 - `longitudeKey:` _(string, default: 'longitude')_ Column name of the longitude (from the dataset).
 - `latitudeKey:` _(string, default: 'latitude')_ Column name of the latitude (from the dataset).
 - `exportSvg:` _(string, default: null)_ URL endpoint to download the current visualization as SVG. Read more on the section export SVG. (more details on a the section "Export as SVG")
+- `exportSvgClient:` _(bool, default: false)_ Show button to download the current visualization as SVG using only the client browser instead of querying the backend (in the opposite of `exportSvg`). You'll need to download [FileSaver.js](https://github.com/eligrey/FileSaver.js) and add a `<script src="filesaver.min.js">` to make it work. You may also use the [CDN version](https://cdnjs.com/libraries/FileSaver.js) in your `<script>` source.
 - `watermark:` _(object, default: null)_ Add a watermark within the map.
     - `watermark.src:` _(string)_ URL of the image (svg, png, jpg).
     - `watermark.width:` _(integer)_ Image width.
@@ -527,6 +529,7 @@ If you want to add a table on your visualization:
 ### Options
 
 - `show:` _([string, ...], default: null)_ Set the order and the columns that we want to see in the table.
+- `onComplete:` _(function, default: null)_ Callback function when the table finished rendering.
 - `className:` _(string, default: 'table table-striped table-bordered')_ Table class name
 - `rowClassName:` _(function(d), default: null)_ Function that returns the row class name depending on its content. Useful to highlight rows.
 - `defaultSorting:` _(object, default: see below)_ How we sort things on the table.
@@ -534,11 +537,12 @@ If you want to add a table on your visualization:
     - `defaultSorting.mode:` _(string, default: 'asc')_ sorting mode: `asc` for ascending, `desc` for descending.
 - `collapseRowsBy:` _([string, ...], default: null)_ Array of columns that we want to be collapsed.
 
-## Export as SVG
-
+## Export as SVG		
 You can enable this feature to allow users download the map on their computer as SVG. However, you would need to set up a server endpoint that is going to allow users download the SVG file.
 
 The sample code for a PHP server is located in `/server/exportSvg.php`. Contributions are welcomed for implementations of in other languages.
+
+We introduced into the version 1.4, the option `exportSvgClient` to use only the customer browser to export the SVG.
 
 ## Credits
 

@@ -47,10 +47,15 @@ export default class MapTable {
           throw errGeoMap;
         }
         this.map = new GeoMap(this, this.options.map, jsonWorld);
-        this.render();
-      });
-    }
 
+        this.buildComponenents();
+      });
+    } else {
+      this.buildComponenents();
+    }
+  }
+
+  buildComponenents() {
     // Filters
     if (this.options.filters) {
       this.filters = new Filters(this, this.options.filters);
@@ -60,6 +65,8 @@ export default class MapTable {
     if (this.options.table) {
       this.table = new Table(this, this.options.table);
     }
+
+    this.render();
   }
 
   render() {
@@ -74,6 +81,11 @@ export default class MapTable {
 
     if (this.table) {
       this.table.render();
+    }
+
+    // On complete
+    if (this.options.onComplete && this.options.onComplete.constructor === Function) {
+      this.options.onComplete.bind(this.maptable)();
     }
   }
 
