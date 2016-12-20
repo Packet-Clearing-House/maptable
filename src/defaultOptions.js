@@ -27,7 +27,7 @@ export default {
       circles: {
         min: 1,
         max: 90,
-        step: 2,
+        step: 4,
         color: '#FF0000',
         blur: 4.0,
         magnitudeScale: function () {

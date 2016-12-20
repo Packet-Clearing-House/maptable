@@ -28,16 +28,18 @@
                 circles: {
                   min: 1,
                   max: 90,
-                  step: 2,
+                  step: 4,
                   color: '#0000FF',
-                  blur: 4.0,
+                  blur: 6.0,
                   magnitudeScale: function () {
-                    var maxOpacityScale = d3.scale.linear()
-                      .domain([1, 100])
-                      .range([0.7, 1.05]);
+                    var opts = this.options.map.heatmap;
                     var lengthDataset = this.data.filter(function(d) {
                         return parseInt(d.traf, 10) > 0;
                     }).length;
+                    var layersPerLocation = (opts.circles.max - opts.circles.min) / opts.circles.step;
+                    var maxOpacityScale = d3.scale.linear()
+                      .domain([1, lengthDataset * layersPerLocation])
+                      .range([1, 1/256]);
                     var centralCircleOpacity = maxOpacityScale(lengthDataset) / lengthDataset;
 
                     var scale = d3.scale.linear()

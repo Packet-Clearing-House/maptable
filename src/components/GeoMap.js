@@ -1,6 +1,5 @@
 import Legend from './Legend';
 import Watermark from './Watermark';
-import utils from '../utils';
 import StackBlur from './StackBlur';
 
 // Used the name GeoMap instead of Map to avoid collision with the native Map class of JS
@@ -207,13 +206,13 @@ export default class GeoMap {
 
   getHeatmapData() {
     const ctx = this.canvasHeatmap.node().getContext('2d');
+    ctx.globalCompositeOperation = 'multiply';
     const circles = d3.range(
       this.options.heatmap.circles.min,
       this.options.heatmap.circles.max,
       this.options.heatmap.circles.step
     );
     const path = this.path.context(ctx);
-    const color = utils.hexToRgb(this.options.heatmap.circles.color);
     const magnitudeScale = this.options.heatmap.circles.magnitudeScale.bind(this.maptable)();
     const datumScale = this.options.heatmap.circles.datumScale ?
       this.options.heatmap.circles.datumScale.bind(this.maptable)() : () => 1;
@@ -221,12 +220,17 @@ export default class GeoMap {
       const coord = [point.longitude, point.latitude];
       const scaleOpacityDatum = datumScale(point);
       circles.forEach(m => {
-        ctx.beginPath();
-        path(d3.geo.circle().origin(coord).angle(m - 0.0001)());
         const opacity = magnitudeScale(m) * scaleOpacityDatum;
-        ctx.fillStyle = `rgba(${color}, ${opacity})`;
-        ctx.fill();
-        ctx.closePath();
+        const scale = d3.scale.linear()
+          .domain([1, 0])
+          .range([this.options.heatmap.circles.color, '#FFFFFF']);
+        if (opacity && !isNaN(opacity)) {
+          ctx.beginPath();
+          path(d3.geo.circle().origin(coord).angle(m - 0.0001)());
+          ctx.fillStyle = scale(opacity);
+          ctx.fill();
+          ctx.closePath();
+        }
       });
     });
     StackBlur.canvasRGBA(this.canvasHeatmap.node(), 0, 0, this.getWidth(),
