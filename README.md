@@ -456,6 +456,8 @@ countries: {
 
 ```
 - `heatmap:` _(object, default: null)_ Add a heatmap on the map - we use concentrated circles on every location in the dataset.
+    - `heatmap.weightByAttribute:` _(function(d), default: null)_ Which attribute we would weight the gradient. it takes a anonymous function that exposes `d` as one row, and expect a float as returned value.
+    - `heatmap.weightByAttributeScale:` _('log' or 'linear', default: 'linear')_ Which scale we would use for the weight (only if `weightByAttribute` is set).
     - `heatmap.mask:` _(bool, default: true)_ Mask the heatmap with countries
     - `heatmap.circles:` _(object)_ Properties of the circles that makes the heatmap gradient
     - `heatmap.circles.min:` _(integer, default: 1)_ The min earth magnitude of the circles. The unit is in degrees (minimum 1 and maximum 180).
@@ -463,8 +465,6 @@ countries: {
     - `heatmap.circles.step:` _(integer, default: 2)_ The magnitude that separates two circles on the heatmap.
     - `heatmap.circles.color:` _(string, default: "#FF0000")_ The color in HEX of the heatmap circles.
     - `heatmap.circles.blur:` _(float, default: 4.0)_ Blur radius that we apply on the heatmap.
-    - `heatmap.circles.magnitudeScale:` _(function, returns function(magnitude))_ Returns an anonymous function that defines the opacity scale of every circle on the heatmap *based on the magnitude*. You may access the MapTable api using `this` (see example)
-    - `heatmap.circles.datumScale:` _(function, returns function(datum), default: not set)_ Returns an anonymous function that defines the opacity scale of every circle on the heatmap *based on the magnitude*. You may access the MapTable api using `this` (see example)
     - `heatmap.borders:` _(object)_ Enable country borders. Set to `false` to disable it.
     - `heatmap.borders.stroke:` _(integer, default: 1)_ Country border stroke width.
     - `heatmap.borders.opacity:` _(integer, default: 0.1)_ Country border stroke opacity.

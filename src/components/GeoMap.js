@@ -147,8 +147,6 @@ export default class GeoMap {
 
     // Build heatmap
     if (this.options.heatmap) this.buildHeatmap();
-
-    this.render();
   }
 
   buildHeatmap() {
@@ -204,6 +202,39 @@ export default class GeoMap {
     }
   }
 
+  getMagnitudeScale(heatmapDataset) {
+    const opts = this.options.heatmap;
+    const lengthDataset = heatmapDataset.length;
+    if (!lengthDataset) return () => 0;
+    const layersPerLocation = (opts.circles.max - opts.circles.min) / opts.circles.step;
+    const maxOpacityScale = d3.scale.linear()
+      .domain([1, lengthDataset * layersPerLocation])
+      .range([1, 1 / 256]);
+    const centralCircleOpacity = maxOpacityScale(lengthDataset) / lengthDataset;
+
+    const scale = d3.scale.linear()
+      .domain([opts.circles.min, opts.circles.max])
+      .range([centralCircleOpacity, 0]);
+    return (m) => scale(m);
+  }
+
+  getDatumScale() {
+    if (!this.options.heatmap.weightByAttribute) return () => 1;
+    const dataExtents = d3.extent(this.maptable.data, this.options.heatmap.weightByAttribute);
+    let scale = d3.scale.linear().domain(dataExtents).range([0, 1]);
+    if (this.options.heatmap.weightByAttributeScale === 'log') {
+      if (!dataExtents[0]) dataExtents[0] = 0.01;
+      scale = d3.scale.log()
+        .domain(dataExtents)
+        .range([0.01, 1.0]);
+    }
+    return (d) => {
+      const val = this.options.heatmap.weightByAttribute(d);
+      if (!val) return 0;
+      return scale(val);
+    };
+  }
+
   getHeatmapData() {
     const ctx = this.canvasHeatmap.node().getContext('2d');
     ctx.globalCompositeOperation = 'multiply';
@@ -212,22 +243,23 @@ export default class GeoMap {
       this.options.heatmap.circles.max,
       this.options.heatmap.circles.step
     );
+    const datumScale = this.getDatumScale();
+    const heatmapDataset = this.maptable.data.filter(d => {
+      return datumScale(d) > 0.1;
+    });
     const path = this.path.context(ctx);
-    const magnitudeScale = this.options.heatmap.circles.magnitudeScale.bind(this.maptable)();
-    const datumScale = this.options.heatmap.circles.datumScale ?
-      this.options.heatmap.circles.datumScale.bind(this.maptable)() : () => 1;
-    this.maptable.data.forEach((point) => {
-      const coord = [point.longitude, point.latitude];
+    const magnitudeScale = this.getMagnitudeScale(heatmapDataset);
+    const colorScale = d3.scale.linear()
+      .domain([1, 0])
+      .range([this.options.heatmap.circles.color, '#FFFFFF']);
+    heatmapDataset.forEach((point) => {
       const scaleOpacityDatum = datumScale(point);
       circles.forEach(m => {
         const opacity = magnitudeScale(m) * scaleOpacityDatum;
-        const scale = d3.scale.linear()
-          .domain([1, 0])
-          .range([this.options.heatmap.circles.color, '#FFFFFF']);
-        if (opacity && !isNaN(opacity)) {
+        if (opacity > 0) {
           ctx.beginPath();
-          path(d3.geo.circle().origin(coord).angle(m - 0.0001)());
-          ctx.fillStyle = scale(opacity);
+          path(d3.geo.circle().origin([point.longitude, point.latitude]).angle(m - 0.0001)());
+          ctx.fillStyle = colorScale(opacity);
           ctx.fill();
           ctx.closePath();
         }

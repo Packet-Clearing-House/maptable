@@ -25,43 +25,16 @@
               },
               heatmap: {
                 mask: false,
+                weightByAttribute: function(d) {
+                  return parseInt(d.traf, 10);
+                },
+                weightByAttributeScale: 'log',
                 circles: {
                   min: 1,
                   max: 90,
                   step: 4,
                   color: '#0000FF',
                   blur: 6.0,
-                  magnitudeScale: function () {
-                    var opts = this.options.map.heatmap;
-                    var lengthDataset = this.data.filter(function(d) {
-                        return parseInt(d.traf, 10) > 0;
-                    }).length;
-                    var layersPerLocation = (opts.circles.max - opts.circles.min) / opts.circles.step;
-                    var maxOpacityScale = d3.scale.linear()
-                      .domain([1, lengthDataset * layersPerLocation])
-                      .range([1, 1/256]);
-                    var centralCircleOpacity = maxOpacityScale(lengthDataset) / lengthDataset;
-
-                    var scale = d3.scale.linear()
-                      .domain([
-                        this.options.map.heatmap.circles.min,
-                        this.options.map.heatmap.circles.max,
-                      ])
-                      .range([centralCircleOpacity, 0]);
-                    return function (m) { return scale(m) };
-                  },
-                  datumScale: function () {
-                    var trafficExtents = d3.extent(this.data, function(d) {
-                      return parseInt(d.traf, 10);
-                    });
-                    if (!trafficExtents[0]) trafficExtents[0] = 0.01;
-                    var scale = d3.scale.log()
-                      .domain(trafficExtents)
-                      .range([0.01, 1.0]);
-                    return function (d) {
-                      return scale(parseInt(d.traf, 10));
-                    };
-                  },
                 },
                 borders: {
                   opacity: 0.2,
