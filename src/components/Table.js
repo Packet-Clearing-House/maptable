@@ -1,6 +1,12 @@
 import utils from '../utils';
 
 export default class Table {
+  /**
+   *
+   * @param maptable
+   * @param options
+   * @returns {string|*}
+   */
   constructor(maptable, options) {
     this.maptable = maptable;
     this.options = options;
@@ -153,6 +159,10 @@ export default class Table {
     });
   }
 
+  /**
+   * 
+   * @param columnKey
+   */
   sortColumn(columnKey) {
     this.currentSorting.key = columnKey;
     if (columnKey === this.currentSorting.key) {

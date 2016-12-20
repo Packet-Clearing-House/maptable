@@ -20,6 +20,11 @@ export default class MapTable {
     }
   }
 
+  /**
+   * 
+   * @param err
+   * @param data
+   */
   loadData(err, data) {
     if (err) {
       throw err;
@@ -67,6 +72,9 @@ export default class MapTable {
     });
   }
 
+  /**
+   *
+   */
   restoreState() {
     if (this.filters) this.filters.restoreState();
     if (this.map) this.map.restoreState();

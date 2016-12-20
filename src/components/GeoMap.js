@@ -3,6 +3,12 @@ import Watermark from './Watermark';
 
 // Used the name GeoMap instead of Map to avoid collision with the native Map class of JS
 export default class GeoMap {
+  /**
+   *
+   * @param maptable
+   * @param options
+   * @param jsonWorld
+   */
   constructor(maptable, options, jsonWorld) {
     const self = this;
     this.maptable = maptable;
@@ -357,6 +363,12 @@ export default class GeoMap {
     }
   }
 
+  /**
+   *
+   * @param s
+   * @param t
+   * @returns {{translate: *[], scale: *}}
+   */
   adaptToEncoded(s, t) {
     const newTx = t[0] / (s * this.getWidth());
 
@@ -370,6 +382,12 @@ export default class GeoMap {
     };
   }
 
+  /**
+   *
+   * @param s
+   * @param t
+   * @returns {{translate: *[], scale: *}}
+   */
   adaptToScreen(s, t) {
     const newTx = t[0] * this.getWidth() * s;
 
@@ -383,6 +401,9 @@ export default class GeoMap {
     };
   }
 
+  /**
+   *
+   */
   restoreState() {
     this.restoringState = true;
     const params = document.location.href.split('!mt-zoom=');
@@ -405,6 +426,9 @@ export default class GeoMap {
     this.restoringState = false;
   }
 
+  /**
+   *
+   */
   saveState() {
     if (this.restoringState && this.options.map.saveState) return;
     const encodedZoom = this.adaptToEncoded(this.scale, [this.transX, this.transY]);

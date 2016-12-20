@@ -5,6 +5,10 @@ export default class Filters {
     this.maptable = maptable;
     this.options = options;
     this.criteria = [];
+    /**
+     *
+     * @type {boolean}
+     */
     this.restoringState = false;
 
     if (this.options.show) {
@@ -70,6 +74,10 @@ export default class Filters {
     this.node.appendChild(filtersBodyNode);
   }
 
+  /**
+   *
+   * @param evt
+   */
   add(evt) {
     if (evt) evt.preventDefault();
     const possibleFilters = this.getPossibleFilters();
@@ -103,6 +111,9 @@ export default class Filters {
     this.maptable.render();
   }
 
+  /**
+   *
+   */
   reset() {
     const rowNodes = document.querySelectorAll('[data-mt-filter-name]');
     for (let i = 0; i < rowNodes.length; i++) {
@@ -112,6 +123,10 @@ export default class Filters {
     this.maptable.render();
   }
 
+  /**
+   *
+   * @returns {{}}
+   */
   exportCriteria() {
     const output = {};
     const filtersChildren = document.querySelector('#mt-filters-elements').childNodes;
@@ -150,6 +165,10 @@ export default class Filters {
     return output;
   }
 
+  /**
+   *
+   * @param criteria
+   */
   setCriteria(criteria) {
     this.reset();
     Object.keys(criteria).forEach(filterName => {
@@ -176,6 +195,9 @@ export default class Filters {
     this.maptable.render();
   }
 
+  /**
+   *
+   */
   restoreState() {
     this.restoringState = true;
     const params = document.location.href.split('!mt-filters=');
@@ -190,6 +212,9 @@ export default class Filters {
     this.restoringState = false;
   }
 
+  /**
+   *
+   */
   saveState() {
     if (this.restoringState && this.options.filters.saveState) return;
     const exportedCriteria = this.exportCriteria();
@@ -203,6 +228,10 @@ export default class Filters {
     window.history.pushState(null, null, newUrl);
   }
 
+  /**
+   * 
+   * @returns {string}
+   */
   getDescription() {
     const outputArray = [];
 
