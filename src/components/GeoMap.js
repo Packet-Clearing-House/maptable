@@ -389,7 +389,7 @@ export default class GeoMap {
     const defaultZoomRaw = (params[1]) ? params[1].split('!mt')[0] : null;
     if (defaultZoomRaw) {
       try {
-        const defaultZoom = JSON.parse(unescape(defaultZoomRaw));
+        const defaultZoom = JSON.parse(decodeURIComponent(defaultZoomRaw));
         if (defaultZoom && defaultZoom.length === 3) {
           const encodedZoom = this.adaptToScreen(defaultZoom[0], [defaultZoom[1], defaultZoom[2]]);
           this.scale = encodedZoom.scale;
@@ -415,7 +415,7 @@ export default class GeoMap {
     let newUrl = document.location.href.replace(`!mt-zoom=${defaultZoom}`, '');
     if (this.scale !== 1) {
       if (newUrl.indexOf('#') === -1) newUrl += '#';
-      newUrl += `!mt-zoom=${escape(JSON.stringify(exportedCriteria))}`;
+      newUrl += `!mt-zoom=${encodeURIComponent(JSON.stringify(exportedCriteria))}`;
     }
     window.history.pushState(null, null, newUrl);
   }

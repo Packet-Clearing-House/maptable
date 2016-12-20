@@ -68,12 +68,6 @@ export default class Filters {
     filtersBodyNode.appendChild(filtersNewNode);
 
     this.node.appendChild(filtersBodyNode);
-
-    // Restore state
-    this.restoreState();
-    window.addEventListener('hashchange', () => {
-      this.restoreState();
-    });
   }
 
   add(evt) {
@@ -175,7 +169,7 @@ export default class Filters {
             }
           }
         } else if (criterion[0] === 'field' || criterion[0] === 'dropdown') {
-          row.querySelector('.mt-filter-value').value = unescape(criterion[2]);
+          row.querySelector('.mt-filter-value').value = decodeURIComponent(criterion[2]);
         }
       }
     });
@@ -188,7 +182,7 @@ export default class Filters {
     const defaultCriteria = (params[1]) ? params[1].split('!mt')[0] : null;
     if (defaultCriteria) {
       try {
-        this.setCriteria(JSON.parse(unescape(defaultCriteria)));
+        this.setCriteria(JSON.parse(decodeURIComponent(defaultCriteria)));
       } catch (e) {
         console.log(`Maptable: Invalid URL State for mt-filters ${e.message}`);
       }
@@ -204,7 +198,7 @@ export default class Filters {
     let newUrl = document.location.href.replace(`!mt-filters=${defaultCriteria}`, '');
     if (Object.keys(exportedCriteria).length) {
       if (newUrl.indexOf('#') === -1) newUrl += '#';
-      newUrl += `!mt-filters=${escape(JSON.stringify(exportedCriteria))}`;
+      newUrl += `!mt-filters=${encodeURIComponent(JSON.stringify(exportedCriteria))}`;
     }
     window.history.pushState(null, null, newUrl);
   }
