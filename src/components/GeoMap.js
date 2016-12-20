@@ -355,16 +355,45 @@ export default class GeoMap {
     }
   }
 
+  adaptToEncoded(s, t) {
+    const newTx = t[0] / (s * this.getWidth());
+
+    const newTy = t[1] / (s * this.getHeight());
+
+    const newS = s;
+
+    return {
+      translate: [newTx, newTy],
+      scale: newS,
+    };
+  }
+
+  adaptToScreen(s, t) {
+    const newTx = t[0] * this.getWidth() * s;
+
+    const newTy = t[1] * this.getHeight() * s;
+
+    const newS = s;
+
+    return {
+      translate: [newTx, newTy],
+      scale: newS,
+    };
+  }
+
   restoreState() {
     this.restoringState = true;
     const params = document.location.href.split('!mt-zoom=');
     const defaultZoomRaw = (params[1]) ? params[1].split('!mt')[0] : null;
     if (defaultZoomRaw) {
       try {
-        const defaultZoom = JSON.parse(defaultZoomRaw);
+        const defaultZoom = JSON.parse(unescape(defaultZoomRaw));
         if (defaultZoom && defaultZoom.length === 3) {
-          this.zoomListener.scale(defaultZoom[0])
-          .translate([defaultZoom[1], defaultZoom[2]])
+          const encodedZoom = this.adaptToScreen(defaultZoom[0], [defaultZoom[1], defaultZoom[2]]);
+          this.scale = encodedZoom.scale;
+          this.translate = encodedZoom.translate;
+          this.zoomListener.scale(encodedZoom.scale)
+          .translate(encodedZoom.translate)
           .event(this.svg);
         }
       } catch (e) {
@@ -377,13 +406,15 @@ export default class GeoMap {
 
   saveState() {
     if (this.restoringState && this.options.map.saveState) return;
-    const exportedCriteria = [this.scale, this.transX, this.transY];
+    const encodedZoom = this.adaptToEncoded(this.scale, [this.transX, this.transY]);
+    const exportedCriteria = [encodedZoom.scale, encodedZoom.translate[0],
+      encodedZoom.translate[1]];
     const params = document.location.href.split('!mt-zoom=');
     const defaultZoom = (params[1]) ? params[1].split('!mt')[0] : null;
     let newUrl = document.location.href.replace(`!mt-zoom=${defaultZoom}`, '');
     if (this.scale !== 1) {
       if (newUrl.indexOf('#') === -1) newUrl += '#';
-      newUrl += `!mt-zoom=${JSON.stringify(exportedCriteria)}`;
+      newUrl += `!mt-zoom=${escape(JSON.stringify(exportedCriteria))}`;
     }
     window.history.pushState(null, null, newUrl);
   }
@@ -448,7 +479,7 @@ export default class GeoMap {
     window.clearTimeout(this.saveStateTimeout);
     this.saveStateTimeout = window.setTimeout(() => {
       this.saveState();
-    }, 500);
+    }, 200);
   }
 
   setAttrValues(attrKey, attrValue, dataset) {

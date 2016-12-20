@@ -180,7 +180,7 @@ export default class Filters {
     const defaultCriteria = (params[1]) ? params[1].split('!mt')[0] : null;
     if (defaultCriteria) {
       try {
-        this.setCriteria(JSON.parse(defaultCriteria));
+        this.setCriteria(JSON.parse(unescape(defaultCriteria)));
       } catch (e) {
         console.log(`Maptable: Invalid URL State for mt-filters ${e.message}`);
       }
@@ -197,7 +197,7 @@ export default class Filters {
     let newUrl = document.location.href.replace(`!mt-filters=${defaultCriteria}`, '');
     if (Object.keys(exportedCriteria).length) {
       if (newUrl.indexOf('#') === -1) newUrl += '#';
-      newUrl += `!mt-filters=${JSON.stringify(exportedCriteria)}`;
+      newUrl += `!mt-filters=${escape(JSON.stringify(exportedCriteria))}`;
     }
     window.history.pushState(null, null, newUrl);
   }
