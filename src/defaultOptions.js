@@ -6,6 +6,8 @@ export default {
     countryIdentifierType: 'iso_a2',
     zoom: true,
     saveState: true,
+    exportSvg: null,
+    exportSvgClient: false,
     ratioFromWidth: 0.5,
     scaleHeight: 1.0,
     scaleZoom: [1, 10],

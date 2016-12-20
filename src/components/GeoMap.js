@@ -89,7 +89,7 @@ export default class GeoMap {
     }
 
     // Add Export SVG Capability
-    if (this.options.exportSvg) {
+    if (this.options.exportSvgClient || this.options.exportSvg) {
       this.addExportSvgCapability();
     }
 
@@ -617,11 +617,17 @@ export default class GeoMap {
     // Extract the data as SVG text string
     const svgXml = (new XMLSerializer).serializeToString(svg);
 
-    // Submit the <FORM> to the server.
-    // The result will be an attachment file to download.
-    const form = document.getElementById('mt-map-svg-form');
-    form.querySelector('[name="data"]').value = svgXml;
-    form.submit();
+    if (this.options.exportSvgClient) {
+      if (!window.saveAs) {
+        throw new Error('MapTable: Missing FileSaver.js library');
+      }
+      const blob = new Blob([svgXml], { type: 'image/svg+xml' });
+      window.saveAs(blob, 'visualization.svg');
+    } else if (this.options.exportSvg) {
+      const form = document.getElementById('mt-map-svg-form');
+      form.querySelector('[name="data"]').value = svgXml;
+      form.submit();
+    }
   }
 
   addExportSvgCapability() {
@@ -635,9 +641,11 @@ export default class GeoMap {
     exportButton.addEventListener('click', this.exportSvg.bind(this));
     exportNode.appendChild(exportButton);
 
-    const exportForm = document.createElement('div');
-    exportForm.innerHTML = `<form id="mt-map-svg-form" method="post"
-      action="${this.options.exportSvg}"><input type="hidden" name="data"></form>`;
-    exportNode.appendChild(exportForm);
+    if (this.options.exportSvg) {
+      const exportForm = document.createElement('div');
+      exportForm.innerHTML = `<form id="mt-map-svg-form" method="post"
+  action="${this.options.exportSvg}"><input type="hidden" name="data"></form>`;
+      exportNode.appendChild(exportForm);
+    }
   }
 }

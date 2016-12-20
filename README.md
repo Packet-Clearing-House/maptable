@@ -37,7 +37,7 @@ You can also browse other code samples and **examples** here:
 * [Table](#table)
   *	[Options](#options-2)
 * [Export as SVG](#export-as-svg)
-  *	[Credits](#credits)
+*	[Credits](#credits)
 * [Contribute](#contribute)
   * 	[Set up your development environment](#set-up-your-development-environment)
     * 		[Requirements](#requirements)
@@ -312,6 +312,7 @@ title: {
 - `longitudeKey:` _(string, default: 'longitude')_ Column name of the longitude (from the dataset).
 - `latitudeKey:` _(string, default: 'latitude')_ Column name of the latitude (from the dataset).
 - `exportSvg:` _(string, default: null)_ URL endpoint to download the current visualization as SVG. Read more on the section export SVG. (more details on a the section "Export as SVG")
+- `exportSvgClient:` _(bool, default: false)_ Show button to download the current visualization as SVG using only the client browser instead of querying the backend (in the opposite of `exportSvg`). You'll need to download [FileSaver.js](https://github.com/eligrey/FileSaver.js) and add a `<script src="filesaver.min.js">` to make it work. You may also use the [CDN version](https://cdnjs.com/libraries/FileSaver.js) in your `<script>` source.
 - `watermark:` _(object, default: null)_ Add a watermark within the map.
     - `watermark.src:` _(string)_ URL of the image (svg, png, jpg).
     - `watermark.width:` _(integer)_ Image width.
@@ -467,11 +468,12 @@ If you want to add a table on your visualization:
     - `defaultSorting.mode:` _(string, default: 'asc')_ sorting mode: `asc` for ascending, `desc` for descending.
 - `collapseRowsBy:` _([string, ...], default: null)_ Array of columns that we want to be collapsed.
 
-## Export as SVG
-
+## Export as SVG		
 You can enable this feature to allow users download the map on their computer as SVG. However, you would need to set up a server endpoint that is going to allow users download the SVG file.
 
 The sample code for a PHP server is located in `/server/exportSvg.php`. Contributions are welcomed for implementations of in other languages.
+
+We introduced into the version 1.4, the option `exportSvgClient` to use only the customer browser to export the SVG.
 
 ## Credits
 
