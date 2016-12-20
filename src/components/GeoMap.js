@@ -231,12 +231,14 @@ export default class GeoMap {
     });
     StackBlur.canvasRGBA(this.canvasHeatmap.node(), 0, 0, this.getWidth(),
       this.getHeight(), this.options.heatmap.circles.blur);
-    return this.canvasHeatmap.node().toDataURL();
+    const dataUrl = this.canvasHeatmap.node().toDataURL();
+    ctx.clearRect(0, 0, this.canvasHeatmap.width, this.canvasHeatmap.height);
+    return dataUrl;
   }
 
   updateHeatmap() {
     const dataUrl = this.getHeatmapData();
-    this.imgHeatmap.attr('xlink:href', dataUrl).attr('style', 'filter: blur(5px)');
+    this.imgHeatmap.attr('xlink:href', dataUrl);
   }
 
   buildCountries() {
