@@ -1,8 +1,9 @@
 import Legend from './Legend';
 import Watermark from './Watermark';
 import StackBlur from './StackBlur';
-
-// Used the name GeoMap instead of Map to avoid collision with the native Map class of JS
+/**
+ * Used the name GeoMap instead of Map to avoid collision with the native Map class of JS
+ */
 export default class GeoMap {
   /**
    * Geo Mapping class constructor that will initiate the map drawing
@@ -142,6 +143,9 @@ export default class GeoMap {
     return this.options.height * this.options.scaleHeight + deltaHeight;
   }
 
+  /**
+   *
+   */
   loadGeometries() {
     // We filter world data
     if (this.options.filterCountries) {
@@ -156,6 +160,9 @@ export default class GeoMap {
     if (this.options.heatmap) this.buildHeatmap();
   }
 
+  /**
+   *
+   */
   buildHeatmap() {
     // Build vectors
     const lands = topojson.merge(this.jsonWorld, this.jsonWorld.objects.countries.geometries);
@@ -209,6 +216,10 @@ export default class GeoMap {
     }
   }
 
+  /**
+   *
+   * @param heatmapDataset
+   */
   getMagnitudeScale(heatmapDataset) {
     const opts = this.options.heatmap;
     const lengthDataset = heatmapDataset.length;
@@ -225,6 +236,10 @@ export default class GeoMap {
     return (m) => scale(m);
   }
 
+  /**
+   *
+   * @returns {*}
+   */
   getDatumScale() {
     if (!this.options.heatmap.weightByAttribute) return () => 1;
     const dataExtents = d3.extent(this.maptable.data, this.options.heatmap.weightByAttribute);
@@ -242,6 +257,10 @@ export default class GeoMap {
     };
   }
 
+  /**
+   *
+   * @returns {string}
+   */
   getHeatmapData() {
     const ctx = this.canvasHeatmap.node().getContext('2d');
     ctx.globalCompositeOperation = 'multiply';
@@ -279,11 +298,17 @@ export default class GeoMap {
     return dataUrl;
   }
 
+  /**
+   *
+   */
   updateHeatmap() {
     const dataUrl = this.getHeatmapData();
     this.imgHeatmap.attr('xlink:href', dataUrl);
   }
 
+  /**
+   *
+   */
   buildCountries() {
     this.dataCountries = topojson.feature(this.jsonWorld,
       this.jsonWorld.objects.countries).features;
@@ -308,6 +333,9 @@ export default class GeoMap {
     }
   }
 
+  /**
+   *
+   */
   updateCountries() {
     // Data from user input
     const dataByCountry = d3.nest()

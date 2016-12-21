@@ -60,6 +60,11 @@ function keyToTile(k) {
   return upperK.replace(/_/g, ' ');
 }
 
+/**
+ *
+ * @param k
+ * @returns {string}
+ */
 function sanitizeKey(k) {
   return k.toLowerCase()
   .replace(/ /g, '_')

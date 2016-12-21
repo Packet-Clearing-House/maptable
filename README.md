@@ -471,7 +471,6 @@ countries: {
 *Example*
 ```js
 heatmap: {
-  mask: false,
   weightByAttribute: function(d) {
     return parseInt(d.traf, 10);
   },
