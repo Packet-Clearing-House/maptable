@@ -1,7 +1,7 @@
 MapTable
 ========
 
-[![GitHub stars](https://img.shields.io/github/stars/Packet-Clearing-House/maptable.svg?style=social&label=Star&maxAge=2592003)]() [![GitHub release](https://img.shields.io/github/release/Packet-Clearing-House/maptable.svg?maxAge=2592003)]() [![license](https://img.shields.io/github/license/Packet-Clearing-House/maptable.svg?maxAge=2592004)]()
+[![GitHub stars](https://img.shields.io/github/stars/Packet-Clearing-House/maptable.svg?style=social&label=Star&maxAge=2592004)]() [![GitHub release](https://img.shields.io/github/release/Packet-Clearing-House/maptable.svg?maxAge=2592004)]() [![license](https://img.shields.io/github/license/Packet-Clearing-House/maptable.svg?maxAge=2592005)]()
 
 This library was originally conceived to render the [home page](https://pch.net) and next generation of [IXP directory](https://www.pch.net/ixp/dir) for Packet Clearing House ([PCH](https://pch.net)).
 
@@ -516,7 +516,7 @@ You can enable this feature to allow users download the map on their computer as
 
 The sample code for a PHP server is located in `/server/exportSvg.php`. Contributions are welcomed for implementations of in other languages.
 
-We introduced into the version 1.4, the option `exportSvgClient` to use only the customer browser to export the SVG.
+We introduced into the version 1.4.0, the option `exportSvgClient` to use only the customer browser to export the SVG.
 
 ## Credits
 
@@ -561,6 +561,12 @@ Run these commands as your unprivileged user you're doing your development as:
 
 
 ## Release History
+* Version 1.4.0 December 20 2016
+  * Add heatmap feature - [PR #43](https://github.com/Packet-Clearing-House/maptable/pull/43)
+  * Add client side export feature - [Issue #9](https://github.com/Packet-Clearing-House/maptable/issues/9)
+  * Fixed country colors when filtering - [Issue #43](https://github.com/Packet-Clearing-House/maptable/issues/43)
+  * Add callback feature - [Issue #25](https://github.com/Packet-Clearing-House/maptable/issues/25)
+  * Add stateful URL feature - [Issue #38](https://github.com/Packet-Clearing-House/maptable/issues/38)
 * Version 1.3 September 26 2016
   * Allow fancier math on country values in ``map.countries.attr.fill.transform()`` in GeoMap.js - [Issue #32](https://github.com/Packet-Clearing-House/maptable/issues/32)
 * Version 1.2.1 September 21 2016
