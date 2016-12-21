@@ -209,7 +209,7 @@ export default class Filters {
   }
 
   /**
-   * Save teh state into the URL hash
+   * Save the state into the URL hash
    */
   saveState() {
     if (this.restoringState && this.options.filters.saveState) return;
