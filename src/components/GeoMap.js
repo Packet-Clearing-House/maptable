@@ -144,7 +144,7 @@ export default class GeoMap {
   }
 
   /**
-   *
+   * Load geometries and built the map components
    */
   loadGeometries() {
     // We filter world data
@@ -161,7 +161,7 @@ export default class GeoMap {
   }
 
   /**
-   *
+   * Logic to build the heatmap elements (without the filling the heatmap image)
    */
   buildHeatmap() {
     // Build vectors
@@ -217,8 +217,9 @@ export default class GeoMap {
   }
 
   /**
-   *
-   * @param heatmapDataset
+   * Get Scale for every circle magnitude
+   * @param heatmapDataset: heatmap dataset that we use
+   * @returns scale: function - Scale function that output a value [0 - 1]
    */
   getMagnitudeScale(heatmapDataset) {
     const opts = this.options.heatmap;
@@ -237,8 +238,8 @@ export default class GeoMap {
   }
 
   /**
-   *
-   * @returns {*}
+   * Get Scale for every data point (used for weighting)
+   * @returns scale: function - Scale function that output a value [0 - 1]
    */
   getDatumScale() {
     if (!this.options.heatmap.weightByAttribute) return () => 1;
@@ -258,8 +259,8 @@ export default class GeoMap {
   }
 
   /**
-   *
-   * @returns {string}
+   * Get the Data URL of the heatmap image
+   * @returns {string} base64 image
    */
   getHeatmapData() {
     const ctx = this.canvasHeatmap.node().getContext('2d');
@@ -299,7 +300,7 @@ export default class GeoMap {
   }
 
   /**
-   *
+   * Set the data URL to the heatmap image
    */
   updateHeatmap() {
     const dataUrl = this.getHeatmapData();
@@ -307,7 +308,7 @@ export default class GeoMap {
   }
 
   /**
-   *
+   * build the paths for the countries
    */
   buildCountries() {
     this.dataCountries = topojson.feature(this.jsonWorld,
@@ -334,7 +335,7 @@ export default class GeoMap {
   }
 
   /**
-   *
+   * Set the right color for every country
    */
   updateCountries() {
     // Data from user input
