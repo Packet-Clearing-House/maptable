@@ -5,6 +5,7 @@ export default class Filters {
     this.maptable = maptable;
     this.options = options;
     this.criteria = [];
+    this.restoringState = false; // a flag to check if we are restoring the state or not
 
     if (this.options.show) {
       const arrayDiff = this.options.show.filter(i => {
@@ -69,8 +70,12 @@ export default class Filters {
     this.node.appendChild(filtersBodyNode);
   }
 
+  /**
+   * Add a filter
+   * @param evt: Window Event Object
+   */
   add(evt) {
-    evt.preventDefault();
+    if (evt) evt.preventDefault();
     const possibleFilters = this.getPossibleFilters();
 
     if (possibleFilters.length === 0) {
@@ -102,13 +107,127 @@ export default class Filters {
     this.maptable.render();
   }
 
+  /**
+   * Reset filters
+   */
   reset() {
+    const rowNodes = document.querySelectorAll('[data-mt-filter-name]');
+    for (let i = 0; i < rowNodes.length; i++) {
+      rowNodes[i].parentNode.removeChild(rowNodes[i]);
+    }
     this.criteria = [];
-    this.container.innerHTML = '';
-    this.refresh();
-    this.maptable.map.reset();
+    this.maptable.render();
   }
 
+  /**
+   * Export the current filters to an object
+   * @returns exportedFilters: Object - key => value that contain data about the current filters
+   */
+  exportFilters() {
+    const output = {};
+    const filtersChildren = document.querySelector('#mt-filters-elements').childNodes;
+
+    for (let i = 0; i < filtersChildren.length; i++) {
+      const element = filtersChildren[i];
+      const filterName = element.querySelector('.mt-filter-name').value;
+      const columnDetails = this.maptable.columnDetails[filterName];
+      const filterOutput = [columnDetails.filterMethod];
+      if (columnDetails.filterMethod === 'compare') {
+        const filterRangeSelect = element.querySelector('.mt-filter-range');
+        filterOutput[1] = filterRangeSelect.value;
+        if (filterRangeSelect.value !== 'any') {
+          if (filterRangeSelect.value === 'BETWEEN') {
+            const filterValueMin = element.querySelector('.mt-filter-value-min').value;
+            const filterValueMax = element.querySelector('.mt-filter-value-max').value;
+            if (filterValueMin !== '' && filterValueMax === '') {
+              filterOutput[2] = filterValueMin;
+              filterOutput[3] = filterValueMax;
+            }
+          } else {
+            const filterValue = element.querySelector('.mt-filter-value-min').value;
+            filterOutput[2] = filterValue;
+          }
+        }
+      } else if (columnDetails.filterMethod === 'field' ||
+        columnDetails.filterMethod === 'dropdown') {
+        filterOutput[1] = '';
+        const filterValue = element.querySelector('.mt-filter-value').value;
+        filterOutput[2] = filterValue;
+      }
+      if (filterOutput[1] !== 'any' && filterOutput[2] && filterOutput[2] !== '') {
+        output[filterName] = filterOutput;
+      }
+    }
+    return output;
+  }
+
+  /**
+   * Set the value for the current filters
+   * @param criteria - Object - same format as the exportedFilters
+   */
+  setFilters(criteria) {
+    this.reset();
+    Object.keys(criteria).forEach(filterName => {
+      this.add();
+      const criterion = criteria[filterName];
+      const row = document
+      .querySelector(`#mt-filters-elements [data-mt-filter-name="${filterName}"]`);
+      if (row) {
+        if (criterion[0] === 'compare') {
+          row.querySelector('.mt-filter-range').value = criterion[1];
+          if (criterion[1] !== 'any') {
+            if (criterion[1] === 'BETWEEN') {
+              row.querySelector('.mt-filter-value-min').value = criterion[2];
+              row.querySelector('.mt-filter-value-max').value = criterion[3];
+            } else {
+              row.querySelector('.mt-filter-value-min').value = criterion[2];
+            }
+          }
+        } else if (criterion[0] === 'field' || criterion[0] === 'dropdown') {
+          row.querySelector('.mt-filter-value').value = decodeURIComponent(criterion[2]);
+        }
+      }
+    });
+    this.maptable.render();
+  }
+
+  /**
+   * Restore state from the URL hash
+   */
+  restoreState() {
+    this.restoringState = true;
+    const params = document.location.href.split('!mt-filters=');
+    const defaultCriteria = (params[1]) ? params[1].split('!mt')[0] : null;
+    if (defaultCriteria) {
+      try {
+        this.setFilters(JSON.parse(decodeURIComponent(defaultCriteria)));
+      } catch (e) {
+        console.log(`Maptable: Invalid URL State for mt-filters ${e.message}`);
+      }
+    }
+    this.restoringState = false;
+  }
+
+  /**
+   * Save the state into the URL hash
+   */
+  saveState() {
+    if (this.restoringState && this.options.filters.saveState) return;
+    const exportedFilters = this.exportFilters();
+    const params = document.location.href.split('!mt-filters=');
+    const defaultCriteria = (params[1]) ? params[1].split('!mt')[0] : null;
+    let newUrl = document.location.href.replace(`!mt-filters=${defaultCriteria}`, '');
+    if (Object.keys(exportedFilters).length) {
+      if (newUrl.indexOf('#') === -1) newUrl += '#';
+      newUrl += `!mt-filters=${encodeURIComponent(JSON.stringify(exportedFilters))}`;
+    }
+    window.history.pushState(null, null, newUrl);
+  }
+
+  /**
+   *  Get a human readable description of the filters (used for the title)
+   * @returns {string} Human readable description
+   */
   getDescription() {
     const outputArray = [];
 
@@ -308,54 +427,59 @@ export default class Filters {
   filterData() {
     const that = this;
     this.maptable.data = this.maptable.rawData.filter(d => {
-          const rowNodes = document.querySelectorAll('.mt-filter-row');
-    let matched = true;
-    for (let i = 0; i < rowNodes.length && matched; i++) {
-      const rowNode = rowNodes[i];
-      const filterName = rowNode.getAttribute('data-mt-filter-name');
-      const columnDetails = that.maptable.columnDetails[filterName];
-      const fmt = columnDetails.dataParse; // shortcut
+      const rowNodes = document.querySelectorAll('.mt-filter-row');
+      let matched = true;
+      for (let i = 0; i < rowNodes.length && matched; i++) {
+        const rowNode = rowNodes[i];
+        const filterName = rowNode.getAttribute('data-mt-filter-name');
+        const columnDetails = that.maptable.columnDetails[filterName];
+        const fmt = columnDetails.dataParse; // shortcut
 
-      if (columnDetails.filterMethod === 'dropdown') {
-        const filterValue = rowNode.querySelector('.mt-filter-value').value;
-        if (filterValue === '') continue;
-        if (d[filterName] !== filterValue) matched = false;
-      } else if (columnDetails.filterMethod === 'field') {
-        const filterValue = rowNode.querySelector('.mt-filter-value').value;
-        if (filterValue === '') continue;
-        if (d[filterName].toLowerCase().indexOf(filterValue.toLowerCase()) === -1) {
-          matched = false;
-        }
-      } else if (columnDetails.filterMethod === 'compare') {
-        const filterRange = rowNode.querySelector('.mt-filter-range').value;
-        if (filterRange === 'BETWEEN') {
-          const filterValueMin = rowNode.querySelector('.mt-filter-value-min').value;
-          const filterValueMax = rowNode.querySelector('.mt-filter-value-max').value;
-          if (filterValueMin === '' || filterValueMax === '') continue;
-          if (fmt &&
-              (fmt(d[filterName]) < fmt(filterValueMin) ||
-              fmt(d[filterName]) > fmt(filterValueMax))
-          ) {
-            matched = false;
-          } else if (
-              parseInt(d[filterName], 10) < parseInt(filterValueMin, 10) ||
-              parseInt(d[filterName], 10) > parseInt(filterValueMax, 10)
-          ) {
+        if (columnDetails.filterMethod === 'dropdown') {
+          const filterValue = rowNode.querySelector('.mt-filter-value').value;
+          if (filterValue === '') continue;
+          if (d[filterName] !== filterValue) matched = false;
+        } else if (columnDetails.filterMethod === 'field') {
+          const filterValue = rowNode.querySelector('.mt-filter-value').value;
+          if (filterValue === '') continue;
+          if (d[filterName].toLowerCase().indexOf(filterValue.toLowerCase()) === -1) {
             matched = false;
           }
-        } else {
-          const filterValue = rowNode.querySelector('.mt-filter-value-min').value;
-          if (filterValue === '') continue;
-          if (fmt && !utils.rangeToBool(fmt(d[filterName]), filterRange, fmt(filterValue))) {
-            matched = false;
-          } else if (!fmt && !utils.rangeToBool(d[filterName], filterRange, filterValue)) {
-            matched = false;
+        } else if (columnDetails.filterMethod === 'compare') {
+          const filterRange = rowNode.querySelector('.mt-filter-range').value;
+          if (filterRange === 'BETWEEN') {
+            const filterValueMin = rowNode.querySelector('.mt-filter-value-min').value;
+            const filterValueMax = rowNode.querySelector('.mt-filter-value-max').value;
+            if (filterValueMin === '' || filterValueMax === '') continue;
+            if (fmt &&
+                (fmt(d[filterName]) < fmt(filterValueMin) ||
+                fmt(d[filterName]) > fmt(filterValueMax))
+            ) {
+              matched = false;
+            } else if (
+                parseInt(d[filterName], 10) < parseInt(filterValueMin, 10) ||
+                parseInt(d[filterName], 10) > parseInt(filterValueMax, 10)
+            ) {
+              matched = false;
+            }
+          } else {
+            const filterValue = rowNode.querySelector('.mt-filter-value-min').value;
+            if (filterValue === '') continue;
+            if (fmt && !utils.rangeToBool(fmt(d[filterName]), filterRange, fmt(filterValue))) {
+              matched = false;
+            } else if (!fmt && !utils.rangeToBool(d[filterName], filterRange, filterValue)) {
+              matched = false;
+            }
           }
         }
       }
-    }
-    return matched;
-  });
+      return matched;
+    });
+    // save state
+    window.clearTimeout(this.saveStateTimeout);
+    this.saveStateTimeout = window.setTimeout(() => {
+      this.saveState();
+    }, 200);
   }
 
   refresh() {

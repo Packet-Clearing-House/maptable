@@ -5,6 +5,7 @@ export default {
     countryIdentifierKey: 'country_code',
     countryIdentifierType: 'iso_a2',
     zoom: true,
+    saveState: true,
     exportSvg: null,
     exportSvgClient: false,
     ratioFromWidth: 0.5,
@@ -35,6 +36,9 @@ export default {
       fontSize: 12,
       fontFamily: 'Helevetica, Arial, Sans-Serif',
     },
+  },
+  filters: {
+    saveState: true,
   },
   table: {
     className: 'table table-striped table-bordered',

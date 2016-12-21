@@ -3,12 +3,19 @@ import Watermark from './Watermark';
 
 // Used the name GeoMap instead of Map to avoid collision with the native Map class of JS
 export default class GeoMap {
+  /**
+   * Geo Mapping class constructor that will initiate the map drawing
+   * @param maptable: Maptable main Object
+   * @param options: options communicated to map
+   * @param jsonWorld: Object that contain TopoJSON dataset
+   */
   constructor(maptable, options, jsonWorld) {
-    const that = this;
+    const self = this;
     this.maptable = maptable;
     this.scale = 1;
     this.transX = 0;
     this.transY = 0;
+    this.restoringState = false;
 
     this.options = options;
 
@@ -40,11 +47,11 @@ export default class GeoMap {
 
     // Add coordinates to rawData
     this.maptable.rawData.forEach(d => {
-      d.longitude = parseFloat(d[that.options.longitudeKey]);
-      d.latitude = parseFloat(d[that.options.latitudeKey]);
+      d.longitude = parseFloat(d[self.options.longitudeKey]);
+      d.latitude = parseFloat(d[self.options.latitudeKey]);
       let coord = [0, 0];
       if (!isNaN(d.longitude) && !isNaN(d.latitude)) {
-        coord = that.projection([d.longitude, d.latitude]);
+        coord = self.projection([d.longitude, d.latitude]);
       }
       d.x = coord[0];
       d.y = coord[1];
@@ -274,6 +281,8 @@ export default class GeoMap {
     if (this.options.markers.tooltip) {
       this.activateTooltip(markerUpdate, this.tooltipMarkersNode, this.options.markers.tooltip);
     }
+
+    this.rescale();
   }
 
   fitContent() {
@@ -354,8 +363,78 @@ export default class GeoMap {
     }
   }
 
+  /**
+   * We encode a transaltion to be independent from the dimensions of the visualization
+   * @param originalTranslation: Array - original translation value (from screen)
+   * @returns encodedTranslation: Array - encoded translation
+   */
+  encodeTranslation(originalTranslation) {
+    const newTx = originalTranslation[0] / (this.scale * this.getWidth());
+
+    const newTy = originalTranslation[1] / (this.scale * this.getHeight());
+
+    return [newTx, newTy];
+  }
+
+  /**
+   * We decode a translation to adapt it to the dimensions of the visualization
+   * @param encodedTranslation: Array - encoded translation
+   * @returns originalTranslation: Array - original translation value (from screen)
+   */
+  decodeTranslation(encodedTranslation) {
+    const newTx = encodedTranslation[0] * this.getWidth() * this.scale;
+
+    const newTy = encodedTranslation[1] * this.getHeight() * this.scale;
+
+    return [newTx, newTy];
+  }
+
+  /**
+   * Restore state from the url hash
+   */
+  restoreState() {
+    this.restoringState = true;
+    const params = document.location.href.split('!mt-zoom=');
+    const defaultZoomRaw = (params[1]) ? params[1].split('!mt')[0] : null;
+    if (defaultZoomRaw) {
+      try {
+        const defaultZoom = JSON.parse(decodeURIComponent(defaultZoomRaw));
+        if (defaultZoom && defaultZoom.length === 3) {
+          this.scale = defaultZoom[0];
+          const originalTranslation = this.decodeTranslation([defaultZoom[1], defaultZoom[2]]);
+          this.transX = originalTranslation[0];
+          this.transY = originalTranslation[1];
+          this.zoomListener.scale(defaultZoom[0])
+          .translate(originalTranslation)
+          .event(this.svg);
+        }
+      } catch (e) {
+        console.log(`Maptable: Invalid URL State for mt-zoom ${e.message}`);
+      }
+    }
+    this.restoringState = false;
+  }
+
+  /**
+   * Save state into the url hash
+   */
+  saveState() {
+    if (this.restoringState && this.options.map.saveState) return;
+    const encodedTranslation = this.encodeTranslation([this.transX, this.transY]);
+    const exportedCriteria = [this.scale, encodedTranslation[0],
+      encodedTranslation[1]];
+    const params = document.location.href.split('!mt-zoom=');
+    const defaultZoom = (params[1]) ? params[1].split('!mt')[0] : null;
+    let newUrl = document.location.href.replace(`!mt-zoom=${defaultZoom}`, '');
+    if (this.scale !== 1) {
+      if (newUrl.indexOf('#') === -1) newUrl += '#';
+      newUrl += `!mt-zoom=${encodeURIComponent(JSON.stringify(exportedCriteria))}`;
+    }
+    window.history.pushState(null, null, newUrl);
+  }
+
   rescale() {
-    const that = this;
+    const self = this;
     if (d3.event && d3.event.translate) {
       this.scale = d3.event.scale;
       this.transX = (this.scale === 1) ? 0 : d3.event.translate[0];
@@ -388,8 +467,8 @@ export default class GeoMap {
       `translate(${this.transX}, ${this.transY})scale(${this.scale})`);
 
     // Hide tooltip
-    that.tooltipCountriesNode.attr('style', 'display:none;');
-    that.tooltipMarkersNode.attr('style', 'display:none;');
+    self.tooltipCountriesNode.attr('style', 'display:none;');
+    self.tooltipMarkersNode.attr('style', 'display:none;');
 
     // Rescale markers size
     if (this.options.markers) {
@@ -397,11 +476,11 @@ export default class GeoMap {
       d3.selectAll('.mt-map-marker').each(function (d) {
         // stroke
         if (d.attr['stroke-width']) {
-          d3.select(this).attr('stroke-width', d.attr['stroke-width'] / that.scaleAttributes());
+          d3.select(this).attr('stroke-width', d.attr['stroke-width'] / self.scaleAttributes());
         }
         // radius
         if (d.attr.r) {
-          d3.select(this).attr('r', d.attr.r / that.scaleAttributes());
+          d3.select(this).attr('r', d.attr.r / self.scaleAttributes());
         }
       });
     }
@@ -409,6 +488,12 @@ export default class GeoMap {
     // Rescale Country stroke-width
     d3.selectAll('.mt-map-country').style('stroke-width',
       this.options.countries.attr['stroke-width'] / this.scale);
+
+    // save state
+    window.clearTimeout(this.saveStateTimeout);
+    this.saveStateTimeout = window.setTimeout(() => {
+      this.saveState();
+    }, 200);
   }
 
   setAttrValues(attrKey, attrValue, dataset) {
