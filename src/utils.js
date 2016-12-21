@@ -31,12 +31,6 @@ function rangeToBool(el1, range, el2) {
   return true;
 }
 
-function hexToRgb(hex) {
-  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-  return result ?
-  `${parseInt(result[1], 16)}, ${parseInt(result[2], 16)}, ${parseInt(result[3], 16)}` : null;
-}
-
 function extendRecursive() {
   const dst = {};
   let src;
@@ -67,7 +61,10 @@ function keyToTile(k) {
 }
 
 function sanitizeKey(k) {
-  return k.toLowerCase().replace(/ /g, '_').replace(/"/g, '').replace(/'/g, '');
+  return k.toLowerCase()
+  .replace(/ /g, '_')
+  .replace(/"/g, '')
+  .replace(/'/g, '');
 }
 
 export default {
@@ -76,5 +73,4 @@ export default {
   extendRecursive,
   sanitizeKey,
   keyToTile,
-  hexToRgb,
 };
