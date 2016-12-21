@@ -187,8 +187,8 @@ export default class GeoMap {
 
     this.imgHeatmap = this.layerHeatmap
       .append('image')
-      .attr('width', '100%')
-      .attr('height', '100%')
+      .attr('width', this.getWidth())
+      .attr('height', this.getHeight())
       .attr('class', 'mt-map-heatmap-img');
 
     if (this.options.heatmap.mask) {
@@ -208,7 +208,7 @@ export default class GeoMap {
         .enter()
         .append('path')
         .attr('class', 'mt-map-heatmap-borders-paths')
-        .attr('fill', 'transparent')
+        .attr('fill', 'none')
         .attr('stroke-width', this.options.heatmap.borders.stroke)
         .attr('stroke', this.options.heatmap.borders.color)
         .attr('style', `opacity: ${this.options.heatmap.borders.opacity}`)
