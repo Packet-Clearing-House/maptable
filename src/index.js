@@ -73,6 +73,7 @@ d3.maptable = function (target) {
 
     if (!options.map || !options.map.heatmap) options.map.heatmap = null;
 
+    if (!options.filters) options.filters = null;
     options.onComplete = onComplete;
 
     const customOptions = utils.extendRecursive(defaultOptions, options);

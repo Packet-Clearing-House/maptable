@@ -24,6 +24,11 @@ export default class MapTable {
     }
   }
 
+  /**
+   * Callback used when we pull the dataset
+   * @param err: Error - error data if it happened
+   * @param data: Object - dataset object
+   */
   loadData(err, data) {
     if (err) {
       throw err;
@@ -70,7 +75,22 @@ export default class MapTable {
       this.table = new Table(this, this.options.table);
     }
 
+    // Render
     this.render();
+
+    // Restore state
+    this.restoreState();
+    window.addEventListener('hashchange', () => {
+      this.restoreState();
+    });
+  }
+
+  /**
+   * Restore state for filters or/and map zooming
+   */
+  restoreState() {
+    if (this.filters) this.filters.restoreState();
+    if (this.map) this.map.restoreState();
   }
 
   render() {

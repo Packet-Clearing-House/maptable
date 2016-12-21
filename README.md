@@ -277,6 +277,7 @@ If you want to attach the data boundaries to the value of an attribute, you may 
 - `onComplete:` _(function, default: null)_ Callback function when the map finished rendering.
 - `width:` _(integer, default:'window.innerWidth')_ Map Width.
 - `height:` _(integer, default:'window.innerHeight')_ Map Height.
+- `saveState:` _(bool, default: true)_ Save zoom state into the URL
 - `zoom:` _(bool, default: true)_ Enable zoom on the map (when scrolling up/down on the map).
 - `filterCountries:`  _(function(country))_ Filter countries follow a specific condition.
 
@@ -519,6 +520,7 @@ heatmap: {
 ### Options
 
 - `show:` _([string, ...], default: null)_ Set the order and the columns that we want to see in the filters.
+- `saveState:` _(bool, default: true)_ Save filters state into the URL
 
 ## Table
 

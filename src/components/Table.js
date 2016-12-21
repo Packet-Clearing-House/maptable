@@ -1,6 +1,12 @@
 import utils from '../utils';
 
 export default class Table {
+  /**
+   * Table componenet constructor
+   * @param maptable: Maptable main Object
+   * @param options: options communicated to the table
+   * @returns {string|*}
+   */
   constructor(maptable, options) {
     this.maptable = maptable;
     this.options = options;
@@ -38,7 +44,9 @@ export default class Table {
       .enter()
       .append('tr')
       .selectAll('th')
-      .data(this.activeColumns.map(k => utils.extendRecursive({ key: k }, this.maptable.columnDetails[k])))
+      .data(this.activeColumns.map(k => {
+        return utils.extendRecursive({ key: k }, this.maptable.columnDetails[k]);
+      }))
       .enter()
       .append('th')
       .attr('class', d => {
@@ -46,7 +54,9 @@ export default class Table {
         output += (d.nowrap) ? ' nowrap' : '';
         return output;
       })
-      .attr('style', d => (d.nowrap) ? 'white-space:nowrap;' : '')
+      .attr('style', d => {
+        return (d.nowrap) ? 'white-space:nowrap;' : '';
+      })
       .text(d => d.title)
       .attr('id', d => `column_header_${utils.sanitizeKey(d.key)}`)
       .on('click', d => {
@@ -149,7 +159,11 @@ export default class Table {
     });
   }
 
-  sortColumn(columnKey, columnMode) {
+  /**
+   * Sort Table by a column key
+   * @param columnKey: String - column key
+   */
+  sortColumn(columnKey) {
     this.currentSorting.key = columnKey;
     if (columnKey === this.currentSorting.key) {
       this.currentSorting.mode = (this.currentSorting.mode === 'asc') ? 'desc' : 'asc';
