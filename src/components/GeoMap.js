@@ -37,6 +37,8 @@ export default class GeoMap {
     this.svg = d3.select(this.node)
       .append('svg')
       .attr('id', 'mt-map-svg')
+      .attr('xmlns', 'http://www.w3.org/2000/svg')
+      .attr('xmlns:xlink', 'http://www.w3.org/1999/xlink')
       .attr('viewBox', `0 0 ${this.getWidth()} ${this.getHeight()}`)
       .attr('width', this.getWidth())
       .attr('height', this.getHeight());
@@ -805,7 +807,8 @@ export default class GeoMap {
     // Get the d3js SVG element
     const svg = document.getElementById('mt-map-svg');
     // Extract the data as SVG text string
-    const svgXml = (new XMLSerializer).serializeToString(svg);
+    const svgXml = `<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+${(new XMLSerializer).serializeToString(svg)}`;
 
     if (this.options.exportSvgClient) {
       if (!window.saveAs) {
