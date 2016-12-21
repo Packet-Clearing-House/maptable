@@ -191,6 +191,8 @@ export default class GeoMap {
       .append('image')
       .attr('width', this.getWidth())
       .attr('height', this.getHeight())
+      .attr('x', 0)
+      .attr('y', 0)
       .attr('class', 'mt-map-heatmap-img');
 
     if (this.options.heatmap.mask) {
