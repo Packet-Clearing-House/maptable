@@ -21,9 +21,9 @@ export default class MapTable {
   }
 
   /**
-   * 
-   * @param err
-   * @param data
+   * Callback used when we pull the dataset
+   * @param err: Error - error data if it happened
+   * @param data: Object - dataset object
    */
   loadData(err, data) {
     if (err) {
@@ -73,7 +73,7 @@ export default class MapTable {
   }
 
   /**
-   *
+   * Restore state for filters or/and map zooming
    */
   restoreState() {
     if (this.filters) this.filters.restoreState();

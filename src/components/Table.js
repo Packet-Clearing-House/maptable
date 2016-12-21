@@ -2,9 +2,9 @@ import utils from '../utils';
 
 export default class Table {
   /**
-   *
-   * @param maptable
-   * @param options
+   * Table componenet constructor
+   * @param maptable: Maptable main Object
+   * @param options: options communicated to the table
    * @returns {string|*}
    */
   constructor(maptable, options) {
@@ -160,8 +160,8 @@ export default class Table {
   }
 
   /**
-   * 
-   * @param columnKey
+   * Sort Table by a column key
+   * @param columnKey: String - column key
    */
   sortColumn(columnKey) {
     this.currentSorting.key = columnKey;
