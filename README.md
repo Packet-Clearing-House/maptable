@@ -284,6 +284,7 @@ If you want to attach the data boundaries to the value of an attribute, you may 
 - `zoom:` _(bool, default: true)_ Enable zoom on the map (when scrolling up/down on the map).
 - `filterCountries:`  _(function(country))_ Filter countries follow a specific condition.
         *Example:*
+        
         ```js
         filterCountries: (country) => country.id !== 'AQ', // to remove Antarctica from the map
         ```
