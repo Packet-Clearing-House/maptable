@@ -336,16 +336,16 @@ If you want to attach the data boundaries to the value of an attribute, you may 
     - `watermark.position:` _(string)_ Watermark position (top|middle|bottom) (left|middle|right). e.g. `bottom left`.
     - `watermark.style:` _(string)_ Additional css style for the watermark.
 
-*Example:*
-```js
-watermark: {
-  src: 'https://example.com/image.svg',
-  width: 130,
-  height: 60,
-  position: "bottom left",
-  style: "opacity:0.1"
-},
-```
+       *Example:*
+       ```js
+       watermark: {
+         src: 'https://example.com/image.svg',
+         width: 130,
+         height: 60,
+         position: "bottom left",
+         style: "opacity:0.1"
+       },
+       ```
 - `markers:` _(object, default: null)_ Add markers on the map.
     - `markers.customTag:` _(function(markerObject)), default: null)_ This is more advanced feature. If you'd like to override the default market tag (svg:circle) to something different (like an image), you can use this callback function to append to the markerObject your custom implementation (see below example). x and y are coordinates in pixels of the marker.
     - `markers.attrX:` _(string, default: 'cx')_ Attribute to position the marker on the X-Axis
@@ -364,54 +364,53 @@ watermark: {
         - `markers.attr.r.transform:` _(function(value, allRows), default: value)_ Function for changing the value for the current radius.  Can simply only accept value ``transform(value)`` to do a simple ``Math.log(value)`` call or be defined to use more advanced logic with ``transform(value, allRows)`` and then iterate over ``allRows`` (all rows from your csv/tsv/json) to calculate relative values like percentile.
         - `markers.attr.stroke:` _(ScaledValue)_ Marker border color.
         - `markers.attr.stroke-width:` _(ScaledValue)_ Marker border width.
-
-*Example (grouping by value):*
-
-```js
-markers: {
-  tooltip: function(a) {
-    out = '<div class="arrow"></div>';
-    out += '<span class="badge pull-right"> ' + a.values.length + '</span><h3 class="popover-title"> ' + a.key + '</h3>';
-    out += '<div class="popover-content">';
-    for (i = 0; i < a.values.length; i++) out += " • " + a.values[i].long_name + "<br>";
-    out += "</div>";
-    return out;
-  },
-  attr: {
-    r: {
-      min: "minValue",
-      max: "maxValue",
-      transform: function(v) {
-        return 3 * Math.sqrt(v);
-      },
-      rollup: function(values) {
-        return values.length;
-      },
-    },
-    fill: "yellow",
-    stroke: "#d9d9d9",
-    "stroke-width": 0.5
-  }
-},
-```
-*Example (with custom tag - Advanced feature):*
-
-
-```js
-markers: {
-  className: 'starsMarker',
-  customTag: function(markerObject){
-    return markerObject.append("svg:image")
-      .attr("xlink:href", "https://www.example.com/star.svg")
-      .attr("width", "13")
-      .attr("height", "27");
-  },
-  attrX: 'x',
-  attrY: 'y',
-  attrXDelta: -6,
-  attrYDelta: -13
-},
-```
+       
+       *Example (grouping by value):*
+       
+       ```js
+       markers: {
+         tooltip: function(a) {
+           out = '<div class="arrow"></div>';
+           out += '<span class="badge pull-right"> ' + a.values.length + '</span><h3 class="popover-title"> ' + a.key + '</h3>';
+           out += '<div class="popover-content">';
+           for (i = 0; i < a.values.length; i++) out += " • " + a.values[i].long_name + "<br>";
+           out += "</div>";
+           return out;
+         },
+         attr: {
+           r: {
+             min: "minValue",
+             max: "maxValue",
+             transform: function(v) {
+               return 3 * Math.sqrt(v);
+             },
+             rollup: function(values) {
+               return values.length;
+             },
+           },
+           fill: "yellow",
+           stroke: "#d9d9d9",
+           "stroke-width": 0.5
+         }
+       },
+       ```
+       *Example (with custom tag - Advanced feature):*
+       
+       ```js
+       markers: {
+         className: 'starsMarker',
+         customTag: function(markerObject){
+           return markerObject.append("svg:image")
+             .attr("xlink:href", "https://www.example.com/star.svg")
+             .attr("width", "13")
+             .attr("height", "27");
+         },
+         attrX: 'x',
+         attrY: 'y',
+         attrXDelta: -6,
+         attrYDelta: -13
+       },
+       ```
 
 - `countries:` _(object, default: null)_ Add countries on the map. You can **not** use this with `map.heatmap`
     - `countries.tooltip:` _(function(groupedData))_ Function that returns html that we would use as content for the tooltip. We recommend you to use the bootstrap popover. The parameter is `groupedData` (check above on the naming conventions for more details).
@@ -428,64 +427,63 @@ markers: {
         - `countries.attr.legend:` _(bool, default: false)_ show or hide the legend
         - `countries.attr.rollup:` _(function(groupedData), default: values.length)_ Function for the values we're attaching to the country and attribute. return value needs to be an array that contains rows that match that country or marker. Defaults to ``values.length``, the  count of matching countries
         - `countries.attr.transform:` _(function(value, allRows), default: value)_ Function for changing the value for the current country.  Can simply only accept value ``transform(value)`` to do a simple ``Math.log(value)`` call or be defined to use more advanced logic with ``transform(value, allRows)`` and then iterate over ``allRows`` (all rows from your csv/tsv/json) to calculate relative values like percentile.
-*Example*
-
-```js
-countries: {
-  tooltip: function(a) {
-    out = '<div class="arrow"></div>';
-    if (a.values.length === 0) {
-      out += '<h3 class="popover-title"> ' + a.key + '</h3>';
-      out += '<div class="popover-content">N/A</div>';
-    } else {
-      out += '<h3 class="popover-title"> ' + a.values[0]['country_name'] + '</h3>';
-      out += '<div class="popover-content">' + a.values.length + '</div>';
-    }
-    return out;
-  },
-  attr: {
-    fill: {
-      min: "#a9b6c2",
-      max: "#6c89a3",
-      empty: "#f9f9f9",
-      rollup: function(values) {
-        return values.length;
-      },
-    },
-    stroke: "#d9d9d9",
-    "stroke-width": 0.5
-  },
-},
-
-```
+       *Example*
+       
+       ```js
+       countries: {
+         tooltip: function(a) {
+           out = '<div class="arrow"></div>';
+           if (a.values.length === 0) {
+             out += '<h3 class="popover-title"> ' + a.key + '</h3>';
+             out += '<div class="popover-content">N/A</div>';
+           } else {
+             out += '<h3 class="popover-title"> ' + a.values[0]['country_name'] + '</h3>';
+             out += '<div class="popover-content">' + a.values.length + '</div>';
+           }
+           return out;
+         },
+         attr: {
+           fill: {
+             min: "#a9b6c2",
+             max: "#6c89a3",
+             empty: "#f9f9f9",
+             rollup: function(values) {
+               return values.length;
+             },
+           },
+           stroke: "#d9d9d9",
+           "stroke-width": 0.5
+         },
+       },
+       ```
 - `heatmap:` _(object, default: null)_ Add a heatmap on the map - we use concentrated circles on every location in the dataset. You can **not** use this with `map.countries.`
     - `heatmap.weightByAttribute:` _(function(d), default: null)_ Which attribute we would weight the gradient. it takes a anonymous function that exposes `d` as one row, and expect a float as returned value.
     - `heatmap.weightByAttributeScale:` _('log' or 'linear', default: 'linear')_ Which scale we would use for the weight (only if `weightByAttribute` is set).
-    - `heatmap.mask:` _(bool, default: true)_ Mask the heatmap with countries
+    - `heatmap.mask:` _(bool, default: true)_ Mask the heatmap with countries so heatmap doesn't go over oceans
     - `heatmap.circles:` _(object)_ Properties of the circles that makes the heatmap gradient
     - `heatmap.circles.color:` _(string, default: "#FF0000")_ The color in HEX of the heatmap circles.
     - `heatmap.circles.blur:` _(float, default: 4.0)_ Blur radius that we apply on the heatmap.
     - `heatmap.borders:` _(object)_ Enable country borders. Set to `false` to disable it.
     - `heatmap.borders.stroke:` _(integer, default: 1)_ Country border stroke width.
     - `heatmap.borders.opacity:` _(integer, default: 0.1)_ Country border stroke opacity.
-    - `heatmap.borders.color:` _(string, default: "#000")_ Country border stroke color.
-
-*Example*
-```js
-heatmap: {
-  weightByAttribute: function(d) {
-    return parseInt(d.traf, 10);
-  },
-  weightByAttributeScale: 'log',
-  circles: {
-    color: '#0000FF',
-    blur: 6.0,
-  },
-  borders: {
-    opacity: 0.2,
-  },
-},
-```
+    - `heatmap.borders.color:` _(string, default: "#000")_ Country border stroke color.                                                        
+       
+       *Example*
+       ```js
+       heatmap: {
+         weightByAttribute: function(d) {
+           return parseInt(d.traf, 10);
+         },
+         weightByAttributeScale: 'log',
+         circles: {
+           color: '#0000FF',
+           blur: 6.0,
+         },
+         borders: {
+           opacity: 0.2,
+         },
+       },
+       ```
 
 ## Filters
 
