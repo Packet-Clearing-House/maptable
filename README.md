@@ -6,7 +6,7 @@ MapTable
 
 MapTable's primary function is to convert any dataset to a customizable set of components of Map, Filters and Table:
 
-- **Map** - A fully customizable (zoom & pan) SVG choropleth or heat map which dynamically responds to filters and can be exported to a stand alone SVG for external consumption. Can include markers based on lat/lon with tooltips. Markers dynamically update based on filters too
+- **Map** - A fully customizable (zoom & pan) choropleth or heat map rendered using SVG. The map can be exported to a stand alone SVG for external consumption. The map can include markers based on lat/lon with tooltips. Markers and Map are dynamically update based on filters.
 - **Table** - A tabular representation of your dataset which can be sorted by header rows. This also dynamically responds to filters.
 - **Filters** - A programmatically generated list of drop downs and input fields to drill down into your dataset
 
@@ -512,11 +512,11 @@ If you want to add a table on your visualization:
 - `collapseRowsBy:` _([string, ...], default: null)_ Array of columns that we want to be collapsed.
 
 ## Export as SVG		
-You can enable this feature to allow users download the map on their computer as SVG. However, you would need to set up a server endpoint that is going to allow users download the SVG file.
+You can enable this feature via `exportSvg` and set it to a URL.  This will allow users download the map on their computer as an SVG. However, you would need to set up a server endpoint that is going to allow users download the SVG file.
 
 The sample code for a PHP server is located in `/server/exportSvg.php`. Contributions are welcomed for implementations of in other languages.
 
-We introduced into the version 1.4.0, the option `exportSvgClient` to use only the customer browser to export the SVG.
+In the version 1.4.0 `exportSvgClient` was added to use only the browser to export the SVG.
 
 ## Credits
 
