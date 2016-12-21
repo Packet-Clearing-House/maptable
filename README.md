@@ -461,9 +461,6 @@ countries: {
     - `heatmap.weightByAttributeScale:` _('log' or 'linear', default: 'linear')_ Which scale we would use for the weight (only if `weightByAttribute` is set).
     - `heatmap.mask:` _(bool, default: true)_ Mask the heatmap with countries
     - `heatmap.circles:` _(object)_ Properties of the circles that makes the heatmap gradient
-    - `heatmap.circles.min:` _(integer, default: 1)_ The min earth magnitude of the circles. The unit is in degrees (minimum 1 and maximum 180).
-    - `heatmap.circles.max:` _(integer, default: 90)_ The maximum earth magnitude of the circles. The unit is in degrees (minimum 1 and maximum 180).
-    - `heatmap.circles.step:` _(integer, default: 2)_ The magnitude that separates two circles on the heatmap.
     - `heatmap.circles.color:` _(string, default: "#FF0000")_ The color in HEX of the heatmap circles.
     - `heatmap.circles.blur:` _(float, default: 4.0)_ Blur radius that we apply on the heatmap.
     - `heatmap.borders:` _(object)_ Enable country borders. Set to `false` to disable it.
@@ -474,41 +471,17 @@ countries: {
 *Example*
 ```js
 heatmap: {
-  mask: true,
+  mask: false,
+  weightByAttribute: function(d) {
+    return parseInt(d.traf, 10);
+  },
+  weightByAttributeScale: 'log',
   circles: {
-    min: 1,
-    max: 90,
-    step: 2,
-    color: '#FF0000',
-    blur: 4.0,
-    magnitudeScale: function () {
-      const maxOpacityScale = d3.scale.linear()
-        .domain([1, 100])
-        .range([0.7, 1.05]);
-      const lengthDataset = this.data.filter(d => parseInt(d.traf, 10) > 0).length;
-      const centralCircleOpacity = maxOpacityScale(lengthDataset) / lengthDataset;
-
-      const scale = d3.scale.linear()
-        .domain([
-          this.options.map.heatmap.circles.min,
-          this.options.map.heatmap.circles.max,
-        ])
-        .range([centralCircleOpacity, 0]);
-      return (m) => scale(m);
-    },
-    datumScale: function () {
-      const trafficExtents = d3.extent(this.data, d => parseInt(d.traf, 10));
-      if (!trafficExtents[0]) trafficExtents[0] = 0.01;
-      const scale = d3.scale.log()
-        .domain(trafficExtents)
-        .range([0.01, 1.0]);
-      return (d) => scale(parseInt(d.traf, 10));
-    },
+    color: '#0000FF',
+    blur: 6.0,
   },
   borders: {
-    stroke: 1,
-    opacity: 0.1,
-    color: '#000',
+    opacity: 0.2,
   },
 },
 ```
