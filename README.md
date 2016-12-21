@@ -3,12 +3,14 @@ MapTable
 
 [![GitHub stars](https://img.shields.io/github/stars/Packet-Clearing-House/maptable.svg?style=social&label=Star&maxAge=2592004)]() [![GitHub release](https://img.shields.io/github/release/Packet-Clearing-House/maptable.svg?maxAge=2592004)]() [![license](https://img.shields.io/github/license/Packet-Clearing-House/maptable.svg?maxAge=2592005)]()
 
-This library was originally conceived to render the [home page](https://pch.net) and next generation of [IXP directory](https://www.pch.net/ixp/dir) for Packet Clearing House ([PCH](https://pch.net)).
 
-It's primary function is to convert any dataset to a customizable set of components of Map, Filters and Table:
-- **Map** - A fully customizable SVG map which dynamically responds to filters and can be exported to a stand alone SVG for external consumption
+MapTable's primary function is to convert any dataset to a customizable set of components of Map, Filters and Table:
+
+- **Map** - A fully customizable (zoom & pan) SVG choropleth or heat map which dynamically responds to filters and can be exported to a stand alone SVG for external consumption. Can include markers based on lat/lon with tooltips. Markers dynamically update based on filters too
 - **Table** - A tabular representation of your dataset which can be sorted by header rows. This also dynamically responds to filters.
 - **Filters** - A programmatically generated list of drop downs and input fields to drill down into your dataset
+
+This library was originally conceived to render the [home page](https://pch.net) and next generation of [IXP directory](https://www.pch.net/ixp/dir) for Packet Clearing House ([PCH](https://pch.net)).
 
 You can also browse other code samples and **examples** here:
 
@@ -48,7 +50,8 @@ You can also browse other code samples and **examples** here:
 ## Dependencies
 
 - [D3.js](https://d3js.org/)
-- TopoJSON*: [homepage](https://github.com/mbostock/topojson) or [download (cdnjs)](https://cdnjs.com/#q=topojson)
+- TopoJSON*: [homepage](https://github.com/mbostock/topojson) or [download (cdnjs)](https://cdnjs.com/libraries/topojson)
+- FileSaver.js*: [homepage](https://github.com/eligrey/FileSaver.js) or [download (cdnjs)](https://cdnjs.com/libraries/FileSaver.js) - only used if you want to do client side SVG export
 
 \* Only used if you need a map
 
@@ -280,11 +283,10 @@ If you want to attach the data boundaries to the value of an attribute, you may 
 - `saveState:` _(bool, default: true)_ Save zoom state into the URL
 - `zoom:` _(bool, default: true)_ Enable zoom on the map (when scrolling up/down on the map).
 - `filterCountries:`  _(function(country))_ Filter countries follow a specific condition.
-
-*Example:*
-```js
-filterCountries: (country) => country.id !== 'AQ', // to remove Antarctica from the map
-```
+        *Example:*
+        ```js
+        filterCountries: (country) => country.id !== 'AQ', // to remove Antarctica from the map
+        ```
 
 - `title:` _(object, default: *see below*)_ Add a title within the map.
     - `title.bgColor:` _(string, default: '#000000')_ Title font size.
@@ -292,25 +294,24 @@ filterCountries: (country) => country.id !== 'AQ', // to remove Antarctica from 
     - `title.fontFamily:` _(string, default: 'Helevetica, Arial, Sans-Serif')_ Title font family.
     - `title.content:` _(function(countShown, countTotal, filtersDescription)_ Function to define how the title is rendered
     - `title.source:` _(function())__ Function to define how the HTML in the title.
-
-*Example:*
-```js
-title: {
-  bgColor: "#F5F5F5",
-  fontSize: "11",
-  content: function(countShown, countTotal, filtersDescription) {
-    if (countShown === 0 || countTotal === 0) out = "No data shown";
-    else if (countShown < countTotal) out = 'Showing <tspan font-weight="bold">' + countShown + '</tspan> from <tspan font-weight="bold">' + countTotal + "</tspan>";
-    else out = '<tspan font-weight="bold">' + countTotal + "</tspan> shown";
-
-    if (filtersDescription !== '') out += " — " + filtersDescription;
-    return out;
-  },
-  source: function() {
-    return 'Source: <a xlink:href="http://www.example.com" target="_blank"><tspan font-weight="bold">example.com</tspan></a>';
-  }
-},
-```
+        *Example:*
+        ```js
+        title: {
+          bgColor: "#F5F5F5",
+          fontSize: "11",
+          content: function(countShown, countTotal, filtersDescription) {
+            if (countShown === 0 || countTotal === 0) out = "No data shown";
+            else if (countShown < countTotal) out = 'Showing <tspan font-weight="bold">' + countShown + '</tspan> from <tspan font-weight="bold">' + countTotal + "</tspan>";
+            else out = '<tspan font-weight="bold">' + countTotal + "</tspan> shown";
+        
+            if (filtersDescription !== '') out += " — " + filtersDescription;
+            return out;
+          },
+          source: function() {
+            return 'Source: <a xlink:href="http://www.example.com" target="_blank"><tspan font-weight="bold">example.com</tspan></a>';
+          }
+        },
+        ```
 
 - `scaleZoom:` _([integer, integer], default: [1, 10])_ The map zoom scale.
 - `scaleHeight:` _(float, default: 1.0)_ Ratio to scale the map height.
@@ -411,7 +412,7 @@ markers: {
 },
 ```
 
-- `countries:` _(object, default: null)_ Add countries on the map.
+- `countries:` _(object, default: null)_ Add countries on the map. You can **not** use this with `map.heatmap`
     - `countries.tooltip:` _(function(groupedData))_ Function that returns html that we would use as content for the tooltip. We recommend you to use the bootstrap popover. The parameter is `groupedData` (check above on the naming conventions for more details).
     - `countries.attr:` _(object)_ Markers attributes (same naming as svg attributes).
         - `countries.attr.fill:` _(ScaledValue)_ Marker background color.
@@ -456,7 +457,7 @@ countries: {
 },
 
 ```
-- `heatmap:` _(object, default: null)_ Add a heatmap on the map - we use concentrated circles on every location in the dataset.
+- `heatmap:` _(object, default: null)_ Add a heatmap on the map - we use concentrated circles on every location in the dataset. You can **not** use this with `map.countries.`
     - `heatmap.weightByAttribute:` _(function(d), default: null)_ Which attribute we would weight the gradient. it takes a anonymous function that exposes `d` as one row, and expect a float as returned value.
     - `heatmap.weightByAttributeScale:` _('log' or 'linear', default: 'linear')_ Which scale we would use for the weight (only if `weightByAttribute` is set).
     - `heatmap.mask:` _(bool, default: true)_ Mask the heatmap with countries
