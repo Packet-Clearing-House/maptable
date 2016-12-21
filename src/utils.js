@@ -36,7 +36,7 @@ function extendRecursive() {
   let src;
   let p;
   const args = [].splice.call(arguments, 0);
-  var toString = ({}).toString;
+  const toString = ({}).toString;
 
   while (args.length > 0) {
     src = args.splice(0, 1)[0];
@@ -60,14 +60,22 @@ function keyToTile(k) {
   return upperK.replace(/_/g, ' ');
 }
 
+/**
+ *
+ * @param k
+ * @returns {string}
+ */
 function sanitizeKey(k) {
-  return k.toLowerCase().replace(/ /g, '_').replace(/"/g, '').replace(/'/g, '');
+  return k.toLowerCase()
+  .replace(/ /g, '_')
+  .replace(/"/g, '')
+  .replace(/'/g, '');
 }
 
 export default {
-  rangeToBool: rangeToBool,
-  appendOptions: appendOptions,
-  extendRecursive: extendRecursive,
-  sanitizeKey: sanitizeKey,
-  keyToTile: keyToTile,
+  rangeToBool,
+  appendOptions,
+  extendRecursive,
+  sanitizeKey,
+  keyToTile,
 };

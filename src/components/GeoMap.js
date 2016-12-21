@@ -1,7 +1,9 @@
 import Legend from './Legend';
 import Watermark from './Watermark';
-
-// Used the name GeoMap instead of Map to avoid collision with the native Map class of JS
+import StackBlur from './StackBlur';
+/**
+ * Used the name GeoMap instead of Map to avoid collision with the native Map class of JS
+ */
 export default class GeoMap {
   /**
    * Geo Mapping class constructor that will initiate the map drawing
@@ -35,6 +37,8 @@ export default class GeoMap {
     this.svg = d3.select(this.node)
       .append('svg')
       .attr('id', 'mt-map-svg')
+      .attr('xmlns', 'http://www.w3.org/2000/svg')
+      .attr('xmlns:xlink', 'http://www.w3.org/1999/xlink')
       .attr('viewBox', `0 0 ${this.getWidth()} ${this.getHeight()}`)
       .attr('width', this.getWidth())
       .attr('height', this.getHeight());
@@ -44,6 +48,8 @@ export default class GeoMap {
       .scale((this.getWidth() / 640) * 100)
       .rotate([-12, 0])
       .precision(0.1);
+
+    this.path = d3.geo.path().projection(this.projection);
 
     // Add coordinates to rawData
     this.maptable.rawData.forEach(d => {
@@ -74,14 +80,17 @@ export default class GeoMap {
       .attr('class', `mt-map-tooltip ${this.options.markers.tooltipClassName}`)
       .style('display', 'none');
 
-    this.tooltipCountriesNode = d3.select(this.node)
-      .append('div')
-      .attr('id', 'mt-map-countries-tooltip')
-      .attr('class', `mt-map-tooltip ${this.options.countries.tooltipClassName}`)
-      .style('display', 'none');
+    if (this.options.countries) {
+      this.tooltipCountriesNode = d3.select(this.node)
+        .append('div')
+        .attr('id', 'mt-map-countries-tooltip')
+        .attr('class', `mt-map-tooltip ${this.options.countries.tooltipClassName}`)
+        .style('display', 'none');
+    }
 
     this.layerGlobal = this.svg.append('g').attr('class', 'mt-map-global');
     this.layerCountries = this.layerGlobal.append('g').attr('class', 'mt-map-countries');
+    this.layerHeatmap = this.layerGlobal.append('g').attr('class', 'mt-map-heatmap');
     this.layerMarkers = this.layerGlobal.append('g').attr('class', 'mt-map-markers');
 
     // Add Watermark
@@ -136,22 +145,189 @@ export default class GeoMap {
     return this.options.height * this.options.scaleHeight + deltaHeight;
   }
 
+  /**
+   * Load geometries and built the map components
+   */
   loadGeometries() {
-    // We pre-simplify the topojson
-    topojson.presimplify(this.jsonWorld);
+    // We filter world data
+    if (this.options.filterCountries) {
+      this.jsonWorld.objects.countries.geometries = this.jsonWorld.objects.countries
+        .geometries.filter(this.options.filterCountries);
+    }
 
-    // Data geometry
+    // Build countries
+    if (this.options.countries) this.buildCountries();
+
+    // Build heatmap
+    if (this.options.heatmap) this.buildHeatmap();
+  }
+
+  /**
+   * Logic to build the heatmap elements (without the filling the heatmap image)
+   */
+  buildHeatmap() {
+    // Build vectors
+    const lands = topojson.merge(this.jsonWorld, this.jsonWorld.objects.countries.geometries);
+    if (!this.options.heatmap.disableMask) {
+      this.maskHeatmap = this.layerHeatmap.append('defs')
+        .append('clipPath')
+        .attr('id', 'mt-map-heatmap-mask');
+
+      this.maskHeatmap
+          .datum(lands)
+          .append('path')
+          .attr('class', 'mt-map-heatmap-mask-paths')
+          .attr('d', this.path);
+    }
+
+    this.canvasHeatmap = d3.select(this.node)
+      .append('canvas')
+      .attr('id', 'mt-map-heatmap-canvas')
+      .attr('width', this.getWidth())
+      .attr('height', this.getHeight())
+      .attr('style', 'display: none;');
+
+    this.imgHeatmap = this.layerHeatmap
+      .append('image')
+      .attr('width', this.getWidth())
+      .attr('height', this.getHeight())
+      .attr('x', 0)
+      .attr('y', 0)
+      .attr('class', 'mt-map-heatmap-img');
+
+    if (this.options.heatmap.mask) {
+      this.imgHeatmap = this.imgHeatmap.attr('clip-path', 'url(#mt-map-heatmap-mask)');
+    }
+
+    if (this.options.heatmap.borders) {
+      const borders = topojson.mesh(this.jsonWorld,
+        this.jsonWorld.objects.countries, (a, b) => a !== b);
+
+      this.bordersHeatmap = this.layerHeatmap
+          .append('g')
+          .attr('class', 'mt-map-heatmap-borders');
+
+      this.bordersHeatmap.selectAll('path.mt-map-heatmap-borders-paths')
+        .data([lands, borders])
+        .enter()
+        .append('path')
+        .attr('class', 'mt-map-heatmap-borders-paths')
+        .attr('fill', 'none')
+        .attr('stroke-width', this.options.heatmap.borders.stroke)
+        .attr('stroke', this.options.heatmap.borders.color)
+        .attr('style', `opacity: ${this.options.heatmap.borders.opacity}`)
+        .attr('d', this.path);
+    }
+  }
+
+  /**
+   * Get Scale for every circle magnitude
+   * @param heatmapDataset: heatmap dataset that we use
+   * @returns scale: function - Scale function that output a value [0 - 1]
+   */
+  getMagnitudeScale(heatmapDataset) {
+    const opts = this.options.heatmap;
+    const lengthDataset = heatmapDataset.length;
+    if (!lengthDataset) return () => 0;
+    // const layersPerLocation = (opts.circles.max - opts.circles.min) / opts.circles.step;
+    const maxOpacityScale = d3.scale.linear()
+      .domain([1, lengthDataset])
+      .range([1, 1 / 256]);
+    const centralCircleOpacity = maxOpacityScale(lengthDataset);
+
+    const scale = d3.scale.linear()
+      .domain([opts.circles.min, opts.circles.max])
+      .range([centralCircleOpacity, 0]);
+    return (m) => scale(m);
+  }
+
+  /**
+   * Get Scale for every data point (used for weighting)
+   * @returns scale: function - Scale function that output a value [0 - 1]
+   */
+  getDatumScale() {
+    if (!this.options.heatmap.weightByAttribute) return () => 1;
+    const dataExtents = d3.extent(this.maptable.data, this.options.heatmap.weightByAttribute);
+    let scale = d3.scale.linear().domain(dataExtents).range([0, 1]);
+    if (this.options.heatmap.weightByAttributeScale === 'log') {
+      if (!dataExtents[0]) dataExtents[0] = 0.01;
+      scale = d3.scale.log()
+        .domain(dataExtents)
+        .range([0.01, 1.0]);
+    }
+    return (d) => {
+      const val = this.options.heatmap.weightByAttribute(d);
+      if (!val) return 0;
+      return scale(val);
+    };
+  }
+
+  /**
+   * Get the Data URL of the heatmap image
+   * @returns {string} base64 image
+   */
+  getHeatmapData() {
+    const ctx = this.canvasHeatmap.node().getContext('2d');
+    ctx.globalCompositeOperation = 'multiply';
+    const circles = d3.range(
+      this.options.heatmap.circles.min,
+      this.options.heatmap.circles.max,
+      this.options.heatmap.circles.step
+    );
+    const datumScale = this.getDatumScale();
+    const heatmapDataset = this.maptable.data.filter(d => {
+      return datumScale(d) > 0.1;
+    });
+    const path = this.path.context(ctx);
+    const magnitudeScale = this.getMagnitudeScale(heatmapDataset);
+    const colorScale = d3.scale.linear()
+      .domain([1, 0])
+      .range([this.options.heatmap.circles.color, '#FFFFFF']);
+    heatmapDataset.forEach((point) => {
+      const scaleOpacityDatum = datumScale(point);
+      circles.forEach(m => {
+        const opacity = magnitudeScale(m) * scaleOpacityDatum;
+        if (opacity > 0) {
+          ctx.beginPath();
+          path(d3.geo.circle().origin([point.longitude, point.latitude]).angle(m - 0.0001)());
+          ctx.fillStyle = colorScale(opacity);
+          ctx.fill();
+          ctx.closePath();
+        }
+      });
+    });
+    StackBlur.canvasRGBA(this.canvasHeatmap.node(), 0, 0, this.getWidth(),
+      this.getHeight(), this.options.heatmap.circles.blur);
+    const dataUrl = this.canvasHeatmap.node().toDataURL();
+    ctx.clearRect(0, 0, this.canvasHeatmap.width, this.canvasHeatmap.height);
+    return dataUrl;
+  }
+
+  /**
+   * Set the data URL to the heatmap image
+   */
+  updateHeatmap() {
+    const dataUrl = this.getHeatmapData();
+    this.imgHeatmap.attr('xlink:href', dataUrl);
+  }
+
+  /**
+   * build the paths for the countries
+   */
+  buildCountries() {
     this.dataCountries = topojson.feature(this.jsonWorld,
       this.jsonWorld.objects.countries).features;
 
+    // Build country paths
     this.layerCountries
       .selectAll('.mt-map-country')
         .data(this.dataCountries)
         .enter()
         .insert('path')
         .attr('class', 'mt-map-country')
-        .attr('d', d3.geo.path().projection(this.projection));
+        .attr('d', this.path);
 
+    // Build Country Legend
     this.legendCountry = {};
 
     if (this.options.countries.attr.fill &&
@@ -160,10 +336,11 @@ export default class GeoMap {
         this.options.countries.attr.fill.max) {
       this.legendCountry.fill = new Legend(this);
     }
-
-    this.render();
   }
 
+  /**
+   * Set the right color for every country
+   */
   updateCountries() {
     // Data from user input
     const dataByCountry = d3.nest()
@@ -212,7 +389,7 @@ export default class GeoMap {
     });
 
     // Update Tooltip
-    if (this.options.countries.tooltip) {
+    if (this.options.countries && this.options.countries.tooltip) {
       this.activateTooltip(countryItem, this.tooltipCountriesNode, this.options.countries.tooltip);
     }
   }
@@ -467,8 +644,8 @@ export default class GeoMap {
       `translate(${this.transX}, ${this.transY})scale(${this.scale})`);
 
     // Hide tooltip
-    self.tooltipCountriesNode.attr('style', 'display:none;');
-    self.tooltipMarkersNode.attr('style', 'display:none;');
+    if (self.tooltipCountriesNode) self.tooltipCountriesNode.attr('style', 'display:none;');
+    if (self.tooltipMarkersNode) self.tooltipMarkersNode.attr('style', 'display:none;');
 
     // Rescale markers size
     if (this.options.markers) {
@@ -486,8 +663,16 @@ export default class GeoMap {
     }
 
     // Rescale Country stroke-width
-    d3.selectAll('.mt-map-country').style('stroke-width',
-      this.options.countries.attr['stroke-width'] / this.scale);
+    if (this.options.countries) {
+      d3.selectAll('.mt-map-country').style('stroke-width',
+        this.options.countries.attr['stroke-width'] / this.scale);
+    }
+
+    // Rescale heatmap borders
+    if (this.options.heatmap && this.options.heatmap.borders) {
+      d3.selectAll('.mt-map-heatmap-borders-paths').style('stroke-width',
+        this.options.heatmap.borders.stroke / this.scale);
+    }
 
     // save state
     window.clearTimeout(this.saveStateTimeout);
@@ -580,6 +765,7 @@ export default class GeoMap {
     if (this.options.markers) this.updateMarkers();
     if (this.options.countries) this.updateCountries();
     if (this.options.title) this.updateTitle();
+    if (this.options.heatmap) this.updateHeatmap();
     if (this.options.autoFitContent) {
       this.fitContent();
       this.rescale();
@@ -623,7 +809,8 @@ export default class GeoMap {
     // Get the d3js SVG element
     const svg = document.getElementById('mt-map-svg');
     // Extract the data as SVG text string
-    const svgXml = (new XMLSerializer).serializeToString(svg);
+    const svgXml = `<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+${(new XMLSerializer).serializeToString(svg)}`;
 
     if (this.options.exportSvgClient) {
       if (!window.saveAs) {

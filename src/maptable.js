@@ -18,6 +18,10 @@ export default class MapTable {
     } else if (this.options.data.type === 'tsv') {
       d3.tsv(this.options.data.path, this.loadData.bind(this));
     }
+
+    if (this.options.map && this.options.map.heatmap) {
+      delete this.options.map.countries;
+    }
   }
 
   /**
@@ -30,19 +34,28 @@ export default class MapTable {
       throw err;
     }
     this.rawData = data;
+
+    if (this.options.data.preFilter) {
+      this.rawData = this.rawData.filter(this.options.data.preFilter);
+    }
+
     this.setColumnDetails();
-    this.data = data.slice(); // we clone data, so that we can filter it
+    this.data = this.rawData.slice(); // we clone data, so that we can filter it
     // Map
     if (this.options.map) {
       // Map wrapper
       const mapWrapper = document.createElement('div');
       mapWrapper.setAttribute('class', 'mt-map-container');
+      mapWrapper.innerHTML = '<div class="mt-loading">Loading...</div>';
       this.node.insertBefore(mapWrapper, this.node.firstChild);
+      mapWrapper.querySelector('.mt-loading').style.display = 'block';
       d3.json(this.options.map.path, (errGeoMap, jsonWorld) => {
         if (errGeoMap) {
           throw errGeoMap;
         }
         this.map = new GeoMap(this, this.options.map, jsonWorld);
+
+        mapWrapper.querySelector('.mt-loading').style.display = 'none';
 
         this.buildComponenents();
       });

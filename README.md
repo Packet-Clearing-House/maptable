@@ -1,20 +1,22 @@
 MapTable
 ========
 
-[![GitHub stars](https://img.shields.io/github/stars/Packet-Clearing-House/maptable.svg?style=social&label=Star&maxAge=2592003)]() [![GitHub release](https://img.shields.io/github/release/Packet-Clearing-House/maptable.svg?maxAge=2592003)]() [![license](https://img.shields.io/github/license/Packet-Clearing-House/maptable.svg?maxAge=2592004)]()
+[![GitHub stars](https://img.shields.io/github/stars/Packet-Clearing-House/maptable.svg?style=social&label=Star&maxAge=2592004)]() [![GitHub release](https://img.shields.io/github/release/Packet-Clearing-House/maptable.svg?maxAge=2592004)]() [![license](https://img.shields.io/github/license/Packet-Clearing-House/maptable.svg?maxAge=2592005)]()
 
-This library was originally conceived to render the [home page](https://pch.net) and next generation of [IXP directory](https://www.pch.net/ixp/dir) for Packet Clearing House ([PCH](https://pch.net)).
 
-It's primary function is to convert any dataset to a customizable set of components of Map, Filters and Table:
-- **Map** - A fully customizable SVG map which dynamically responds to filters and can be exported to a stand alone SVG for external consumption
+MapTable's primary function is to convert any dataset to a customizable set of components of Map, Filters and Table:
+
+- **Map** - A fully customizable (zoom & pan) choropleth or heat map rendered using SVG. The map can be exported to a stand alone SVG for external consumption. The map can include markers based on lat/lon with tooltips. Markers and Map are dynamically update based on filters.
 - **Table** - A tabular representation of your dataset which can be sorted by header rows. This also dynamically responds to filters.
 - **Filters** - A programmatically generated list of drop downs and input fields to drill down into your dataset
+
+This library was originally conceived to render the [home page](https://pch.net) and next generation of [IXP directory](https://www.pch.net/ixp/dir) for Packet Clearing House ([PCH](https://pch.net)).
 
 You can also browse other code samples and **examples** here:
 
 [<img src="https://gist.githubusercontent.com/melalj/cc130ad4072a2f52a5aa/raw/2abcdff5cc84e71dd40552be68e5ae747dcd9a5d/thumbnail.png">](https://bl.ocks.org/melalj/cc130ad4072a2f52a5aa) [<img src="https://gist.githubusercontent.com/melalj/ef85eb677583647daf52/raw/127e36862c4cfae6e7039023a8a449cc043f6837/thumbnail.png">](https://bl.ocks.org/melalj/ef85eb677583647daf52) [<img src="https://gist.githubusercontent.com/melalj/2394323e478dca231128/raw/a43dadbb67e8ecb335a92f2210ae59f109f25fd6/thumbnail.png">](https://bl.ocks.org/melalj/2394323e478dca231128)
 
-[<img src="https://gist.githubusercontent.com/melalj/772c8a846a3f308e9358/raw/b8b39512d91b56ce4383cfd5a491083ff3f1b42f/thumbnail.png">](https://bl.ocks.org/melalj/772c8a846a3f308e9358) [<img src="https://gist.githubusercontent.com/melalj/07be61a538509b8e4a7e/raw/5565adb3e2a88162c6ecaa55dc7472a085ddb0d2/thumbnail.png">](https://bl.ocks.org/melalj/07be61a538509b8e4a7e) [<img src="https://gist.githubusercontent.com/melalj/1aa4dd90b4561deb8de6/raw/dbb70a32eeba5c366b9a4c4641fb2d104a26f6cb/thumbnail.png">](https://bl.ocks.org/melalj/1aa4dd90b4561deb8de6)
+[<img src="https://gist.githubusercontent.com/melalj/772c8a846a3f308e9358/raw/b8b39512d91b56ce4383cfd5a491083ff3f1b42f/thumbnail.png">](https://bl.ocks.org/melalj/772c8a846a3f308e9358) [<img src="https://gist.githubusercontent.com/melalj/07be61a538509b8e4a7e/raw/5565adb3e2a88162c6ecaa55dc7472a085ddb0d2/thumbnail.png">](https://bl.ocks.org/melalj/07be61a538509b8e4a7e) [<img src="https://gist.githubusercontent.com/melalj/1aa4dd90b4561deb8de6/raw/dbb70a32eeba5c366b9a4c4641fb2d104a26f6cb/thumbnail.png">](https://bl.ocks.org/melalj/1aa4dd90b4561deb8de6) [<img src="https://gist.githubusercontent.com/melalj/145ef67aa04a6713bc1d026eed46c59e/raw/39f0c2da838b6c5e989faeb7709cb96d170012e7/thumbnail.png">](https://bl.ocks.org/melalj/145ef67aa04a6713bc1d026eed46c59e)
 
 
 ## Table of Contents
@@ -48,7 +50,8 @@ You can also browse other code samples and **examples** here:
 ## Dependencies
 
 - [D3.js](https://d3js.org/)
-- TopoJSON*: [homepage](https://github.com/mbostock/topojson) or [download (cdnjs)](https://cdnjs.com/#q=topojson)
+- TopoJSON*: [homepage](https://github.com/mbostock/topojson) or [download (cdnjs)](https://cdnjs.com/libraries/topojson)
+- FileSaver.js*: [homepage](https://github.com/eligrey/FileSaver.js) or [download (cdnjs)](https://cdnjs.com/libraries/FileSaver.js) - only used if you want to do client side SVG export
 
 \* Only used if you need a map
 
@@ -107,15 +110,22 @@ You instantiate the MapTable library into the `viz` variable based on the `#vizC
 ```
 
 The MapTable `viz` declaration in the above example is a chain of functions. The possible functions that you can use are:
-- [viz.json(jsonPath)](#viz-json) with `jsonPath` as string
-- [viz.csv(csvPath)](#viz-csv) with `csvPath` as string
-- [viz.tsv(tsvPath)](#viz-tsv) with `tsvPath` as string
+- [viz.json(jsonPath\[, preFilter\])](#viz-json) with `jsonPath` as string and `preFilter` as function that filters the dataset upfront.
+- [viz.csv(csvPath\[, preFilter\])](#viz-csv) with `csvPath` as string and `preFilter`.
+- [viz.tsv(tsvPath\[, preFilter\])](#viz-tsv) with `tsvPath` as string and `preFilter`.
 - [viz.columns(columnDetails)](#columns-details) with `columnDetails` as a JS dictionary. You can add/remove it of you want to customize your columns or create virtual columns based on the data.
 - [viz.map(mapOptions)](#map) with `mapOptions` as a JS dictionary. You can add/remove it of you want a map on your visualization.
 - [viz.filters(filtersOptions)](#filters) with `filtersOptions` as a JS dictionary. You can add/remove it of you want filters on your visualization.
 - [viz.table(tableOptions)](#table) with `tableOptions` as a JS dictionary. You can add/remove it of you want a table on your visualization.
 - [viz.render([onComplete])](#render) that closes the chain and renders the visualization. Don't forget this! It can take an optional callback function onComplete, that's executed when MapTable finishes rendering its components. For example if you have `function alertTest(){ alert('test!'); }` you would call it with `viz.render(alertTest)`.
 
+*Example with preFilter*
+```js
+var viz = d3.maptable('#vizContainer')
+        .json('dir_data.json', (d) => parseInt(d.traffic) > 0)
+        .map({ path: 'ne_110m_admin_0_countries.json' })
+        .render();
+```
 
 ### Import datasets
 
@@ -272,31 +282,37 @@ If you want to attach the data boundaries to the value of an attribute, you may 
 - `height:` _(integer, default:'window.innerHeight')_ Map Height.
 - `saveState:` _(bool, default: true)_ Save zoom state into the URL
 - `zoom:` _(bool, default: true)_ Enable zoom on the map (when scrolling up/down on the map).
+- `filterCountries:`  _(function(country))_ Filter countries follow a specific condition.
+        *Example:*
+        
+        ```js
+        filterCountries: (country) => country.id !== 'AQ', // to remove Antarctica from the map
+        ```
+
 - `title:` _(object, default: *see below*)_ Add a title within the map.
     - `title.bgColor:` _(string, default: '#000000')_ Title font size.
     - `title.fontSize:` _(integer, default: 12)_ Title font size.
     - `title.fontFamily:` _(string, default: 'Helevetica, Arial, Sans-Serif')_ Title font family.
     - `title.content:` _(function(countShown, countTotal, filtersDescription)_ Function to define how the title is rendered
     - `title.source:` _(function())__ Function to define how the HTML in the title.
-
-*Example:*
-```js
-title: {
-  bgColor: "#F5F5F5",
-  fontSize: "11",
-  content: function(countShown, countTotal, filtersDescription) {
-    if (countShown === 0 || countTotal === 0) out = "No data shown";
-    else if (countShown < countTotal) out = 'Showing <tspan font-weight="bold">' + countShown + '</tspan> from <tspan font-weight="bold">' + countTotal + "</tspan>";
-    else out = '<tspan font-weight="bold">' + countTotal + "</tspan> shown";
-
-    if (filtersDescription !== '') out += " — " + filtersDescription;
-    return out;
-  },
-  source: function() {
-    return 'Source: <a xlink:href="http://www.example.com" target="_blank"><tspan font-weight="bold">example.com</tspan></a>';
-  }
-},
-```
+        *Example:*
+        ```js
+        title: {
+          bgColor: "#F5F5F5",
+          fontSize: "11",
+          content: function(countShown, countTotal, filtersDescription) {
+            if (countShown === 0 || countTotal === 0) out = "No data shown";
+            else if (countShown < countTotal) out = 'Showing <tspan font-weight="bold">' + countShown + '</tspan> from <tspan font-weight="bold">' + countTotal + "</tspan>";
+            else out = '<tspan font-weight="bold">' + countTotal + "</tspan> shown";
+        
+            if (filtersDescription !== '') out += " — " + filtersDescription;
+            return out;
+          },
+          source: function() {
+            return 'Source: <a xlink:href="http://www.example.com" target="_blank"><tspan font-weight="bold">example.com</tspan></a>';
+          }
+        },
+        ```
 
 - `scaleZoom:` _([integer, integer], default: [1, 10])_ The map zoom scale.
 - `scaleHeight:` _(float, default: 1.0)_ Ratio to scale the map height.
@@ -320,16 +336,16 @@ title: {
     - `watermark.position:` _(string)_ Watermark position (top|middle|bottom) (left|middle|right). e.g. `bottom left`.
     - `watermark.style:` _(string)_ Additional css style for the watermark.
 
-*Example:*
-```js
-watermark: {
-  src: 'https://example.com/image.svg',
-  width: 130,
-  height: 60,
-  position: "bottom left",
-  style: "opacity:0.1"
-},
-```
+       *Example:*
+       ```js
+       watermark: {
+         src: 'https://example.com/image.svg',
+         width: 130,
+         height: 60,
+         position: "bottom left",
+         style: "opacity:0.1"
+       },
+       ```
 - `markers:` _(object, default: null)_ Add markers on the map.
     - `markers.customTag:` _(function(markerObject)), default: null)_ This is more advanced feature. If you'd like to override the default market tag (svg:circle) to something different (like an image), you can use this callback function to append to the markerObject your custom implementation (see below example). x and y are coordinates in pixels of the marker.
     - `markers.attrX:` _(string, default: 'cx')_ Attribute to position the marker on the X-Axis
@@ -348,56 +364,55 @@ watermark: {
         - `markers.attr.r.transform:` _(function(value, allRows), default: value)_ Function for changing the value for the current radius.  Can simply only accept value ``transform(value)`` to do a simple ``Math.log(value)`` call or be defined to use more advanced logic with ``transform(value, allRows)`` and then iterate over ``allRows`` (all rows from your csv/tsv/json) to calculate relative values like percentile.
         - `markers.attr.stroke:` _(ScaledValue)_ Marker border color.
         - `markers.attr.stroke-width:` _(ScaledValue)_ Marker border width.
+       
+       *Example (grouping by value):*
+       
+       ```js
+       markers: {
+         tooltip: function(a) {
+           out = '<div class="arrow"></div>';
+           out += '<span class="badge pull-right"> ' + a.values.length + '</span><h3 class="popover-title"> ' + a.key + '</h3>';
+           out += '<div class="popover-content">';
+           for (i = 0; i < a.values.length; i++) out += " • " + a.values[i].long_name + "<br>";
+           out += "</div>";
+           return out;
+         },
+         attr: {
+           r: {
+             min: "minValue",
+             max: "maxValue",
+             transform: function(v) {
+               return 3 * Math.sqrt(v);
+             },
+             rollup: function(values) {
+               return values.length;
+             },
+           },
+           fill: "yellow",
+           stroke: "#d9d9d9",
+           "stroke-width": 0.5
+         }
+       },
+       ```
+       *Example (with custom tag - Advanced feature):*
+       
+       ```js
+       markers: {
+         className: 'starsMarker',
+         customTag: function(markerObject){
+           return markerObject.append("svg:image")
+             .attr("xlink:href", "https://www.example.com/star.svg")
+             .attr("width", "13")
+             .attr("height", "27");
+         },
+         attrX: 'x',
+         attrY: 'y',
+         attrXDelta: -6,
+         attrYDelta: -13
+       },
+       ```
 
-*Example (grouping by value):*
-
-```js
-markers: {
-  tooltip: function(a) {
-    out = '<div class="arrow"></div>';
-    out += '<span class="badge pull-right"> ' + a.values.length + '</span><h3 class="popover-title"> ' + a.key + '</h3>';
-    out += '<div class="popover-content">';
-    for (i = 0; i < a.values.length; i++) out += " • " + a.values[i].long_name + "<br>";
-    out += "</div>";
-    return out;
-  },
-  attr: {
-    r: {
-      min: "minValue",
-      max: "maxValue",
-      transform: function(v) {
-        return 3 * Math.sqrt(v);
-      },
-      rollup: function(values) {
-        return values.length;
-      },
-    },
-    fill: "yellow",
-    stroke: "#d9d9d9",
-    "stroke-width": 0.5
-  }
-},
-```
-*Example (with custom tag - Advanced feature):*
-
-
-```js
-markers: {
-  className: 'starsMarker',
-  customTag: function(markerObject){
-    return markerObject.append("svg:image")
-      .attr("xlink:href", "https://www.example.com/star.svg")
-      .attr("width", "13")
-      .attr("height", "27");
-  },
-  attrX: 'x',
-  attrY: 'y',
-  attrXDelta: -6,
-  attrYDelta: -13
-},
-```
-
-- `countries:` _(object, default: null)_ Add countries on the map.
+- `countries:` _(object, default: null)_ Add countries on the map. You can **not** use this with `map.heatmap`
     - `countries.tooltip:` _(function(groupedData))_ Function that returns html that we would use as content for the tooltip. We recommend you to use the bootstrap popover. The parameter is `groupedData` (check above on the naming conventions for more details).
     - `countries.attr:` _(object)_ Markers attributes (same naming as svg attributes).
         - `countries.attr.fill:` _(ScaledValue)_ Marker background color.
@@ -412,35 +427,63 @@ markers: {
         - `countries.attr.legend:` _(bool, default: false)_ show or hide the legend
         - `countries.attr.rollup:` _(function(groupedData), default: values.length)_ Function for the values we're attaching to the country and attribute. return value needs to be an array that contains rows that match that country or marker. Defaults to ``values.length``, the  count of matching countries
         - `countries.attr.transform:` _(function(value, allRows), default: value)_ Function for changing the value for the current country.  Can simply only accept value ``transform(value)`` to do a simple ``Math.log(value)`` call or be defined to use more advanced logic with ``transform(value, allRows)`` and then iterate over ``allRows`` (all rows from your csv/tsv/json) to calculate relative values like percentile.
-*Example*
-
-```js
-countries: {
-  tooltip: function(a) {
-    out = '<div class="arrow"></div>';
-    if (a.values.length === 0) {
-      out += '<h3 class="popover-title"> ' + a.key + '</h3>';
-      out += '<div class="popover-content">N/A</div>';
-    } else {
-      out += '<h3 class="popover-title"> ' + a.values[0]['country_name'] + '</h3>';
-      out += '<div class="popover-content">' + a.values.length + '</div>';
-    }
-    return out;
-  },
-  attr: {
-    fill: {
-      min: "#a9b6c2",
-      max: "#6c89a3",
-      empty: "#f9f9f9",
-      rollup: function(values) {
-        return values.length;
-      },
-    },
-    stroke: "#d9d9d9",
-    "stroke-width": 0.5
-  },
-},
-```
+       *Example*
+       
+       ```js
+       countries: {
+         tooltip: function(a) {
+           out = '<div class="arrow"></div>';
+           if (a.values.length === 0) {
+             out += '<h3 class="popover-title"> ' + a.key + '</h3>';
+             out += '<div class="popover-content">N/A</div>';
+           } else {
+             out += '<h3 class="popover-title"> ' + a.values[0]['country_name'] + '</h3>';
+             out += '<div class="popover-content">' + a.values.length + '</div>';
+           }
+           return out;
+         },
+         attr: {
+           fill: {
+             min: "#a9b6c2",
+             max: "#6c89a3",
+             empty: "#f9f9f9",
+             rollup: function(values) {
+               return values.length;
+             },
+           },
+           stroke: "#d9d9d9",
+           "stroke-width": 0.5
+         },
+       },
+       ```
+- `heatmap:` _(object, default: null)_ Add a heatmap on the map - we use concentrated circles on every location in the dataset. You can **not** use this with `map.countries.`
+    - `heatmap.weightByAttribute:` _(function(d), default: null)_ Which attribute we would weight the gradient. it takes a anonymous function that exposes `d` as one row, and expect a float as returned value.
+    - `heatmap.weightByAttributeScale:` _('log' or 'linear', default: 'linear')_ Which scale we would use for the weight (only if `weightByAttribute` is set).
+    - `heatmap.mask:` _(bool, default: true)_ Mask the heatmap with countries so heatmap doesn't go over oceans
+    - `heatmap.circles:` _(object)_ Properties of the circles that makes the heatmap gradient
+    - `heatmap.circles.color:` _(string, default: "#FF0000")_ The color in HEX of the heatmap circles.
+    - `heatmap.circles.blur:` _(float, default: 4.0)_ Blur radius that we apply on the heatmap.
+    - `heatmap.borders:` _(object)_ Enable country borders. Set to `false` to disable it.
+    - `heatmap.borders.stroke:` _(integer, default: 1)_ Country border stroke width.
+    - `heatmap.borders.opacity:` _(integer, default: 0.1)_ Country border stroke opacity.
+    - `heatmap.borders.color:` _(string, default: "#000")_ Country border stroke color.                                                        
+       
+       *Example*
+       ```js
+       heatmap: {
+         weightByAttribute: function(d) {
+           return parseInt(d.traf, 10);
+         },
+         weightByAttributeScale: 'log',
+         circles: {
+           color: '#0000FF',
+           blur: 6.0,
+         },
+         borders: {
+           opacity: 0.2,
+         },
+       },
+       ```
 
 ## Filters
 
@@ -469,11 +512,11 @@ If you want to add a table on your visualization:
 - `collapseRowsBy:` _([string, ...], default: null)_ Array of columns that we want to be collapsed.
 
 ## Export as SVG		
-You can enable this feature to allow users download the map on their computer as SVG. However, you would need to set up a server endpoint that is going to allow users download the SVG file.
+You can enable this feature via `exportSvg` and set it to a URL.  This will allow users download the map on their computer as an SVG. However, you would need to set up a server endpoint that is going to allow users download the SVG file.
 
 The sample code for a PHP server is located in `/server/exportSvg.php`. Contributions are welcomed for implementations of in other languages.
 
-We introduced into the version 1.4, the option `exportSvgClient` to use only the customer browser to export the SVG.
+In the version 1.4.0 `exportSvgClient` was added to use only the browser to export the SVG.
 
 ## Credits
 
@@ -518,6 +561,12 @@ Run these commands as your unprivileged user you're doing your development as:
 
 
 ## Release History
+* Version 1.4.0 December 20 2016
+  * Add heatmap feature - [PR #43](https://github.com/Packet-Clearing-House/maptable/pull/43)
+  * Add client side export feature - [Issue #9](https://github.com/Packet-Clearing-House/maptable/issues/9)
+  * Fixed country colors when filtering - [Issue #43](https://github.com/Packet-Clearing-House/maptable/issues/43)
+  * Add callback feature - [Issue #25](https://github.com/Packet-Clearing-House/maptable/issues/25)
+  * Add stateful URL feature - [Issue #38](https://github.com/Packet-Clearing-House/maptable/issues/38)
 * Version 1.3 September 26 2016
   * Allow fancier math on country values in ``map.countries.attr.fill.transform()`` in GeoMap.js - [Issue #32](https://github.com/Packet-Clearing-House/maptable/issues/32)
 * Version 1.2.1 September 21 2016

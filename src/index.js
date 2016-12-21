@@ -26,21 +26,24 @@ d3.maptable = function (target) {
     return maptable;
   };
 
-  maptable.json = function (jsonPath) {
+  maptable.json = function (jsonPath, preFilter) {
     options.data.type = 'json';
     options.data.path = jsonPath;
+    options.data.preFilter = preFilter;
     return maptable;
   };
 
-  maptable.csv = function (csvPath) {
+  maptable.csv = function (csvPath, preFilter) {
     options.data.type = 'csv';
     options.data.path = csvPath;
+    options.data.preFilter = preFilter;
     return maptable;
   };
 
-  maptable.tsv = function (tsvPath) {
+  maptable.tsv = function (tsvPath, preFilter) {
     options.data.type = 'tsv';
     options.data.path = tsvPath;
+    options.data.preFilter = preFilter;
     return maptable;
   };
 
@@ -67,6 +70,8 @@ d3.maptable = function (target) {
     if (!options.data || !options.data.path) {
       throw new Error('MapTable: Please provide the path for your dataset json|csv|tsv');
     }
+
+    if (!options.map || !options.map.heatmap) options.map.heatmap = null;
 
     if (!options.filters) options.filters = null;
     options.onComplete = onComplete;

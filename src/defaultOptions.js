@@ -23,6 +23,23 @@ export default {
       },
       tooltipClassName: 'mt-map-tooltip popover bottom',
     },
+    heatmap: {
+      mask: true,
+      weightByAttribute: null,
+      weightByAttributeScale: 'linear',
+      circles: {
+        min: 1,
+        max: 90,
+        step: 4,
+        color: '#FF0000',
+        blur: 4.0,
+      },
+      borders: {
+        stroke: 1,
+        opacity: 0.1,
+        color: '#000',
+      },
+    },
     markers: {
       attr: {
         r: 4,
