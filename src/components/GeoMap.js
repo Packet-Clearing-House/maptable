@@ -232,11 +232,11 @@ export default class GeoMap {
     // const layersPerLocation = (opts.circles.max - opts.circles.min) / opts.circles.step;
     const maxOpacityScale = d3.scale.linear()
       .domain([1, lengthDataset])
-      .range([1, 1 / 256]);
+      .range([1, 1 / 10]);
     const centralCircleOpacity = maxOpacityScale(lengthDataset);
 
     const scale = d3.scale.linear()
-      .domain([opts.circles.min, opts.circles.max])
+      .domain([opts.circles.min, 25])
       .range([centralCircleOpacity, 0]);
     return (m) => scale(m);
   }
@@ -253,7 +253,7 @@ export default class GeoMap {
       if (!dataExtents[0]) dataExtents[0] = 0.01;
       scale = d3.scale.log()
         .domain(dataExtents)
-        .range([0.01, 1.0]);
+        .range([0.4, 1.0]);
     }
     return (d) => {
       const val = this.options.heatmap.weightByAttribute(d);
@@ -282,11 +282,21 @@ export default class GeoMap {
     const magnitudeScale = this.getMagnitudeScale(heatmapDataset);
     const colorScale = d3.scale.linear()
       .domain([1, 0])
-      .range([this.options.heatmap.circles.color, '#FFFFFF']);
+      .range(['#000000', '#FFFFFF']);
+
+    // Make a flat white background first
+    ctx.beginPath();
+    ctx.rect(0, 0, this.getWidth(), this.getHeight());
+    ctx.fillStyle = '#ffffff';
+    ctx.fill();
+    ctx.closePath();
+
+    // add condensed clouds
     heatmapDataset.forEach((point) => {
       const scaleOpacityDatum = datumScale(point);
       circles.forEach(m => {
         const opacity = magnitudeScale(m) * scaleOpacityDatum;
+        const colorValue = colorScale(opacity);
         if (opacity > 0) {
           ctx.beginPath();
           path(d3.geo.circle().origin([point.longitude, point.latitude]).angle(m - 0.0001)());
@@ -296,8 +306,18 @@ export default class GeoMap {
         }
       });
     });
+
     StackBlur.canvasRGBA(this.canvasHeatmap.node(), 0, 0, this.getWidth(),
       this.getHeight(), this.options.heatmap.circles.blur);
+
+    // Add color layer
+    ctx.beginPath();
+    ctx.globalCompositeOperation = 'screen';
+    ctx.rect(0, 0, this.getWidth(), this.getHeight());
+    ctx.fillStyle = this.options.heatmap.circles.color;
+    ctx.fill();
+    ctx.closePath();
+
     const dataUrl = this.canvasHeatmap.node().toDataURL();
     ctx.clearRect(0, 0, this.canvasHeatmap.width, this.canvasHeatmap.height);
     return dataUrl;
