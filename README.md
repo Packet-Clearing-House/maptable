@@ -284,7 +284,7 @@ If you want to attach the data boundaries to the value of an attribute, you may 
 - `zoom:` _(bool, default: true)_ Enable zoom on the map (when scrolling up/down on the map).
 - `filterCountries:`  _(function(country))_ Filter countries follow a specific condition.
         *Example:*
-        
+
         ```js
         filterCountries: (country) => country.id !== 'AQ', // to remove Antarctica from the map
         ```
@@ -304,7 +304,7 @@ If you want to attach the data boundaries to the value of an attribute, you may 
             if (countShown === 0 || countTotal === 0) out = "No data shown";
             else if (countShown < countTotal) out = 'Showing <tspan font-weight="bold">' + countShown + '</tspan> from <tspan font-weight="bold">' + countTotal + "</tspan>";
             else out = '<tspan font-weight="bold">' + countTotal + "</tspan> shown";
-        
+
             if (filtersDescription !== '') out += " — " + filtersDescription;
             return out;
           },
@@ -364,9 +364,9 @@ If you want to attach the data boundaries to the value of an attribute, you may 
         - `markers.attr.r.transform:` _(function(value, allRows), default: value)_ Function for changing the value for the current radius.  Can simply only accept value ``transform(value)`` to do a simple ``Math.log(value)`` call or be defined to use more advanced logic with ``transform(value, allRows)`` and then iterate over ``allRows`` (all rows from your csv/tsv/json) to calculate relative values like percentile.
         - `markers.attr.stroke:` _(ScaledValue)_ Marker border color.
         - `markers.attr.stroke-width:` _(ScaledValue)_ Marker border width.
-       
+
        *Example (grouping by value):*
-       
+
        ```js
        markers: {
          tooltip: function(a) {
@@ -395,7 +395,7 @@ If you want to attach the data boundaries to the value of an attribute, you may 
        },
        ```
        *Example (with custom tag - Advanced feature):*
-       
+
        ```js
        markers: {
          className: 'starsMarker',
@@ -428,7 +428,7 @@ If you want to attach the data boundaries to the value of an attribute, you may 
         - `countries.attr.rollup:` _(function(groupedData), default: values.length)_ Function for the values we're attaching to the country and attribute. return value needs to be an array that contains rows that match that country or marker. Defaults to ``values.length``, the  count of matching countries
         - `countries.attr.transform:` _(function(value, allRows), default: value)_ Function for changing the value for the current country.  Can simply only accept value ``transform(value)`` to do a simple ``Math.log(value)`` call or be defined to use more advanced logic with ``transform(value, allRows)`` and then iterate over ``allRows`` (all rows from your csv/tsv/json) to calculate relative values like percentile.
        *Example*
-       
+
        ```js
        countries: {
          tooltip: function(a) {
@@ -458,6 +458,7 @@ If you want to attach the data boundaries to the value of an attribute, you may 
        ```
 - `heatmap:` _(object, default: null)_ Add a heatmap on the map - we use concentrated circles on every location in the dataset. You can **not** use this with `map.countries.`
     - `heatmap.weightByAttribute:` _(function(d), default: null)_ Which attribute we would weight the gradient. it takes a anonymous function that exposes `d` as one row, and expect a float as returned value.
+    - `heatmap.fallOffStrenght:` _(float, default: 1.0)_ Factor to increase the fall off strength of the color  (the value should strictly more than 0).
     - `heatmap.weightByAttributeScale:` _('log' or 'linear', default: 'linear')_ Which scale we would use for the weight (only if `weightByAttribute` is set).
     - `heatmap.mask:` _(bool, default: true)_ Mask the heatmap with countries so heatmap doesn't go over oceans
     - `heatmap.circles:` _(object)_ Properties of the circles that makes the heatmap gradient
@@ -467,7 +468,7 @@ If you want to attach the data boundaries to the value of an attribute, you may 
     - `heatmap.borders.stroke:` _(integer, default: 1)_ Country border stroke width.
     - `heatmap.borders.opacity:` _(integer, default: 0.1)_ Country border stroke opacity.
     - `heatmap.borders.color:` _(string, default: "#000")_ Country border stroke color.                                                        
-       
+
        *Example*
        ```js
        heatmap: {

@@ -248,13 +248,10 @@ export default class GeoMap {
   getDatumScale() {
     if (!this.options.heatmap.weightByAttribute) return () => 1;
     const dataExtents = d3.extent(this.maptable.data, this.options.heatmap.weightByAttribute);
-    let scale = d3.scale.linear().domain(dataExtents).range([0, 1]);
-    if (this.options.heatmap.weightByAttributeScale === 'log') {
-      if (!dataExtents[0]) dataExtents[0] = 0.01;
-      scale = d3.scale.log()
-        .domain(dataExtents)
-        .range([0.4, 1.0]);
-    }
+    const userScale = (this.options.heatmap.weightByAttributeScale === 'log') ?
+      d3.scale.log : d3.scale.linear;
+    const fallOffStrenght = this.options.heatmap.fallOffStrenght;
+    const scale = userScale().domain(dataExtents).range([fallOffStrenght, fallOffStrenght + 1]);
     return (d) => {
       const val = this.options.heatmap.weightByAttribute(d);
       if (!val) return 0;

@@ -27,6 +27,7 @@ export default {
       mask: true,
       weightByAttribute: null,
       weightByAttributeScale: 'linear',
+      fallOffStrenght: 1,
       circles: {
         min: 1,
         max: 90,
