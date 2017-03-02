@@ -260,9 +260,6 @@ export default class GeoMap {
    * @returns {string} base64 image
    */
   getHeatmapData() {
-    if (document.querySelector('#mt-map-heatmap-canvas')) {
-      d3.select('#mt-map-heatmap-canvas').remove();
-    }
     const canvasHeatmap = d3.select(this.node)
       .append('canvas')
       .attr('id', 'mt-map-heatmap-canvas')
@@ -322,7 +319,7 @@ export default class GeoMap {
     ctx.closePath();
 
     const dataUrl = canvasHeatmap.node().toDataURL();
-    ctx.clearRect(0, 0, canvasHeatmap.width, canvasHeatmap.height);
+    canvasHeatmap.node().remove();
     return dataUrl;
   }
 
