@@ -180,13 +180,6 @@ export default class GeoMap {
           .attr('d', this.path);
     }
 
-    this.canvasHeatmap = d3.select(this.node)
-      .append('canvas')
-      .attr('id', 'mt-map-heatmap-canvas')
-      .attr('width', this.getWidth())
-      .attr('height', this.getHeight())
-      .attr('style', 'display: none;');
-
     this.imgHeatmap = this.layerHeatmap
       .append('image')
       .attr('width', this.getWidth())
@@ -267,7 +260,14 @@ export default class GeoMap {
    * @returns {string} base64 image
    */
   getHeatmapData() {
-    const ctx = this.canvasHeatmap.node().getContext('2d');
+    const canvasHeatmap = d3.select(this.node)
+      .append('canvas')
+      .attr('id', 'mt-map-heatmap-canvas')
+      .attr('width', this.getWidth())
+      .attr('height', this.getHeight())
+      .attr('style', 'display: none;');
+
+    const ctx = canvasHeatmap.node().getContext('2d');
     ctx.globalCompositeOperation = 'multiply';
     const circles = d3.range(
       this.options.heatmap.circles.min,
@@ -307,7 +307,7 @@ export default class GeoMap {
       });
     });
 
-    StackBlur.canvasRGBA(this.canvasHeatmap.node(), 0, 0, this.getWidth(),
+    StackBlur.canvasRGBA(canvasHeatmap.node(), 0, 0, this.getWidth(),
       this.getHeight(), this.options.heatmap.circles.blur);
 
     // Add color layer
@@ -318,8 +318,8 @@ export default class GeoMap {
     ctx.fill();
     ctx.closePath();
 
-    const dataUrl = this.canvasHeatmap.node().toDataURL();
-    ctx.clearRect(0, 0, this.canvasHeatmap.width, this.canvasHeatmap.height);
+    const dataUrl = canvasHeatmap.node().toDataURL();
+    canvasHeatmap.node().remove();
     return dataUrl;
   }
 
