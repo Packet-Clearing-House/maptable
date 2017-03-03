@@ -8,6 +8,12 @@ export default class MapTable {
   constructor(target, options) {
     this.options = options;
 
+    this.state = {
+      filters: {},
+      zoom: {},
+    };
+    this.saveStateTimeout = {};
+
     this.node = document.querySelector(target);
     this.node.setAttribute('style', 'position:relative;');
 
@@ -89,8 +95,30 @@ export default class MapTable {
    * Restore state for filters or/and map zooming
    */
   restoreState() {
-    if (this.filters) this.filters.restoreState();
     if (this.map) this.map.restoreState();
+    if (this.filters) this.filters.restoreState();
+  }
+
+
+  /**
+   * Save the state into the URL hash
+   * @param stateName: name of the state (either filters or zoom)
+   * @param stateData: object, contain state information
+   */
+  saveState(stateName, stateData) {
+    window.clearTimeout(this.saveStateTimeout[stateName]);
+    this.saveStateTimeout[stateName] = window.setTimeout(() => {
+      this.state[stateName] = stateData;
+      const newUrl = document.location.href.split('#')[0];
+      let stateHash = '';
+      ['filters', 'zoom'].forEach((f) => {
+        if (Object.keys(this.state[f]).length) {
+          stateHash += `!mt-${f}=${encodeURIComponent(JSON.stringify(this.state[f]))}`;
+        }
+      });
+      if (stateHash !== '') stateHash = `#${stateHash}`;
+      window.history.pushState(null, null, `${newUrl}${stateHash}`);
+    }, 200);
   }
 
   render() {
