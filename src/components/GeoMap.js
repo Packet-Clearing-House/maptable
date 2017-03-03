@@ -225,11 +225,11 @@ export default class GeoMap {
     // const layersPerLocation = (opts.circles.max - opts.circles.min) / opts.circles.step;
     const maxOpacityScale = d3.scale.linear()
       .domain([1, lengthDataset])
-      .range([1, 1 / 10]);
+      .range([1, 0.25]);
     const centralCircleOpacity = maxOpacityScale(lengthDataset);
 
     const scale = d3.scale.linear()
-      .domain([opts.circles.min, 25])
+      .domain([opts.circles.min, 20])
       .range([centralCircleOpacity, 0]);
     return (m) => scale(m);
   }
@@ -246,7 +246,7 @@ export default class GeoMap {
       if (!dataExtents[0]) dataExtents[0] = 0.01;
       scale = d3.scale.log()
         .domain(dataExtents)
-        .range([0.4, 1.0]);
+        .range([0.5, 1.0]);
     }
     return (d) => {
       const val = this.options.heatmap.weightByAttribute(d);
