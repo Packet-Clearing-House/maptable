@@ -35,7 +35,23 @@
               opacity: 0.2,
             },
           },
-          markers: false
+          markers: {
+            attr: {
+              fill: "yellow",
+    					stroke: "#d9d9d9",
+    					"stroke-width": 0.5,
+              r: {
+      					min: "minValue",
+      					max: "maxValue",
+      					transform: function(v) {
+      						return 3 * Math.sqrt(v);
+      					},
+      					rollup: function(values) {
+      						return values.length;
+      					},
+      				},
+            }
+          }
         })
         .filters()
         .render();
