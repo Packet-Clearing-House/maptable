@@ -243,8 +243,7 @@ export default class GeoMap {
     const dataExtents = d3.extent(this.maptable.data, this.options.heatmap.weightByAttribute);
     const userScale = (this.options.heatmap.weightByAttributeScale === 'log') ?
       d3.scale.log : d3.scale.linear;
-    const fallOffStrenght = this.options.heatmap.fallOffStrenght;
-    const scale = userScale().domain(dataExtents).range([fallOffStrenght, fallOffStrenght + 1]);
+    const scale = userScale().domain(dataExtents).range([0.01, 1]); // 0.01 is to avoid having 0 for the log scale
     return (d) => {
       const val = this.options.heatmap.weightByAttribute(d);
       if (!val) return 0;
@@ -288,11 +287,19 @@ export default class GeoMap {
     ctx.fill();
     ctx.closePath();
 
+    // color strenght factor
+    const colorMultiplier = (x) => {
+      const a = this.options.heatmap.circles.colorStrength;
+      const aa = 1 + ((a - 1) / 100);
+      if (a > 1) return ( 2 - aa ) * x + aa - 1;
+      return a * x;
+    };
+
     // add condensed clouds
     heatmapDataset.forEach((point) => {
       const scaleOpacityDatum = datumScale(point);
       circles.forEach(m => {
-        const opacity = magnitudeScale(m) * scaleOpacityDatum;
+        const opacity = colorMultiplier(magnitudeScale(m) * scaleOpacityDatum);
         const colorValue = colorScale(opacity);
         if (opacity > 0) {
           ctx.beginPath();
