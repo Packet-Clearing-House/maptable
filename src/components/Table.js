@@ -10,7 +10,12 @@ export default class Table {
   constructor(maptable, options) {
     this.maptable = maptable;
     this.options = options;
-    this.currentSorting = { key: Object.keys(this.maptable.data[0])[0], mode: 'desc' };
+    this.sorting = [
+      {
+        key: Object.keys(this.maptable.data[0])[0],
+        mode: 'asc',
+      },
+    ];
 
     this.node = document.querySelector('#mt-table');
     if (!this.node) {
@@ -137,25 +142,37 @@ export default class Table {
   }
 
   applySort() {
-    const d3SortMode = (this.currentSorting.mode === 'asc') ? d3.ascending : d3.descending;
-    const columnDetails = this.maptable.columnDetails[this.currentSorting.key];
+    const sortableColums = document.querySelectorAll('.mt-table-sortable');
+    for (let i = 0; i < sortableColums.length; i += 1) {
+      sortableColums[i].setAttribute('class', 'mt-table-sortable');
+    }
+    this.sorting.forEach((column) => {
+      document.getElementById(`column_header_${utils.sanitizeKey(column.key)}`)
+        .setAttribute('class', `mt-table-sortable sort_${column.mode}`);
+    });
     this.maptable.data = this.maptable.data.sort((a, b) => {
-      let el1 = a[this.currentSorting.key];
-      let el2 = b[this.currentSorting.key];
-      if (columnDetails.dataParse) {
-        el1 = columnDetails.dataParse(el1);
-        el2 = columnDetails.dataParse(el2);
-      } else if (columnDetails.virtual) {
-        el2 = columnDetails.virtual(a);
-        el2 = columnDetails.virtual(b);
-      } else if (columnDetails.filterType === 'compare') {
-        el1 = parseInt(el1, 10);
-        el2 = parseInt(el2, 10);
-      } else {
-        el1 = el1.toLowerCase();
-        el2 = el2.toLowerCase();
-      }
-      return d3SortMode(el1, el2);
+      let compareBool = false;
+      this.sorting.forEach((column) => {
+        const d3SortMode = (column.mode === 'asc') ? d3.ascending : d3.descending;
+        const columnDetails = this.maptable.columnDetails[column.key];
+        let el1 = a[column.key];
+        let el2 = b[column.key];
+        if (columnDetails.dataParse) {
+          el1 = columnDetails.dataParse(el1);
+          el2 = columnDetails.dataParse(el2);
+        } else if (columnDetails.virtual) {
+          el2 = columnDetails.virtual(a);
+          el2 = columnDetails.virtual(b);
+        } else if (columnDetails.filterType === 'compare') {
+          el1 = Number(el1);
+          el2 = Number(el2);
+        } else if (el1 instanceof String && el2 instanceof String) {
+          el1 = el1.toLowerCase();
+          el2 = el2.toLowerCase();
+        }
+        compareBool = compareBool || d3SortMode(el1, el2);
+      });
+      return compareBool;
     });
   }
 
@@ -163,20 +180,27 @@ export default class Table {
    * Sort Table by a column key
    * @param columnKey: String - column key
    */
-  sortColumn(columnKey) {
-    this.currentSorting.key = columnKey;
-    if (columnKey === this.currentSorting.key) {
-      this.currentSorting.mode = (this.currentSorting.mode === 'asc') ? 'desc' : 'asc';
+  sortColumn(key) {
+    const sortIndex = this.sorting.map(d => d.key).indexOf(key);
+    const sortValue = { key };
+    if (sortIndex === -1) {
+      sortValue.mode = 'asc';
+      if (window.event.shiftKey) {
+        this.sorting.push(sortValue);
+      } else {
+        this.sorting = [sortValue];
+      }
     } else {
-      this.currentSorting.mode = 'asc';
+      if (this.sorting[sortIndex].mode === 'asc') {
+        this.sorting[sortIndex].mode = 'desc';
+      } else {
+        this.sorting[sortIndex].mode = 'asc';
+        // this.sorting.splice(sortIndex, 1); // to disable sorting
+      }
+      if (!window.event.shiftKey) {
+        this.sorting = [this.sorting[sortIndex]];
+      }
     }
-
-    const sortableColums = document.querySelectorAll('.mt-table-sortable');
-    for (let i = 0; i < sortableColums.length; i++) {
-      sortableColums[i].setAttribute('class', 'mt-table-sortable');
-    }
-    document.getElementById(`column_header_${utils.sanitizeKey(columnKey)}`)
-      .setAttribute('class', `mt-table-sortable sort_${this.currentSorting.mode}`);
 
     this.render();
   }
