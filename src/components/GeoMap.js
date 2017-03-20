@@ -74,11 +74,13 @@ export default class GeoMap {
     }
 
     // Add tooltip
-    this.tooltipMarkersNode = d3.select(this.node)
-      .append('div')
-      .attr('id', 'mt-map-markers-tooltip')
-      .attr('class', `mt-map-tooltip ${this.options.markers.tooltipClassName}`)
-      .style('display', 'none');
+    if (this.options.markers) {
+      this.tooltipMarkersNode = d3.select(this.node)
+        .append('div')
+        .attr('id', 'mt-map-markers-tooltip')
+        .attr('class', `mt-map-tooltip ${this.options.markers.tooltipClassName}`)
+        .style('display', 'none');
+    }
 
     if (this.options.countries) {
       this.tooltipCountriesNode = d3.select(this.node)

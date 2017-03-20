@@ -73,6 +73,10 @@ d3.maptable = function (target) {
 
     if (!options.map || !options.map.heatmap) options.map.heatmap = null;
 
+    if (options.map && options.map.markers === false) options.map.markers = null;
+
+    if (options.map && options.map.countries === false) options.map.countries = null;
+
     if (!options.filters) options.filters = null;
     options.onComplete = onComplete;
 
