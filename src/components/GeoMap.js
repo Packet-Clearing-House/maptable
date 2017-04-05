@@ -289,11 +289,19 @@ export default class GeoMap {
     ctx.fill();
     ctx.closePath();
 
+    // color strenght factor
+    const colorMultiplier = (x) => {
+      const a = this.options.heatmap.circles.colorStrength;
+      const aa = 1 + ((a - 1) / 100);
+      if (a > 1) return ( 2 - aa ) * x + aa - 1;
+      return a * x;
+    };
+
     // add condensed clouds
     heatmapDataset.forEach((point) => {
       const scaleOpacityDatum = datumScale(point);
       circles.forEach(m => {
-        const opacity = magnitudeScale(m) * scaleOpacityDatum;
+        const opacity = colorMultiplier(magnitudeScale(m) * scaleOpacityDatum);
         const colorValue = colorScale(opacity);
         if (opacity > 0) {
           ctx.beginPath();

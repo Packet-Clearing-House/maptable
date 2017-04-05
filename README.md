@@ -458,6 +458,7 @@ If you want to attach the data boundaries to the value of an attribute, you may 
        ```
 - `heatmap:` _(object, default: null)_ Add a heatmap on the map - we use concentrated circles on every location in the dataset. You can **not** use this with `map.countries.`
     - `heatmap.weightByAttribute:` _(function(d), default: null)_ Which attribute we would weight the gradient. it takes a anonymous function that exposes `d` as one row, and expect a float as returned value.
+    - `heatmap.colorStrength:` _(float, default: 1)_ Adjusts heatmap color strength, (0 make things transparent, 1 normal behavior, > 1 to make the color darker)
     - `heatmap.weightByAttributeScale:` _('log' or 'linear', default: 'linear')_ Which scale we would use for the weight (only if `weightByAttribute` is set).
     - `heatmap.mask:` _(bool, default: true)_ Mask the heatmap with countries so heatmap doesn't go over oceans
     - `heatmap.circles:` _(object)_ Properties of the circles that makes the heatmap gradient

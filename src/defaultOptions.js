@@ -32,6 +32,7 @@ export default {
         max: 90,
         step: 4,
         color: '#FF0000',
+        colorStrength: 1,
         blur: 4.0,
       },
       borders: {
