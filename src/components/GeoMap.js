@@ -17,7 +17,6 @@ export default class GeoMap {
     this.scale = 1;
     this.transX = 0;
     this.transY = 0;
-    this.restoringState = false;
 
     this.options = options;
 
@@ -596,7 +595,6 @@ export default class GeoMap {
    * Restore state from the url hash
    */
   restoreState() {
-    this.restoringState = true;
     const params = document.location.href.split('!mt-zoom=');
     const defaultZoomRaw = (params[1]) ? params[1].split('!mt')[0] : null;
     if (defaultZoomRaw) {
@@ -615,25 +613,18 @@ export default class GeoMap {
         console.log(`Maptable: Invalid URL State for mt-zoom ${e.message}`);
       }
     }
-    this.restoringState = false;
   }
 
   /**
    * Save state into the url hash
    */
   saveState() {
-    if (this.restoringState && this.options.map.saveState) return;
     const encodedTranslation = this.encodeTranslation([this.transX, this.transY]);
-    const exportedCriteria = [this.scale, encodedTranslation[0],
+    const exportedData = [this.scale, encodedTranslation[0],
       encodedTranslation[1]];
-    const params = document.location.href.split('!mt-zoom=');
-    const defaultZoom = (params[1]) ? params[1].split('!mt')[0] : null;
-    let newUrl = document.location.href.replace(`!mt-zoom=${defaultZoom}`, '');
-    if (this.scale !== 1) {
-      if (newUrl.indexOf('#') === -1) newUrl += '#';
-      newUrl += `!mt-zoom=${encodeURIComponent(JSON.stringify(exportedCriteria))}`;
+    if (exportedData[0] !== 1 && exportedData[1] !== 0 && exportedData[2] !== 0) {
+      this.maptable.saveState('zoom', exportedData);
     }
-    window.history.pushState(null, null, newUrl);
   }
 
   rescale() {
@@ -701,10 +692,7 @@ export default class GeoMap {
     }
 
     // save state
-    window.clearTimeout(this.saveStateTimeout);
-    this.saveStateTimeout = window.setTimeout(() => {
-      this.saveState();
-    }, 200);
+    if (this.options.saveState) this.saveState();
   }
 
   setAttrValues(attrKey, attrValue, dataset) {
