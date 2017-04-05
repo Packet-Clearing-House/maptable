@@ -185,7 +185,7 @@ export default class Table {
     const sortValue = { key };
     if (sortIndex === -1) {
       sortValue.mode = 'asc';
-      if (window.event.shiftKey) {
+      if (d3.event.shiftKey) {
         this.sorting.push(sortValue);
       } else {
         this.sorting = [sortValue];
@@ -197,7 +197,7 @@ export default class Table {
         this.sorting[sortIndex].mode = 'asc';
         // this.sorting.splice(sortIndex, 1); // to disable sorting
       }
-      if (!window.event.shiftKey) {
+      if (!d3.event.shiftKey) {
         this.sorting = [this.sorting[sortIndex]];
       }
     }
