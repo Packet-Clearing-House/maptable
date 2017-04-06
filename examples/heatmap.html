@@ -28,10 +28,10 @@
             weightByAttribute: function(d) {
               return parseInt(d.traf, 10);
             },
-            weightByAttributeScale: 'log',
             circles: {
-              color: '#0000FF',
-              blur: 6.0,
+              colorStrength: 1,
+              color: '#043864',
+              blur: 10.0,
             },
             borders: {
               opacity: 0.2,
@@ -55,6 +55,7 @@
             }
           }
         })
+        .filters()
         .render();
     </script>
   </body>

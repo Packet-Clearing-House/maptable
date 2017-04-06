@@ -17,7 +17,6 @@ export default class GeoMap {
     this.scale = 1;
     this.transX = 0;
     this.transY = 0;
-    this.restoringState = false;
 
     this.options = options;
 
@@ -74,11 +73,13 @@ export default class GeoMap {
     }
 
     // Add tooltip
-    this.tooltipMarkersNode = d3.select(this.node)
-      .append('div')
-      .attr('id', 'mt-map-markers-tooltip')
-      .attr('class', `mt-map-tooltip ${this.options.markers.tooltipClassName}`)
-      .style('display', 'none');
+    if (this.options.markers) {
+      this.tooltipMarkersNode = d3.select(this.node)
+        .append('div')
+        .attr('id', 'mt-map-markers-tooltip')
+        .attr('class', `mt-map-tooltip ${this.options.markers.tooltipClassName}`)
+        .style('display', 'none');
+    }
 
     if (this.options.countries) {
       this.tooltipCountriesNode = d3.select(this.node)
@@ -180,13 +181,6 @@ export default class GeoMap {
           .attr('d', this.path);
     }
 
-    this.canvasHeatmap = d3.select(this.node)
-      .append('canvas')
-      .attr('id', 'mt-map-heatmap-canvas')
-      .attr('width', this.getWidth())
-      .attr('height', this.getHeight())
-      .attr('style', 'display: none;');
-
     this.imgHeatmap = this.layerHeatmap
       .append('image')
       .attr('width', this.getWidth())
@@ -232,11 +226,11 @@ export default class GeoMap {
     // const layersPerLocation = (opts.circles.max - opts.circles.min) / opts.circles.step;
     const maxOpacityScale = d3.scale.linear()
       .domain([1, lengthDataset])
-      .range([1, 1 / 256]);
+      .range([1, 0.25]);
     const centralCircleOpacity = maxOpacityScale(lengthDataset);
 
     const scale = d3.scale.linear()
-      .domain([opts.circles.min, opts.circles.max])
+      .domain([opts.circles.min, 20])
       .range([centralCircleOpacity, 0]);
     return (m) => scale(m);
   }
@@ -248,13 +242,9 @@ export default class GeoMap {
   getDatumScale() {
     if (!this.options.heatmap.weightByAttribute) return () => 1;
     const dataExtents = d3.extent(this.maptable.data, this.options.heatmap.weightByAttribute);
-    let scale = d3.scale.linear().domain(dataExtents).range([0, 1]);
-    if (this.options.heatmap.weightByAttributeScale === 'log') {
-      if (!dataExtents[0]) dataExtents[0] = 0.01;
-      scale = d3.scale.log()
-        .domain(dataExtents)
-        .range([0.01, 1.0]);
-    }
+    const userScale = (this.options.heatmap.weightByAttributeScale === 'log') ?
+      d3.scale.log : d3.scale.linear;
+    const scale = userScale().domain(dataExtents).range([0.5, 1]); // 0.01 is to avoid having 0 for the log scale
     return (d) => {
       const val = this.options.heatmap.weightByAttribute(d);
       if (!val) return 0;
@@ -267,7 +257,14 @@ export default class GeoMap {
    * @returns {string} base64 image
    */
   getHeatmapData() {
-    const ctx = this.canvasHeatmap.node().getContext('2d');
+    const canvasHeatmap = d3.select(this.node)
+      .append('canvas')
+      .attr('id', 'mt-map-heatmap-canvas')
+      .attr('width', this.getWidth())
+      .attr('height', this.getHeight())
+      .attr('style', 'display: none;');
+
+    const ctx = canvasHeatmap.node().getContext('2d');
     ctx.globalCompositeOperation = 'multiply';
     const circles = d3.range(
       this.options.heatmap.circles.min,
@@ -282,11 +279,29 @@ export default class GeoMap {
     const magnitudeScale = this.getMagnitudeScale(heatmapDataset);
     const colorScale = d3.scale.linear()
       .domain([1, 0])
-      .range([this.options.heatmap.circles.color, '#FFFFFF']);
+      .range(['#000000', '#FFFFFF']);
+
+    // Make a flat white background first
+    ctx.beginPath();
+    ctx.rect(0, 0, this.getWidth(), this.getHeight());
+    ctx.fillStyle = '#ffffff';
+    ctx.fill();
+    ctx.closePath();
+
+    // color strenght factor
+    const colorMultiplier = (x) => {
+      const a = this.options.heatmap.circles.colorStrength;
+      const aa = 1 + ((a - 1) / 100);
+      if (a > 1) return ( 2 - aa ) * x + aa - 1;
+      return a * x;
+    };
+
+    // add condensed clouds
     heatmapDataset.forEach((point) => {
       const scaleOpacityDatum = datumScale(point);
       circles.forEach(m => {
-        const opacity = magnitudeScale(m) * scaleOpacityDatum;
+        const opacity = colorMultiplier(magnitudeScale(m) * scaleOpacityDatum);
+        const colorValue = colorScale(opacity);
         if (opacity > 0) {
           ctx.beginPath();
           path(d3.geo.circle().origin([point.longitude, point.latitude]).angle(m - 0.0001)());
@@ -296,10 +311,20 @@ export default class GeoMap {
         }
       });
     });
-    StackBlur.canvasRGBA(this.canvasHeatmap.node(), 0, 0, this.getWidth(),
+
+    StackBlur.canvasRGBA(canvasHeatmap.node(), 0, 0, this.getWidth(),
       this.getHeight(), this.options.heatmap.circles.blur);
-    const dataUrl = this.canvasHeatmap.node().toDataURL();
-    ctx.clearRect(0, 0, this.canvasHeatmap.width, this.canvasHeatmap.height);
+
+    // Add color layer
+    ctx.beginPath();
+    ctx.globalCompositeOperation = 'screen';
+    ctx.rect(0, 0, this.getWidth(), this.getHeight());
+    ctx.fillStyle = this.options.heatmap.circles.color;
+    ctx.fill();
+    ctx.closePath();
+
+    const dataUrl = canvasHeatmap.node().toDataURL();
+    canvasHeatmap.node().remove();
     return dataUrl;
   }
 
@@ -570,7 +595,6 @@ export default class GeoMap {
    * Restore state from the url hash
    */
   restoreState() {
-    this.restoringState = true;
     const params = document.location.href.split('!mt-zoom=');
     const defaultZoomRaw = (params[1]) ? params[1].split('!mt')[0] : null;
     if (defaultZoomRaw) {
@@ -589,25 +613,18 @@ export default class GeoMap {
         console.log(`Maptable: Invalid URL State for mt-zoom ${e.message}`);
       }
     }
-    this.restoringState = false;
   }
 
   /**
    * Save state into the url hash
    */
   saveState() {
-    if (this.restoringState && this.options.map.saveState) return;
     const encodedTranslation = this.encodeTranslation([this.transX, this.transY]);
-    const exportedCriteria = [this.scale, encodedTranslation[0],
+    const exportedData = [this.scale, encodedTranslation[0],
       encodedTranslation[1]];
-    const params = document.location.href.split('!mt-zoom=');
-    const defaultZoom = (params[1]) ? params[1].split('!mt')[0] : null;
-    let newUrl = document.location.href.replace(`!mt-zoom=${defaultZoom}`, '');
-    if (this.scale !== 1) {
-      if (newUrl.indexOf('#') === -1) newUrl += '#';
-      newUrl += `!mt-zoom=${encodeURIComponent(JSON.stringify(exportedCriteria))}`;
+    if (exportedData[0] !== 1 && exportedData[1] !== 0 && exportedData[2] !== 0) {
+      this.maptable.saveState('zoom', exportedData);
     }
-    window.history.pushState(null, null, newUrl);
   }
 
   rescale() {
@@ -675,10 +692,7 @@ export default class GeoMap {
     }
 
     // save state
-    window.clearTimeout(this.saveStateTimeout);
-    this.saveStateTimeout = window.setTimeout(() => {
-      this.saveState();
-    }, 200);
+    if (this.options.saveState) this.saveState();
   }
 
   setAttrValues(attrKey, attrValue, dataset) {

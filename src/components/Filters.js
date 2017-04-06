@@ -5,7 +5,6 @@ export default class Filters {
     this.maptable = maptable;
     this.options = options;
     this.criteria = [];
-    this.restoringState = false; // a flag to check if we are restoring the state or not
 
     if (this.options.show) {
       const arrayDiff = this.options.show.filter(i => {
@@ -195,7 +194,6 @@ export default class Filters {
    * Restore state from the URL hash
    */
   restoreState() {
-    this.restoringState = true;
     const params = document.location.href.split('!mt-filters=');
     const defaultCriteria = (params[1]) ? params[1].split('!mt')[0] : null;
     if (defaultCriteria) {
@@ -205,23 +203,6 @@ export default class Filters {
         console.log(`Maptable: Invalid URL State for mt-filters ${e.message}`);
       }
     }
-    this.restoringState = false;
-  }
-
-  /**
-   * Save the state into the URL hash
-   */
-  saveState() {
-    if (this.restoringState && this.options.filters.saveState) return;
-    const exportedFilters = this.exportFilters();
-    const params = document.location.href.split('!mt-filters=');
-    const defaultCriteria = (params[1]) ? params[1].split('!mt')[0] : null;
-    let newUrl = document.location.href.replace(`!mt-filters=${defaultCriteria}`, '');
-    if (Object.keys(exportedFilters).length) {
-      if (newUrl.indexOf('#') === -1) newUrl += '#';
-      newUrl += `!mt-filters=${encodeURIComponent(JSON.stringify(exportedFilters))}`;
-    }
-    window.history.pushState(null, null, newUrl);
   }
 
   /**
@@ -476,10 +457,7 @@ export default class Filters {
       return matched;
     });
     // save state
-    window.clearTimeout(this.saveStateTimeout);
-    this.saveStateTimeout = window.setTimeout(() => {
-      this.saveState();
-    }, 200);
+    if (this.options.saveState) this.maptable.saveState('filters', this.exportFilters());
   }
 
   refresh() {
