@@ -60,7 +60,7 @@ export default class Table {
         return output;
       })
       .attr('style', d => {
-        return (d.nowrap) ? 'white-space:nowrap;' : '';
+        return `user-select: none;${(d.nowrap) ? 'white-space:nowrap;' : ''}`;
       })
       .text(d => d.title)
       .attr('id', d => `column_header_${utils.sanitizeKey(d.key)}`)
