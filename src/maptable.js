@@ -121,7 +121,7 @@ export default class MapTable {
     const defaultColumns = {};
 
     Object.keys(that.rawData[0]).forEach(k => {
-      const patternNumber = /^\d+$/;
+      const patternNumber = /^[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?$/;
       const isNumber = (patternNumber.test(that.rawData[0][k]));
       defaultColumns[k] = {
         title: utils.keyToTile(k),
@@ -130,7 +130,7 @@ export default class MapTable {
         sorting: true,
       };
       if (isNumber) {
-        defaultColumns[k].dataParse = (val) => parseInt(val, 10);
+        defaultColumns[k].dataParse = (val) => parseFloat(val);
       }
     });
     that.columnDetails = utils.extendRecursive(defaultColumns, this.options.columns);
