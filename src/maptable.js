@@ -52,6 +52,15 @@ export default class MapTable {
       // Map wrapper
       const mapWrapper = document.createElement('div');
       mapWrapper.setAttribute('class', 'mt-map-container');
+      const isIE = (navigator.userAgent.indexOf('MSIE') !== -1 || navigator.appVersion.indexOf('Trident/') > 0);
+      if (this.options.map.heatmap && isIE) {
+        mapWrapper.innerHTML = '<div class="mt-loading">The heatmap feature is not supported with Internet Explorer.<br>Please use another modern browser to see this map.</div>';
+        this.node.insertBefore(mapWrapper, this.node.firstChild);
+        mapWrapper.querySelector('.mt-loading').style.display = 'block';
+        this.options.map = false;
+        this.buildComponenents();
+        return;
+      }
       mapWrapper.innerHTML = '<div class="mt-loading">Loading...</div>';
       this.node.insertBefore(mapWrapper, this.node.firstChild);
       mapWrapper.querySelector('.mt-loading').style.display = 'block';
