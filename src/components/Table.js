@@ -16,6 +16,7 @@ export default class Table {
         mode: 'asc',
       },
     ];
+    this.isSorting = false;
 
     this.node = document.querySelector('#mt-table');
     if (!this.node) {
@@ -60,15 +61,18 @@ export default class Table {
         return output;
       })
       .attr('style', d => {
-        return `user-select: none;${(d.nowrap) ? 'white-space:nowrap;' : ''}`;
+        return (d.nowrap) ? 'white-space:nowrap;' : '';
       })
-      .text(d => d.title)
-      .attr('id', d => `column_header_${utils.sanitizeKey(d.key)}`)
       .on('click', d => {
+        if (this.isSorting) return;
+        this.isSorting = true;
         if (d.sorting) {
           this.sortColumn(d.key);
         }
-      });
+        this.isSorting = false;
+      })
+      .text(d => d.title)
+      .attr('id', d => `column_header_${utils.sanitizeKey(d.key)}`);
 
     if (this.options.defaultSorting) {
       this.sortColumn(this.options.defaultSorting.key, this.options.defaultSorting.mode);
@@ -186,7 +190,7 @@ export default class Table {
     if (sortIndex === -1) {
       sortValue.mode = 'asc';
       if (d3.event.shiftKey) {
-        this.sorting.push(sortValue);
+        this.sorting[1] = sortValue;
       } else {
         this.sorting = [sortValue];
       }
