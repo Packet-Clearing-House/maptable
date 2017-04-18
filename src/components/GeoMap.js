@@ -324,7 +324,7 @@ export default class GeoMap {
     ctx.closePath();
 
     const dataUrl = canvasHeatmap.node().toDataURL();
-    canvasHeatmap.node().remove();
+    canvasHeatmap.remove();
     return dataUrl;
   }
 
