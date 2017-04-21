@@ -60,6 +60,8 @@ export default class Table {
         output += (d.nowrap) ? ' nowrap' : '';
         return output;
       })
+      .attr('onselectstart', 'return false;')
+      .attr('unselectable', 'on')
       .attr('style', d => {
         return (d.nowrap) ? 'white-space:nowrap;' : '';
       })
