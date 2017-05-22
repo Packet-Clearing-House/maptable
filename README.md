@@ -562,6 +562,8 @@ Run these commands as your unprivileged user you're doing your development as:
 
 
 ## Release History
+* Version 1.5.1 May 22 2017
+  * Fix default sort bug - [Issue #66](https://github.com/Packet-Clearing-House/maptable/issues/66)
 * Version 1.5.0 May 22 2017
   * Improve heatmap falloff - [Issue #58](https://github.com/Packet-Clearing-House/maptable/issues/58)
   * Improve heatmap colors - [Issue #56](https://github.com/Packet-Clearing-House/maptable/issues/56)

@@ -1,5 +1,4 @@
-/* MapTable 1.5.0 */
-this.d3 = this.d3 || {};
+/* MapTable 1.5.1 */this.d3 = this.d3 || {};
 this.d3.maptable = (function () {
     'use strict';
 
@@ -2410,7 +2409,7 @@ this.d3.maptable = (function () {
           var sortValue = { key: key };
           if (sortIndex === -1) {
             sortValue.mode = 'asc';
-            if (d3.event.shiftKey) {
+            if (d3.event && d3.event.shiftKey) {
               this.sorting[1] = sortValue;
             } else {
               this.sorting = [sortValue];
