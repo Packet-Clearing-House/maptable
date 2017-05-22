@@ -1,13 +1,13 @@
 MapTable
 ========
 
-[![GitHub stars](https://img.shields.io/github/stars/Packet-Clearing-House/maptable.svg?style=social&label=Star&maxAge=2592005)]() [![GitHub release](https://img.shields.io/github/release/Packet-Clearing-House/maptable.svg?maxAge=2592054)]() [![license](https://img.shields.io/github/license/Packet-Clearing-House/maptable.svg?maxAge=2592006)]()
+[![GitHub stars](https://img.shields.io/github/stars/Packet-Clearing-House/maptable.svg?style=social&label=Star&maxAge=2592006)]() [![GitHub release](https://img.shields.io/github/release/Packet-Clearing-House/maptable.svg?maxAge=2592056)]() [![license](https://img.shields.io/github/license/Packet-Clearing-House/maptable.svg?maxAge=2592007)]()
 
 
 MapTable's primary function is to convert any dataset to a customizable set of components of Map, Filters and Table:
 
 - **Map** - A fully customizable (zoom & pan) choropleth or heat map rendered using SVG. The map can be exported to a stand alone SVG for external consumption. The map can include markers based on lat/lon with tooltips. Markers and Map are dynamically update based on filters.
-- **Table** - A tabular representation of your dataset which can be sorted by header rows. This also dynamically responds to filters.
+- **Table** - A tabular representation of your dataset which can be sorted by header rows. Primary sort is the first click and secondary sort is the second click when shift is held down. This also dynamically responds to filters.
 - **Filters** - A programmatically generated list of drop downs and input fields to drill down into your dataset
 
 This library was originally conceived to render the [home page](https://pch.net) and next generation of [IXP directory](https://www.pch.net/ixp/dir) for Packet Clearing House ([PCH](https://pch.net)).
@@ -16,7 +16,7 @@ You can also browse other code samples and **examples** here:
 
 [<img src="https://gist.githubusercontent.com/melalj/cc130ad4072a2f52a5aa/raw/2abcdff5cc84e71dd40552be68e5ae747dcd9a5d/thumbnail.png">](https://bl.ocks.org/melalj/cc130ad4072a2f52a5aa) [<img src="https://gist.githubusercontent.com/melalj/ef85eb677583647daf52/raw/127e36862c4cfae6e7039023a8a449cc043f6837/thumbnail.png">](https://bl.ocks.org/melalj/ef85eb677583647daf52) [<img src="https://gist.githubusercontent.com/melalj/2394323e478dca231128/raw/a43dadbb67e8ecb335a92f2210ae59f109f25fd6/thumbnail.png">](https://bl.ocks.org/melalj/2394323e478dca231128)
 
-[<img src="https://gist.githubusercontent.com/melalj/772c8a846a3f308e9358/raw/b8b39512d91b56ce4383cfd5a491083ff3f1b42f/thumbnail.png">](https://bl.ocks.org/melalj/772c8a846a3f308e9358) [<img src="https://gist.githubusercontent.com/melalj/07be61a538509b8e4a7e/raw/5565adb3e2a88162c6ecaa55dc7472a085ddb0d2/thumbnail.png">](https://bl.ocks.org/melalj/07be61a538509b8e4a7e) [<img src="https://gist.githubusercontent.com/melalj/1aa4dd90b4561deb8de6/raw/dbb70a32eeba5c366b9a4c4641fb2d104a26f6cb/thumbnail.png">](https://bl.ocks.org/melalj/1aa4dd90b4561deb8de6) [<img src="https://gist.githubusercontent.com/melalj/145ef67aa04a6713bc1d026eed46c59e/raw/39f0c2da838b6c5e989faeb7709cb96d170012e7/thumbnail.png">](https://bl.ocks.org/melalj/145ef67aa04a6713bc1d026eed46c59e)
+[<img src="https://gist.githubusercontent.com/melalj/772c8a846a3f308e9358/raw/b8b39512d91b56ce4383cfd5a491083ff3f1b42f/thumbnail.png">](https://bl.ocks.org/melalj/772c8a846a3f308e9358) [<img src="https://gist.githubusercontent.com/melalj/07be61a538509b8e4a7e/raw/5565adb3e2a88162c6ecaa55dc7472a085ddb0d2/thumbnail.png">](https://bl.ocks.org/melalj/07be61a538509b8e4a7e) [<img src="https://gist.githubusercontent.com/melalj/1aa4dd90b4561deb8de6/raw/dbb70a32eeba5c366b9a4c4641fb2d104a26f6cb/thumbnail.png">](https://bl.ocks.org/melalj/1aa4dd90b4561deb8de6) [<img src="https://raw.githubusercontent.com/Packet-Clearing-House/maptable/master/examples/edit.png">](https://bl.ocks.org/melalj/145ef67aa04a6713bc1d026eed46c59e)
 
 
 ## Table of Contents
@@ -29,11 +29,11 @@ You can also browse other code samples and **examples** here:
   *	[Map datasets](#map-datasets)
   *	[Dataset requirements](#dataset-requirements)
   *	[Columns details](#columns-details)
-    *		[columnsDetails format](#columnsdetails-format)
+       * [columnsDetails format](#columnsdetails-format)
 * [Naming conventions](#naming-conventions)
 * [ScaledValue](#scaledvalue)
   *	[Map](#map)
-    *		[Options](#options)
+       * [Options](#options)
 * [Filters](#filters)
   *	[Options](#options-1)
 * [Table](#table)
@@ -41,10 +41,10 @@ You can also browse other code samples and **examples** here:
 * [Export as SVG](#export-as-svg)
 *	[Credits](#credits)
 * [Contribute](#contribute)
-  * 	[Set up your development environment](#set-up-your-development-environment)
-    * 		[Requirements](#requirements)
-  * 	[Getting Started](#getting-started)
-  * 	[Todo](#todo)
+  * [Set up your development environment](#set-up-your-development-environment)
+    * [Requirements](#requirements)
+    * [Getting Started](#getting-started)
+  * [Todo](#todo)
 * [Release History](#release-history)
 
 ## Dependencies
@@ -554,7 +554,7 @@ Run these commands as your unprivileged user you're doing your development as:
  * [x] Publish v1
  * [ ] Write unit tests 🙏
  * [ ] Improve documentation (spell, formulation, emoji...)
- * [ ] Secondary sorting
+ * [x] Secondary sorting
  * [ ] Append SVG filters to the map and use them as styling
  * [ ] Legend gradient transformation (if we used the log scale)
  * [ ] Have multiple legends depending on the attribute
@@ -562,6 +562,15 @@ Run these commands as your unprivileged user you're doing your development as:
 
 
 ## Release History
+* Version 1.5.0 May 22 2017
+  * Improve heatmap falloff - [Issue #58](https://github.com/Packet-Clearing-House/maptable/issues/58)
+  * Improve heatmap colors - [Issue #56](https://github.com/Packet-Clearing-House/maptable/issues/56)
+  * Improve heatmap marker handling - [Issue #54](https://github.com/Packet-Clearing-House/maptable/issues/54)
+  * Fix heatmap filter but - [Issue #53](https://github.com/Packet-Clearing-House/maptable/issues/53)
+  * Fix color bug on filters - [Issue #43](https://github.com/Packet-Clearing-House/maptable/issues/43)
+  * Fix marker bug on filters - [Issue #41](https://github.com/Packet-Clearing-House/maptable/issues/41)
+  * Add stateful URLs for filters, zoom and Lat/Long - [Issue #38](https://github.com/Packet-Clearing-House/maptable/issues/38).com/Packet-Clearing-House/maptable/issues/41)
+  * Add secondary sort on columns - [Issue #37](https://github.com/Packet-Clearing-House/maptable/issues/37)
 * Version 1.4.0 December 20 2016
   * Add heatmap feature - [PR #43](https://github.com/Packet-Clearing-House/maptable/pull/43)
   * Add client side export feature - [Issue #9](https://github.com/Packet-Clearing-House/maptable/issues/9)

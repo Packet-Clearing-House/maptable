@@ -1,3 +1,4 @@
+/* MapTable 1.5.0 */
 this.d3 = this.d3 || {};
 this.d3.maptable = (function () {
     'use strict';
@@ -6,7 +7,7 @@ this.d3.maptable = (function () {
     babelHelpers.typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
       return typeof obj;
     } : function (obj) {
-      return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj;
+      return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
     };
 
     babelHelpers.classCallCheck = function (instance, Constructor) {
@@ -148,6 +149,7 @@ this.d3.maptable = (function () {
             max: 90,
             step: 4,
             color: '#FF0000',
+            colorStrength: 1,
             blur: 4.0
           },
           borders: {
@@ -887,7 +889,6 @@ this.d3.maptable = (function () {
        * @param options: options communicated to map
        * @param jsonWorld: Object that contain TopoJSON dataset
        */
-
       function GeoMap(maptable, options, jsonWorld) {
         var _this = this;
 
@@ -898,7 +899,6 @@ this.d3.maptable = (function () {
         this.scale = 1;
         this.transX = 0;
         this.transY = 0;
-        this.restoringState = false;
 
         this.options = options;
 
@@ -941,7 +941,9 @@ this.d3.maptable = (function () {
         }
 
         // Add tooltip
-        this.tooltipMarkersNode = d3.select(this.node).append('div').attr('id', 'mt-map-markers-tooltip').attr('class', 'mt-map-tooltip ' + this.options.markers.tooltipClassName).style('display', 'none');
+        if (this.options.markers) {
+          this.tooltipMarkersNode = d3.select(this.node).append('div').attr('id', 'mt-map-markers-tooltip').attr('class', 'mt-map-tooltip ' + this.options.markers.tooltipClassName).style('display', 'none');
+        }
 
         if (this.options.countries) {
           this.tooltipCountriesNode = d3.select(this.node).append('div').attr('id', 'mt-map-countries-tooltip').attr('class', 'mt-map-tooltip ' + this.options.countries.tooltipClassName).style('display', 'none');
@@ -1042,8 +1044,6 @@ this.d3.maptable = (function () {
             this.maskHeatmap.datum(lands).append('path').attr('class', 'mt-map-heatmap-mask-paths').attr('d', this.path);
           }
 
-          this.canvasHeatmap = d3.select(this.node).append('canvas').attr('id', 'mt-map-heatmap-canvas').attr('width', this.getWidth()).attr('height', this.getHeight()).attr('style', 'display: none;');
-
           this.imgHeatmap = this.layerHeatmap.append('image').attr('width', this.getWidth()).attr('height', this.getHeight()).attr('x', 0).attr('y', 0).attr('class', 'mt-map-heatmap-img');
 
           if (this.options.heatmap.mask) {
@@ -1076,10 +1076,10 @@ this.d3.maptable = (function () {
             return 0;
           };
           // const layersPerLocation = (opts.circles.max - opts.circles.min) / opts.circles.step;
-          var maxOpacityScale = d3.scale.linear().domain([1, lengthDataset]).range([1, 1 / 256]);
+          var maxOpacityScale = d3.scale.linear().domain([1, lengthDataset]).range([1, 0.25]);
           var centralCircleOpacity = maxOpacityScale(lengthDataset);
 
-          var scale = d3.scale.linear().domain([opts.circles.min, opts.circles.max]).range([centralCircleOpacity, 0]);
+          var scale = d3.scale.linear().domain([opts.circles.min, 20]).range([centralCircleOpacity, 0]);
           return function (m) {
             return scale(m);
           };
@@ -1099,11 +1099,8 @@ this.d3.maptable = (function () {
             return 1;
           };
           var dataExtents = d3.extent(this.maptable.data, this.options.heatmap.weightByAttribute);
-          var scale = d3.scale.linear().domain(dataExtents).range([0, 1]);
-          if (this.options.heatmap.weightByAttributeScale === 'log') {
-            if (!dataExtents[0]) dataExtents[0] = 0.01;
-            scale = d3.scale.log().domain(dataExtents).range([0.01, 1.0]);
-          }
+          var userScale = this.options.heatmap.weightByAttributeScale === 'log' ? d3.scale.log : d3.scale.linear;
+          var scale = userScale().domain(dataExtents).range([0.5, 1]); // 0.01 is to avoid having 0 for the log scale
           return function (d) {
             var val = _this2.options.heatmap.weightByAttribute(d);
             if (!val) return 0;
@@ -1119,7 +1116,11 @@ this.d3.maptable = (function () {
       }, {
         key: 'getHeatmapData',
         value: function getHeatmapData() {
-          var ctx = this.canvasHeatmap.node().getContext('2d');
+          var _this3 = this;
+
+          var canvasHeatmap = d3.select(this.node).append('canvas').attr('id', 'mt-map-heatmap-canvas').attr('width', this.getWidth()).attr('height', this.getHeight()).attr('style', 'display: none;');
+
+          var ctx = canvasHeatmap.node().getContext('2d');
           ctx.globalCompositeOperation = 'multiply';
           var circles = d3.range(this.options.heatmap.circles.min, this.options.heatmap.circles.max, this.options.heatmap.circles.step);
           var datumScale = this.getDatumScale();
@@ -1128,11 +1129,29 @@ this.d3.maptable = (function () {
           });
           var path = this.path.context(ctx);
           var magnitudeScale = this.getMagnitudeScale(heatmapDataset);
-          var colorScale = d3.scale.linear().domain([1, 0]).range([this.options.heatmap.circles.color, '#FFFFFF']);
+          var colorScale = d3.scale.linear().domain([1, 0]).range(['#000000', '#FFFFFF']);
+
+          // Make a flat white background first
+          ctx.beginPath();
+          ctx.rect(0, 0, this.getWidth(), this.getHeight());
+          ctx.fillStyle = '#ffffff';
+          ctx.fill();
+          ctx.closePath();
+
+          // color strenght factor
+          var colorMultiplier = function colorMultiplier(x) {
+            var a = _this3.options.heatmap.circles.colorStrength;
+            var aa = 1 + (a - 1) / 100;
+            if (a > 1) return (2 - aa) * x + aa - 1;
+            return a * x;
+          };
+
+          // add condensed clouds
           heatmapDataset.forEach(function (point) {
             var scaleOpacityDatum = datumScale(point);
             circles.forEach(function (m) {
-              var opacity = magnitudeScale(m) * scaleOpacityDatum;
+              var opacity = colorMultiplier(magnitudeScale(m) * scaleOpacityDatum);
+              var colorValue = colorScale(opacity);
               if (opacity > 0) {
                 ctx.beginPath();
                 path(d3.geo.circle().origin([point.longitude, point.latitude]).angle(m - 0.0001)());
@@ -1142,9 +1161,19 @@ this.d3.maptable = (function () {
               }
             });
           });
-          StackBlur.canvasRGBA(this.canvasHeatmap.node(), 0, 0, this.getWidth(), this.getHeight(), this.options.heatmap.circles.blur);
-          var dataUrl = this.canvasHeatmap.node().toDataURL();
-          ctx.clearRect(0, 0, this.canvasHeatmap.width, this.canvasHeatmap.height);
+
+          StackBlur.canvasRGBA(canvasHeatmap.node(), 0, 0, this.getWidth(), this.getHeight(), this.options.heatmap.circles.blur);
+
+          // Add color layer
+          ctx.beginPath();
+          ctx.globalCompositeOperation = 'screen';
+          ctx.rect(0, 0, this.getWidth(), this.getHeight());
+          ctx.fillStyle = this.options.heatmap.circles.color;
+          ctx.fill();
+          ctx.closePath();
+
+          var dataUrl = canvasHeatmap.node().toDataURL();
+          canvasHeatmap.remove();
           return dataUrl;
         }
 
@@ -1186,16 +1215,16 @@ this.d3.maptable = (function () {
       }, {
         key: 'updateCountries',
         value: function updateCountries() {
-          var _this3 = this;
+          var _this4 = this;
 
           // Data from user input
           var dataByCountry = d3.nest().key(function (d) {
-            return d[_this3.options.countryIdentifierKey];
+            return d[_this4.options.countryIdentifierKey];
           }).entries(this.maptable.data);
 
           // We merge both data
           this.dataCountries.forEach(function (geoDatum) {
-            geoDatum.key = geoDatum.properties[_this3.options.countryIdentifierType];
+            geoDatum.key = geoDatum.properties[_this4.options.countryIdentifierType];
             var matchedCountry = dataByCountry.filter(function (uDatum) {
               return uDatum.key === geoDatum.key;
             });
@@ -1206,7 +1235,7 @@ this.d3.maptable = (function () {
 
           // We calculate attributes values
           Object.keys(this.options.countries.attr).forEach(function (k) {
-            _this3.setAttrValues(k, _this3.options.countries.attr[k], _this3.dataCountries);
+            _this4.setAttrValues(k, _this4.options.countries.attr[k], _this4.dataCountries);
           });
 
           // Update SVG
@@ -1219,18 +1248,18 @@ this.d3.maptable = (function () {
 
           // Update Legend
           Object.keys(this.options.countries.attr).forEach(function (attrKey) {
-            var attrValue = _this3.options.countries.attr[attrKey];
+            var attrValue = _this4.options.countries.attr[attrKey];
             if ((typeof attrValue === 'undefined' ? 'undefined' : babelHelpers.typeof(attrValue)) === 'object' && attrValue.legend) {
-              var scaleDomain = d3.extent(_this3.dataCountries, function (d) {
+              var scaleDomain = d3.extent(_this4.dataCountries, function (d) {
                 return Number(d.rollupValue[attrKey]);
               });
-              _this3.legendCountry[attrKey].updateExtents(scaleDomain);
+              _this4.legendCountry[attrKey].updateExtents(scaleDomain);
 
               // When we mouseover the legend, it should highlight the indice selected
               countryItem.on('mouseover', function (d) {
-                _this3.legendCountry[attrKey].indiceChange(d.rollupValue[attrKey]);
+                _this4.legendCountry[attrKey].indiceChange(d.rollupValue[attrKey]);
               }).on('mouseout', function () {
-                _this3.legendCountry[attrKey].indiceChange(NaN);
+                _this4.legendCountry[attrKey].indiceChange(NaN);
               });
             }
           });
@@ -1243,7 +1272,7 @@ this.d3.maptable = (function () {
       }, {
         key: 'updateMarkers',
         value: function updateMarkers() {
-          var _this4 = this;
+          var _this5 = this;
 
           var defaultGroupBy = function defaultGroupBy(a) {
             return a.longitude + ',' + a.latitude;
@@ -1261,7 +1290,7 @@ this.d3.maptable = (function () {
 
           // We calculate attributes values
           Object.keys(this.options.markers.attr).forEach(function (k) {
-            _this4.setAttrValues(k, _this4.options.markers.attr[k], _this4.dataMarkers);
+            _this5.setAttrValues(k, _this5.options.markers.attr[k], _this5.dataMarkers);
           });
 
           // Enter
@@ -1407,7 +1436,6 @@ this.d3.maptable = (function () {
       }, {
         key: 'restoreState',
         value: function restoreState() {
-          this.restoringState = true;
           var params = document.location.href.split('!mt-zoom=');
           var defaultZoomRaw = params[1] ? params[1].split('!mt')[0] : null;
           if (defaultZoomRaw) {
@@ -1424,7 +1452,6 @@ this.d3.maptable = (function () {
               console.log('Maptable: Invalid URL State for mt-zoom ' + e.message);
             }
           }
-          this.restoringState = false;
         }
 
         /**
@@ -1434,23 +1461,15 @@ this.d3.maptable = (function () {
       }, {
         key: 'saveState',
         value: function saveState() {
-          if (this.restoringState && this.options.map.saveState) return;
           var encodedTranslation = this.encodeTranslation([this.transX, this.transY]);
-          var exportedCriteria = [this.scale, encodedTranslation[0], encodedTranslation[1]];
-          var params = document.location.href.split('!mt-zoom=');
-          var defaultZoom = params[1] ? params[1].split('!mt')[0] : null;
-          var newUrl = document.location.href.replace('!mt-zoom=' + defaultZoom, '');
-          if (this.scale !== 1) {
-            if (newUrl.indexOf('#') === -1) newUrl += '#';
-            newUrl += '!mt-zoom=' + encodeURIComponent(JSON.stringify(exportedCriteria));
+          var exportedData = [this.scale, encodedTranslation[0], encodedTranslation[1]];
+          if (exportedData[0] !== 1 && exportedData[1] !== 0 && exportedData[2] !== 0) {
+            this.maptable.saveState('zoom', exportedData);
           }
-          window.history.pushState(null, null, newUrl);
         }
       }, {
         key: 'rescale',
         value: function rescale() {
-          var _this5 = this;
-
           var self = this;
           if (d3.event && d3.event.translate) {
             this.scale = d3.event.scale;
@@ -1512,10 +1531,7 @@ this.d3.maptable = (function () {
           }
 
           // save state
-          window.clearTimeout(this.saveStateTimeout);
-          this.saveStateTimeout = window.setTimeout(function () {
-            _this5.saveState();
-          }, 200);
+          if (this.options.saveState) this.saveState();
         }
       }, {
         key: 'setAttrValues',
@@ -1528,72 +1544,70 @@ this.d3.maptable = (function () {
               d.attr[attrKey] = attrValue;
             });
           } else if ((typeof attrValue === 'undefined' ? 'undefined' : babelHelpers.typeof(attrValue)) === 'object') {
-            (function () {
-              // Dynamic value
-              if (!attrValue.rollup) {
-                attrValue.rollup = function (d) {
-                  return d.length;
-                };
-              }
-              if (!attrValue.min || !attrValue.max) {
-                throw new Error('MapTable: You should provide values \'min\' & \'max\' for attr.' + attrKey);
-              }
+            // Dynamic value
+            if (!attrValue.rollup) {
+              attrValue.rollup = function (d) {
+                return d.length;
+              };
+            }
+            if (!attrValue.min || !attrValue.max) {
+              throw new Error('MapTable: You should provide values \'min\' & \'max\' for attr.' + attrKey);
+            }
 
-              dataset.forEach(function (d) {
-                d.rollupValue[attrKey] = attrValue.rollup(d.values);
-              });
-              var scaleDomain = d3.extent(dataset, function (d) {
-                return Number(d.rollupValue[attrKey]);
-              });
-              if (attrValue.transform) {
-                scaleDomain[0] = attrValue.transform(scaleDomain[0], _this6.maptable.data);
-                scaleDomain[1] = attrValue.transform(scaleDomain[1], _this6.maptable.data);
-              }
+            dataset.forEach(function (d) {
+              d.rollupValue[attrKey] = attrValue.rollup(d.values);
+            });
+            var scaleDomain = d3.extent(dataset, function (d) {
+              return Number(d.rollupValue[attrKey]);
+            });
+            if (attrValue.transform) {
+              scaleDomain[0] = attrValue.transform(scaleDomain[0], this.maptable.data);
+              scaleDomain[1] = attrValue.transform(scaleDomain[1], this.maptable.data);
+            }
 
-              var minValue = attrValue.min;
-              var maxValue = attrValue.max;
+            var minValue = attrValue.min;
+            var maxValue = attrValue.max;
 
-              if (attrValue.min === 'minValue') {
-                minValue = scaleDomain[0];
-              }
-              if (attrValue.max === 'maxValue') {
-                maxValue = scaleDomain[1];
-              }
+            if (attrValue.min === 'minValue') {
+              minValue = scaleDomain[0];
+            }
+            if (attrValue.max === 'maxValue') {
+              maxValue = scaleDomain[1];
+            }
 
-              // check for negative color declarations
-              if (attrValue.maxNegative && !attrValue.minNegative || !attrValue.maxNegative && attrValue.minNegative) {
-                throw new Error('MapTable: maxNegative or minNegative undefined. Please declare both.');
-              }
-              var useNegative = attrValue.maxNegative && attrValue.minNegative;
-              var scaleFunction = void 0;
-              var scaleNegativeFunction = void 0;
-              if (useNegative) {
-                scaleFunction = d3.scale.linear().domain([0, scaleDomain[1]]).range([minValue, maxValue]);
+            // check for negative color declarations
+            if (attrValue.maxNegative && !attrValue.minNegative || !attrValue.maxNegative && attrValue.minNegative) {
+              throw new Error('MapTable: maxNegative or minNegative undefined. Please declare both.');
+            }
+            var useNegative = attrValue.maxNegative && attrValue.minNegative;
+            var scaleFunction = void 0;
+            var scaleNegativeFunction = void 0;
+            if (useNegative) {
+              scaleFunction = d3.scale.linear().domain([0, scaleDomain[1]]).range([minValue, maxValue]);
 
-                scaleNegativeFunction = d3.scale.linear().domain([scaleDomain[0], 0]).range([attrValue.maxNegative, attrValue.minNegative]);
-              } else {
-                scaleFunction = d3.scale.linear().domain(scaleDomain).range([minValue, maxValue]);
-              }
+              scaleNegativeFunction = d3.scale.linear().domain([scaleDomain[0], 0]).range([attrValue.maxNegative, attrValue.minNegative]);
+            } else {
+              scaleFunction = d3.scale.linear().domain(scaleDomain).range([minValue, maxValue]);
+            }
 
-              dataset.forEach(function (d) {
-                var scaledValue = void 0;
-                if (!d.values.length || isNaN(d.rollupValue[attrKey])) {
-                  if (typeof attrValue.empty === 'undefined') {
-                    throw new Error('MapTable: no empty property found for attr.' + attrKey);
-                  }
-                  scaledValue = attrValue.empty;
-                } else {
-                  var originalValueRaw = d.rollupValue[attrKey];
-                  var originalValue = attrValue.transform ? attrValue.transform(originalValueRaw, _this6.maptable.data) : originalValueRaw;
-                  if (useNegative && originalValue < 0) {
-                    scaledValue = scaleNegativeFunction(originalValue);
-                  } else {
-                    scaledValue = scaleFunction(originalValue);
-                  }
+            dataset.forEach(function (d) {
+              var scaledValue = void 0;
+              if (!d.values.length || isNaN(d.rollupValue[attrKey])) {
+                if (typeof attrValue.empty === 'undefined') {
+                  throw new Error('MapTable: no empty property found for attr.' + attrKey);
                 }
-                d.attr[attrKey] = scaledValue;
-              });
-            })();
+                scaledValue = attrValue.empty;
+              } else {
+                var originalValueRaw = d.rollupValue[attrKey];
+                var originalValue = attrValue.transform ? attrValue.transform(originalValueRaw, _this6.maptable.data) : originalValueRaw;
+                if (useNegative && originalValue < 0) {
+                  scaledValue = scaleNegativeFunction(originalValue);
+                } else {
+                  scaledValue = scaleFunction(originalValue);
+                }
+              }
+              d.attr[attrKey] = scaledValue;
+            });
           } else {
             throw new Error('Maptable: Invalid value for ' + attrKey);
           }
@@ -1708,7 +1722,6 @@ this.d3.maptable = (function () {
         this.maptable = maptable;
         this.options = options;
         this.criteria = [];
-        this.restoringState = false; // a flag to check if we are restoring the state or not
 
         if (this.options.show) {
           var arrayDiff = this.options.show.filter(function (i) {
@@ -1916,7 +1929,6 @@ this.d3.maptable = (function () {
       }, {
         key: 'restoreState',
         value: function restoreState() {
-          this.restoringState = true;
           var params = document.location.href.split('!mt-filters=');
           var defaultCriteria = params[1] ? params[1].split('!mt')[0] : null;
           if (defaultCriteria) {
@@ -1926,26 +1938,6 @@ this.d3.maptable = (function () {
               console.log('Maptable: Invalid URL State for mt-filters ' + e.message);
             }
           }
-          this.restoringState = false;
-        }
-
-        /**
-         * Save the state into the URL hash
-         */
-
-      }, {
-        key: 'saveState',
-        value: function saveState() {
-          if (this.restoringState && this.options.filters.saveState) return;
-          var exportedFilters = this.exportFilters();
-          var params = document.location.href.split('!mt-filters=');
-          var defaultCriteria = params[1] ? params[1].split('!mt')[0] : null;
-          var newUrl = document.location.href.replace('!mt-filters=' + defaultCriteria, '');
-          if (Object.keys(exportedFilters).length) {
-            if (newUrl.indexOf('#') === -1) newUrl += '#';
-            newUrl += '!mt-filters=' + encodeURIComponent(JSON.stringify(exportedFilters));
-          }
-          window.history.pushState(null, null, newUrl);
         }
 
         /**
@@ -2152,8 +2144,6 @@ this.d3.maptable = (function () {
       }, {
         key: 'filterData',
         value: function filterData() {
-          var _this5 = this;
-
           var that = this;
           this.maptable.data = this.maptable.rawData.filter(function (d) {
             var rowNodes = document.querySelectorAll('.mt-filter-row');
@@ -2199,10 +2189,7 @@ this.d3.maptable = (function () {
             return matched;
           });
           // save state
-          window.clearTimeout(this.saveStateTimeout);
-          this.saveStateTimeout = window.setTimeout(function () {
-            _this5.saveState();
-          }, 200);
+          if (this.options.saveState) this.maptable.saveState('filters', this.exportFilters());
         }
       }, {
         key: 'refresh',
@@ -2252,7 +2239,6 @@ this.d3.maptable = (function () {
        * @param options: options communicated to the table
        * @returns {string|*}
        */
-
       function Table(maptable, options) {
         var _this = this;
 
@@ -2260,7 +2246,11 @@ this.d3.maptable = (function () {
 
         this.maptable = maptable;
         this.options = options;
-        this.currentSorting = { key: Object.keys(this.maptable.data[0])[0], mode: 'desc' };
+        this.sorting = [{
+          key: Object.keys(this.maptable.data[0])[0],
+          mode: 'asc'
+        }];
+        this.isSorting = false;
 
         this.node = document.querySelector('#mt-table');
         if (!this.node) {
@@ -2293,16 +2283,19 @@ this.d3.maptable = (function () {
           var output = d.sorting ? 'mt-table-sortable' : '';
           output += d.nowrap ? ' nowrap' : '';
           return output;
-        }).attr('style', function (d) {
+        }).attr('onselectstart', 'return false;').attr('unselectable', 'on').attr('style', function (d) {
           return d.nowrap ? 'white-space:nowrap;' : '';
+        }).on('click', function (d) {
+          if (_this.isSorting) return;
+          _this.isSorting = true;
+          if (d.sorting) {
+            _this.sortColumn(d.key);
+          }
+          _this.isSorting = false;
         }).text(function (d) {
           return d.title;
         }).attr('id', function (d) {
           return 'column_header_' + utils.sanitizeKey(d.key);
-        }).on('click', function (d) {
-          if (d.sorting) {
-            _this.sortColumn(d.key);
-          }
         });
 
         if (this.options.defaultSorting) {
@@ -2370,25 +2363,36 @@ this.d3.maptable = (function () {
         value: function applySort() {
           var _this3 = this;
 
-          var d3SortMode = this.currentSorting.mode === 'asc' ? d3.ascending : d3.descending;
-          var columnDetails = this.maptable.columnDetails[this.currentSorting.key];
+          var sortableColums = document.querySelectorAll('.mt-table-sortable');
+          for (var i = 0; i < sortableColums.length; i += 1) {
+            sortableColums[i].setAttribute('class', 'mt-table-sortable');
+          }
+          this.sorting.forEach(function (column) {
+            document.getElementById('column_header_' + utils.sanitizeKey(column.key)).setAttribute('class', 'mt-table-sortable sort_' + column.mode);
+          });
           this.maptable.data = this.maptable.data.sort(function (a, b) {
-            var el1 = a[_this3.currentSorting.key];
-            var el2 = b[_this3.currentSorting.key];
-            if (columnDetails.dataParse) {
-              el1 = columnDetails.dataParse(el1);
-              el2 = columnDetails.dataParse(el2);
-            } else if (columnDetails.virtual) {
-              el2 = columnDetails.virtual(a);
-              el2 = columnDetails.virtual(b);
-            } else if (columnDetails.filterType === 'compare') {
-              el1 = parseInt(el1, 10);
-              el2 = parseInt(el2, 10);
-            } else {
-              el1 = el1.toLowerCase();
-              el2 = el2.toLowerCase();
-            }
-            return d3SortMode(el1, el2);
+            var compareBool = false;
+            _this3.sorting.forEach(function (column) {
+              var d3SortMode = column.mode === 'asc' ? d3.ascending : d3.descending;
+              var columnDetails = _this3.maptable.columnDetails[column.key];
+              var el1 = a[column.key];
+              var el2 = b[column.key];
+              if (columnDetails.dataParse) {
+                el1 = columnDetails.dataParse(el1);
+                el2 = columnDetails.dataParse(el2);
+              } else if (columnDetails.virtual) {
+                el2 = columnDetails.virtual(a);
+                el2 = columnDetails.virtual(b);
+              } else if (columnDetails.filterType === 'compare') {
+                el1 = Number(el1);
+                el2 = Number(el2);
+              } else if (el1 instanceof String && el2 instanceof String) {
+                el1 = el1.toLowerCase();
+                el2 = el2.toLowerCase();
+              }
+              compareBool = compareBool || d3SortMode(el1, el2);
+            });
+            return compareBool;
           });
         }
 
@@ -2399,19 +2403,29 @@ this.d3.maptable = (function () {
 
       }, {
         key: 'sortColumn',
-        value: function sortColumn(columnKey) {
-          this.currentSorting.key = columnKey;
-          if (columnKey === this.currentSorting.key) {
-            this.currentSorting.mode = this.currentSorting.mode === 'asc' ? 'desc' : 'asc';
+        value: function sortColumn(key) {
+          var sortIndex = this.sorting.map(function (d) {
+            return d.key;
+          }).indexOf(key);
+          var sortValue = { key: key };
+          if (sortIndex === -1) {
+            sortValue.mode = 'asc';
+            if (d3.event.shiftKey) {
+              this.sorting[1] = sortValue;
+            } else {
+              this.sorting = [sortValue];
+            }
           } else {
-            this.currentSorting.mode = 'asc';
+            if (this.sorting[sortIndex].mode === 'asc') {
+              this.sorting[sortIndex].mode = 'desc';
+            } else {
+              this.sorting[sortIndex].mode = 'asc';
+              // this.sorting.splice(sortIndex, 1); // to disable sorting
+            }
+            if (!d3.event.shiftKey) {
+              this.sorting = [this.sorting[sortIndex]];
+            }
           }
-
-          var sortableColums = document.querySelectorAll('.mt-table-sortable');
-          for (var i = 0; i < sortableColums.length; i++) {
-            sortableColums[i].setAttribute('class', 'mt-table-sortable');
-          }
-          document.getElementById('column_header_' + utils.sanitizeKey(columnKey)).setAttribute('class', 'mt-table-sortable sort_' + this.currentSorting.mode);
 
           this.render();
         }
@@ -2424,6 +2438,12 @@ this.d3.maptable = (function () {
         babelHelpers.classCallCheck(this, MapTable);
 
         this.options = options;
+
+        this.state = {
+          filters: {},
+          zoom: {}
+        };
+        this.saveStateTimeout = {};
 
         this.node = document.querySelector(target);
         this.node.setAttribute('style', 'position:relative;');
@@ -2466,24 +2486,31 @@ this.d3.maptable = (function () {
           this.data = this.rawData.slice(); // we clone data, so that we can filter it
           // Map
           if (this.options.map) {
-            (function () {
-              // Map wrapper
-              var mapWrapper = document.createElement('div');
-              mapWrapper.setAttribute('class', 'mt-map-container');
-              mapWrapper.innerHTML = '<div class="mt-loading">Loading...</div>';
-              _this.node.insertBefore(mapWrapper, _this.node.firstChild);
+            // Map wrapper
+            var mapWrapper = document.createElement('div');
+            mapWrapper.setAttribute('class', 'mt-map-container');
+            var isIE = navigator.userAgent.indexOf('MSIE') !== -1 || navigator.appVersion.indexOf('Trident/') > 0;
+            if (this.options.map.heatmap && isIE) {
+              mapWrapper.innerHTML = '<div class="mt-loading">The heatmap feature is not supported with Internet Explorer.<br>Please use another modern browser to see this map.</div>';
+              this.node.insertBefore(mapWrapper, this.node.firstChild);
               mapWrapper.querySelector('.mt-loading').style.display = 'block';
-              d3.json(_this.options.map.path, function (errGeoMap, jsonWorld) {
-                if (errGeoMap) {
-                  throw errGeoMap;
-                }
-                _this.map = new GeoMap(_this, _this.options.map, jsonWorld);
+              this.options.map = false;
+              this.buildComponenents();
+              return;
+            }
+            mapWrapper.innerHTML = '<div class="mt-loading">Loading...</div>';
+            this.node.insertBefore(mapWrapper, this.node.firstChild);
+            mapWrapper.querySelector('.mt-loading').style.display = 'block';
+            d3.json(this.options.map.path, function (errGeoMap, jsonWorld) {
+              if (errGeoMap) {
+                throw errGeoMap;
+              }
+              _this.map = new GeoMap(_this, _this.options.map, jsonWorld);
 
-                mapWrapper.querySelector('.mt-loading').style.display = 'none';
+              mapWrapper.querySelector('.mt-loading').style.display = 'none';
 
-                _this.buildComponenents();
-              });
-            })();
+              _this.buildComponenents();
+            });
           } else {
             this.buildComponenents();
           }
@@ -2520,8 +2547,34 @@ this.d3.maptable = (function () {
       }, {
         key: 'restoreState',
         value: function restoreState() {
-          if (this.filters) this.filters.restoreState();
           if (this.map) this.map.restoreState();
+          if (this.filters) this.filters.restoreState();
+        }
+
+        /**
+         * Save the state into the URL hash
+         * @param stateName: name of the state (either filters or zoom)
+         * @param stateData: object, contain state information
+         */
+
+      }, {
+        key: 'saveState',
+        value: function saveState(stateName, stateData) {
+          var _this3 = this;
+
+          window.clearTimeout(this.saveStateTimeout[stateName]);
+          this.saveStateTimeout[stateName] = window.setTimeout(function () {
+            _this3.state[stateName] = stateData;
+            var newUrl = document.location.href.split('#')[0];
+            var stateHash = '';
+            ['filters', 'zoom'].forEach(function (f) {
+              if (Object.keys(_this3.state[f]).length) {
+                stateHash += '!mt-' + f + '=' + encodeURIComponent(JSON.stringify(_this3.state[f]));
+              }
+            });
+            if (stateHash !== '') stateHash = '#' + stateHash;
+            window.history.pushState(null, null, '' + newUrl + stateHash);
+          }, 200);
         }
       }, {
         key: 'render',
@@ -2554,7 +2607,7 @@ this.d3.maptable = (function () {
           var defaultColumns = {};
 
           Object.keys(that.rawData[0]).forEach(function (k) {
-            var patternNumber = /^\d+$/;
+            var patternNumber = /^[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?$/;
             var isNumber = patternNumber.test(that.rawData[0][k]);
             defaultColumns[k] = {
               title: utils.keyToTile(k),
@@ -2564,7 +2617,7 @@ this.d3.maptable = (function () {
             };
             if (isNumber) {
               defaultColumns[k].dataParse = function (val) {
-                return parseInt(val, 10);
+                return parseFloat(val);
               };
             }
           });
@@ -2592,7 +2645,7 @@ this.d3.maptable = (function () {
       };
 
       maptable.map = function () {
-        var mapOptions = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+        var mapOptions = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
         if (!topojson) {
           throw new Error('Maptable requires topojson.js');
@@ -2626,21 +2679,21 @@ this.d3.maptable = (function () {
       };
 
       maptable.filters = function () {
-        var filtersOptions = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+        var filtersOptions = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
         options.filters = filtersOptions;
         return maptable;
       };
 
       maptable.table = function () {
-        var tableOptions = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+        var tableOptions = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
         options.table = tableOptions;
         return maptable;
       };
 
       maptable.columns = function () {
-        var columns = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+        var columns = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
         options.columns = columns;
         return maptable;
@@ -2656,6 +2709,10 @@ this.d3.maptable = (function () {
         }
 
         if (!options.map || !options.map.heatmap) options.map.heatmap = null;
+
+        if (options.map && options.map.markers === false) options.map.markers = null;
+
+        if (options.map && options.map.countries === false) options.map.countries = null;
 
         if (!options.filters) options.filters = null;
         options.onComplete = onComplete;
