@@ -191,7 +191,7 @@ export default class Table {
     const sortValue = { key };
     if (sortIndex === -1) {
       sortValue.mode = 'asc';
-      if (d3.event.shiftKey) {
+      if (d3.event && d3.event.shiftKey) {
         this.sorting[1] = sortValue;
       } else {
         this.sorting = [sortValue];
