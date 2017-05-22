@@ -569,7 +569,7 @@ Run these commands as your unprivileged user you're doing your development as:
   * Fix heatmap filter but - [Issue #53](https://github.com/Packet-Clearing-House/maptable/issues/53)
   * Fix color bug on filters - [Issue #43](https://github.com/Packet-Clearing-House/maptable/issues/43)
   * Fix marker bug on filters - [Issue #41](https://github.com/Packet-Clearing-House/maptable/issues/41)
-  * Add stateful URLs for filters, zoom and Lat/Long - [Issue #38](https://github.com/Packet-Clearing-House/maptable/issues/38).com/Packet-Clearing-House/maptable/issues/41)
+  * Add stateful URLs for filters, zoom and Lat/Long - [Issue #38](https://github.com/Packet-Clearing-House/maptable/issues/38)
   * Add secondary sort on columns - [Issue #37](https://github.com/Packet-Clearing-House/maptable/issues/37)
 * Version 1.4.0 December 20 2016
   * Add heatmap feature - [PR #43](https://github.com/Packet-Clearing-House/maptable/pull/43)
