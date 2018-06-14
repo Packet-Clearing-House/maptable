@@ -167,7 +167,7 @@ export default class Filters {
   setFilters(criteria) {
     this.reset();
     Object.keys(criteria).forEach(filterName => {
-      this.add();
+      this.create(filterName);
       const criterion = criteria[filterName];
       const row = document
       .querySelector(`#mt-filters-elements [data-mt-filter-name="${filterName}"]`);
