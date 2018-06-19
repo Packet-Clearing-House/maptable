@@ -194,7 +194,7 @@ export default class Filters {
    * Restore state from the URL hash
    */
   restoreState() {
-    const params = document.location.href.split('!mt-filters=');
+    const params = document.location.href.replace(/%21mt/g, '!mt').split('!mt-filters=');
     const defaultCriteria = (params[1]) ? params[1].split('!mt')[0] : null;
     if (defaultCriteria) {
       try {
