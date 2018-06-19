@@ -595,7 +595,7 @@ export default class GeoMap {
    * Restore state from the url hash
    */
   restoreState() {
-    const params = document.location.href.split('!mt-zoom=');
+    const params = document.location.href.replace(/%21mt/g, '!mt').split('!mt-zoom=');
     const defaultZoomRaw = (params[1]) ? params[1].split('!mt')[0] : null;
     if (defaultZoomRaw) {
       try {
