@@ -562,6 +562,9 @@ Run these commands as your unprivileged user you're doing your development as:
 
 
 ## Release History
+* Version 1.5.2 June 18 2018
+  * Fix permalink bug - [Issue #71](https://github.com/Packet-Clearing-House/maptable/issues/71)
+  * Update browser-sync - [Issue #73](https://github.com/Packet-Clearing-House/maptable/issues/73)
 * Version 1.5.1 May 22 2017
   * Fix default sort bug - [Issue #66](https://github.com/Packet-Clearing-House/maptable/issues/66)
 * Version 1.5.0 May 22 2017

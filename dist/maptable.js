@@ -1,4 +1,4 @@
-/* MapTable 1.5.1 */this.d3 = this.d3 || {};
+this.d3 = this.d3 || {};
 this.d3.maptable = (function () {
     'use strict';
 
@@ -1899,7 +1899,7 @@ this.d3.maptable = (function () {
 
           this.reset();
           Object.keys(criteria).forEach(function (filterName) {
-            _this2.add();
+            _this2.create(filterName);
             var criterion = criteria[filterName];
             var row = document.querySelector('#mt-filters-elements [data-mt-filter-name="' + filterName + '"]');
             if (row) {
