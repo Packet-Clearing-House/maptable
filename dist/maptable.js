@@ -1,4 +1,4 @@
-this.d3 = this.d3 || {};
+/* MapTable 1.5.3 */this.d3 = this.d3 || {};
 this.d3.maptable = (function () {
     'use strict';
 
@@ -1435,7 +1435,7 @@ this.d3.maptable = (function () {
       }, {
         key: 'restoreState',
         value: function restoreState() {
-          var params = document.location.href.split('!mt-zoom=');
+          var params = document.location.href.replace(/%21mt/g, '!mt').split('!mt-zoom=');
           var defaultZoomRaw = params[1] ? params[1].split('!mt')[0] : null;
           if (defaultZoomRaw) {
             try {
@@ -1928,7 +1928,7 @@ this.d3.maptable = (function () {
       }, {
         key: 'restoreState',
         value: function restoreState() {
-          var params = document.location.href.split('!mt-filters=');
+          var params = document.location.href.replace(/%21mt/g, '!mt').split('!mt-filters=');
           var defaultCriteria = params[1] ? params[1].split('!mt')[0] : null;
           if (defaultCriteria) {
             try {
