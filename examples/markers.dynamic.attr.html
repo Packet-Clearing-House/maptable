@@ -25,7 +25,6 @@
                             groupedData.values.forEach(function(d) {
                                 totalTraffic += Number(d.traf);
                             });
-                            console.log(totalTraffic);
                             if (totalTraffic && totalTraffic > 50000000) return 'green';
                             return 'red';
                         }
