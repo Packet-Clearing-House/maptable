@@ -701,8 +701,13 @@ export default class GeoMap {
       dataset.forEach(d => {
         d.attr[attrKey] = attrValue;
       });
+    } else if (typeof (attrValue) === 'function') {
+      // Dynamic value based on the dataset
+      dataset.forEach(d => {
+        d.attr[attrKey] = attrValue(d);
+      });
     } else if (typeof (attrValue) === 'object') {
-      // Dynamic value
+      // Dynamic value based on a scale
       if (!attrValue.rollup) {
         attrValue.rollup = (d) => d.length;
       }
