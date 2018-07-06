@@ -1,4 +1,4 @@
-/* MapTable 1.5.3 */this.d3 = this.d3 || {};
+this.d3 = this.d3 || {};
 this.d3.maptable = (function () {
     'use strict';
 
@@ -1542,8 +1542,13 @@ this.d3.maptable = (function () {
             dataset.forEach(function (d) {
               d.attr[attrKey] = attrValue;
             });
+          } else if (typeof attrValue === 'function') {
+            // Dynamic value based on the dataset
+            dataset.forEach(function (d) {
+              d.attr[attrKey] = attrValue(d);
+            });
           } else if ((typeof attrValue === 'undefined' ? 'undefined' : babelHelpers.typeof(attrValue)) === 'object') {
-            // Dynamic value
+            // Dynamic value based on a scale
             if (!attrValue.rollup) {
               attrValue.rollup = function (d) {
                 return d.length;
