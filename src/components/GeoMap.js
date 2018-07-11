@@ -802,7 +802,7 @@ export default class GeoMap {
       }
 
       document.getElementById('mt-map-title').innerHTML = this.options.title
-        .content(showing, total, inlineFilters);
+        .content(showing, total, inlineFilters, this.maptable.data, this.maptable.rawData);
     }
   }
 
