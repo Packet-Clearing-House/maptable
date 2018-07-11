@@ -522,7 +522,7 @@ If you want to add a table on your visualization:
 - `onComplete:` _(function, default: null)_ Callback function when the table finished rendering.
 - `className:` _(string, default: 'table table-striped table-bordered')_ Table class name
 - `rowClassName:` _(function(d), default: null)_ Function that returns the row class name depending on its content. Useful to highlight rows.
-- `defaultSorting:` _(object, default: see below)_ How we sort things on the table.
+- `defaultSorting:` _(object or table or object, default: see below)_ How we sort things on the table. You can specify a an array of two objects for secondary sorting.
     - `defaultSorting.key:` _(string, default: <first column shown>)_ default sorting on which column.
     - `defaultSorting.mode:` _(string, default: 'asc')_ sorting mode: `asc` for ascending, `desc` for descending.
 - `collapseRowsBy:` _([string, ...], default: null)_ Array of columns that we want to be collapsed.
