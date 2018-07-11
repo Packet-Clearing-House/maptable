@@ -77,10 +77,13 @@ export default class Table {
       .attr('id', d => `column_header_${utils.sanitizeKey(d.key)}`);
 
     if (this.options.defaultSorting) {
-      this.sortColumn(this.options.defaultSorting.key, this.options.defaultSorting.mode);
-    } else {
-      this.render();
+      if (Array.isArray(this.options.defaultSorting) && this.options.defaultSorting.length === 2) {
+        this.sorting = this.options.defaultSorting;
+      } else {
+        this.sorting = [this.options.defaultSorting];
+      }
     }
+    this.render();
 
     // On complete
     if (this.options.onComplete && this.options.onComplete.constructor === Function) {
