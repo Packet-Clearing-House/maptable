@@ -244,7 +244,7 @@ export default class GeoMap {
     const dataExtents = d3.extent(this.maptable.data, this.options.heatmap.weightByAttribute);
     const userScale = (this.options.heatmap.weightByAttributeScale === 'log') ?
       d3.scale.log : d3.scale.linear;
-    const scale = userScale().domain(dataExtents).range([0.5, 1]); // 0.01 is to avoid having 0 for the log scale
+    const scale = userScale().domain(dataExtents).range([0.5, 1]);
     return (d) => {
       const val = this.options.heatmap.weightByAttribute(d);
       if (!val) return 0;
@@ -292,7 +292,7 @@ export default class GeoMap {
     const colorMultiplier = (x) => {
       const a = this.options.heatmap.circles.colorStrength;
       const aa = 1 + ((a - 1) / 100);
-      if (a > 1) return ( 2 - aa ) * x + aa - 1;
+      if (a > 1) return (2 - aa) * x + aa - 1;
       return a * x;
     };
 
@@ -301,7 +301,6 @@ export default class GeoMap {
       const scaleOpacityDatum = datumScale(point);
       circles.forEach(m => {
         const opacity = colorMultiplier(magnitudeScale(m) * scaleOpacityDatum);
-        const colorValue = colorScale(opacity);
         if (opacity > 0) {
           ctx.beginPath();
           path(d3.geo.circle().origin([point.longitude, point.latitude]).angle(m - 0.0001)());
