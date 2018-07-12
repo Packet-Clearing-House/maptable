@@ -1099,7 +1099,7 @@ this.d3.maptable = (function () {
           };
           var dataExtents = d3.extent(this.maptable.data, this.options.heatmap.weightByAttribute);
           var userScale = this.options.heatmap.weightByAttributeScale === 'log' ? d3.scale.log : d3.scale.linear;
-          var scale = userScale().domain(dataExtents).range([0.5, 1]); // 0.01 is to avoid having 0 for the log scale
+          var scale = userScale().domain(dataExtents).range([0.5, 1]);
           return function (d) {
             var val = _this2.options.heatmap.weightByAttribute(d);
             if (!val) return 0;
@@ -1150,7 +1150,6 @@ this.d3.maptable = (function () {
             var scaleOpacityDatum = datumScale(point);
             circles.forEach(function (m) {
               var opacity = colorMultiplier(magnitudeScale(m) * scaleOpacityDatum);
-              var colorValue = colorScale(opacity);
               if (opacity > 0) {
                 ctx.beginPath();
                 path(d3.geo.circle().origin([point.longitude, point.latitude]).angle(m - 0.0001)());
@@ -1646,7 +1645,7 @@ this.d3.maptable = (function () {
               inlineFilters = this.maptable.filters.getDescription();
             }
 
-            document.getElementById('mt-map-title').innerHTML = this.options.title.content(showing, total, inlineFilters);
+            document.getElementById('mt-map-title').innerHTML = this.options.title.content(showing, total, inlineFilters, this.maptable.data, this.maptable.rawData);
           }
         }
       }, {
