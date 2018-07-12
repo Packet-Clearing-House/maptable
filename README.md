@@ -257,6 +257,21 @@ For example, if we want to have countries background color to be related to a sc
 }
 ```
 
+The value can also be a function that have a parameter a `groupedData` and returns the value. You can define your own logic to generate the attribute value, for example:
+
+```js
+{
+  fill: function(groupedData) {
+    var totalTraffic = 0;
+    groupedData.values.forEach(function(d) {
+        totalTraffic += Number(d.traf);
+    });
+    if (totalTraffic && totalTraffic > 50000000) return 'green';
+    return 'red';
+  },
+}
+```
+
 If you want to attach the data boundaries to the value of an attribute, you may set as values for min and max as `minValue` and `maxValue`. For example, if we want to have markers radius to be related to a scale from minimum value and the maximum value, but also transform the value following a function. The value for the map options on `markers.attr.r` would be:
 
 ```js
