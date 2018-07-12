@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="stylesheet" href="bootstrap.min.css">
+  <link rel="stylesheet" href="maptable.css">
+  <title>Only Table and filters - sorting, virtual columns</title>
+</head>
+<body>
+
+  <script src="d3.min.js" charset="utf-8"></script>
+  <script src="topojson.min.js"></script>
+  <script src="maptable.js"></script>
+
+<div id="vizContainer" class='container'></div>
+
+<script>
+    var viz = d3.maptable('#vizContainer')
+    .json('table.json')
+    .columns({
+      position: {
+        filterMethod: 'dropdown',
+      },
+      office: {
+        filterMethod: 'dropdown',
+      },
+      start_date: {
+        filterMethod: 'compare',
+        filterInputType: 'date',
+        dataParse: function(val) {
+          return new Date(val).getTime();
+        }
+      },
+      salary: {
+        filterMethod: 'compare',
+        filterInputType: 'number',
+        dataParse: function(val) {
+          return parseInt(val.replace(/[^0-9]+/g, ''), 10);
+        }
+      },
+      links: {
+        virtual: function(d) {
+          return '<a href="#' + d.extn+ '">Link</a>';
+        }
+      }
+    })
+    .filters({
+      show: ['name', 'position', 'office', 'salary', 'start_date']
+    })
+    .table({
+      show: ['name', 'position', 'office', 'salary', 'start_date', 'links']
+    })
+    .render();
+</script>
+
+
+</body>
+</html>
