@@ -806,22 +806,25 @@ export default class GeoMap {
     }
   }
 
-  activateTooltip(target, tooltipNode, tooltipContent, cb) {
-    target.on('mousemove', d => {
-      const mousePosition = d3.mouse(this.svg.node()).map(v => parseInt(v, 10));
-
+  activateTooltip(target, tooltipNode, tooltipContent) {
+    target.on('mouseover', function (d) {
+      const circleRect = this.getBoundingClientRect();
+      tooltipNode.html(tooltipContent(d)).attr('style', `display:block;position:fixed;`);
       const tooltipDelta = tooltipNode.node().offsetWidth / 2;
-      const mouseLeft = (mousePosition[0] - tooltipDelta);
-      const mouseTop = (mousePosition[1] + 10);
+      const mouseLeft = (circleRect.left + (circleRect.width / 2) - tooltipDelta);
+      const mouseTop = (circleRect.top + circleRect.height);
 
-      tooltipNode.attr('style', `top:${mouseTop}px;left:${mouseLeft}px;display:block;`)
-        .html(tooltipContent(d))
-        .on('mouseout', () => tooltipNode.style('display', 'none'));
-
-      if (cb) {
-        tooltipNode.on('click', cb);
-      }
-    }).on('mouseout', () => tooltipNode.style('display', 'none'));
+      tooltipNode.attr(
+        'style',
+        `top:${mouseTop}px;left:${mouseLeft}px;display:block;position:fixed;`
+      )
+      .on('mouseout', () => {
+        tooltipNode.style('display', 'none');
+      });
+    })
+    .on('mouseout', () => {
+      tooltipNode.style('display', 'none');
+    });
   }
 
   exportSvg() {
