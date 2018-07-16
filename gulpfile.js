@@ -9,6 +9,7 @@ var browserSync = require('browser-sync');
 
 var compressJs = require('gulp-uglify');
 var compressCss = require('gulp-cssnano');
+var headerComment = require('gulp-header-comment');
 
 var rimraf = require('gulp-rimraf');
 
@@ -17,6 +18,8 @@ var jeditor = require('gulp-json-editor');
 var _ = require('underscore');
 
 var reload = browserSync.reload;
+
+var package = require('./package.json');
 
 // Browser
 gulp.task('browser-sync', function() {
@@ -71,6 +74,7 @@ gulp.task('build:js:dev', function() {
 gulp.task('compress:js', function() {
   return gulp.src('dist/*.js')
     .pipe(compressJs())
+    .pipe(headerComment('MapTable '+ package.version + ' - License MIT - Build: ' + (new Date()).toString()))
     .pipe(rename({
       suffix: '.min'
     }))

@@ -1651,27 +1651,19 @@ this.d3.maptable = (function () {
         }
       }, {
         key: 'activateTooltip',
-        value: function activateTooltip(target, tooltipNode, tooltipContent, cb) {
-          var _this8 = this;
-
-          target.on('mousemove', function (d) {
-            var mousePosition = d3.mouse(_this8.svg.node()).map(function (v) {
-              return parseInt(v, 10);
-            });
-
+        value: function activateTooltip(target, tooltipNode, tooltipContent) {
+          target.on('mouseover', function (d) {
+            var circleRect = this.getBoundingClientRect();
+            tooltipNode.html(tooltipContent(d)).attr('style', 'display:block;position:fixed;');
             var tooltipDelta = tooltipNode.node().offsetWidth / 2;
-            var mouseLeft = mousePosition[0] - tooltipDelta;
-            var mouseTop = mousePosition[1] + 10;
+            var mouseLeft = circleRect.left + circleRect.width / 2 - tooltipDelta;
+            var mouseTop = circleRect.top + circleRect.height;
 
-            tooltipNode.attr('style', 'top:' + mouseTop + 'px;left:' + mouseLeft + 'px;display:block;').html(tooltipContent(d)).on('mouseout', function () {
-              return tooltipNode.style('display', 'none');
+            tooltipNode.attr('style', 'top:' + mouseTop + 'px;left:' + mouseLeft + 'px;display:block;position:fixed;').on('mouseout', function () {
+              tooltipNode.style('display', 'none');
             });
-
-            if (cb) {
-              tooltipNode.on('click', cb);
-            }
           }).on('mouseout', function () {
-            return tooltipNode.style('display', 'none');
+            tooltipNode.style('display', 'none');
           });
         }
       }, {
@@ -2712,7 +2704,7 @@ this.d3.maptable = (function () {
           throw new Error('MapTable: Please provide the path for your dataset json|csv|tsv');
         }
 
-        if (!options.map || !options.map.heatmap) options.map.heatmap = null;
+        if (options.map && !options.map.heatmap) options.map.heatmap = null;
 
         if (options.map && options.map.markers === false) options.map.markers = null;
 
