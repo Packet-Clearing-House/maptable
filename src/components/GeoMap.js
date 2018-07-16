@@ -136,7 +136,7 @@ export default class GeoMap {
   }
 
   scaleAttributes() {
-    return this.scale ** (2 / 3);
+    return Math.pow(this.scale, 2 / 3); // eslint-disable-line
   }
 
   getWidth() {
