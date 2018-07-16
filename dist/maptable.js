@@ -1673,7 +1673,7 @@ this.d3.maptable = (function () {
             } else {
               var targetRect = this.getBoundingClientRect();
               mouseLeft = targetRect.left + targetRect.width / 2 - tooltipDelta;
-              mouseTop = targetRect.top + targetRect.height;
+              mouseTop = targetRect.top + targetRect.height + 2; // +2 is for the border
             }
 
             tooltipNode.attr('style', 'top:' + mouseTop + 'px;left:' + mouseLeft + 'px;display:block;position:fixed;').on('mouseout', function () {
