@@ -59,11 +59,11 @@ export default class GeoMap {
     this.path = d3.geo.path().projection(this.projection);
 
     // Add coordinates to rawData
-    this.maptable.rawData.forEach(d => {
+    this.maptable.rawData.forEach((d) => {
       d.longitude = parseFloat(d[self.options.longitudeKey]);
       d.latitude = parseFloat(d[self.options.latitudeKey]);
       let coord = [0, 0];
-      if (!isNaN(d.longitude) && !isNaN(d.latitude)) {
+      if (!Number.isNaN(d.longitude) && !Number.isNaN(d.latitude)) {
         coord = self.projection([d.longitude, d.latitude]);
       }
       d.x = coord[0];
@@ -136,7 +136,7 @@ export default class GeoMap {
   }
 
   scaleAttributes() {
-    return Math.pow(this.scale, 2 / 3);
+    return this.scale ** (2 / 3);
   }
 
   getWidth() {
@@ -183,10 +183,10 @@ export default class GeoMap {
         .attr('id', 'mt-map-heatmap-mask');
 
       this.maskHeatmap
-          .datum(lands)
-          .append('path')
-          .attr('class', 'mt-map-heatmap-mask-paths')
-          .attr('d', this.path);
+        .datum(lands)
+        .append('path')
+        .attr('class', 'mt-map-heatmap-mask-paths')
+        .attr('d', this.path);
     }
 
     this.imgHeatmap = this.layerHeatmap
@@ -206,8 +206,8 @@ export default class GeoMap {
         this.jsonWorld.objects.countries, (a, b) => a !== b);
 
       this.bordersHeatmap = this.layerHeatmap
-          .append('g')
-          .attr('class', 'mt-map-heatmap-borders');
+        .append('g')
+        .attr('class', 'mt-map-heatmap-borders');
 
       this.bordersHeatmap.selectAll('path.mt-map-heatmap-borders-paths')
         .data([lands, borders])
@@ -240,7 +240,7 @@ export default class GeoMap {
     const scale = d3.scale.linear()
       .domain([opts.circles.min, 20])
       .range([centralCircleOpacity, 0]);
-    return (m) => scale(m);
+    return m => scale(m);
   }
 
   /**
@@ -250,8 +250,8 @@ export default class GeoMap {
   getDatumScale() {
     if (!this.options.heatmap.weightByAttribute) return () => 1;
     const dataExtents = d3.extent(this.maptable.data, this.options.heatmap.weightByAttribute);
-    const userScale = (this.options.heatmap.weightByAttributeScale === 'log') ?
-      d3.scale.log : d3.scale.linear;
+    const userScale = (this.options.heatmap.weightByAttributeScale === 'log')
+      ? d3.scale.log : d3.scale.linear;
     const scale = userScale().domain(dataExtents).range([0.5, 1]);
     return (d) => {
       const val = this.options.heatmap.weightByAttribute(d);
@@ -277,12 +277,10 @@ export default class GeoMap {
     const circles = d3.range(
       this.options.heatmap.circles.min,
       this.options.heatmap.circles.max,
-      this.options.heatmap.circles.step
+      this.options.heatmap.circles.step,
     );
     const datumScale = this.getDatumScale();
-    const heatmapDataset = this.maptable.data.filter(d => {
-      return datumScale(d) > 0.1;
-    });
+    const heatmapDataset = this.maptable.data.filter(d => datumScale(d) > 0.1);
     const path = this.path.context(ctx);
     const magnitudeScale = this.getMagnitudeScale(heatmapDataset);
     const colorScale = d3.scale.linear()
@@ -307,7 +305,7 @@ export default class GeoMap {
     // add condensed clouds
     heatmapDataset.forEach((point) => {
       const scaleOpacityDatum = datumScale(point);
-      circles.forEach(m => {
+      circles.forEach((m) => {
         const opacity = colorMultiplier(magnitudeScale(m) * scaleOpacityDatum);
         if (opacity > 0) {
           ctx.beginPath();
@@ -353,19 +351,19 @@ export default class GeoMap {
     // Build country paths
     this.layerCountries
       .selectAll('.mt-map-country')
-        .data(this.dataCountries)
-        .enter()
-        .insert('path')
-        .attr('class', 'mt-map-country')
-        .attr('d', this.path);
+      .data(this.dataCountries)
+      .enter()
+      .insert('path')
+      .attr('class', 'mt-map-country')
+      .attr('d', this.path);
 
     // Build Country Legend
     this.legendCountry = {};
 
-    if (this.options.countries.attr.fill &&
-        this.options.countries.attr.fill.legend &&
-        this.options.countries.attr.fill.min &&
-        this.options.countries.attr.fill.max) {
+    if (this.options.countries.attr.fill
+        && this.options.countries.attr.fill.legend
+        && this.options.countries.attr.fill.min
+        && this.options.countries.attr.fill.max) {
       this.legendCountry.fill = new Legend(this);
     }
   }
@@ -376,35 +374,33 @@ export default class GeoMap {
   updateCountries() {
     // Data from user input
     const dataByCountry = d3.nest()
-          .key(d => d[this.options.countryIdentifierKey])
-          .entries(this.maptable.data);
+      .key(d => d[this.options.countryIdentifierKey])
+      .entries(this.maptable.data);
 
     // We merge both data
-    this.dataCountries.forEach(geoDatum => {
+    this.dataCountries.forEach((geoDatum) => {
       geoDatum.key = geoDatum.properties[this.options.countryIdentifierType];
-      const matchedCountry = dataByCountry.filter(uDatum => {
-        return uDatum.key === geoDatum.key;
-      });
+      const matchedCountry = dataByCountry.filter(uDatum => uDatum.key === geoDatum.key);
       geoDatum.values = (matchedCountry.length === 0) ? [] : matchedCountry[0].values;
       geoDatum.attr = {};
       geoDatum.rollupValue = {};
     });
 
     // We calculate attributes values
-    Object.keys(this.options.countries.attr).forEach(k => {
+    Object.keys(this.options.countries.attr).forEach((k) => {
       this.setAttrValues(k, this.options.countries.attr[k], this.dataCountries);
     });
 
     // Update SVG
     const countryItem = d3.selectAll('.mt-map-country').each(function (d) {
       const targetPath = this;
-      Object.keys(d.attr).forEach(key => {
+      Object.keys(d.attr).forEach((key) => {
         d3.select(targetPath).attr(key, d.attr[key]);
       });
     });
 
     // Update Legend
-    Object.keys(this.options.countries.attr).forEach(attrKey => {
+    Object.keys(this.options.countries.attr).forEach((attrKey) => {
       const attrValue = this.options.countries.attr[attrKey];
       if (typeof (attrValue) === 'object' && attrValue.legend) {
         const scaleDomain = d3.extent(this.dataCountries, d => Number(d.rollupValue[attrKey]));
@@ -414,15 +410,16 @@ export default class GeoMap {
         countryItem.on('mouseover', (d) => {
           this.legendCountry[attrKey].indiceChange(d.rollupValue[attrKey]);
         })
-        .on('mouseout', () => {
-          this.legendCountry[attrKey].indiceChange(NaN);
-        });
+          .on('mouseout', () => {
+            this.legendCountry[attrKey].indiceChange(NaN);
+          });
       }
     });
 
     // Update Tooltip
     if (this.options.countries && this.options.countries.tooltip) {
-      this.activateTooltip(countryItem, this.tooltipCountriesNode, this.options.countries.tooltip, true);
+      this.activateTooltip(countryItem, this.tooltipCountriesNode,
+        this.options.countries.tooltip, true);
     }
   }
 
@@ -432,18 +429,16 @@ export default class GeoMap {
     this.dataMarkers = d3.nest()
       .key(defaultGroupBy)
       .entries(this.maptable.data)
-      .filter(d => {
-        return d.values[0].x !== 0;
-      });
+      .filter(d => d.values[0].x !== 0);
 
     // We merge both data
-    this.dataMarkers.forEach(d => {
+    this.dataMarkers.forEach((d) => {
       d.attr = {};
       d.rollupValue = {};
     });
 
     // We calculate attributes values
-    Object.keys(this.options.markers.attr).forEach(k => {
+    Object.keys(this.options.markers.attr).forEach((k) => {
       this.setAttrValues(k, this.options.markers.attr[k], this.dataMarkers);
     });
 
@@ -457,8 +452,8 @@ export default class GeoMap {
     } else {
       markerObject = markerObject.append('svg:circle');
     }
-    const markerClassName = (this.options.markers.className) ?
-      this.options.markers.className : '';
+    const markerClassName = (this.options.markers.className)
+      ? this.options.markers.className : '';
 
     markerObject.attr('class', `mt-map-marker ${markerClassName}`);
 
@@ -482,13 +477,14 @@ export default class GeoMap {
 
     d3.selectAll(`${this.containerSelector} .mt-map-marker`).each(function (d) {
       const targetPath = this;
-      Object.keys(d.attr).forEach(key => {
+      Object.keys(d.attr).forEach((key) => {
         d3.select(targetPath).attr(key, d.attr[key]);
       });
     });
 
     if (this.options.markers.tooltip) {
-      this.activateTooltip(markerUpdate, this.tooltipMarkersNode, this.options.markers.tooltip, false);
+      this.activateTooltip(markerUpdate, this.tooltipMarkersNode,
+        this.options.markers.tooltip, false);
     }
 
     this.rescale();
@@ -613,8 +609,8 @@ export default class GeoMap {
           this.transX = originalTranslation[0];
           this.transY = originalTranslation[1];
           this.zoomListener.scale(defaultZoom[0])
-          .translate(originalTranslation)
-          .event(this.svg);
+            .translate(originalTranslation)
+            .event(this.svg);
         }
       } catch (e) {
         console.log(`Maptable: Invalid URL State for mt-zoom ${e.message}`);
@@ -705,24 +701,24 @@ export default class GeoMap {
   setAttrValues(attrKey, attrValue, dataset) {
     if (typeof (attrValue) === 'number' || typeof (attrValue) === 'string') {
       // Static value
-      dataset.forEach(d => {
+      dataset.forEach((d) => {
         d.attr[attrKey] = attrValue;
       });
     } else if (typeof (attrValue) === 'function') {
       // Dynamic value based on the dataset
-      dataset.forEach(d => {
+      dataset.forEach((d) => {
         d.attr[attrKey] = attrValue(d);
       });
     } else if (typeof (attrValue) === 'object') {
       // Dynamic value based on a scale
       if (!attrValue.rollup) {
-        attrValue.rollup = (d) => d.length;
+        attrValue.rollup = d => d.length;
       }
       if (!attrValue.min || !attrValue.max) {
         throw new Error(`MapTable: You should provide values 'min' & 'max' for attr.${attrKey}`);
       }
 
-      dataset.forEach(d => {
+      dataset.forEach((d) => {
         d.rollupValue[attrKey] = attrValue.rollup(d.values);
       });
       const scaleDomain = d3.extent(dataset, d => Number(d.rollupValue[attrKey]));
@@ -742,8 +738,8 @@ export default class GeoMap {
       }
 
       // check for negative color declarations
-      if ((attrValue.maxNegative && !attrValue.minNegative) ||
-          (!attrValue.maxNegative && attrValue.minNegative)) {
+      if ((attrValue.maxNegative && !attrValue.minNegative)
+          || (!attrValue.maxNegative && attrValue.minNegative)) {
         throw new Error('MapTable: maxNegative or minNegative undefined. Please declare both.');
       }
       const useNegative = (attrValue.maxNegative && attrValue.minNegative);
@@ -751,29 +747,29 @@ export default class GeoMap {
       let scaleNegativeFunction;
       if (useNegative) {
         scaleFunction = d3.scale.linear()
-            .domain([0, scaleDomain[1]])
-            .range([minValue, maxValue]);
+          .domain([0, scaleDomain[1]])
+          .range([minValue, maxValue]);
 
         scaleNegativeFunction = d3.scale.linear()
-            .domain([scaleDomain[0], 0])
-            .range([attrValue.maxNegative, attrValue.minNegative]);
+          .domain([scaleDomain[0], 0])
+          .range([attrValue.maxNegative, attrValue.minNegative]);
       } else {
         scaleFunction = d3.scale.linear()
-            .domain(scaleDomain)
-            .range([minValue, maxValue]);
+          .domain(scaleDomain)
+          .range([minValue, maxValue]);
       }
 
-      dataset.forEach(d => {
+      dataset.forEach((d) => {
         let scaledValue;
-        if (!d.values.length || isNaN(d.rollupValue[attrKey])) {
+        if (!d.values.length || Number.isNaN(d.rollupValue[attrKey])) {
           if (typeof (attrValue.empty) === 'undefined') {
             throw new Error(`MapTable: no empty property found for attr.${attrKey}`);
           }
           scaledValue = attrValue.empty;
         } else {
           const originalValueRaw = d.rollupValue[attrKey];
-          const originalValue = (attrValue.transform) ?
-              attrValue.transform(originalValueRaw, this.maptable.data) : originalValueRaw;
+          const originalValue = (attrValue.transform)
+            ? attrValue.transform(originalValueRaw, this.maptable.data) : originalValueRaw;
           if (useNegative && originalValue < 0) {
             scaledValue = scaleNegativeFunction(originalValue);
           } else {
@@ -816,7 +812,7 @@ export default class GeoMap {
   activateTooltip(target, tooltipNode, tooltipContent, isCountry) {
     const self = this;
     target.on(isCountry ? 'mousemove' : 'mouseover', function (d) {
-      tooltipNode.html(tooltipContent(d)).attr('style', `display:block;position:fixed;`);
+      tooltipNode.html(tooltipContent(d)).attr('style', 'display:block;position:fixed;');
 
       let mouseLeft;
       let mouseTop;
@@ -835,15 +831,15 @@ export default class GeoMap {
 
       tooltipNode.attr(
         'style',
-        `top:${mouseTop}px;left:${mouseLeft}px;display:block;position:fixed;`
+        `top:${mouseTop}px;left:${mouseLeft}px;display:block;position:fixed;`,
       )
+        .on('mouseout', () => {
+          tooltipNode.style('display', 'none');
+        });
+    })
       .on('mouseout', () => {
         tooltipNode.style('display', 'none');
       });
-    })
-    .on('mouseout', () => {
-      tooltipNode.style('display', 'none');
-    });
   }
 
   exportSvg() {
@@ -851,7 +847,7 @@ export default class GeoMap {
     const svg = this.container.querySelector('#mt-map-svg');
     // Extract the data as SVG text string
     const svgXml = `<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-${(new XMLSerializer).serializeToString(svg)}`;
+${(new XMLSerializer()).serializeToString(svg)}`;
 
     if (this.options.exportSvgClient) {
       if (!window.saveAs) {

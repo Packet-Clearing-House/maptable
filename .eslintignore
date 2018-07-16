@@ -1,4 +1,9 @@
-gulpfile.js
-.eslintrc
-build/**/*.js
-node_modules
+/.eslintrc
+/gulpfile.js
+/build
+/node_modules
+/dist
+/dev
+/examples
+/site
+/vendor

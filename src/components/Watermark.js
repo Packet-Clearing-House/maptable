@@ -12,11 +12,11 @@ export default class Legend {
       console.warn('Watermak src not found');
       return;
     }
-    if (isNaN(this.width)) {
+    if (Number.isNaN(this.width)) {
       console.warn('Watermak width not found');
       return;
     }
-    if (isNaN(this.height)) {
+    if (Number.isNaN(this.height)) {
       console.warn('Watermak height not found');
       return;
     }
@@ -29,7 +29,7 @@ export default class Legend {
   }
 
   buildWatermark() {
-    d3.xhr(this.src, res => {
+    d3.xhr(this.src, (res) => {
       let mapWatermarkDelta = 0;
       if (this.map.options.title) mapWatermarkDelta = 30;
       let mime;

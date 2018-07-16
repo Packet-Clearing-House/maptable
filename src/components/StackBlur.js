@@ -99,7 +99,7 @@ function processImage(img, canvas, radius, blurAlphaChannel)
     context.clearRect(0, 0, w, h);
     context.drawImage(img, 0, 0);
 
-    if (isNaN(radius) || radius < 1) return;
+    if (Number.isNaN(radius) || radius < 1) return;
 
     if (blurAlphaChannel)
         processCanvasRGBA(canvas, 0, 0, w, h, radius);
@@ -133,7 +133,7 @@ function getImageDataFromCanvas(canvas, top_x, top_y, width, height)
 
 function processCanvasRGBA(canvas, top_x, top_y, width, height, radius)
 {
-    if (isNaN(radius) || radius < 1) return;
+    if (Number.isNaN(radius) || radius < 1) return;
     radius |= 0;
 
     var imageData = getImageDataFromCanvas(canvas, top_x, top_y, width, height);
@@ -380,7 +380,7 @@ function processImageDataRGBA(imageData, top_x, top_y, width, height, radius)
 
 function processCanvasRGB(canvas, top_x, top_y, width, height, radius)
 {
-    if (isNaN(radius) || radius < 1) return;
+    if (Number.isNaN(radius) || radius < 1) return;
     radius |= 0;
 
     var imageData = getImageDataFromCanvas(canvas, top_x, top_y, width, height);

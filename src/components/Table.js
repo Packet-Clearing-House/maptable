@@ -38,9 +38,8 @@ export default class Table {
     this.body = this.node.append('tbody');
 
     if (this.options.show) {
-      const arrayDiff = this.options.show.filter(i => {
-        return Object.keys(this.maptable.columnDetails).indexOf(i) < 0;
-      });
+      const arrayDiff = this.options.show
+        .filter(i => Object.keys(this.maptable.columnDetails).indexOf(i) < 0);
       if (arrayDiff.length > 0) {
         throw new Error(`MapTable: invalid columns "${arrayDiff.join(', ')}"`);
       }
@@ -54,22 +53,19 @@ export default class Table {
       .enter()
       .append('tr')
       .selectAll('th')
-      .data(this.activeColumns.map(k => {
-        return utils.extendRecursive({ key: k }, this.maptable.columnDetails[k]);
-      }))
+      .data(this.activeColumns
+        .map(k => utils.extendRecursive({ key: k }, this.maptable.columnDetails[k])))
       .enter()
       .append('th')
-      .attr('class', d => {
+      .attr('class', (d) => {
         let output = (d.sorting) ? 'mt-table-sortable' : '';
         output += (d.nowrap) ? ' nowrap' : '';
         return output;
       })
       .attr('onselectstart', 'return false;')
       .attr('unselectable', 'on')
-      .attr('style', d => {
-        return (d.nowrap) ? 'white-space:nowrap;' : '';
-      })
-      .on('click', d => {
+      .attr('style', d => ((d.nowrap) ? 'white-space:nowrap;' : ''))
+      .on('click', (d) => {
         if (this.isSorting) return;
         this.isSorting = true;
         if (d.sorting) {
@@ -116,15 +112,15 @@ export default class Table {
     const uniqueCollapsedRows = [];
     this.body.selectAll('tr')
       .data(this.maptable.data)
-      .attr('class', row => {
+      .attr('class', (row) => {
         if (this.options.rowClassName) {
           return `line ${this.options.rowClassName(row)}`;
         }
         return 'line';
       })
-      .html(row => {
+      .html((row) => {
         let tds = '';
-        this.activeColumns.forEach(columnKey => {
+        this.activeColumns.forEach((columnKey) => {
           const column = this.maptable.columnDetails[columnKey];
           tds += '<td';
           if (column.nowrap) {
@@ -133,17 +129,15 @@ export default class Table {
           tds += '>';
 
           if (!(
-              this.options.collapseRowsBy.indexOf(columnKey) !== -1 &&
-              uniqueCollapsedRows[columnKey] &&
-              uniqueCollapsedRows[columnKey] === row[columnKey]
-            )) {
+            this.options.collapseRowsBy.indexOf(columnKey) !== -1
+              && uniqueCollapsedRows[columnKey]
+              && uniqueCollapsedRows[columnKey] === row[columnKey]
+          )) {
             if (column.cellContent) {
               tds += column.cellContent(row);
             } else if (column.virtual) {
               tds += column.virtual(row);
-            } else {
-              if (row[columnKey] && row[columnKey] !== 'null') tds += row[columnKey];
-            }
+            } else if (row[columnKey] && row[columnKey] !== 'null') tds += row[columnKey];
             if (this.options.collapseRowsBy.indexOf(columnKey) !== -1) {
               uniqueCollapsedRows[columnKey] = row[columnKey];
             }

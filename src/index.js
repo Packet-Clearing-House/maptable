@@ -7,7 +7,7 @@ d3.maptable = function (target) {
   let maptableObject;
   const maptable = {};
   const options = {
-    target: target,
+    target,
     columns: {},
     data: {},
     map: null,
@@ -19,7 +19,7 @@ d3.maptable = function (target) {
     if (!topojson) {
       throw new Error('Maptable requires topojson.js');
     }
-    if (typeof(mapOptions.path) !== 'string') {
+    if (typeof (mapOptions.path) !== 'string') {
       throw new Error('MapTable: map not provided');
     }
     options.map = mapOptions;
@@ -63,7 +63,7 @@ d3.maptable = function (target) {
   };
 
   maptable.render = function (onComplete) {
-    if (typeof(target) !== 'string' || !document.querySelector(target)) {
+    if (typeof (target) !== 'string' || !document.querySelector(target)) {
       throw new Error('MapTable: target not found');
     }
 
