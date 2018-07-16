@@ -577,6 +577,12 @@ Run these commands as your unprivileged user you're doing your development as:
 
 
 ## Release History
+* Version 1.6.0 July 16 2018
+  * Add ability to support secondary sorting in defaultSorting - [Issue #78](https://github.com/Packet-Clearing-House/maptable/issues/78)
+  * Add ability to provide dataset to map.title.content function to have better customizations - [Issue #77](https://github.com/Packet-Clearing-House/maptable/issues/77)
+  * Add ability to set a property (like attr.fill) of an attribute (eg marker) based on the data - [Issue #76](https://github.com/Packet-Clearing-House/maptable/issues/76)
+  * Fix first column as defaultSorting - [Issue #71](https://github.com/Packet-Clearing-House/maptable/issues/71)
+  * Fix sorting, virtual columns demo - [Issue #70](https://github.com/Packet-Clearing-House/maptable/issues/70)
 * Version 1.5.3 June 19 2018
   * More better fix for permalink - [Issue #74](https://github.com/Packet-Clearing-House/maptable/issues/74)
 * Version 1.5.2 June 18 2018
