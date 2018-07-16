@@ -18,7 +18,11 @@ export default class Table {
     ];
     this.isSorting = false;
 
-    this.node = document.querySelector('#mt-table');
+    this.containerSelector = maptable.options.target;
+    this.container = document.querySelector(maptable.options.target);
+
+    this.node = this.container.querySelector('#mt-table');
+
     if (!this.node) {
       this.node = document.createElement('div');
       this.node.setAttribute('id', 'mt-table');

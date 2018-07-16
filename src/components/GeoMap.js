@@ -22,10 +22,13 @@ export default class GeoMap {
 
     this.jsonWorld = jsonWorld;
 
-    this.node = document.querySelector('#mt-map');
+    this.containerSelector = maptable.options.target;
+    this.container = document.querySelector(maptable.options.target);
+
+    this.node = this.container.querySelector('#mt-map');
     if (!this.node) {
       // Map wrapper
-      const mapWrapper = document.querySelector('.mt-map-container');
+      const mapWrapper = this.container.querySelector('.mt-map-container');
 
       // Map
       this.node = document.createElement('div');
@@ -473,7 +476,7 @@ export default class GeoMap {
       .attr(attrX, d => d.values[0].x + attrXDelta)
       .attr(attrY, d => d.values[0].y + attrYDelta);
 
-    d3.selectAll('.mt-map-marker').each(function (d) {
+    d3.selectAll(`${this.containerSelector} .mt-map-marker`).each(function (d) {
       const targetPath = this;
       Object.keys(d.attr).forEach(key => {
         d3.select(targetPath).attr(key, d.attr[key]);
@@ -667,7 +670,7 @@ export default class GeoMap {
     // Rescale markers size
     if (this.options.markers) {
       // markers
-      d3.selectAll('.mt-map-marker').each(function (d) {
+      d3.selectAll(`${this.containerSelector} .mt-map-marker`).each(function (d) {
         // stroke
         if (d.attr['stroke-width']) {
           d3.select(this).attr('stroke-width', d.attr['stroke-width'] / self.scaleAttributes());
@@ -681,14 +684,14 @@ export default class GeoMap {
 
     // Rescale Country stroke-width
     if (this.options.countries) {
-      d3.selectAll('.mt-map-country').style('stroke-width',
+      d3.selectAll(`${this.containerSelector} .mt-map-country`).style('stroke-width',
         this.options.countries.attr['stroke-width'] / this.scale);
     }
 
     // Rescale heatmap borders
     if (this.options.heatmap && this.options.heatmap.borders) {
-      d3.selectAll('.mt-map-heatmap-borders-paths').style('stroke-width',
-        this.options.heatmap.borders.stroke / this.scale);
+      d3.selectAll(`${this.containerSelector} .mt-map-heatmap-borders-paths`)
+        .style('stroke-width', this.options.heatmap.borders.stroke / this.scale);
     }
 
     // save state
@@ -841,7 +844,7 @@ ${(new XMLSerializer).serializeToString(svg)}`;
       const blob = new Blob([svgXml], { type: 'image/svg+xml' });
       window.saveAs(blob, 'visualization.svg');
     } else if (this.options.exportSvg) {
-      const form = document.getElementById('mt-map-svg-form');
+      const form = this.node.getElementById('mt-map-svg-form');
       form.querySelector('[name="data"]').value = svgXml;
       form.submit();
     }
