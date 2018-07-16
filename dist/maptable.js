@@ -68,25 +68,23 @@ this.d3.maptable = (function () {
       return true;
     }
 
+    /* eslint no-loop-func: 0 */
     function extendRecursive() {
       var dst = {};
       var src = void 0;
-      var p = void 0;
       var args = [].splice.call(arguments, 0);
       var toString = {}.toString;
 
       while (args.length > 0) {
         src = args.splice(0, 1)[0];
         if (toString.call(src) === '[object Object]') {
-          for (p in src) {
-            if (src.hasOwnProperty(p)) {
-              if (toString.call(src[p]) === '[object Object]') {
-                dst[p] = extendRecursive(dst[p] || {}, src[p]);
-              } else {
-                dst[p] = src[p];
-              }
+          Object.keys(src).forEach(function (p) {
+            if (toString.call(src[p]) === '[object Object]') {
+              dst[p] = extendRecursive(dst[p] || {}, src[p]);
+            } else {
+              dst[p] = src[p];
             }
-          }
+          });
         }
       }
       return dst;
@@ -198,7 +196,6 @@ this.d3.maptable = (function () {
           var legendGradient = this.node.append('defs').append('linearGradient').attr('id', 'mt-map-legend-gradient').attr('x1', '0%').attr('y1', '0%').attr('x2', '100%').attr('y2', '0%');
 
           if (this.map.options.countries.attr.fill.minNegative && this.map.options.countries.attr.fill.maxNegative) {
-
             // todo - maybe watch for domain[0] < 0 && domain[1] < 0? fall back to normal min & max?
             var midPercentNegative = Math.round((0 - domain[0]) / (domain[1] - domain[0]) * 100);
             var midPercentPositive = midPercentNegative + 1;
@@ -231,8 +228,8 @@ this.d3.maptable = (function () {
       }, {
         key: 'updateExtents',
         value: function updateExtents(domain) {
-          document.getElementById('mt-map-legend').style.opacity = domain[0] === domain[1] ? 0 : 1;
-          if (document.getElementById('mt-map-legend-min')) {
+          this.node.select('#mt-map-legend').style('opacity', domain[0] === domain[1] ? 0 : 1);
+          if (this.node.selectAll('mt-map-legend-min').length) {
             this.node.select('#mt-map-legend-min').text(Math.round(domain[0]));
             this.node.select('#mt-map-legend-max').text(Math.round(domain[1]));
 
@@ -243,7 +240,7 @@ this.d3.maptable = (function () {
       }, {
         key: 'indiceChange',
         value: function indiceChange(val) {
-          if (isNaN(val)) {
+          if (Number.isNaN(val)) {
             this.node.select('#mt-map-legend-indice').attr('style', 'display:none');
           } else {
             var maxValue = parseInt(this.node.select('#mt-map-legend-max').text(), 10);
@@ -273,11 +270,11 @@ this.d3.maptable = (function () {
           console.warn('Watermak src not found');
           return;
         }
-        if (isNaN(this.width)) {
+        if (Number.isNaN(this.width)) {
           console.warn('Watermak width not found');
           return;
         }
-        if (isNaN(this.height)) {
+        if (Number.isNaN(this.height)) {
           console.warn('Watermak height not found');
           return;
         }
@@ -413,7 +410,7 @@ this.d3.maptable = (function () {
         context.clearRect(0, 0, w, h);
         context.drawImage(img, 0, 0);
 
-        if (isNaN(radius) || radius < 1) return;
+        if (Number.isNaN(radius) || radius < 1) return;
 
         if (blurAlphaChannel) processCanvasRGBA(canvas, 0, 0, w, h, radius);else processCanvasRGB(canvas, 0, 0, w, h, radius);
     }
@@ -439,7 +436,7 @@ this.d3.maptable = (function () {
     }
 
     function processCanvasRGBA(canvas, top_x, top_y, width, height, radius) {
-        if (isNaN(radius) || radius < 1) return;
+        if (Number.isNaN(radius) || radius < 1) return;
         radius |= 0;
 
         var imageData = getImageDataFromCanvas(canvas, top_x, top_y, width, height);
@@ -667,7 +664,7 @@ this.d3.maptable = (function () {
     }
 
     function processCanvasRGB(canvas, top_x, top_y, width, height, radius) {
-        if (isNaN(radius) || radius < 1) return;
+        if (Number.isNaN(radius) || radius < 1) return;
         radius |= 0;
 
         var imageData = getImageDataFromCanvas(canvas, top_x, top_y, width, height);
@@ -906,16 +903,20 @@ this.d3.maptable = (function () {
         this.containerSelector = maptable.options.target;
         this.container = document.querySelector(maptable.options.target);
 
-        this.node = this.container.querySelector('#mt-map');
-        if (!this.node) {
-          // Map wrapper
-          var mapWrapper = this.container.querySelector('.mt-map-container');
+        // Map wrapper
+        var mapWrapper = this.container.querySelector('.mt-map-container');
 
-          // Map
-          this.node = document.createElement('div');
-          this.node.setAttribute('id', 'mt-map');
-          mapWrapper.appendChild(this.node);
+        var existingMap = this.container.querySelector('#mt-map');
+        if (existingMap) {
+          // transform #mt-map to .mt-map-container'
+          mapWrapper.parentNode.insertBefore(mapWrapper, existingMap);
+          existingMap.parentNode.removeChild(existingMap);
         }
+
+        // Map
+        this.node = document.createElement('div');
+        this.node.setAttribute('id', 'mt-map');
+        mapWrapper.appendChild(this.node);
 
         this.svg = d3.select(this.node).append('svg').attr('id', 'mt-map-svg').attr('xmlns', 'http://www.w3.org/2000/svg').attr('xmlns:xlink', 'http://www.w3.org/1999/xlink').attr('viewBox', '0 0 ' + this.getWidth() + ' ' + this.getHeight()).attr('width', this.getWidth()).attr('height', this.getHeight());
 
@@ -928,7 +929,7 @@ this.d3.maptable = (function () {
           d.longitude = parseFloat(d[self.options.longitudeKey]);
           d.latitude = parseFloat(d[self.options.latitudeKey]);
           var coord = [0, 0];
-          if (!isNaN(d.longitude) && !isNaN(d.latitude)) {
+          if (!Number.isNaN(d.longitude) && !Number.isNaN(d.latitude)) {
             coord = self.projection([d.longitude, d.latitude]);
           }
           d.x = coord[0];
@@ -992,7 +993,7 @@ this.d3.maptable = (function () {
       babelHelpers.createClass(GeoMap, [{
         key: 'scaleAttributes',
         value: function scaleAttributes() {
-          return Math.pow(this.scale, 2 / 3);
+          return Math.pow(this.scale, 2 / 3); // eslint-disable-line
         }
       }, {
         key: 'getWidth',
@@ -1267,7 +1268,7 @@ this.d3.maptable = (function () {
 
           // Update Tooltip
           if (this.options.countries && this.options.countries.tooltip) {
-            this.activateTooltip(countryItem, this.tooltipCountriesNode, this.options.countries.tooltip);
+            this.activateTooltip(countryItem, this.tooltipCountriesNode, this.options.countries.tooltip, true);
           }
         }
       }, {
@@ -1330,7 +1331,7 @@ this.d3.maptable = (function () {
           });
 
           if (this.options.markers.tooltip) {
-            this.activateTooltip(markerUpdate, this.tooltipMarkersNode, this.options.markers.tooltip);
+            this.activateTooltip(markerUpdate, this.tooltipMarkersNode, this.options.markers.tooltip, false);
           }
 
           this.rescale();
@@ -1598,7 +1599,7 @@ this.d3.maptable = (function () {
 
             dataset.forEach(function (d) {
               var scaledValue = void 0;
-              if (!d.values.length || isNaN(d.rollupValue[attrKey])) {
+              if (!d.values.length || Number.isNaN(d.rollupValue[attrKey])) {
                 if (typeof attrValue.empty === 'undefined') {
                   throw new Error('MapTable: no empty property found for attr.' + attrKey);
                 }
@@ -1648,18 +1649,32 @@ this.d3.maptable = (function () {
               inlineFilters = this.maptable.filters.getDescription();
             }
 
-            document.getElementById('mt-map-title').innerHTML = this.options.title.content(showing, total, inlineFilters, this.maptable.data, this.maptable.rawData);
+            this.container.querySelector('#mt-map-title').innerHTML = this.options.title.content(showing, total, inlineFilters, this.maptable.data, this.maptable.rawData);
           }
         }
       }, {
         key: 'activateTooltip',
-        value: function activateTooltip(target, tooltipNode, tooltipContent) {
-          target.on('mouseover', function (d) {
-            var circleRect = this.getBoundingClientRect();
+        value: function activateTooltip(target, tooltipNode, tooltipContent, isCountry) {
+          var self = this;
+          target.on(isCountry ? 'mousemove' : 'mouseover', function (d) {
             tooltipNode.html(tooltipContent(d)).attr('style', 'display:block;position:fixed;');
+
+            var mouseLeft = void 0;
+            var mouseTop = void 0;
             var tooltipDelta = tooltipNode.node().offsetWidth / 2;
-            var mouseLeft = circleRect.left + circleRect.width / 2 - tooltipDelta;
-            var mouseTop = circleRect.top + circleRect.height;
+            if (isCountry) {
+              var mapRect = self.node.getBoundingClientRect();
+              var mousePosition = d3.mouse(self.svg.node()).map(function (v) {
+                return parseInt(v, 10);
+              });
+
+              mouseLeft = mapRect.left + mousePosition[0] - tooltipDelta;
+              mouseTop = mapRect.top + mousePosition[1] + 10;
+            } else {
+              var targetRect = this.getBoundingClientRect();
+              mouseLeft = targetRect.left + targetRect.width / 2 - tooltipDelta;
+              mouseTop = targetRect.top + targetRect.height;
+            }
 
             tooltipNode.attr('style', 'top:' + mouseTop + 'px;left:' + mouseLeft + 'px;display:block;position:fixed;').on('mouseout', function () {
               tooltipNode.style('display', 'none');
@@ -1672,7 +1687,7 @@ this.d3.maptable = (function () {
         key: 'exportSvg',
         value: function exportSvg() {
           // Get the d3js SVG element
-          var svg = document.getElementById('mt-map-svg');
+          var svg = this.container.querySelector('#mt-map-svg');
           // Extract the data as SVG text string
           var svgXml = '<?xml version="1.0" encoding="UTF-8" standalone="no"?>\n' + new XMLSerializer().serializeToString(svg);
 
@@ -1693,7 +1708,7 @@ this.d3.maptable = (function () {
         value: function addExportSvgCapability() {
           var exportNode = document.createElement('div');
           exportNode.setAttribute('id', 'mt-map-export');
-          document.getElementById('mt-map').appendChild(exportNode);
+          this.container.querySelector('#mt-map').appendChild(exportNode);
 
           var exportButton = document.createElement('button');
           exportButton.setAttribute('class', 'btn btn-xs btn-default');
@@ -1838,7 +1853,7 @@ this.d3.maptable = (function () {
         key: 'reset',
         value: function reset() {
           var rowNodes = this.node.querySelectorAll('[data-mt-filter-name]');
-          for (var i = 0; i < rowNodes.length; i++) {
+          for (var i = 0; i < rowNodes.length; i += 1) {
             rowNodes[i].parentNode.removeChild(rowNodes[i]);
           }
           this.criteria = [];
@@ -1856,7 +1871,7 @@ this.d3.maptable = (function () {
           var output = {};
           var filtersChildren = this.node.querySelector('#mt-filters-elements').childNodes;
 
-          for (var i = 0; i < filtersChildren.length; i++) {
+          for (var i = 0; i < filtersChildren.length; i += 1) {
             var element = filtersChildren[i];
             var filterName = element.querySelector('.mt-filter-name').value;
             var columnDetails = this.maptable.columnDetails[filterName];
@@ -1953,7 +1968,7 @@ this.d3.maptable = (function () {
 
           var filtersChildren = this.node.querySelector('#mt-filters-elements').childNodes;
 
-          for (var i = 0; i < filtersChildren.length; i++) {
+          for (var i = 0; i < filtersChildren.length; i += 1) {
             var element = filtersChildren[i];
             var filterName = element.querySelector('.mt-filter-name').value;
 
@@ -2151,7 +2166,7 @@ this.d3.maptable = (function () {
           this.maptable.data = this.maptable.rawData.filter(function (d) {
             var rowNodes = _this5.node.querySelectorAll('.mt-filter-row');
             var matched = true;
-            for (var i = 0; i < rowNodes.length && matched; i++) {
+            for (var i = 0; i < rowNodes.length && matched; i += 1) {
               var rowNode = rowNodes[i];
               var filterName = rowNode.getAttribute('data-mt-filter-name');
               var columnDetails = that.maptable.columnDetails[filterName];
@@ -2199,7 +2214,7 @@ this.d3.maptable = (function () {
         value: function refresh() {
           // update dropdown
           var filterNameSelects = this.node.querySelectorAll('.mt-filter-name');
-          for (var i = 0; i < filterNameSelects.length; i++) {
+          for (var i = 0; i < filterNameSelects.length; i += 1) {
             var filterNameSelect = filterNameSelects[i];
             var filterName = filterNameSelect.value;
             var possibleFilters = this.getPossibleFilters(filterName);
@@ -2356,9 +2371,7 @@ this.d3.maptable = (function () {
                   tds += column.cellContent(row);
                 } else if (column.virtual) {
                   tds += column.virtual(row);
-                } else {
-                  if (row[columnKey] && row[columnKey] !== 'null') tds += row[columnKey];
-                }
+                } else if (row[columnKey] && row[columnKey] !== 'null') tds += row[columnKey];
                 if (_this2.options.collapseRowsBy.indexOf(columnKey) !== -1) {
                   uniqueCollapsedRows[columnKey] = row[columnKey];
                 }
@@ -2373,12 +2386,13 @@ this.d3.maptable = (function () {
         value: function applySort() {
           var _this3 = this;
 
-          var sortableColums = document.querySelectorAll('.mt-table-sortable');
+          var sortableColums = this.container.querySelectorAll('.mt-table-sortable');
           for (var i = 0; i < sortableColums.length; i += 1) {
             sortableColums[i].setAttribute('class', 'mt-table-sortable');
           }
           this.sorting.forEach(function (column) {
-            document.getElementById('column_header_' + utils.sanitizeKey(column.key)).setAttribute('class', 'mt-table-sortable sort_' + column.mode);
+            console.log(_this3.container);
+            _this3.container.querySelector('#column_header_' + utils.sanitizeKey(column.key)).setAttribute('class', 'mt-table-sortable sort_' + column.mode);
           });
           this.maptable.data = this.maptable.data.sort(function (a, b) {
             var compareBool = false;
