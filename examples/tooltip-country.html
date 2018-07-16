@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="stylesheet" href="bootstrap.min.css">
+  <link rel="stylesheet" href="maptable.css">
+  <title>MapTable: Global Airport by Countries - +6000 rows, Log scale for country colors, tooltip</title>
+</head>
+<body>
+
+  <script src="d3.min.js" charset="utf-8"></script>
+  <script src="topojson.min.js"></script>
+  <script src="maptable.js"></script>
+
+<div id="vizContainer" class='container'>
+  <div id='mt-filters' class='panel panel-default'></div>
+  <div id='mt-map'></div>
+</div>
+
+<script>
+    var viz = d3.maptable('#vizContainer')
+    .csv('global_airports.csv')
+    .map({
+      path: 'ne_110m_admin_0_countries.json',
+      countryIdentifierKey: 'country',
+      countryIdentifierType: 'name',
+      autoFitContent: true,
+      countries: {
+        attr: {
+          fill: {
+            empty: '#FFFFFF',
+            min: '#FFFFFF',
+            max: '#0000FF',
+            legend: true,
+            transform: function(val) {
+              if (val === 0) return 0;
+              return Math.sqrt(val);
+            },
+            rollup: function(groupedData) {
+              return groupedData.length;
+            }
+          },
+        },
+        tooltip: function(a) {
+          out = '<div class="arrow"></div>';
+          if (a.values.length === 0) {
+            out += '<h3 class="popover-title"> ' + a.key + '</h3>';
+            out += '<div class="popover-content">N/A</div>';
+          } else {
+            out += '<h3 class="popover-title"> ' + a.values[0].country + '</h3>';
+            out += '<div class="popover-content">' + a.values.length+ ' airports</div>';
+          }
+          return out;
+        },
+      },
+      markers: false,
+    })
+    .filters({
+      show: ['country', 'city']
+    })
+    .columns({
+      country: {
+        type: 'dropdown'
+      }
+    })
+    .render();
+</script>
+
+
+</body>
+</html>

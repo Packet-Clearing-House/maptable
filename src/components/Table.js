@@ -155,12 +155,13 @@ export default class Table {
   }
 
   applySort() {
-    const sortableColums = document.querySelectorAll('.mt-table-sortable');
+    const sortableColums = this.container.querySelectorAll('.mt-table-sortable');
     for (let i = 0; i < sortableColums.length; i += 1) {
       sortableColums[i].setAttribute('class', 'mt-table-sortable');
     }
     this.sorting.forEach((column) => {
-      document.getElementById(`column_header_${utils.sanitizeKey(column.key)}`)
+      console.log(this.container);
+      this.container.querySelector(`#column_header_${utils.sanitizeKey(column.key)}`)
         .setAttribute('class', `mt-table-sortable sort_${column.mode}`);
     });
     this.maptable.data = this.maptable.data.sort((a, b) => {

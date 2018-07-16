@@ -110,8 +110,8 @@ export default class Legend {
   }
 
   updateExtents(domain) {
-    document.getElementById('mt-map-legend').style.opacity = (domain[0] === domain[1]) ? 0 : 1;
-    if (document.getElementById('mt-map-legend-min')) {
+    this.node.select('#mt-map-legend').style('opacity', (domain[0] === domain[1]) ? 0 : 1);
+    if (this.node.selectAll('mt-map-legend-min').length) {
       this.node.select('#mt-map-legend-min').text(Math.round(domain[0]));
       this.node.select('#mt-map-legend-max').text(Math.round(domain[1]));
 
@@ -127,7 +127,7 @@ export default class Legend {
     } else {
       const maxValue = parseInt(this.node.select('#mt-map-legend-max').text(), 10);
       const minValue = parseInt(this.node.select('#mt-map-legend-min').text(), 10);
-      let positionDelta = Math.round((0 - (minValue - val) /(maxValue - minValue)) * this.legendWidth);
+      let positionDelta = Math.round((0 - (minValue - val) / (maxValue - minValue)) * this.legendWidth);
       this.node.select('#mt-map-legend-indice text').text(Math.round(val));
       this.node.select('#mt-map-legend-indice')
         .attr('style', 'display:block')

@@ -25,16 +25,21 @@ export default class GeoMap {
     this.containerSelector = maptable.options.target;
     this.container = document.querySelector(maptable.options.target);
 
-    this.node = this.container.querySelector('#mt-map');
-    if (!this.node) {
-      // Map wrapper
-      const mapWrapper = this.container.querySelector('.mt-map-container');
 
-      // Map
-      this.node = document.createElement('div');
-      this.node.setAttribute('id', 'mt-map');
-      mapWrapper.appendChild(this.node);
+    // Map wrapper
+    const mapWrapper = this.container.querySelector('.mt-map-container');
+
+    const existingMap = this.container.querySelector('#mt-map');
+    if (existingMap) {
+      // transform #mt-map to .mt-map-container'
+      mapWrapper.parentNode.insertBefore(mapWrapper, existingMap);
+      existingMap.parentNode.removeChild(existingMap);
     }
+
+    // Map
+    this.node = document.createElement('div');
+    this.node.setAttribute('id', 'mt-map');
+    mapWrapper.appendChild(this.node);
 
     this.svg = d3.select(this.node)
       .append('svg')
@@ -803,7 +808,7 @@ export default class GeoMap {
         inlineFilters = this.maptable.filters.getDescription();
       }
 
-      document.getElementById('mt-map-title').innerHTML = this.options.title
+      this.container.querySelector('#mt-map-title').innerHTML = this.options.title
         .content(showing, total, inlineFilters, this.maptable.data, this.maptable.rawData);
     }
   }
@@ -831,7 +836,7 @@ export default class GeoMap {
 
   exportSvg() {
     // Get the d3js SVG element
-    const svg = document.getElementById('mt-map-svg');
+    const svg = this.container.querySelector('#mt-map-svg');
     // Extract the data as SVG text string
     const svgXml = `<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 ${(new XMLSerializer).serializeToString(svg)}`;
@@ -852,7 +857,7 @@ ${(new XMLSerializer).serializeToString(svg)}`;
   addExportSvgCapability() {
     const exportNode = document.createElement('div');
     exportNode.setAttribute('id', 'mt-map-export');
-    document.getElementById('mt-map').appendChild(exportNode);
+    this.container.querySelector('#mt-map').appendChild(exportNode);
 
     const exportButton = document.createElement('button');
     exportButton.setAttribute('class', 'btn btn-xs btn-default');
