@@ -21,7 +21,10 @@ export default class Filters {
     this.container = document.createElement('div');
     this.maptable.node.appendChild(this.container);
 
-    this.node = document.querySelector('#mt-filters');
+    this.containerSelector = maptable.options.target;
+    this.container = document.querySelector(maptable.options.target);
+    this.node = this.container.querySelector('#mt-filters');
+
     if (!this.node) {
       this.node = document.createElement('div');
       this.node.setAttribute('id', 'mt-filters');
@@ -89,7 +92,7 @@ export default class Filters {
     if (replaceNode) {
       replaceNode.parentNode.replaceChild(rowNode, replaceNode);
     } else {
-      document.querySelector('#mt-filters-elements').appendChild(rowNode);
+      this.node.querySelector('#mt-filters-elements').appendChild(rowNode);
     }
     this.criteria.push(filterName);
     this.maptable.render();
@@ -99,7 +102,7 @@ export default class Filters {
   }
 
   remove(filterName) {
-    const rowNode = document.querySelector(`[data-mt-filter-name="${filterName}"]`);
+    const rowNode = this.node.querySelector(`[data-mt-filter-name="${filterName}"]`);
     if (rowNode) rowNode.parentNode.removeChild(rowNode);
     const filterIndex = this.criteria.indexOf(filterName);
     this.criteria.splice(filterIndex, 1);
@@ -110,7 +113,7 @@ export default class Filters {
    * Reset filters
    */
   reset() {
-    const rowNodes = document.querySelectorAll('[data-mt-filter-name]');
+    const rowNodes = this.node.querySelectorAll('[data-mt-filter-name]');
     for (let i = 0; i < rowNodes.length; i++) {
       rowNodes[i].parentNode.removeChild(rowNodes[i]);
     }
@@ -124,7 +127,7 @@ export default class Filters {
    */
   exportFilters() {
     const output = {};
-    const filtersChildren = document.querySelector('#mt-filters-elements').childNodes;
+    const filtersChildren = this.node.querySelector('#mt-filters-elements').childNodes;
 
     for (let i = 0; i < filtersChildren.length; i++) {
       const element = filtersChildren[i];
@@ -212,7 +215,7 @@ export default class Filters {
   getDescription() {
     const outputArray = [];
 
-    const filtersChildren = document.querySelector('#mt-filters-elements').childNodes;
+    const filtersChildren = this.node.querySelector('#mt-filters-elements').childNodes;
 
     for (let i = 0; i < filtersChildren.length; i++) {
       const element = filtersChildren[i];
@@ -408,7 +411,7 @@ export default class Filters {
   filterData() {
     const that = this;
     this.maptable.data = this.maptable.rawData.filter(d => {
-      const rowNodes = document.querySelectorAll('.mt-filter-row');
+      const rowNodes = this.node.querySelectorAll('.mt-filter-row');
       let matched = true;
       for (let i = 0; i < rowNodes.length && matched; i++) {
         const rowNode = rowNodes[i];
@@ -462,7 +465,7 @@ export default class Filters {
 
   refresh() {
     // update dropdown
-    const filterNameSelects = document.querySelectorAll('.mt-filter-name');
+    const filterNameSelects = this.node.querySelectorAll('.mt-filter-name');
     for (let i = 0; i < filterNameSelects.length; i++) {
       const filterNameSelect = filterNameSelects[i];
       const filterName = filterNameSelect.value;
@@ -475,13 +478,13 @@ export default class Filters {
     }
 
     // Hide the first "And"
-    if (document.querySelectorAll('.mt-filters-and').length > 0) {
-      document.querySelectorAll('.mt-filters-and')[0].style.visibility = 'hidden';
+    if (this.node.querySelectorAll('.mt-filters-and').length > 0) {
+      this.node.querySelectorAll('.mt-filters-and')[0].style.visibility = 'hidden';
     }
 
     // Check if we reached the maximum of allowed filters
     const disableNewFilter = (!this.getPossibleFilters().length);
-    document.querySelector('#mt-filters-new').style.visibility = disableNewFilter ?
+    this.node.querySelector('#mt-filters-new').style.visibility = disableNewFilter ?
       'hidden' : 'visible';
   }
 

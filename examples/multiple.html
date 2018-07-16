@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="bootstrap.min.css">
+    <link rel="stylesheet" href="maptable.css">
+    <title>MapTable: Basic with Map, Filters and Table - minimal options</title>
+</head>
+<body>
+
+<script src="d3.min.js" charset="utf-8"></script>
+<script src="topojson.min.js"></script>
+<script src="maptable.js"></script>
+
+<div id="vizContainer1" class='container'></div>
+<div id="vizContainer2" class='container'></div>
+
+<script>
+    var viz1 = d3.maptable('#vizContainer1')
+            .csv('basic.csv')
+            .map({
+                path: 'ne_110m_admin_0_countries.json',
+                markers: {
+                    attr: {
+                        fill: 'red',
+                    }
+                }
+            })
+            .filters()
+            .table()
+            .render();
+
+        var viz2 = d3.maptable('#vizContainer2')
+            .csv('basic.csv')
+            .map({
+                path: 'ne_110m_admin_0_countries.json',
+                markers: {
+                    attr: {
+                        fill: 'green',
+                    }
+                }
+            })
+            .filters()
+            .table()
+            .render();
+</script>
+</body>
+</html>

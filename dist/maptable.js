@@ -903,10 +903,13 @@ this.d3.maptable = (function () {
 
         this.jsonWorld = jsonWorld;
 
-        this.node = document.querySelector('#mt-map');
+        this.containerSelector = maptable.options.target;
+        this.container = document.querySelector(maptable.options.target);
+
+        this.node = this.container.querySelector('#mt-map');
         if (!this.node) {
           // Map wrapper
-          var mapWrapper = document.querySelector('.mt-map-container');
+          var mapWrapper = this.container.querySelector('.mt-map-container');
 
           // Map
           this.node = document.createElement('div');
@@ -1319,7 +1322,7 @@ this.d3.maptable = (function () {
             return d.values[0].y + attrYDelta;
           });
 
-          d3.selectAll('.mt-map-marker').each(function (d) {
+          d3.selectAll(this.containerSelector + ' .mt-map-marker').each(function (d) {
             var targetPath = this;
             Object.keys(d.attr).forEach(function (key) {
               d3.select(targetPath).attr(key, d.attr[key]);
@@ -1506,7 +1509,7 @@ this.d3.maptable = (function () {
           // Rescale markers size
           if (this.options.markers) {
             // markers
-            d3.selectAll('.mt-map-marker').each(function (d) {
+            d3.selectAll(this.containerSelector + ' .mt-map-marker').each(function (d) {
               // stroke
               if (d.attr['stroke-width']) {
                 d3.select(this).attr('stroke-width', d.attr['stroke-width'] / self.scaleAttributes());
@@ -1520,12 +1523,12 @@ this.d3.maptable = (function () {
 
           // Rescale Country stroke-width
           if (this.options.countries) {
-            d3.selectAll('.mt-map-country').style('stroke-width', this.options.countries.attr['stroke-width'] / this.scale);
+            d3.selectAll(this.containerSelector + ' .mt-map-country').style('stroke-width', this.options.countries.attr['stroke-width'] / this.scale);
           }
 
           // Rescale heatmap borders
           if (this.options.heatmap && this.options.heatmap.borders) {
-            d3.selectAll('.mt-map-heatmap-borders-paths').style('stroke-width', this.options.heatmap.borders.stroke / this.scale);
+            d3.selectAll(this.containerSelector + ' .mt-map-heatmap-borders-paths').style('stroke-width', this.options.heatmap.borders.stroke / this.scale);
           }
 
           // save state
@@ -1650,27 +1653,19 @@ this.d3.maptable = (function () {
         }
       }, {
         key: 'activateTooltip',
-        value: function activateTooltip(target, tooltipNode, tooltipContent, cb) {
-          var _this8 = this;
-
-          target.on('mousemove', function (d) {
-            var mousePosition = d3.mouse(_this8.svg.node()).map(function (v) {
-              return parseInt(v, 10);
-            });
-
+        value: function activateTooltip(target, tooltipNode, tooltipContent) {
+          target.on('mouseover', function (d) {
+            var circleRect = this.getBoundingClientRect();
+            tooltipNode.html(tooltipContent(d)).attr('style', 'display:block;position:fixed;');
             var tooltipDelta = tooltipNode.node().offsetWidth / 2;
-            var mouseLeft = mousePosition[0] - tooltipDelta;
-            var mouseTop = mousePosition[1] + 10;
+            var mouseLeft = circleRect.left + circleRect.width / 2 - tooltipDelta;
+            var mouseTop = circleRect.top + circleRect.height;
 
-            tooltipNode.attr('style', 'top:' + mouseTop + 'px;left:' + mouseLeft + 'px;display:block;').html(tooltipContent(d)).on('mouseout', function () {
-              return tooltipNode.style('display', 'none');
+            tooltipNode.attr('style', 'top:' + mouseTop + 'px;left:' + mouseLeft + 'px;display:block;position:fixed;').on('mouseout', function () {
+              tooltipNode.style('display', 'none');
             });
-
-            if (cb) {
-              tooltipNode.on('click', cb);
-            }
           }).on('mouseout', function () {
-            return tooltipNode.style('display', 'none');
+            tooltipNode.style('display', 'none');
           });
         }
       }, {
@@ -1688,7 +1683,7 @@ this.d3.maptable = (function () {
             var blob = new Blob([svgXml], { type: 'image/svg+xml' });
             window.saveAs(blob, 'visualization.svg');
           } else if (this.options.exportSvg) {
-            var form = document.getElementById('mt-map-svg-form');
+            var form = this.node.getElementById('mt-map-svg-form');
             form.querySelector('[name="data"]').value = svgXml;
             form.submit();
           }
@@ -1741,7 +1736,10 @@ this.d3.maptable = (function () {
         this.container = document.createElement('div');
         this.maptable.node.appendChild(this.container);
 
-        this.node = document.querySelector('#mt-filters');
+        this.containerSelector = maptable.options.target;
+        this.container = document.querySelector(maptable.options.target);
+        this.node = this.container.querySelector('#mt-filters');
+
         if (!this.node) {
           this.node = document.createElement('div');
           this.node.setAttribute('id', 'mt-filters');
@@ -1814,7 +1812,7 @@ this.d3.maptable = (function () {
           if (replaceNode) {
             replaceNode.parentNode.replaceChild(rowNode, replaceNode);
           } else {
-            document.querySelector('#mt-filters-elements').appendChild(rowNode);
+            this.node.querySelector('#mt-filters-elements').appendChild(rowNode);
           }
           this.criteria.push(filterName);
           this.maptable.render();
@@ -1825,7 +1823,7 @@ this.d3.maptable = (function () {
       }, {
         key: 'remove',
         value: function remove(filterName) {
-          var rowNode = document.querySelector('[data-mt-filter-name="' + filterName + '"]');
+          var rowNode = this.node.querySelector('[data-mt-filter-name="' + filterName + '"]');
           if (rowNode) rowNode.parentNode.removeChild(rowNode);
           var filterIndex = this.criteria.indexOf(filterName);
           this.criteria.splice(filterIndex, 1);
@@ -1839,7 +1837,7 @@ this.d3.maptable = (function () {
       }, {
         key: 'reset',
         value: function reset() {
-          var rowNodes = document.querySelectorAll('[data-mt-filter-name]');
+          var rowNodes = this.node.querySelectorAll('[data-mt-filter-name]');
           for (var i = 0; i < rowNodes.length; i++) {
             rowNodes[i].parentNode.removeChild(rowNodes[i]);
           }
@@ -1856,7 +1854,7 @@ this.d3.maptable = (function () {
         key: 'exportFilters',
         value: function exportFilters() {
           var output = {};
-          var filtersChildren = document.querySelector('#mt-filters-elements').childNodes;
+          var filtersChildren = this.node.querySelector('#mt-filters-elements').childNodes;
 
           for (var i = 0; i < filtersChildren.length; i++) {
             var element = filtersChildren[i];
@@ -1953,7 +1951,7 @@ this.d3.maptable = (function () {
         value: function getDescription() {
           var outputArray = [];
 
-          var filtersChildren = document.querySelector('#mt-filters-elements').childNodes;
+          var filtersChildren = this.node.querySelector('#mt-filters-elements').childNodes;
 
           for (var i = 0; i < filtersChildren.length; i++) {
             var element = filtersChildren[i];
@@ -2147,9 +2145,11 @@ this.d3.maptable = (function () {
       }, {
         key: 'filterData',
         value: function filterData() {
+          var _this5 = this;
+
           var that = this;
           this.maptable.data = this.maptable.rawData.filter(function (d) {
-            var rowNodes = document.querySelectorAll('.mt-filter-row');
+            var rowNodes = _this5.node.querySelectorAll('.mt-filter-row');
             var matched = true;
             for (var i = 0; i < rowNodes.length && matched; i++) {
               var rowNode = rowNodes[i];
@@ -2198,7 +2198,7 @@ this.d3.maptable = (function () {
         key: 'refresh',
         value: function refresh() {
           // update dropdown
-          var filterNameSelects = document.querySelectorAll('.mt-filter-name');
+          var filterNameSelects = this.node.querySelectorAll('.mt-filter-name');
           for (var i = 0; i < filterNameSelects.length; i++) {
             var filterNameSelect = filterNameSelects[i];
             var filterName = filterNameSelect.value;
@@ -2211,13 +2211,13 @@ this.d3.maptable = (function () {
           }
 
           // Hide the first "And"
-          if (document.querySelectorAll('.mt-filters-and').length > 0) {
-            document.querySelectorAll('.mt-filters-and')[0].style.visibility = 'hidden';
+          if (this.node.querySelectorAll('.mt-filters-and').length > 0) {
+            this.node.querySelectorAll('.mt-filters-and')[0].style.visibility = 'hidden';
           }
 
           // Check if we reached the maximum of allowed filters
           var disableNewFilter = !this.getPossibleFilters().length;
-          document.querySelector('#mt-filters-new').style.visibility = disableNewFilter ? 'hidden' : 'visible';
+          this.node.querySelector('#mt-filters-new').style.visibility = disableNewFilter ? 'hidden' : 'visible';
         }
       }, {
         key: 'toggle',
@@ -2255,7 +2255,11 @@ this.d3.maptable = (function () {
         }];
         this.isSorting = false;
 
-        this.node = document.querySelector('#mt-table');
+        this.containerSelector = maptable.options.target;
+        this.container = document.querySelector(maptable.options.target);
+
+        this.node = this.container.querySelector('#mt-table');
+
         if (!this.node) {
           this.node = document.createElement('div');
           this.node.setAttribute('id', 'mt-table');
@@ -2714,7 +2718,7 @@ this.d3.maptable = (function () {
           throw new Error('MapTable: Please provide the path for your dataset json|csv|tsv');
         }
 
-        if (!options.map || !options.map.heatmap) options.map.heatmap = null;
+        if (options.map && !options.map.heatmap) options.map.heatmap = null;
 
         if (options.map && options.map.markers === false) options.map.markers = null;
 
