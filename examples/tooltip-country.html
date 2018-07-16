@@ -31,10 +31,6 @@
             min: '#FFFFFF',
             max: '#0000FF',
             legend: true,
-            transform: function(val) {
-              if (val === 0) return 0;
-              return Math.sqrt(val);
-            },
             rollup: function(groupedData) {
               return groupedData.length;
             }

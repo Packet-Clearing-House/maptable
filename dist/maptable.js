@@ -1683,7 +1683,7 @@ this.d3.maptable = (function () {
             var blob = new Blob([svgXml], { type: 'image/svg+xml' });
             window.saveAs(blob, 'visualization.svg');
           } else if (this.options.exportSvg) {
-            var form = this.node.getElementById('mt-map-svg-form');
+            var form = this.node.querySelector('#mt-map-svg-form');
             form.querySelector('[name="data"]').value = svgXml;
             form.submit();
           }

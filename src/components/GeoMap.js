@@ -422,7 +422,7 @@ export default class GeoMap {
 
     // Update Tooltip
     if (this.options.countries && this.options.countries.tooltip) {
-      this.activateTooltip(countryItem, this.tooltipCountriesNode, this.options.countries.tooltip);
+      this.activateTooltip(countryItem, this.tooltipCountriesNode, this.options.countries.tooltip, true);
     }
   }
 
@@ -488,7 +488,7 @@ export default class GeoMap {
     });
 
     if (this.options.markers.tooltip) {
-      this.activateTooltip(markerUpdate, this.tooltipMarkersNode, this.options.markers.tooltip);
+      this.activateTooltip(markerUpdate, this.tooltipMarkersNode, this.options.markers.tooltip, false);
     }
 
     this.rescale();
@@ -813,13 +813,25 @@ export default class GeoMap {
     }
   }
 
-  activateTooltip(target, tooltipNode, tooltipContent) {
-    target.on('mouseover', function (d) {
-      const circleRect = this.getBoundingClientRect();
+  activateTooltip(target, tooltipNode, tooltipContent, isCountry) {
+    const self = this;
+    target.on(isCountry ? 'mousemove' : 'mouseover', function (d) {
       tooltipNode.html(tooltipContent(d)).attr('style', `display:block;position:fixed;`);
+
+      let mouseLeft;
+      let mouseTop;
       const tooltipDelta = tooltipNode.node().offsetWidth / 2;
-      const mouseLeft = (circleRect.left + (circleRect.width / 2) - tooltipDelta);
-      const mouseTop = (circleRect.top + circleRect.height);
+      if (isCountry) {
+        const mapRect = self.node.getBoundingClientRect();
+        const mousePosition = d3.mouse(self.svg.node()).map(v => parseInt(v, 10));
+
+        mouseLeft = mapRect.left + mousePosition[0] - tooltipDelta;
+        mouseTop = mapRect.top + mousePosition[1] + 10;
+      } else {
+        const targetRect = this.getBoundingClientRect();
+        mouseLeft = (targetRect.left + (targetRect.width / 2) - tooltipDelta);
+        mouseTop = (targetRect.top + targetRect.height);
+      }
 
       tooltipNode.attr(
         'style',
@@ -848,7 +860,7 @@ ${(new XMLSerializer).serializeToString(svg)}`;
       const blob = new Blob([svgXml], { type: 'image/svg+xml' });
       window.saveAs(blob, 'visualization.svg');
     } else if (this.options.exportSvg) {
-      const form = this.node.getElementById('mt-map-svg-form');
+      const form = this.node.querySelector('#mt-map-svg-form');
       form.querySelector('[name="data"]').value = svgXml;
       form.submit();
     }
