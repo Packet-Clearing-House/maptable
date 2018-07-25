@@ -1,0 +1,329 @@
+.form-control-inline {
+  display: inline;
+  min-width: 0;
+  width: auto;
+}
+.panel{
+  margin-top:15px;
+}
+
+.mt-map-country:hover{
+  opacity:0.9;
+}
+.mt-map-tooltip {
+  background-color:#fff;
+  background-color:rgba(255,255,255,0.9);
+  color: #222;
+  max-width:450px;
+  min-width:375px;
+  position: absolute;
+}
+.ixp_growth_map .mt-map-tooltip {
+  max-width:250px;
+  min-width:175px;
+}
+.ixp_growth  {
+  min-height: 750px;
+}
+.mt-map-tooltip .pull-right{
+  margin:5px 10px;
+}
+
+.mt-map-marker {
+  opacity:0.9;
+}
+
+.mt-map-marker:hover {
+  opacity:1;
+}
+
+.mt-table-sortable.sort_asc:after{
+  content: "▲";
+  font-size: 7px;
+  padding-left: 5px;
+}
+.mt-table-sortable.sort_desc:after{
+  content: "▼";
+  font-size: 7px;
+  padding-left: 5px;
+}
+.mt-table-sortable{
+  cursor:pointer;
+}
+#mt-filters-new{
+  margin: 10px 10px;
+}
+.mt-filter-row{
+  border-bottom: 1px solid #DDD;
+  color:#AAA;
+  margin: 10px 10px;
+  padding-bottom: 10px;
+}
+
+.mt-filter-row span{
+  color: #333;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 1px;
+  line-height: 34px;
+  padding-left:4px;
+  padding-right:4px;
+}
+.mt-map-container {
+  height: 0;
+  padding-bottom: 52%;
+  position: relative;
+  width: 100%;
+}
+.mt-map-container #mt-map{
+  display: block;
+  height: 100%;
+  position: absolute;
+  width: 100%;
+}
+#mt-map:hover #mt-map-export{
+  opacity: 1;
+  transition: opacity 0.5s linear;
+}
+#mt-map-export {
+  opacity: 0;
+  position: absolute;
+  right:10px;
+  top: 10px;
+  transition: opacity 0.5s linear;
+}
+
+.glyphicon-question-sign {
+  color: darkgray;
+}
+
+.maponly {
+  width:99%;
+}
+
+.table-striped > tbody > tr:nth-child(2n+1) > td, .table-striped > tbody > tr:nth-child(2n+1) > th {
+  background-color: #ddd;
+}
+
+.table-bordered, .table-bordered > tbody > tr > td, .table-bordered > tbody > tr > th, .table-bordered > tfoot > tr > td, .table-bordered > tfoot > tr > th, .table-bordered > thead > tr > td, .table-bordered > thead > tr > th {
+  border: 1px solid white ;
+}
+.line .glyphicon-new-window, .line a, .glyphicon.outofdate {
+  color: #333;
+}
+.ixp_dir_viz #mt-table td:nth-child(5),
+.ixp_dir_viz #mt-table td:nth-child(6),
+.ixp_dir_viz #mt-table td:nth-child(7),
+.ixp_dir_viz #mt-table td:nth-child(8) {
+  text-align: right
+}
+#vizContainer #mt-table td, 
+#vizContainer #mt-table th, 
+#mt-filters,
+h3.panel-title, 
+#mt-filters .btn, 
+#mt-filters span, 
+#mt-filters .form-control {
+  font-size: 8pt;
+}
+
+#vizContainer #mt-table th {
+  background-color: black;
+  color: white;
+}
+
+.panel {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+#vizContainer #mt-table .sort_desc ,#vizContainer #mt-table .sort_asc ,.table thead th.sorting-desc ,.table thead th.sorting-asc {
+  background-color: #036;
+}
+
+.inactive, .inactive a, .inactive .glyphicon-new-window, table tr.inactive td {
+  color: #888;
+}
+
+/* if we really wanted to have the greyed out stuff have a different grey on striped rows */
+/*.table-striped > tbody > tr:nth-of-type(2n+1).inactive td,
+.table-striped > tbody > tr:nth-of-type(2n+1).inactive a,
+.table-striped > tbody > tr:nth-of-type(2n+1).inactive .glyphicon-new-window {
+  color: red;
+} 
+*/
+/*Always show region as black, even if row is inactive*/
+.ixp-dir-table td:nth-child(1){
+  color: #333 !important;
+}
+/*align numerical headers to the right*/
+.ixp-dir-table th:nth-child(5),
+.ixp-dir-table th:nth-child(6),
+.ixp-dir-table th:nth-child(7),
+.ixp-dir-table th:nth-child(8)
+{
+  text-align: right;
+}
+.growth-table  {
+  margin-top: 30px
+}
+/* align all columns but first to the right and the first th row centered */
+.growth-table th, .growth-table td {
+  text-align: right;
+}
+.growth-table td:nth-child(1) {
+  text-align: left;
+}
+.growth-table td:nth-child(5),.growth-table th:nth-child(5), .growth-table td:nth-child(1),.growth-table th:nth-child(1),.growth-table tr:first-child th + th {
+  border-right: 30px solid white;
+}
+.growth-table tr:first-child th + th + th {
+  border-right: 1px;
+}
+.growth-table tr:first-child th, .growth-table th:nth-child(1) {
+  text-align: center;
+}
+.stupid-sort th {
+  cursor: pointer;
+}
+.growth-table .empty-cell {
+  background-color: white;
+}
+
+/*only show region count when it's the sort row*/
+.active_count {
+  display: none;
+}
+
+.table > tbody > tr > td, 
+.table > tbody > tr > th, 
+.table > tfoot > tr > td, 
+.table > tfoot > tr > th, 
+.table > thead > tr > td, 
+.table > thead > tr > th {
+  line-height: 1;
+}
+
+.meetings .table > tbody > tr > td,
+.meetings .table > thead > tr > th {
+  vertical-align: middle;;
+}
+.meetings .table > tbody > tr > th {
+  white-space:nowrap;
+}
+/* for the first column, alternating rows, make the right border match the background color */
+.meetings .table-striped > tbody > tr:nth-child(2n+1) > td:nth-child(1) {
+  border-right: 1px solid #ddd;
+}
+.month_start_row {
+  border-top: 2px solid black ;
+}
+.meetings tbody tr:first-child {
+  border-top: unset;
+}
+.meetings #column_header_mo {
+  display:none;
+}
+.meetings tfoot {
+  font-weight: bold;
+}
+.meetings #mt-table {
+  padding-top: 1px;
+}
+#histogram {
+  padding-top: 30px;
+  padding-bottom: 40px;
+}
+
+
+/* histogram */
+.yearHistogram {
+}
+.yearHistogram .month{
+  width: 8.33%;
+  float:left;
+}
+.yearHistogram .month .name,
+.yAxisLabel
+{
+  font-family: Helvetica;
+  height: 9px;
+  font-size: 8pt;
+}
+.yearHistogram .month .name {
+  border-left: 1px solid black;
+  text-align: center;
+  border-top: 1px solid black;
+  width: 100%;
+}
+.yearHistogram  .Dec .name {
+  border-right: 1px solid black;
+}
+.yearHistogram  .Jan .chart {
+  border-left: 1px solid black;
+}
+.yearHistogram .month .chart {
+  height: 50px;
+  width: 100%;
+}
+.yearHistogram .bar,
+.yearHistogram .emptyTop,
+.yearHistogram .filledBottom,
+.yearHistogram .yAxisLabel,
+.yearHistogram .yAxis,
+.yearHistogram .data
+{
+  float: left;
+}
+.yearHistogram .bar {
+  height: 100%;
+}
+.yearHistogram .yAxisLabel {
+  height: 100%;
+  width: 2%;
+  margin-top: -8px;
+  text-align: right;
+  padding-right: 3px;
+}
+.yearHistogram .yAxis {
+  height: 95%;
+  width: .25%;
+  border-top: 1px solid black;
+}
+.yearHistogram .data {
+  height: 100%;
+  width: 96.75%;
+}
+.yearHistogram .emptyTop,
+.yearHistogram .filledBottom{
+  width: 100%;
+}
+
+
+
+
+@media print {
+  .container svg {
+    height: 99% !important;
+    width: 99% !important;
+  }
+  .header_print {
+    display: none;
+  }
+  .container.w_menu {
+    padding:0 !important;
+    margin:0 !important;
+  }
+  #wrap main, h1 {
+    margin-top: 0;
+    padding-top: 0;
+  }
+  .meetings .meetingLink {
+    display: none;
+  }
+  .no_print {
+    display: none;
+  }
+}

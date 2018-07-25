@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+	<link rel="stylesheet" href="index_files/bootstrap.css">
+	<link rel="stylesheet" href="index_files/font-awesome.css">
+	<link rel="stylesheet" href="index_files/Helvetica_Black_unhinted.css">
+  
+
+  
+	<link rel="stylesheet" href="index_files/style.css">
+  
+    <title>IXPDIR</title>
+</head>
+<body>
+
+	<script type="text/javascript">
+		URL_ROOT = "https://www.pch.net/";
+	</script>
+  
+  
+  <script src="index_files/jquery.js" charset="utf-8"></script>
+  <script src="../d3.min.js" charset="utf-8"></script>
+  <script src="../topojson.min.js"></script>
+  <script src="../maptable.js"></script>
+
+<div id="vizContainer" class='container'></div>
+
+
+<script>
+	var prefixUrl = 'https://prefix-dev.pch.net';
+	var topoJson = 'countries.topo.json';
+	var ranks = null;
+	var countKey = 'ctry';
+	var emptyIcon = '<span title="No information found." ' +
+		'class="glyphicon glyphicon-question-sign"></span>';
+	var viz = d3.maptable('#vizContainer')
+		.csv(URL_ROOT + 'ixp/dir_data_csv')
+		.map({
+			longitudeKey: 'lon',
+			latitudeKey: 'lat',
+			countryIdentifierKey: 'ctry',
+			countryIdentifierType: 'name',
+			path: topoJson,
+			exportSvgClient: 'true',
+			title: {
+				bgColor: "white",
+				fontSize: "11",
+				content: function(countShown, countTotal, filtersDescription) {
+					if (countShown === 0 || countTotal === 0) out = "No IXPs shown";
+					else if (countShown < countTotal) out = 'Showing <tspan font-weight="bold">' +
+						countShown + '</tspan> IXPs from <tspan font-weight="bold">' +
+						countTotal + "</tspan>";
+					else out = '<tspan font-weight="bold">' + countTotal + "</tspan> IXPs shown";
+					if (filtersDescription !== '') out += " — " + filtersDescription;
+					return out;
+				},
+				source: function() {
+					return 'Source: <a xlink:href="http://www.pch.net/" target="_blank">' +
+						'<tspan font-weight="bold">pch.net</tspan></a>';
+				}
+			},
+			markers: {
+				groupBy: function(a) {
+					return a.city + ", " + a.ctry;
+				},
+				rollup: function(a) {
+					return a.length;
+				},
+				attr: {
+					r: {
+						min: "minValue",
+						max: "maxValue",
+						transform: function(v) {
+							return 3 * Math.sqrt(v);
+						},
+						rollup: function(values) {
+							return values.length;
+						},
+					},
+					fill: "yellow",
+					stroke: "#d9d9d9",
+					"stroke-width": 0.5
+				},
+				tooltip: function(a) {
+					var statusClass = '';
+					out = '<div class="arrow"></div>';
+					if (a.values.length > 4){
+						out += '<span class="pull-right"> ' + a.values.length + ' IXPs</span>';
+					}
+					out += '<h3 class="popover-title"> ' +
+						a.values[0].cit + ', ' + a.values[0].ctry + '</h3>';
+					out += '<div class="popover-content">';
+					for (i = 0; i < a.values.length; i++) {
+					    if (a.values[i].stat != 'Active'){
+					        statusClass = 'inactive';
+					    } else {
+					        statusClass = ''
+					    }
+					    out += "<span class='" + statusClass + "'>" + a.values[i].name + "</span></br>";
+					}
+					out += "</div>";
+					return out;
+				},
+			},
+			countries: {
+				attr: { // todo min, max, empty, legend and rollup don't work
+					fill: {
+						min: "#B4C3D1",
+						max: "#043864",
+						empty: "#f9f9f9",
+						transform: function(val, dataset) {
+							return val;
+						},
+						rollup: function(a) {
+							return a.length;
+						},
+					},
+					stroke: "#d9d9d9",
+					"stroke-width": 0.5
+				},
+			}
+		})
+		.filters({
+			show: ['reg', 'ctry', 'cit', 'name', 'pch', 'stat', 'q9' ],
+		})
+		.table({
+			show: ['reg', 'ctry', 'cit', 'name', 'prts','traf', 'avg','ipv6_avg', 'prfs', 'date', 'url'],
+			collapseRowsBy: ['reg'],
+			defaultSorting: {
+				key: "ctry"
+			},
+			rowClassName: function(d){
+				var thirtyDays = new Date().getTime() - (30 * 24 * 60 * 60 * 1000);
+				var rowDate = new Date(d.updt).getTime();
+				var recentClass = '';
+				var statusClass = '';
+				if (d.stat != 'Active'){
+					statusClass = 'inactive';
+				}
+				return statusClass + ' ' + recentClass;
+			}
+		})
+		.columns({
+			pch: {
+				title: 'PCH Present',
+				filterMethod: 'dropdown',
+			},
+            q9: {
+				title: 'Quad9 Present',
+				filterMethod: 'dropdown',
+			},
+			ipv6_avg: {
+				title: 'IPv6',
+				cellContent: function(d){
+                    return getIpv6Field(d.ipv6_avg);
+				},
+				// remove decimals so they sort correct. multiply times -1 so sort
+                // on first click is reversed.
+				dataParse: function(val){
+                    if (val != '' ) {
+                        return val * -1;
+                    }
+				},
+			},
+			stat: {
+				title: 'Status',
+				filterMethod: 'dropdown',
+			},
+			cit: {
+				title: 'City',
+				filterMethod: 'dropdown',
+				cellContent: function(d){
+					return d.cit;
+				},
+			},
+			ctry: {
+				title: 'Country',
+				filterMethod: 'dropdown',
+				cellContent: function(d){
+					return d.ctry;
+				},
+			},
+			name: {
+				title: 'IXP Name',
+				cellContent: function(d){
+					var title, linkHtml, traffic;
+
+					if (d.stat == 'Active'){
+						if (d.traf == 0){
+							traffic = '0';
+						} else {
+							traffic = d.traf +  ' of ';
+						}
+						title = ' title="(participants) ' + d.prts + ' ISPs participate at ';
+						title += d.name + '. By participants it ranks #' + d.pc_rank + ' in ' ;
+						title += d.ctry + ', #' + d.pr_rank + ' in ' + d.reg + ', and #' + d.pw_rank;
+						title += ' in the world.\n\n(traffic) ' + d.name + ' peaks at ' + traffic;
+						title += ' traffic each day. By traffic, it ranks #' + d.tc_rank + ' in ' ;
+						title += d.ctry + ', #' + d.tr_rank + ' in ' + d.reg + ', and #' + d.tw_rank;
+						title += ' in the world." ';
+					}
+					linkHtml = '<a ' + title + ' href="';
+					linkHtml += prefixUrl + '/applications/ixpdir/detail.php?id=' + d.id;
+					linkHtml += '">' + d.name + '</a>';
+					return linkHtml;
+				},
+			},
+			prts: {
+				title: 'Participants',
+				cellContent: function(d){
+					if (d.prts >= -1) {
+						if (d.prts > 0 && d.prts_url != '') {
+							return '<a href="' + d.prts_url + '" target="_blank">' + d.prts + '</a>';
+						} else {
+							return d.prts;
+						}
+					} else {
+						return emptyIcon;
+					}
+				},
+                // multiply times -1 so sort on first click is reversed.
+                dataParse: function(val){
+                    if (val != '' ) {
+                        return val * -1;
+                    }
+                },
+			},
+			traf: {
+				nowrap: true,
+				title: 'Peak',
+				cellContent: function(d){
+				    return getTrafficField(d.traf, d.updt);
+				},
+                // multiply times -1 so sort on first click is reversed.
+                dataParse: function(val){
+                    if (val != '' ) {
+                        return val * -1;
+                    }
+                },
+			},
+			avg: {
+                // multiply times -1 so sort on first click is reversed.
+                dataParse: function(val){
+                    if (val != '' ) {
+                        return val * -1;
+                    }
+                },
+				nowrap: true,
+				title: 'Avg',
+				cellContent: function(d){
+				    return getTrafficField(d.avg, d.updt);
+				},
+			},
+			url: {
+				title: 'URL',
+				cellContent: function(d){
+					var value;
+					var title = 'title="Go to ' + d.name + '\'s site."';
+					if (d.url !== '') {
+						if (d.url.substring(0,4) == 'http'){
+							value = '<a ' + title + ' href="';
+						} else {
+							value = '<a ' + title + 'href="http://';
+						}
+						value += d.url + '" target="_blank" ><span class="glyphicon' +
+							' glyphicon-link"></span></a>';
+					} else {
+						value = emptyIcon;
+					}
+					return value;
+				},
+			},
+			reg: {
+				nowrap: true,
+				filterMethod: 'dropdown',
+				title: 'Region',
+				cellContent: function (d){
+					return d.reg +' <span class="active_count">(' + d.regct + ')</span>';
+				}
+			},
+			prfs: {
+				cellContent: function(d){
+					var prfs;
+					if (d.prfs != '0') {
+						prfs = d.prfs;
+					} else {
+						prfs = emptyIcon;
+					}
+					return prfs;
+				},
+				// multiply times -1 so sort on first click is reversed.
+				dataParse: function(val){
+				    if (val != '' ) {
+				        return val * -1;
+				    }
+				},
+				title: 'Prefixes',
+			},
+			date: {
+				inputType: "date",
+				type: "custom",
+				cellContent: function(a) {
+					months = new Array('', "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug",
+						"Sep", "Oct", "Nov", "Dec");
+					year = 1 * parseInt(a.date.substring(0, 4));
+					month = 1 * parseInt(a.date.substring(4, 6));
+					if (!isNaN(month) && 0 !== month) month = months[month];
+					else month = '';
+					day = 1 * parseInt(a.date.substring(6, 8));
+					output = day + " " + month + " " + year;
+					if (isNaN(day) || 0 === day) output = month + " " + year;
+					if ('' === month) output = year;
+					if (isNaN(year) || 0 === year || a.stat == 'Planned')
+						output = emptyIcon;
+					return output;
+				},
+				title: 'Established',
+			},
+			updt: {
+				inputType: "date",
+				type: "date",
+				title: 'Last Updated',
+			}
+		})
+		.render();
+
+	
+	function getIpv6Field(percent){
+        if (percent != '' && percent != '0.000000' ) {
+            return percent + '%';
+        } else {
+            return emptyIcon;
+        }
+    }
+    /**
+     * given a float amount and a date, render the HTML for traffic
+     * @param trafficInput
+     * @param date
+     * @returns string of html
+     */
+    function getTrafficField(trafficInput, date){
+        if (trafficInput != '0' && trafficInput !== '') {
+            var traffic = trafficInput;
+            var thirtyDays = new Date().getTime() - (30 * 24 * 60 * 60 * 1000);
+            var rowDate = new Date(date).getTime();
+            if (thirtyDays >= rowDate && trafficInput != '0' && trafficInput !== '') {
+                return '<span title="This information is more than 30 days old">' + traffic + '</span>';
+            } else {
+                return traffic;
+            }
+        } else {
+            return emptyIcon;
+        }
+    }
+	// until maptable get's a callback fire at .5, 1 and 10 seconds :(
+	setTimeout(function() {addThHandler();}, 500); 
+	setTimeout(function() {addThHandler();}, 1000); 
+	setTimeout(function() {addThHandler();}, 10000); 
+	// thanks for the super .ready! http://stackoverflow.com/a/545005
+	function addThHandler() {
+		
+		// if region th is clicked, show the .active_count, otherwise
+		// hide it
+		$("th").click(function() {
+			var  index = $(this).index();
+			var parent_index = $(this).parent().index() + 1;
+			if (index === 0){
+				$("td:nth-child(" + parent_index + ") .active_count").show();
+			} else {
+				$(".active_count").hide();	
+			}
+		});
+	};
+</script>
+
+
+</body>
+</html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="bootstrap.min.css">
+    <link rel="stylesheet" href="maptable.css">
+    <title>MapTable: Basic with Map, Filters and Table - minimal options</title>
+</head>
+<body>
+
+<script src="d3.min.js" charset="utf-8"></script>
+<script src="topojson.min.js"></script>
+<script src="maptable.js"></script>
+
+<div id="vizContainer" class='container'></div>
+
+<script>
+    var viz = d3.maptable('#vizContainer')
+            .csv('basic.csv')
+            .map({
+                path: 'ne_50m_admin_0_countries_lakes_wo_antarctica.json',
+                countries: {
+        tooltip: function(a) {
+          out = '<div class="arrow"></div>';
+            out += '<h3 class="popover-title"> ' + a.id + '</h3>';
+            out += '<div class="popover-content">' + JSON.stringify(a.properties) + '</div>';
+          return out;
+        },
+      },
+      markers: false,
+    })
+            .filters()
+            .table()
+            .render();
+</script>
+</body>
+</html>

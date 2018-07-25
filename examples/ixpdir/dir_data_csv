@@ -1,0 +1,2749 @@
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8"></head><body>id,ctry,cit,reg,name,url,stat,date,prfs,lat,lon,prts,traf,avg,trgh,ipv6_avg,pch,updt,tc_rank,tw_rank,pc_rank,pr_rank,pw_rank,tr_rank,prts_url,q9,iata,regct
+1,Argentina,"Buenos
+ Aires","Latin America",Cubecorp,http://www.cubecorp.com.ar/,"Not an 
+exchange",0,0,-34.57000,-58.42000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",116
+2,Argentina,"Buenos Aires","Latin America","CABASE IXP Buenos 
+Aires",http://www.cabase.org.ar/nap-buenos-aires/,Active,19980401,17507,-34.57000,-58.42000,106,9190000,0,0,0.000000,Yes,2015-02-15,4,209,1,4,68,28,http://www.cabase.org.ar/nap-buenos-aires/,"No
+ ",EZE,116
+3,Australia,Adelaide,Asia-Pacific,"South Australian Internet 
+Exchange",http://www.saia.asn.au/saix,Defunct,19960700,0,-34.93000,138.52000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",194
+4,Australia,Brisbane,Asia-Pacific,"AusBONE-Brisbane Internet 
+Exchange",http://www.ausbone.net/whyisps.htm,Defunct,19971000,0,-27.38000,153.10001,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",194
+5,Australia,Melbourne,Asia-Pacific,"AusBONE-Melbourne Internet 
+Exchange",http://www.ausbone.net/whyisps.htm,Defunct,19970000,0,-37.82000,144.97000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",194
+6,Australia,Melbourne,Asia-Pacific,AUSIX,,Active,20010700,0,-37.82000,144.97000,7,20000,0,0,0.000000,No,0000-00-00,8,287,11,59,333,46,,"No
+ ","     ",194
+7,Australia,Melbourne,Asia-Pacific,"Melbourne 
+NAPette",http://peer.sensation.net.au/,Defunct,19990400,0,-37.82000,144.97000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",194
+8,Australia,Melbourne,Asia-Pacific,"Victoria Internet 
+Exchange",https://www.ix.asn.au/peering/,Active,20110000,0,-37.82000,144.97000,66,98000000,51400000,22000000,0.000000,No,2018-07-18,2,80,5,19,99,14,https://www.ix.asn.au/peers-vic/,"No
+ ","     ",194
+9,Australia,Perth,Asia-Pacific,"Western Australian Internet 
+Association",https://www.ix.asn.au/peering/,Active,19970000,32509,-31.93000,115.95000,81,49000000,29400000,9700000,0.000000,Yes,2018-07-17,3,90,4,11,58,15,https://www.ix.asn.au/peers-wa/,Yes,PER,194
+10,Australia,Sydney,Asia-Pacific,"AusBONE-Sydney
+ Internet 
+Exchange",http://www.ausbone.net/whyisps.htm,Defunct,19971000,0,-33.95000,151.17999,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",194
+11,Australia,Sydney,Asia-Pacific,"Pihana Sydney",,"Not an 
+exchange",0,0,-33.95000,151.17999,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",194
+12,Australia,Sydney,Asia-Pacific,"Equinix 
+Sydney",https://www.equinix.com/resources/data-sheets/equinix-internet-exchange/,Active,20030000,193599,-33.95000,151.17999,177,0,0,0,0.000000,Yes,0000-00-00,7,264,3,9,54,43,,Yes,SYD,194
+13,Australia,Brisbane,Asia-Pacific,"PIPE
+ Networks 
+Brisbane",http://www.pipenetworks.com/pipeix.php,Active,20020500,0,-27.38000,153.10001,36,0,0,0,0.000000,No,0000-00-00,9,308,6,24,130,53,http://www.pipenetworks.com/pipeix-who.php,"No
+ ","     ",194
+14,Austria,Graz,Europe,"Grazer Internet 
+Exchange",http://www.grax.at/,Active,20100304,0,47.07030,15.43890,14,36400,0,0,0.000000,No,2017-04-03,3,282,3,108,228,126,http://www.grax.at/index.html,"No
+ ","     ",301
+15,Austria,Vienna,Europe,"Vienna Internet 
+Exchange",https://www.vix.at/vixhome.html,Active,19960400,145453,48.20000,16.37000,131,442880000,274500000,102000000,2.003640,Yes,2018-07-18,1,30,1,22,35,19,https://www.vix.at/vix_participants.html,Yes,VIE,301
+16,Bangladesh,Dhaka,Asia-Pacific,"Bangladesh
+ Internet 
+Exchange",http://www.bdix.net/,Active,20040826,4640,23.77000,90.38000,79,26941733,0,14000000,0.000000,Yes,2018-07-23,1,136,1,27,144,25,http://www.bdix.net/members.html,Yes,DAC,194
+17,Belgium,Brussels,Europe,"Belgian
+ National Internet 
+Exchange",https://bnix.net/,Active,19950000,0,50.90000,4.53000,61,150000000,0,40000000,0.000000,No,2018-07-17,1,46,1,46,81,28,https://bnix.net/en/content/participants,"No
+ ","     ",301
+18,Belgium,Brussels,Europe,"Free Belgian Internet 
+Exchange",http://www.freebix.net/,Defunct,20030904,0,50.90000,4.53000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,http://www.freebix.net/members,"No
+ ","     ",301
+19,Brazil,"Belo Horizonte","Latin America","Ponto de Troca de Tráfego do
+ Belo 
+Horizonte",https://ix.br/adesao/mg/,Active,20100100,0,-19.63000,-43.97000,38,9300000,6100000,2000000,0.000000,No,2018-07-18,10,139,7,8,118,13,http://ix.br/particip/mg,"No
+ ","     ",116
+20,Brazil,Brasília,"Latin America","Ponto de Troca de Tráfego do 
+Brasília",https://ix.br/adesao/df,Active,20090000,0,-15.78000,-47.93000,31,19000000,13800000,4000000,0.000000,No,2018-07-18,9,129,10,11,135,12,http://ix.br/particip/df,"No
+ ","     ",116
+21,Brazil,Paraná,"Latin America","Ponto de Troca de Tráfego do 
+Paraná",https://ix.br/adesao/pr,Defunct,20020600,0,-25.25210,-52.02150,0,0,0,0,0.000000,No,2017-11-09,5,84,4,4,68,6,http://ix.br/particip/pr,"No
+ ","     ",116
+22,Brazil,Florianópolis,"Latin America","Ponto de Troca de Tráfego do 
+Florianópolis",https://ix.br/adesao/sc,Active,20080000,0,-27.58000,-48.57000,34,6600000,4900000,1500000,0.000000,No,2018-07-18,15,162,10,11,135,18,https://ix.br/particip/sc,"No
+ ","     ",116
+23,Brazil,"Porto Alegre","Latin America","Rio Grande do Sul Internet 
+Exchange",http://rs.ptt.br/,Deprecated,20001120,0,-30.00000,-51.18000,0,0,0,0,0.000000,No,2017-10-19,,,,,,,,"No
+ ","     ",116
+24,Brazil,"Rio De Janeiro","Latin America","Optiglobe Internet Exchange -
+ Latin 
+America",,Defunct,0,0,-22.90000,-43.17000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",116
+25,Brazil,"São Paulo","Latin 
+America",Daedalus,,Defunct,0,0,-23.62000,-46.65000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",116
+26,Brazil,"São Paulo","Latin America","Diveo NAP",,"Not an 
+exchange",0,0,-23.62000,-46.65000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",116
+27,Brazil,"São Paulo","Latin America","NAP Abranet (Not an 
+exchange)",,"Not an 
+exchange",0,0,-23.62000,-46.65000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",116
+28,Brazil,"São Paulo","Latin 
+America",Tivit,http://www2.tivit.com.br/internet2/,Defunct,0,0,-23.62000,-46.65000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",116
+29,Brazil,"São Paulo","Latin America","Equinix São 
+Paulo",,Active,19980000,0,-23.62000,-46.65000,41,20000000,0,0,0.000000,No,0000-00-00,6,108,8,9,127,8,,"No
+ ","     ",116
+30,Brazil,"São Paulo","Latin America","Ponto de Troca de Tráfego Metro 
+São 
+Paulo",http://ix.br/adesao/sp,Active,20041004,0,-23.62000,-46.65000,1467,4450000000,2955000000,1020000000,5.245350,Yes,2018-07-18,1,7,1,1,1,1,http://ix.br/adesao/sp,"No
+ ",GRU,116
+31,Brazil,"São Paulo","Latin 
+America",Telcomp,http://www.telcomp.org.br/,Defunct,20030000,0,-23.62000,-46.65000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",116
+32,Bulgaria,Sofia,Europe,GoCIS,,Unknown,0,0,42.65000,23.38000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",301
+33,Bulgaria,Sofia,Europe,"Sofia Internet 
+Exchange",,Unknown,0,0,42.65000,23.38000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",301
+34,Cambodia,"Phnom Penh",Asia-Pacific,"Finder Internet 
+Exchange",http://www.finder.com.kh/,Defunct,20030600,0,11.55000,104.85000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",194
+35,Canada,Edmonton,"North America","Edmonton Internet 
+Exchange",http://www.eix.net/,Defunct,0,0,53.54440,-113.49090,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",215
+36,Canada,Montreal,"North America","Quebec Internet 
+Exchange/RISQ",http://www.risq.qc.ca/reseau/architecture/archi_section.php?LANG=EN&amp;S=qix,"Not
+ an 
+exchange",0,0,45.47000,-73.75000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",215
+37,Canada,Ottawa,"North America","Ottawa Internet 
+Exchange",http://www.ottix.net/,Active,20010410,943,45.40000,-75.72000,12,107000,17000,7000,0.000000,Yes,2018-06-12,7,280,7,42,244,37,http://www.ottix.net/peers.html,Yes,YOW,215
+38,Canada,Toronto,"North
+ 
+America",CANIX,http://www.canix.ca/toronto.php,Defunct,0,0,43.67000,-79.40000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,http://www.canix.ca/toronto.php,"No
+ ","     ",215
+39,Canada,Toronto,"North America","Toronto Internet 
+Exchange",https://www.torix.ca/,Active,19980724,300889,43.67000,-79.40000,226,475000000,361000000,177000000,0.000000,Yes,2018-07-18,1,32,1,4,18,7,https://www.torix.ca/peers.php,Yes,YYZ,215
+40,Canada,Vancouver,"North
+ America","British Columbia Internet Exchange",http://www.bcix.net/,"Not
+ an 
+exchange",0,0,49.18000,-123.17000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,http://www.bcix.net/member_info/membership_categories.htm,"No
+ ","     ",215
+41,Chile,Santiago,"Latin America","NAP 
+Chile",http://www.nap.cl/,Active,19970900,0,-33.38000,-70.78000,21,0,0,0,0.000000,No,0000-00-00,1,308,1,32,255,55,http://www.nap.cl/f_proveedores.html,"No
+ ","     ",116
+42,Chile,,"Latin America","Chile Network Access 
+Point",,Unknown,0,0,,,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No ","     
+",116
+43,China,Beijing,Asia-Pacific,"Beijing National Internet Exchange 
+Center",,Active,20000400,0,39.93000,116.28000,11,2000000,0,0,0.000000,No,0000-00-00,3,184,3,51,288,32,,"No
+ ","     ",194
+44,China,Beijing,Asia-Pacific,"TerreNAP 
+Beijing",http://www.corporate-ir.net/ireye/ir_site.zhtml?ticker=tww&amp;script=410&amp;layout=-6&amp;item_id=137869,Unknown,0,0,39.93000,116.28000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",194
+45,China,Guangzhou,Asia-Pacific,,,Unknown,20001200,0,23.13915,113.24146,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",194
+46,China,Shanghai,Asia-Pacific,"Asia Pacific Internet Exchange",,"Not an
+ 
+exchange",0,0,31.40000,121.47000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",194
+47,China,Shanghai,Asia-Pacific,"Shanghai City 
+Exchange",,Unknown,0,0,31.40000,121.47000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",194
+48,China,Shanghai,Asia-Pacific,"Shanghai Internet 
+Exchange",http://www.sii.com.cn/html/en/infoport/internet_exchange_center.htm,Unknown,20001200,0,31.40000,121.47000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",194
+49,Colombia,Bogotá,"Latin 
+America",NAP-Colombia,http://nap.co/,Active,20000629,0,4.70000,-74.13000,21,70000000,0,5000000,0.000000,No,2018-07-17,1,67,1,23,208,4,http://nap.co/html/integrantes.php,"No
+ ","     ",116
+50,Colombia,,"Latin 
+America",CIN,,Unknown,0,0,,,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No 
+","     ",116
+51,Croatia,Zagreb,Europe,"Croatian Internet 
+Exchange",http://www.cix.hr/,Active,20050000,0,45.82000,16.03000,37,56000000,0,12000000,0.000000,No,2018-07-17,1,86,1,80,156,50,http://www.cix.hr/clanice/clanice,"No
+ ","     ",301
+52,Cuba,Habana,"Latin America","NAP de 
+Cuba",http://www.etecsa.cu/internet_conectividad/internet/,Active,20010600,0,22.98000,-82.40000,5,50000,0,0,0.000000,No,0000-00-00,1,276,1,55,370,50,,"No
+ ","     ",116
+53,Cyprus,Lefkosia,Europe,"Cyprus Internet 
+Exchange",https://www.cyta.com.cy/telephony-internet,Active,19990000,0,35.17000,33.37000,3,10000,0,0,0.000000,No,0000-00-00,1,291,1,166,395,129,,"No
+ ","     ",301
+54,"Czech Republic",Brno,Europe,"Neutral Internet 
+Exchange",,Planned,0,0,49.15000,16.70000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",301
+55,"Czech Republic",Prague,Europe,"NIX.CZ - Neutral Internet eXchange 
+for the Czech 
+Republic",https://www.nix.cz/cs,Active,19960831,0,50.08000,14.43000,150,520000000,0,120000000,0.000000,No,2018-07-17,1,25,2,36,60,15,https://www.nix.cz/en/networks,"No
+ ","     ",301
+56,Denmark,Copenhagen,Europe,"Danish Internet 
+Exchange",http://www.dix.dk/,Active,19940500,0,55.67000,12.57000,48,44207242,0,0,0.000000,No,2017-02-22,2,76,1,58,105,44,http://www.dix.dk/connectednetworks/,"No
+ ","     ",301
+57,Ecuador,Guayaquil,"Latin America","NAP AEPROVI 
+Guayaquil",http://aeprovi.org.ec/es/napec,Active,20030000,0,-2.15000,-79.88000,10,6003625,0,1300000,0.000000,No,2018-07-23,2,183,1,13,137,23,http://aeprovi.org.ec/es/napec/topologia,"No
+ ","     ",116
+58,Ecuador,Quito,"Latin America","NAP AEPROVI 
+Quito",http://aeprovi.org.ec/es/napec,Active,20030000,0,-0.15000,-78.48000,21,45554821,0,4500000,0.000000,No,2018-07-23,1,99,2,15,159,7,http://aeprovi.org.ec/es/napec/topologia,"No
+ ","     ",116
+59,Egypt,Cairo,Africa,"Cairo Internet 
+Exchange",http://www.caix.net.eg/,Active,20020500,3259,30.13000,31.40000,4,2590000,0,0,0.000000,Yes,2015-10-02,1,193,2,23,333,10,http://www.caix.net.eg/index.php/member-list,Yes,CAI,73
+60,Egypt,Cairo,Africa,"Cairo
+ Regional Internet 
+Exchange",http://www.cr-ix.net,Defunct,20020500,0,30.13000,31.40000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",73
+61,"United Kingdom",London,Europe,"LoNAP/XchangePoint shared 
+interconnect",http://www.xchangepoint.net/ourpartners/LoNAP-XP-iconnect.html,Defunct,20040000,0,51.48000,-0.45000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",301
+62,"United Kingdom",London,Europe,"London Internet 
+Exchange",https://www.linx.net/,Active,19941108,757539,51.48000,-0.45000,770,4016000000,2800000000,1400000000,0.000000,Yes,2018-07-17,1,3,1,2,3,3,https://www.linx.net/about/member-list,Yes,LHR,301
+63,"United
+ Kingdom",London,Europe,"London Internet Providers 
+Exchange",http://www.lipex.net,Defunct,20011000,0,51.48000,-0.45000,0,0,0,0,0.000000,No,2009-03-20,,,,,,,http://www.lipex.net/peers/,"No
+ ","     ",301
+64,"United Kingdom",London,Europe,"London Network Access 
+Point",https://www.lonap.net/,Active,19980000,89149,51.48000,-0.45000,185,288945081,0,80000000,0.000000,Yes,2018-07-23,2,39,2,15,24,24,https://www.lonap.net/members.shtml,Yes,LHR,301
+65,"United
+ 
+Kingdom",London,Europe,UK6X,http://uk6x.net,Defunct,0,0,51.48000,-0.45000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",301
+66,"United Kingdom",London,Europe,"XchangePoint London 
+IPP",,Active,20010000,0,51.48000,-0.45000,166,5300000,0,0,0.000000,No,0000-00-00,4,152,3,16,25,83,,"No
+ ","     ",301
+67,"United Kingdom",Manchester,Europe,"Manchester Network Access 
+Point",http://www.manap.net/,Unknown,19970000,0,53.35000,-2.27000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,http://www.manap.net/members.php?sort=Company_name,"No
+ ","     ",301
+68,Estonia,Tallinn,Europe,"Tallinn Internet Exchange 
+(TIX)",http://tix.estpak.ee,Active,20020000,0,59.35000,24.80000,13,425250,0,0,0.000000,No,2014-01-12,2,234,2,118,255,106,http://tix.estpak.ee/?members,"No
+ ","     ",301
+69,Finland,Helsinki,Europe,"Finnish Communication and Internet Exchange 
+Helsinki",https://www.ficix.fi/,Active,19930000,0,60.17000,25.00000,47,36000000,0,0,0.000000,No,2013-03-20,1,81,2,87,171,46,https://www.ficix.fi/membership/ficix-jasenet/,"No
+ ","     ",301
+70,Finland,Tampere,Europe,"Tampere Region 
+Exchange",http://www.trex.fi/,Active,20030803,1248,61.42000,23.58000,21,1900000,0,600000,0.000000,Yes,2018-04-02,3,149,4,112,236,81,http://www.trex.fi/members.html,Yes,TMP,301
+71,France,Lyon,Europe,"Lyon
+ Internet 
+Exchange",http://www.lyonix.net/fr/,Active,20100601,31926,45.72000,4.95000,95,18170317,0,4000000,0.000000,Yes,2018-07-23,4,117,5,28,47,67,http://www.lyonix.net/en/lyonix-members,Yes,LYS,301
+72,France,Paris,Europe,Free-IX,http://www.FreeIX.net,Defunct,20000000,0,48.80000,2.33000,0,0,0,0,0.000000,No,2008-12-02,,,,,,,http://tools.freeix.net/freeix/cgi-bin/members.pl,"No
+ ","     ",301
+73,France,Paris,Europe,"Metropolitan Area 
+Ethernet-Paris",http://www.mae.net/fac/mae-paris.htm,Unknown,0,0,48.80000,2.33000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,http://www.mae.net/fac/mae-paris-members.htm,"No
+ ","     ",301
+74,France,Paris,Europe,"Mix Internet Exchange and 
+Transit",http://www.mixt.net/,Unknown,19990000,0,48.80000,2.33000,0,0,0,0,0.000000,No,0000-00-00,8,308,12,149,333,131,http://www.mixt.net/membres?PHPSESSID=d70789dd2193dfc12c377b1c95fbe580,"No
+ ","     ",301
+75,France,Paris,Europe,"Paris Internet 
+Exchange",,Deprecated,0,0,48.80000,2.33000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",301
+76,France,Paris,Europe,"Paris Internet Exchange 
+Service",,Unknown,0,0,48.80000,2.33000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",301
+77,France,Paris,Europe,PARIX,http://www.parix.net,"Not an 
+exchange",20010000,0,48.80000,2.33000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,http://www.parix.net/parix-members.html,"No
+ ","     ",301
+78,France,Paris,Europe,"Service for French Internet 
+Exchange",https://www.sfinx.fr/,Active,19950000,10102,48.80000,2.33000,75,6500000,8000000,2000000,0.000000,Yes,2018-07-18,3,96,4,27,46,56,https://www.sfinx.fr/,Yes,CDG,301
+79,France,Paris,Europe,"Paris
+ 
+NAP",http://www.panap.fr,Defunct,20050700,0,48.80000,2.33000,0,0,0,0,0.000000,No,2013-03-20,,,,,,,http://www.panap.fr/members.php,"No
+ ","     ",301
+80,Germany,Berlin,Europe,"Berlin Commercial Internet 
+Exchange",http://www.bcix.de/bcix/,Active,20020906,302858,52.38000,13.52000,83,360000000,0,80000000,0.000000,Yes,2018-07-17,3,43,6,36,60,26,http://www.bcix.de/bcix/members/,Yes,BER,301
+81,Germany,Berlin,Europe,"European
+ Commercial Internet Exchange 
+Berlin",https://www.ecix.net/,Active,20030000,211261,52.38000,13.52000,56,286000000,0,0,0.000000,Yes,0000-00-00,2,29,2,18,28,18,https://www.ecix.net/connected-networks,Yes,FRA,301
+82,Germany,Düsseldorf,Europe,"European
+ Commercial Internet Exchange 
+Düsseldorf",https://www.ecix.net/,Active,20030000,235361,51.28000,6.76000,113,22900000,0,0,0.000000,Yes,2012-01-23,4,103,5,26,45,59,https://www.ecix.net/connected-networks,"No
+ ","     ",301
+83,Germany,Frankfurt,Europe,"Deutscher Commercial Internet Exchange 
+DE-CIX 
+Frankfurt",https://www.de-cix.net/en/locations/germany/frankfurt,Active,19950500,1431638,50.12000,8.68000,776,5585000200,3793000000,1700000000,0.000000,Yes,2018-07-18,1,2,1,3,4,2,https://www.de-cix.net/en/locations/germany/frankfurt/connected-networks,Yes,FRA,301
+84,Germany,Frankfurt,Europe,MAE-Frankfurt,http://www.mae.net/fac/mae-frankfurt.htm,Unknown,0,0,50.12000,8.68000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,http://www.mae.net/fac/mae-frankfurt-members.htm,"No
+ ","     ",301
+85,Germany,Frankfurt,Europe,"XchangePoint Frankfurt 
+IPP",,Unknown,0,0,50.12000,8.68000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",301
+86,Germany,Hamburg,Europe,"Internet Exchange 
+Hamburg",http://www.inxs.de,Defunct,20001000,0,53.55000,10.03000,0,0,0,0,0.000000,No,2015-10-31,5,105,8,64,113,60,http://www.inxs.de/public/cgi-bin/showmembers,"No
+ ","     ",301
+87,Germany,Hamburg,Europe,"XchangePoint Hamburg 
+IPP",,Unknown,20030400,0,53.55000,10.03000,0,0,0,0,0.000000,No,0000-00-00,13,308,21,170,404,131,,"No
+ ","     ",301
+88,Germany,Hamburg,Europe,"DE-CIX 
+Hamburg",https://www.de-cix.net/en/locations/germany/hamburg,Active,20070000,238055,53.55000,10.03000,52,11900000,8400000,3000000,0.000000,Yes,2018-07-18,7,112,10,71,124,64,https://www.de-cix.net/en/locations/germany/hamburg/connected-networks,"No
+ ","     ",301
+89,Germany,Munich,Europe,"European Commercial Internet Exchange 
+Munich",https://www.ecix.net/,Active,19940600,119896,48.13000,11.70000,42,20000000,0,0,0.000000,Yes,2015-10-31,5,105,8,64,113,60,https://www.ecix.net/connected-networks,Yes,MUC,301
+90,Germany,Munich,Europe,"Munich
+ Commercial Internet 
+Exchange",,Defunct,0,0,48.13000,11.70000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",301
+91,Germany,Münster,Europe,"Nederlands-Duitse Internet 
+Exchange",http://www.ndix.net,Planned,0,0,51.95000,7.48401,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",301
+92,Germany,Nuremberg,Europe,"Nürnberger Internet 
+Exchange",http://wwww.n-ix.net/,Active,20030000,8942,49.50000,11.08000,43,8000000,6000000,4000000,0.000000,No,2018-07-17,9,159,7,61,108,87,http://www.n-ix.net/teilnehmer/teilnehmerliste/,"No
+ ","     ",301
+93,Ghana,Accra,Africa,"Ghana Internet 
+Exchange",http://www.gixa.org.gh/,Active,20051018,2307,5.60000,-0.17000,19,5500000,0,1000000,0.000000,Yes,2018-07-17,1,233,1,8,214,19,http://www.gixa.org.gh/members/,Yes,ACC,73
+94,Greece,Athens,Europe,"Greek
+ Internet 
+Exchange",https://www.gr-ix.gr/,Active,20000000,0,37.90000,23.70000,31,52000000,0,10000000,0.000000,No,2018-07-17,1,95,1,87,171,55,https://www.gr-ix.gr/members/,"No
+ ","     ",301
+95,China,"Hong Kong",Asia-Pacific,"Hong Kong Academic Internet 
+Exchange",http://cn.apan.net?,Planned,0,0,22.33000,114.18000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",194
+96,China,"Hong Kong",Asia-Pacific,"Hong Kong Internet 
+Exchange",http://www.hkix.net,Active,19950400,648896,22.33000,114.18000,278,944956873,595000000,250000000,0.000000,Yes,2018-07-17,1,13,1,1,16,2,http://www.hkix.net/hkix/participant.htm,"No
+ ",HKG,194
+97,China,"Hong 
+Kong",Asia-Pacific,Level3,,Defunct,0,0,22.33000,114.18000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",194
+98,China,"Hong Kong",Asia-Pacific,"Pihana Hong Kong",,"Not an 
+exchange",0,0,22.33000,114.18000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",194
+99,Hungary,Budapest,Europe,"Budapest Internet 
+Exchange",http://www.bix.hu/,Active,19960000,0,47.43000,19.18000,59,177000000,102000000,28000000,0.000000,No,2018-07-17,1,38,1,51,88,23,http://www.bix.hu/en/members,"No
+ ","     ",301
+100,Iceland,Reykjavik,Europe,"Reykjavik Internet 
+Exchange",http://www.rix.is/,Active,19990000,0,64.12000,-21.90000,25,17380460,0,5200000,0.000000,No,2018-07-23,1,135,1,89,178,75,http://www.rix.is/connected.html,"No
+ ","     ",301
+101,India,Mumbai,Asia-Pacific,"Enron India 
+Exchange",,Defunct,0,0,19.00000,72.80000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",194
+102,India,"New Delhi",Asia-Pacific,"India Internet 
+Exchange",https://www.india-ix.com/,Planned,0,0,28.58000,77.20000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",194
+103,India,Mumbai,Asia-Pacific,"National Internet Exchange of 
+India",http://nixi.in/en/,Active,20030719,0,19.00000,72.80000,47,60000000,0,13000000,0.000000,No,2018-07-11,1,150,2,18,94,26,http://nixi.in/en/connected-parties,"No
+ ","     ",194
+104,India,"New Delhi",Asia-Pacific,"National Internet Exchange of 
+India",http://nixi.in/index.php?option=com_noclocation&amp;task=click&amp;id=52&amp;Itemid=28,Active,20030719,0,28.58000,77.20000,29,60000000,0,8000000,0.000000,No,2018-07-13,3,199,4,34,178,34,http://nixi.in/index.php?option=com_noclocation&amp;task=click&amp;id=52&amp;Itemid=28,"No
+ ","     ",194
+105,India,Chennai,Asia-Pacific,"National Internet Exchange of 
+India",http://nixi.in/en/noc-locations/55?view=noclocation,Active,20030719,0,13.07000,80.20000,22,55000000,0,8000000,0.000000,No,2018-07-04,2,163,3,21,110,28,http://nixi.in/en/connected-parties,"No
+ ","     ",194
+106,India,Kolkata,Asia-Pacific,"National Internet Exchange of 
+India",http://nixi.in/index.php?option=com_noclocation&amp;task=click&amp;id=53&amp;Itemid=28,Active,20030719,0,22.57000,88.40000,9,48000,0,6,0.000000,No,2018-07-13,5,294,5,56,299,48,http://nixi.in/index.php?option=com_noclocation&amp;task=click&amp;id=53&amp;Itemid=28,"No
+ ","     ",194
+107,Indonesia,Bali,Asia-Pacific,"Bali Internet 
+Exchange",,Planned,0,0,-8.31478,115.21912,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",194
+108,Indonesia,Bandung,Asia-Pacific,NPXP,,Planned,0,0,-6.90344,107.57312,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",194
+109,Indonesia,Jakarta,Asia-Pacific,IndonesiaEP,,Unknown,0,0,-6.17444,106.82944,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",194
+110,Indonesia,Jakarta,Asia-Pacific,"Indonesian Internet 
+Exchange",http://www.iix.net.id/,Active,19970800,31888,-6.17444,106.82944,252,3400000,0,0,0.000000,Yes,0000-00-00,3,166,1,6,44,29,,Yes,JKT,194
+111,Indonesia,Jakarta,Asia-Pacific,"Jakarta
+ Internet 
+Exchange",,Planned,0,0,-6.17444,106.82944,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",194
+112,Indonesia,Jakarta,Asia-Pacific,"NAPSINDO International Internet 
+Exchange",http://www.naiix.net/,Defunct,0,0,-6.17444,106.82944,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",194
+114,Indonesia,Surabaya,Asia-Pacific,"Indonesian Internet 
+Exchange",http://www.iix.net.id/,Active,20031000,0,-7.24917,112.75083,0,0,0,0,0.000000,No,0000-00-00,6,308,7,76,413,53,,"No
+ ","     ",194
+115,Indonesia,Surabaya,Asia-Pacific,NPXP,,Planned,0,0,-7.24917,112.75083,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",194
+116,Ireland,Dublin,Europe,"Internet Neutral Exchange Association 
+Limited",https://www.inex.ie/,Active,19960000,968199,53.33000,-6.25000,57,244000000,0,65000000,0.000000,Yes,2018-07-17,1,52,1,25,42,31,https://www.inex.ie/about-us/inex-members/,Yes,DUB,301
+117,Israel,"Tel
+ Aviv",Europe,"Israeli Internet 
+Exchange",http://en.isoc.org.il/iix/2x.html,Active,19960000,0,32.00000,34.90000,18,68000000,41000000,17000000,0.000000,No,2018-07-17,1,128,1,108,228,71,http://en.isoc.org.il/iix/2x_list.html,"No
+ ",TLV,301
+118,Italy,Milan,Europe,"Milan Internet 
+Exchange",http://www.mix-it.net/,Active,20001100,0,45.45000,9.17000,209,421803000,306376000,100400000,0.449120,No,2018-07-18,1,26,1,24,40,16,http://www.mix-it.net/index.php?option=com_content&amp;view=article&amp;id=85&amp;Itemid=84&amp;lang=en,"No
+ ","     ",301
+119,Italy,Rome,Europe,CASPUR,,"Not an 
+exchange",0,0,41.90000,12.45000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",301
+120,Italy,Rome,Europe,"NaMeX - Nautilus Mediterranean Exchange 
+Point",https://www.namex.it/,Active,19960000,0,41.90000,12.45000,76,44000000,27000000,10000000,0.000000,No,2018-07-18,3,92,3,50,86,53,https://www.namex.it/connected_networks/,"No
+ ","     ",301
+121,Italy,Torino,Europe,"Torino Piemonte Exchange 
+Point",https://www.top-ix.org/it/home/,Active,20020000,209307,45.22000,7.65000,100,90000000,58000000,15000000,0.000000,Yes,2018-07-18,2,68,2,33,54,38,https://www.top-ix.org/en/connected_networks/,Yes,TRN,301
+122,Japan,Kyoto,Asia-Pacific,"Kyoto
+ Municipal 
+Exchange",,Unknown,0,0,35.02000,135.73000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",194
+123,Japan,Nagoya,Asia-Pacific,"JPIX 
+Nagoya",https://www.jpix.ad.jp/en/,Active,20010400,0,35.12000,136.93000,10,513000000,0,0,0.000000,No,2017-02-23,2,20,7,51,288,4,,"No
+ ","     ",194
+124,Japan,Tokyo,Asia-Pacific,"JPIX 
+Nihonbashi",http://www.jpix.ad.jp/en/,Active,20040400,0,35.55000,139.78000,0,0,0,0,0.000000,No,0000-00-00,9,308,11,76,413,53,https://www.jpix.ad.jp/en/member.php,"No
+ ","     ",194
+125,Japan,Osaka,Asia-Pacific,"JPIX 
+Osaka",http://www.jpix.ad.jp/en/,Active,20020400,0,34.53000,135.50000,47,280000000,152000000,70000000,0.000000,No,2018-07-17,9,308,7,51,288,53,https://www.jpix.ad.jp/jp/member.php,"No
+ ","     ",194
+126,Japan,Osaka,Asia-Pacific,"JPNAP 
+Osaka",http://www.mfeed.co.jp/english/jpnap-osaka/index.html,Active,20020002,0,34.53000,135.50000,42,325180000,177000000,74000000,0.000000,No,2018-07-18,4,51,5,23,127,8,http://www.mfeed.co.jp/english/jpnap-osaka/customer.html,"No
+ ","     ",194
+127,Japan,Osaka,Asia-Pacific,NSPIXP-2,,Deprecated,19970300,0,34.53000,135.50000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",194
+128,Japan,Osaka,Asia-Pacific,NSPIXP-3,http://nspixp.wide.ad.jp/3/,Active,19970300,0,34.53000,135.50000,23,72000000,0,0,0.000000,No,0000-00-00,5,57,6,36,187,10,,"No
+ ","     ",194
+129,Japan,Tokyo,Asia-Pacific,"Japan Internet 
+Exchange",https://www.jpix.ad.jp/jp/index.php,Active,19970700,303545,35.55000,139.78000,174,736000000,469000000,200000000,0.000000,Yes,2018-07-17,2,20,1,4,33,4,https://www.jpix.ad.jp/en/member.php?qso=b&amp;qar=2,Yes,NRT,194
+130,Japan,Tokyo,Asia-Pacific,"JPNAP
+ Tokyo I - 
+Otemachi",http://www.jpnap.net/english/jpnap-tokyo/index.html,Active,20010000,0,35.55000,139.78000,130,1122568000,673000000,307000000,0.000000,No,2018-07-18,1,15,2,5,43,3,http://www.jpnap.net/english/jpnap-tokyo/customer.html,"No
+ ","     ",194
+132,Japan,Tokyo,Asia-Pacific,"Media Exchange 
+Co.",http://www.mex.ad.jp/,"Not an 
+exchange",0,0,35.55000,139.78000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",194
+133,Japan,Tokyo,Asia-Pacific,"Network Service Provider 
+IXP",,Defunct,19940400,0,35.55000,139.78000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",194
+134,Japan,Tokyo,Asia-Pacific,"Network Service Provider IXP (Distributed 
+IX in 
+Edo)",http://nspixp.wide.ad.jp/2/,Active,19961000,6904,35.55000,139.78000,46,23000000,0,0,0.000000,Yes,2014-09-20,7,101,3,9,54,19,,Yes,NRT,194
+135,Japan,Tokyo,Asia-Pacific,"Network
+ Service Provider 
+IXP-6",http://www.wide.ad.jp/,Active,19990800,0,35.55000,139.78000,51,0,0,0,0.000000,No,0000-00-00,8,266,4,17,92,44,http://member.wide.ad.jp/nspixp6/peering-status.html,"No
+ ","     ",194
+136,Japan,Tokyo,Asia-Pacific,"Pihana Tokyo",,"Not an 
+exchange",0,0,35.55000,139.78000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",194
+137,Japan,Tokyo,Asia-Pacific,"BBIX 
+Tokyo",http://www.bbix.net/en/service/ix/,Active,20030700,0,35.55000,139.78000,149,0,0,0,0.000000,No,0000-00-00,9,308,11,76,413,53,,"No
+ ","     ",194
+138,Japan,Osaka,Asia-Pacific,"BBIX 
+Osaka",http://www.bbix.net/en/service/ix/,Active,20030900,0,34.53000,135.50000,16,0,0,0,0.000000,No,0000-00-00,9,308,11,76,413,53,,"No
+ ","     ",194
+139,Japan,Nagoya,Asia-Pacific,"BBIX 
+Nagoya",http://www.bbix.net/en/service/ix/,Active,20050500,0,35.12000,136.93000,0,0,0,0,0.000000,No,0000-00-00,9,308,11,76,413,53,,"No
+ ","     ",194
+140,Japan,Sendai,Asia-Pacific,"BBIX 
+Sendai",http://www.bbix.net/en/service/ix/,Defunct,20040800,0,38.13000,140.93000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",194
+141,Japan,Fukuoka,Asia-Pacific,"BBIX 
+Fukuoka",http://www.bbix.net/en/service/ix/,Active,20041000,0,33.58000,130.38000,0,0,0,0,0.000000,No,0000-00-00,9,308,11,76,413,53,,"No
+ ","     ",194
+142,Japan,Tokyo,Asia-Pacific,"Equinix IBX 
+Tokyo",https://www.equinix.nl/locations/japan-colocation/tokyo-data-centers/,Active,20010529,0,35.55000,139.78000,94,0,0,0,0.000000,No,0000-00-00,9,308,11,76,413,53,,"No
+ ","     ",194
+143,Kenya,Nairobi,Africa,"Kenya Internet Exchange 
+Point",https://www.tespok.co.ke/?page_id=11648,Active,20010200,177732,-1.32000,36.82000,38,5600000,3500000,1000000,0.000000,Yes,2018-07-18,1,198,1,5,149,11,https://www.tespok.co.ke/?page_id=11646,Yes,NBO,73
+144,"South
+ 
+Korea",Seoul,Asia-Pacific,6NGIX,https://vsix.kr/eng/biz/contents/0000000101/getContents.do,Active,20010800,0,37.50000,126.93000,82,0,0,0,0.000000,No,0000-00-00,3,308,3,31,162,53,https://vsix.kr/eng/biz/contents/0000000101/getContents.do,"No
+ ","     ",194
+145,"South Korea",Seoul,Asia-Pacific,"LGDACOM Internet 
+Exchange",,Active,19961000,0,37.50000,126.93000,52,70000000,0,0,0.000000,No,0000-00-00,2,58,1,16,88,11,,"No
+ ","     ",194
+146,"South Korea",Seoul,Asia-Pacific,"Korea Internet Data 
+Center",http://www.kidc.net/eng/,Unknown,19991000,0,37.50000,126.93000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",194
+147,"South Korea",Seoul,Asia-Pacific,"Korea Internet Neutral Exchange 
+KINX",https://www.kinx.net/?lang=en,Active,19990600,146093,37.50000,126.93000,42,157000000,0,0,0.000000,Yes,2016-03-08,1,35,2,20,104,6,https://www.kinx.net/service/network/ix/localpeering/?lang=en,Yes,ICN,194
+148,"South
+ Korea",Seoul,Asia-Pacific,"Korea Internet Exchange 
+KIX",http://www.kix.ne.kr,Unknown,19961000,0,37.50000,126.93000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",194
+149,"South Korea",Seoul,Asia-Pacific,"Korea Telecom Internet 
+Exchange",http://www.kix.net,"Not an 
+exchange",19961000,0,37.50000,126.93000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",194
+150,"South Korea",Seoul,Asia-Pacific,"Pihana Seoul",,"Not an 
+exchange",0,0,37.50000,126.93000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",194
+151,Latvia,Riga,Europe,"Latvian Internet 
+Exchange",http://www.lix.lv,"Not an 
+exchange",20070600,0,56.97000,24.05000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,http://www.lix.lv/site/members,"No
+ ","     ",301
+152,Luxembourg,Luxembourg,Europe,"Luxembourg Internet 
+Exchange",http://www.lix.lu/,Defunct,19980000,0,49.62000,6.22000,0,0,0,0,0.000000,No,2010-01-15,,,,,,,http://www.restena.lu/restena/en/EN-LIXMembersNet.html,"No
+ ","     ",301
+153,Malaysia,"Kuala Lumpur",Asia-Pacific,"Asia Regional Internet 
+Exchange NAP",http://www.arix-nap.net/,"Not an 
+exchange",0,0,3.13000,101.70000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",194
+154,Malaysia,"Kuala Lumpur",Asia-Pacific,"Kuala Lumpur Internet 
+Exchange",,"Not an 
+exchange",0,0,3.13000,101.70000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",194
+155,Malta,Msida,Europe,"Malta Internet 
+Exchange",http://www.mix.net.mt/,Active,19990907,0,35.89000,14.48000,12,0,0,0,0.000000,No,0000-00-00,1,308,1,123,270,131,http://www.mix.net.mt/participants.html,"No
+ ","     ",301
+156,Mauritius,Ebene,Africa,"Mauritius Internet 
+Exchange",http://www.mixp.org/index.html,Active,20051200,298,-20.24435,57.49175,12,55000,0,8000,0.000000,Yes,2018-07-16,1,284,1,18,299,24,http://www.mixp.org/index.html,Yes,MRU,73
+157,Mongolia,"Ulan
+ Bator",Asia-Pacific,"Mongolia Internet 
+Exchange",http://www.infocon.mn/info/node/95,Active,20010500,0,47.93000,106.98000,6,0,0,0,0.000000,No,0000-00-00,1,308,1,62,351,53,,"No
+ ","     ",194
+158,Mozambique,Maputo,Africa,"Mozambique Internet 
+Exchange",http://www.mozix.org.mz,Active,20020700,1428,-25.92000,32.57000,15,14700,0,0,0.000000,Yes,2016-11-22,1,246,1,8,214,20,http://www.mozix.org.mz/membros.htm,Yes,MPM,73
+159,Nepal,Kathmandu,Asia-Pacific,"Nepal
+ Internet 
+Exchange",http://www.npix.net.np/,Active,20020800,896,27.70000,85.37000,36,3400000,284000,50000,0.000000,Yes,2018-07-18,1,223,1,27,144,40,http://www.npix.net.np/members,Yes,KTM,194
+160,Netherlands,Amsterdam,Europe,"Amsterdam
+ Internet 
+Exchange",https://ams-ix.net/,Active,19971229,1141034,52.30000,4.77000,807,4597000000,3373000000,1942000000,2.164250,Yes,2018-07-18,1,1,1,1,2,1,https://ams-ix.net/connected_parties,Yes,AMS,301
+161,Netherlands,Amsterdam,Europe,"XchangePoint
+ Amsterdam 
+IPP",,Unknown,0,0,52.30000,4.77000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",301
+162,Netherlands,Enschede,Europe,"Nederlands-Duitse Internet 
+Exchange",http://www.ndix.net/,Active,20010400,0,52.22000,6.90000,32,50000,0,0,0.000000,No,0000-00-00,4,276,6,98,198,124,http://www.ndix.net/uploads/attachment_file/59/NDIX_IPv4__IPv6_Peering_List.pdf,"No
+ ","     ",301
+163,Netherlands,Groningen,Europe,Groningen-IX,http://www.gn-ix.net/,Active,20010000,0,53.13000,6.58000,51,0,0,0,0.000000,No,0000-00-00,5,308,4,53,92,131,,"No
+ ","     ",301
+164,"New Zealand",Auckland,Asia-Pacific,"Auckland Peering 
+Exchange",http://ape.nzix.net/,Active,19990810,21238,-37.02000,174.80000,84,21000000,13600000,5000000,0.000000,Yes,2018-07-18,1,116,1,7,48,22,http://ape.nzix.net/ape-peers.html,Yes,AKL,194
+165,"New
+ Zealand",Christchurch,Asia-Pacific,"Christchurch Internet 
+Exchange",http://chix.nzix.net/,Active,20070000,2598,-43.48000,172.55000,12,0,0,0,0.000000,No,0000-00-00,3,308,3,49,270,53,http://pnix.nzix.net/chix-peers.html,"No
+ ","     ",194
+166,"New Zealand",Dunedin,Asia-Pacific,"Dunedin Peering 
+Exchange",http://dpe.nzix.net/,Defunct,20050000,0,-45.92000,170.17999,0,0,0,0,0.000000,No,0000-00-00,,,,,,,http://dpe.nzix.net/peers.html,"No
+ ","     ",194
+167,"New Zealand",Invercargill,Asia-Pacific,"Southland Internet 
+Exchange",http://six.nzix.net/,Planned,0,0,-46.40224,168.35500,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",194
+168,"New Zealand","Palmerston North",Asia-Pacific,"Palmerston North 
+Internet 
+Exchange",http://pnix.nzix.net/,Active,20041130,10,-40.32000,175.60001,4,0,0,0,0.000000,No,0000-00-00,3,308,4,67,381,53,http://pnix.nzix.net/peers.html,"No
+ ","     ",194
+169,"New Zealand",Waikato,Asia-Pacific,"New Zealand Internet Exchange 
+(Defunct)",http://www.waikato.ac.nz/NZIX/,Defunct,0,0,-40.62142,172.67887,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",194
+170,"New Zealand","Upper Hutt/Lower Hutt/Porirua",Asia-Pacific,"Three 
+Cities Internet 
+Exchange",http://3cix.nzix.net/,Defunct,20050600,0,-41.11579,174.95364,0,0,0,0,0.000000,No,0000-00-00,,,,,,,http://3cix.nzix.net/peers.html,"No
+ ","     ",194
+171,"New Zealand",Wellington,Asia-Pacific,"Wellington Internet 
+Exchange",http://wix.nzix.net/,Active,19961200,6325,-41.33000,174.80000,85,540000,0,0,0.000000,Yes,0000-00-00,2,230,2,8,52,41,http://ape.nzix.net/wix-peers.html,Yes,WLG,194
+172,Nicaragua,Managua,"Latin
+ America","Nicaraguan Internet 
+Exchange",http://www.ain.org.ni/index.php/nicix,Active,20040400,0,12.15000,-86.17000,10,46000,0,0,0.000000,No,2015-11-03,1,254,1,41,299,42,http://www.ain.org.ni/index.php/nicix#Miembros,"No
+ ","     ",116
+173,Nigeria,Ibadan,Africa,"Ibadan Internet 
+Exchange",http://www.ib-ix.net,Defunct,20020300,0,7.43000,3.90000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",73
+174,Norway,Oslo,Europe,"Norwegian Internet Exchange Oslo 
+1",http://www.uio.no/tjenester/it/nett/fastnett/nix/,Active,19930300,0,59.95000,10.70000,91,47043545,0,19000000,0.000000,No,2018-07-23,1,65,1,43,78,36,http://www.uio.no/tjenester/it/nett/fastnett/nix/nix-ops.html,"No
+ ","     ",301
+175,Pakistan,Karachi,Asia-Pacific,"Pakistan Network Access 
+Point",,Defunct,0,0,24.90000,67.13000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",194
+176,Panama,"Panama City","Latin America","Intered 
+Panamá",http://intered.org.pa/intered/,Active,19970902,0,8.97000,-79.53000,211,34700,0,0,0.000000,No,0000-00-00,1,283,1,41,299,52,,"No
+ ","     ",116
+177,Panama,"Panama City","Latin America","NAP Panamericano 
+S.A.",http://www.sunglobefiber.com/panamnap.htm,Defunct,0,0,8.97000,-79.53000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",116
+178,Panama,,"Latin America","Secretaria Nacional de Ciencia, Tecnologia e
+ 
+Innovacion",http://www.senacyt.gob.pa/,Unknown,0,0,,,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",116
+179,Paraguay,Asuncion,"Latin America","CAPADI 
+NAP-PY",http://www.capadi.org.py,Defunct,20000920,0,-25.24000,-57.52000,0,0,0,0,0.000000,No,0000-00-00,1,281,1,28,236,51,http://www.capadi.org.py/articulo.php?id=17,"No
+ ","     ",116
+180,Peru,Lima,"Latin America","NAP 
+Lima",,Defunct,0,0,-12.00000,-77.12000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",116
+181,Peru,Lima,"Latin America","NAP 
+Perú",http://www.nap.pe/,Active,20010514,0,-12.00000,-77.12000,15,26000000,16000000,4000000,0.000000,No,2018-07-17,1,308,1,30,244,55,http://www.nap.pe/nuestros-asociados/,"No
+ ","     ",116
+182,Philippines,Manila,Asia-Pacific,"Common Routing 
+Exchange",http://www.ph.net/CORE/,Defunct,19930000,0,14.58000,120.95000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,http://www.ph.net/CORE/CORE-mem.html,"No
+ ","     ",194
+183,Philippines,Manila,Asia-Pacific,"Manila Internet 
+Exchange",http://www.easterntelecom.com.ph/Products/index.asp?ID=39&amp;MCID=3,"Not
+ an 
+exchange",0,0,14.58000,120.95000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",194
+184,Philippines,Manila,Asia-Pacific,"Philippines Internet 
+Exchange",http://www.phix.net.ph,"Not an 
+exchange",19970100,0,14.58000,120.95000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,http://www.phix.net.ph/phix/network.html#isp,"No
+ ","     ",194
+185,Poland,Warsaw,Europe,"Warsaw Internet 
+Exchange",http://www.wix.aster.pl/vxb/w/,Defunct,19960000,0,52.23000,21.00000,0,0,0,0,0.000000,No,2009-12-15,6,155,6,62,109,85,http://www.wix.aster.pl/vxb/w/index.asp?sid=e1130c4dbcc8bf8b213df928bdc8926c&amp;klienci_x=klienci,"No
+ ","     ",301
+186,Portugal,Lisbon,Europe,"Gigabit Portuguese Internet Exchange 
+Point",https://gigapix.pt/en/index/,Active,19951000,0,38.73000,-9.15000,30,67000000,45000000,15000000,0.000000,No,2018-07-17,1,89,1,95,191,52,https://gigapix.pt/en/members/,"No
+ ","     ",301
+187,Portugal,Porto,Europe,"Gigabit Portuguese Internet Exchange 
+Point",https://gigapix.pt/en/index/,Planned,0,0,41.16210,-8.62200,0,0,0,0,0.000000,No,0000-00-00,,,,,,,https://gigapix.pt/en/members/,"No
+ ","     ",301
+188,Romania,Bucharest,Europe,"Bucharest Internet 
+Exchange",http://www.buhix.ro/,Defunct,19990000,0,44.50000,26.13000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,http://www.buhix.ro/toc.htm,"No
+ ","     ",301
+189,Romania,Bucharest,Europe,"Romanian National Internet 
+Exchange",http://www.ronix.ro/,Active,20010907,0,44.50000,26.13000,33,30000000,21000000,7000000,0.000000,No,2018-07-18,1,87,2,74,139,51,http://www.ronix.ro/membri.php,"No
+ ","     ",301
+190,Russia,Ekaterinburg,Europe,"MSK-IX 
+Ekaterinburg",https://www.msk-ix.ru/en/,Active,20121201,0,56.80000,60.63000,46,43200000,0,0,0.000000,No,2016-06-06,2,5,8,64,113,5,https://www.msk-ix.ru/en/members/,"No
+ ","     ",301
+191,Russia,Moscow,Europe,"MSK-IX 
+Moscow",https://www.msk-ix.ru/en/,Active,19951125,0,55.75000,37.60000,436,0,0,0,0.000000,No,2016-06-06,1,4,1,5,7,4,https://www.msk-ix.ru/en/members/,"No
+ ","     ",301
+192,Russia,Novosibirsk,Europe,"MSK-IX 
+Novosibirsk",http://www.msk-ix.ru/eng/,Active,20040000,0,55.03000,82.90000,63,26500000,0,0,0.000000,No,2016-06-06,3,6,7,57,101,6,"
+ http://www.msk-ix.ru/en/members/","No ","     ",301
+193,Russia,Samara,Europe,"MSK-IX 
+Samara",http://www.msk-ix.ru/eng/,Active,20090000,0,53.25000,50.45000,17,12400000,0,0,0.000000,No,2014-08-20,14,153,13,102,208,84,http://www.msk-ix.ru/en/members/,"No
+ ","     ",301
+194,Russia,"St. Petersburg",Europe,"North West Internet 
+Exchange",http://www.rusnet.ru/mpix,Defunct,19980000,0,59.93000,30.30000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,http://www.rusnet.ru/mpix/members.htm,"No
+ ","     ",301
+195,Russia,"St. Petersburg",Europe,"MSK-IX St. 
+Petersburg",http://www.msk-ix.ru/eng/,Active,20090000,0,59.93000,30.30000,92,83400000,0,0,0.000000,No,2016-06-06,7,66,4,34,57,37,"
+ http://www.msk-ix.ru/en/members/","No ","     ",301
+196,"Saudi Arabia",Riyadh,Europe,"Saudi Telecommunications Company 
+Internet NOC",,"Not an 
+exchange",0,0,24.72000,46.72000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",301
+197,"Saudi Arabia",Riyadh,Europe,"The Internet Services 
+Unit",http://www.isu.net.sa/,"Not an 
+exchange",19980000,0,24.72000,46.72000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",301
+198,"United Kingdom",Edinburgh,Europe,"Scottish Internet 
+Exchange",http://www.scotix.com/,Defunct,19990900,0,55.92000,-3.17000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",301
+199,"United 
+Kingdom",Edinburgh,Europe,WorldIX,http://www.worldix.com,Defunct,20000200,0,55.92000,-3.17000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",301
+200,Singapore,Singapore,Asia-Pacific,"Pihana Singapore",,"Not an 
+exchange",0,0,1.37000,103.98000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",194
+201,Singapore,Singapore,Asia-Pacific,"Singapore One Network for 
+Everyone",,"Not an 
+exchange",0,0,1.37000,103.98000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",194
+202,Singapore,Singapore,Asia-Pacific,"Singapore Open 
+Exchange",http://www.sox.net.sg/,Active,20010800,107022,1.37000,103.98000,27,0,0,0,0.000000,Yes,0000-00-00,3,308,3,31,162,53,http://www.sox.net.sg/members.html,"No
+ ",SIN,194
+203,Singapore,Singapore,Asia-Pacific,"Singapore Telecom Internet 
+Exchange",http://www.ix.singtel.com/,"Not an 
+exchange",0,0,1.37000,103.98000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",194
+204,Slovakia,Bratislava,Europe,"Slovak Internet eXchange 
+Bratislava",http://www.six.sk/,Active,19961000,0,48.20000,17.20000,59,102185068,0,22000000,0.000000,No,2018-07-23,1,71,1,47,82,41,http://www.six.sk/index.php?lang=en&amp;page=pripojene_siete,"No
+ ","     ",301
+205,Slovenia,Ljubljana,Europe,"Slovenian Internet 
+Exchange",http://arnes.splet.arnes.si/infrastruktura/six-sticisce-omrezij/,Active,19940200,0,46.22000,14.48000,23,39000000,21000000,10000000,0.000000,No,2018-07-18,1,73,1,83,162,42,http://www.arnes.si/infrastruktura/six-sticisce-omrezij/clanstvo-v-six/,"No
+ ","     ",301
+206,"South Africa","Cape Town",Africa,"Cape Town Internet 
+Exchange",https://ispa.org.za/,Active,20090700,10682,-33.98000,18.60000,23,3800000,0,0,0.000000,Yes,2017-05-20,4,156,2,2,21,5,https://ispa.org.za/membership/list-of-members/,Yes,CPT,73
+207,"South
+ Africa","Cape 
+Town",Africa,Hub,http://hub.org.za,Defunct,0,0,-33.98000,18.60000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",73
+208,"South Africa",Grahamstown,Africa,"Grahamstown Internet 
+Exchange",http://ginx.org.za/,Defunct,20050313,30,-33.28000,26.50000,0,0,0,0,0.000000,No,2017-01-30,,,,,,,http://ginx.org.za/participants,"No
+ ","     ",73
+209,"South Africa",Johannesburg,Africa,"Johannesburg Internet 
+Exchange",https://ispa.org.za/,Active,19960600,212729,-26.13000,28.23000,65,7800000,0,0,0.000000,Yes,2017-05-20,3,114,3,3,74,4,https://ispa.org.za/,"No
+ ","     ",73
+210,"South Africa",Johannesburg,Africa,"South African Internet 
+Exchange",,"Not an 
+exchange",0,0,-26.13000,28.23000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",73
+211,Spain,Barcelona,Europe,"Catalunya Neutral Internet Exchange 
+Point",http://www.catnix.net/,Active,19990407,0,41.28000,2.07000,33,39000000,26000000,10000000,0.000000,No,2018-07-18,2,140,2,85,168,78,http://www.catnix.net/en/members/,"No
+ ","     ",301
+212,Spain,Bilbao,Europe,"Punto Neutro Vasco de 
+Internet",http://www.euskonix.net/,Defunct,20020117,0,43.30000,-2.93000,0,0,0,0,0.000000,No,2017-02-22,3,307,3,149,333,130,http://www.euskonix.net/socios.html,"No
+ ","     ",301
+213,Spain,Madrid,Europe,"Punto Neutro Español de 
+Internet",http://www.espanix.net/en/index.html,Active,19970000,0,40.43000,-3.70000,35,337000000,228000000,80000000,0.000000,No,2018-07-18,1,36,1,58,105,22,http://www.espanix.net/en/partners.html,"No
+ ","     ",301
+214,Spain,Madrid,Europe,"Madrid Internet 
+Exchange",http://www.mad-ix.net/,Unknown,0,0,40.43000,-3.70000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",301
+215,Spain,Madrid,Europe,"Terremark NAP de las Americas - 
+Madrid",http://www.verizonenterprise.com/products/it-solutions/colocation-services/data-centers/europe-middle-east-africa/nap/nap-of-madrid.xml,Active,20041000,0,40.43000,-3.70000,2,0,0,0,0.000000,No,0000-00-00,4,308,4,170,404,131,,"No
+ ","     ",301
+216,Spain,Madrid,Europe,"Punto Neutro Español de 
+Internet",http://www.espanix.net,Deprecated,0,0,40.43000,-3.70000,0,0,0,0,0.000000,No,2014-09-23,,,,,,,http://www.espanix.net/esp/peering.htm,"No
+ ","     ",301
+217,Spain,"Santiago de Compostela",Europe,"Punto Neutro de Intercambio 
+de Tráfico de Internet en 
+Galicia",http://www.galnix.net,Defunct,20020719,0,42.90000,-8.43000,0,0,0,0,0.000000,No,2007-12-27,,,,,,,http://www.galnix.net,"No
+ ","     ",301
+218,"Sri Lanka",Colombo,Asia-Pacific,"Singapore Telecom Internet 
+Exchange",,"Not an 
+exchange",0,0,6.90000,79.87000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",194
+219,"Sri Lanka",Colombo,Asia-Pacific,"Sri Lanka Internet 
+Exchange",http://www.lankacom.net/our-solutions/web-hosting,Active,20010701,319,6.90000,79.87000,3,0,0,0,0.000000,Yes,0000-00-00,1,308,1,40,205,53,,Yes,CMB,194
+220,Swaziland,Mbabane,Africa,"Swaziland
+ Internet 
+Exchange",,Deprecated,20040600,0,-26.31667,31.13333,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",73
+222,Sweden,Gothenburg,Europe,"Netnod 
+Gothenburg",https://www.netnod.se/,Active,19980000,0,57.67000,12.30000,13,5600000,3300000,1200000,0.000000,No,2018-07-18,4,125,7,131,288,70,https://www.netnod.se/ix/networks,"No
+ ","     ",301
+223,Sweden,Linköping,Europe,"Linkoping municipal 
+exchange",http://www.tekniskaverken.se/tekniskaverken/foretag/bredband/index.html,Planned,20021000,0,58.41686,15.60234,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",301
+224,Sweden,Luleå,Europe,PolarIX,http://www.polarix.se/intro/index.asp,Unknown,20020900,0,65.58000,22.15000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",301
+225,Sweden,Luleå,Europe,"Netnod 
+Luleå",https://www.netnod.se/,Active,20040900,0,65.58000,22.15000,6,520,248,200,0.000000,No,2018-07-18,6,244,9,155,351,112,https://www.netnod.se/ix/networks,"No
+ ","     ",301
+226,Sweden,Malmö,Europe,"Netnod 
+Malmö",http://www.netnod.se,Defunct,20000000,0,55.57000,13.07000,0,0,0,0,0.000000,No,2014-02-26,,,,,,,http://www.netnod.se/connected.shtml,"No
+ ","     ",301
+227,Sweden,Stockholm,Europe,"Netnod 
+Stockholm",http://www.netnod.se,Active,19970000,0,59.33000,18.05000,175,1100711000,848000000,350000000,0.000000,Yes,2018-07-18,1,17,1,14,22,11,http://www.netnod.se/connected.shtml,"No
+ ",ARN,301
+228,Sweden,Stockholm,Europe,SOLIX,http://www.solix.se/,Active,20011200,0,59.33000,18.05000,74,11300000,7800000,3000000,0.000000,No,2018-07-18,3,119,3,45,80,69,https://apps.db.ripe.net/db-web-ui/,"No
+ ","     ",301
+229,Sweden,Sundsvall,Europe,"Netnod 
+Sundsvall",http://www.netnod.se,Active,20000000,0,62.38000,17.30000,13,2200000,1100000,500000,0.000000,No,2018-07-18,5,144,6,118,255,79,http://www.netnod.se/connected.shtml,"No
+ ","     ",301
+230,Sweden,Umeå,Europe,NorrNod,http://www.norrnod.se/,Active,19960000,0,63.80000,20.28000,7,462000,160000,20000,0.000000,No,2018-07-17,7,262,8,149,333,119,http://www.norrnod.se/knutpunkt/anslutna.html,"No
+ ","     ",301
+231,Switzerland,Geneva,Europe,"CERN Internet Exchange 
+Point",http://cixp.web.cern.ch/,Active,19950000,0,46.25000,6.13000,44,2200000,898000,200000,0.000000,No,2018-07-18,3,185,3,60,107,94,http://cixp.web.cern.ch/technical/peering,"No
+ ","     ",301
+232,Switzerland,Zurich,Europe,MAE-Zurich,,Defunct,0,0,47.48000,8.53000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",301
+233,Switzerland,Zurich,Europe,"Swiss Internet 
+Exchange",,Defunct,0,0,47.48000,8.53000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",301
+234,Switzerland,Zurich,Europe,SwissIX,https://www.swissix.ch/,Active,20010309,98444,47.48000,8.53000,225,126000000,79000000,40000000,0.000000,Yes,2018-07-18,1,53,1,13,20,32,https://www.swissix.ch/participation/participants,Yes,ZRH,301
+235,Switzerland,Zurich,Europe,"Telehouse
+ Internet 
+Exchange",http://www.tix.ch/,Unknown,19990000,0,47.48000,8.53000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",301
+236,Switzerland,Zurich,Europe,"Equinix 
+Zurich",https://www.equinix.ch/,Active,19990000,0,47.48000,8.53000,45,4600000,0,0,0.000000,No,2008-01-13,2,158,2,41,74,86,,"No
+ ","     ",301
+237,Taiwan,Taipei,Asia-Pacific,"Taipei Internet Exchange 
+(TPIX)",http://www.tpix.net.tw/,Active,20020702,0,25.03000,121.52000,42,95000000,60,25000000,0.000000,No,2018-07-17,2,93,2,38,191,17,http://www.tpix.net.tw/mem_list.html,"No
+ ","     ",194
+238,Taiwan,Taipei,Asia-Pacific,"Taiwan Internet 
+Exchange",http://www.twix.net.tw/index_e.html,Active,19971200,35830,25.03000,121.52000,26,138000000,84000000,40000000,0.000000,No,2018-07-18,1,74,1,22,118,13,http://www.twix.net/member_e.html,"No
+ ","     ",194
+239,Taiwan,Taipei,Asia-Pacific,"Taiwan Network Access 
+Point",http://www.nap.net.tw/,Active,20010000,0,25.03000,121.52000,16,1000000,0,0,0.000000,No,0000-00-00,3,203,3,47,228,35,,"No
+ ","     ",194
+240,Taiwan,Taipei,Asia-Pacific,TaiwanEP,,Unknown,0,0,25.03000,121.52000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",194
+241,Taiwan,Taipei,Asia-Pacific,,,Unknown,0,0,25.03000,121.52000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",194
+242,Tanzania,"Dar es Salaam",Africa,"Tanzania Internet 
+Exchange",https://www.tix.or.tz/,Active,20030700,3178,-6.87000,39.20000,42,8800000,5300000,980000,0.000000,Yes,2018-07-18,1,166,1,5,149,6,https://www.tix.or.tz/peers.html,Yes,DAR,73
+243,Australia,Hobart,Asia-Pacific,"Tasmanian
+ Internet 
+Exchange",http://www.tia.asn.au/,Defunct,0,0,-42.83000,147.48000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",194
+244,Thailand,Bangkok,Asia-Pacific,"CAT National Internet 
+Exchange",http://www.cat.net.th/cat-thix/index.php,Active,19970900,0,13.92000,100.60000,20,1700000,0,0,0.000000,No,0000-00-00,2,188,1,40,205,33,,"No
+ ","     ",194
+245,Thailand,Bangkok,Asia-Pacific,NECTEC-IIR,,"Not an 
+exchange",19970000,0,13.92000,100.60000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",194
+246,Thailand,Bangkok,Asia-Pacific,"ThaiSarn Public Internet 
+Exchange",http://ntl.nectec.or.th/pie/,Unknown,0,0,13.92000,100.60000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",194
+247,Turkey,Istanbul,Europe,"Turkish Internet 
+Exchange",http://www.tix.net,Defunct,19970000,0,40.97000,28.82000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",301
+248,Uganda,Kampala,Africa,"Uganda Internet 
+Exchange",https://www.uixp.co.ug/,Active,20030700,5385,0.32000,32.62000,26,6400000,0,500000,0.000000,Yes,2018-07-17,1,201,1,21,320,13,https://www.uixp.co.ug/networks,Yes,KLA,73
+249,Ukraine,Kiev,Europe,"Ukrainian
+ Internet 
+Exchange",http://www.ix.net.ua/en,Active,20000700,93084,50.40000,30.45000,180,378000000,169,70000000,0.000000,No,2018-07-18,3,28,1,12,19,17,http://www.ix.net.ua/members,"No
+ ","     ",301
+250,Ukraine,Kiev,Europe,"Ukrtelecom Internet 
+Exchange",http://en.ukrtelecom.ua/services/operators_providers/traffic,"Not
+ an 
+exchange",0,0,50.40000,30.45000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",301
+251,"United Arab Emirates","Abu Dhabi",Europe,"Emirates Internet 
+Exchange",http://www.emix.ae,"Not an 
+exchange",0,0,24.43000,54.65000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",301
+252,"United Arab Emirates","Abu Dhabi",Europe,"Gulf Internet 
+Exchange",,Planned,0,0,24.43000,54.65000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",301
+253,"United States",Albuquerque,"North 
+America",IXNM,http://www.ixnm.net,Unknown,20020200,0,35.08000,-106.65000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",215
+254,"United States","Anchorage ","North America","Anchorage Metropolitan
+ Access 
+Point",,Unknown,0,0,61.21575,-149.86894,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",215
+255,"United States",Ashburn,"North America","Equinix IBX 
+Ashburn",https://www.equinix.com/,Active,20021031,891646,39.02000,-77.46000,208,610000000,0,0,0.000000,Yes,0000-00-00,1,10,3,3,17,1,,Yes,IAD,215
+256,"United
+ States",Atlanta,"North America","Atlanta Internet 
+Exchange",http://www.atlantaix.com,Defunct,20030800,112219,33.86000,-84.40000,0,0,0,0,0.000000,No,2017-10-22,3,18,6,7,37,3,https://www.atlantaix.com/,"No
+ ","     ",215
+257,"United States",Atlanta,"North America","Atlanta 
+NAP",http://www.atlanta-nap.net/,Unknown,0,0,33.86000,-84.40000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",215
+258,"United States",Atlanta,"North 
+America",MAE-Central,http://www.mae.net/fac/mae-central.htm,Defunct,0,0,33.86000,-84.40000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,http://www.mae.net/fac/mae-central-members.htm,"No
+ ","     ",215
+259,"United States",Atlanta,"North America","Equinix 
+Atlanta",https://www.equinix.com/locations/united-states-colocation/atlanta-data-centers/,Active,20041203,0,33.86000,-84.40000,23,0,0,0,0.000000,No,0000-00-00,31,308,61,72,413,39,,"No
+ ","     ",215
+260,"United States",Austin,"North 
+America",AUSIX,,Defunct,0,0,30.27000,-97.74000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",215
+261,"United States",Austin,"North America","Austin Metro Access 
+Point",http://www.fc.net/map/austin/,Defunct,0,0,30.27000,-97.74000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",215
+262,"United States",Baltimore,"North 
+America",Baltimore-NAP,http://www.baltimore-nap.net/,Unknown,0,0,39.30000,-76.62000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",215
+263,"United States",Bend,"North America","Central Oregon 
+Exchange",,Unknown,0,0,44.05640,-121.30810,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",215
+264,"United States",Berkeley,"North America","Calren2 
+North",,Unknown,0,0,37.87000,-122.27000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",215
+265,"United States",Boston,"North America","Boston Metropolitan Exchange
+ 
+Point",http://www.bmxp.net/,Defunct,0,0,42.37000,-71.03000,0,0,0,0,0.000000,No,2009-08-26,,,,,,,http://www.bmxp.net/members.html,"No
+ ","     ",215
+266,"United States",Boston,"North 
+America",Equinix-Boston,https://www.equinix.com/locations/united-states-colocation/boston-data-center/,Active,20000720,0,42.37000,-71.03000,0,0,0,0,0.000000,No,0000-00-00,31,308,61,72,413,39,,"No
+ ","     ",215
+267,"United States",Chicago,"North America","Ameritech Advanced Data 
+Services Network Access 
+Point",http://aads.net/index.html,Deprecated,0,0,41.85000,-87.65000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",215
+268,"United States",Chicago,"North America","Equinix Chicago 
+IBX",https://www.equinix.com/,Active,20020304,700423,41.85000,-87.65000,129,0,0,0,0.000000,Yes,0000-00-00,31,308,19,22,130,39,,Yes,ORD,215
+269,"United
+ States",Chicago,"North 
+America",MAE-Chicago,,Defunct,0,0,41.85000,-87.65000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",215
+270,"United States",Chicago,"North America","PacBell ATM 
+Exchange",,Defunct,0,0,41.85000,-87.65000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",215
+271,"United States",Chicago,"North America","STAR 
+TAP",http://www.startap.net/ENGINEERING/IPPLAN.html,Unknown,19980000,0,41.85000,-87.65000,0,0,0,0,0.000000,No,0000-00-00,31,308,22,25,144,39,http://www.startap.net/startap/NETWORKS/,"No
+ ","     ",215
+272,"United States",Chicago,"North 
+America",StarLight,http://www.startap.net/starlight/ENGINEERING/engIPadds.html,Active,20010300,0,41.85000,-87.65000,15,0,0,0,0.000000,No,0000-00-00,31,308,20,23,137,39,http://www.startap.net/starlight/NETWORKS/,"No
+ ","     ",215
+273,"United States",Colchester,"North 
+America",VermontIX,http://www.hill.com/trc/vix/index.html,Defunct,0,0,44.55000,-73.18000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",215
+274,"United States",Columbus,"North 
+America",CMH-IX,http://www.cmh-ix.net/,Defunct,0,0,40.00000,-83.02000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",215
+275,"United States",Columbus,"North America","Columbus Internet 
+Exchange",http://www.cmh-ix.net/,Unknown,0,0,40.00000,-83.02000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",215
+276,"United States",Columbus,"North 
+America",FiberNAP,http://www.fibernap.net/,Unknown,0,0,40.00000,-83.02000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",215
+277,"United States",Dallas,"North America","Dallas/Fort Worth 
+Metropolitan Access 
+Point",http://www.fc.net/map/dfw/,Unknown,0,0,32.77000,-96.77000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",215
+278,"United States",Dallas,"North America","Equinix IBX 
+Dallas",https://ix.equinix.com/,Active,20010615,177559,32.77000,-96.77000,143,0,0,0,0.000000,Yes,0000-00-00,31,308,61,72,413,39,,Yes,DFW,215
+279,"United
+ States",Dallas,"North America","Excel Telecom 
+NAP",,Unknown,0,0,32.77000,-96.77000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",215
+280,"United States",Dallas,"North America","MAE 
+Central",,Defunct,0,0,32.77000,-96.77000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",215
+281,"United States",Dallas,"North 
+America",MAE-Dallas,,Defunct,0,0,32.77000,-96.77000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",215
+282,"United States",Dallas,"North America","Equinix-Dallas(former 
+PAIX)",http://www.switchanddata.com/Dallas%5Fcolocation/,Deprecated,20020224,0,32.77000,-96.77000,0,0,0,0,0.000000,No,0000-00-00,31,308,61,72,413,39,,"No
+ ","     ",215
+283,"United States",Denver,"North America","Denver Internet 
+Exchange",,Defunct,0,0,39.75000,-105.00000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",215
+284,"United States",Denver,"North America","Mountain Area 
+Exchange",http://themax.net/,Defunct,0,0,39.75000,-105.00000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",215
+285,"United States",Denver,"North 
+America",Equinix-Denver,,Planned,0,0,39.75000,-105.00000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",215
+286,"United States",Eugene,"North America","Oregon Internet 
+Exchange",http://darkwing.uoregon.edu/~oregonix/,Unknown,0,0,44.05000,-123.08000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",215
+287,"United States",Honolulu,"North America","Hawaii Internet 
+Exchange",http://www.hawaii.edu/hix/,Active,19950700,1695,21.30000,-157.83000,8,0,0,0,0.000000,No,0000-00-00,31,308,46,55,320,39,http://www.hawaii.edu/hix/Hawaii_Internet_Exchange/Networks.html,"No
+ ","     ",215
+288,"United States",Houston,"North America","Houston Network Access 
+Point",http://www.houston-nap.com/index.html,Defunct,20100000,0,29.75000,-95.35000,0,0,0,0,0.000000,No,0000-00-00,31,308,61,72,413,39,,"No
+ ","     ",215
+289,"United States",Houston,"North America","Houston 
+MAGIE",,Unknown,0,0,29.75000,-95.35000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",215
+290,"United States",Houston,"North America","Houston Metropolitan Access
+ 
+Point",http://www.fc.net/map/houston/,Unknown,0,0,29.75000,-95.35000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",215
+291,"United States",Houston,"North 
+America",MAE-Houston,,Defunct,0,0,29.75000,-95.35000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",215
+292,"United States",Houston,"North America","Rice 
+EduPOP",,Deprecated,20010510,0,29.75000,-95.35000,0,0,0,0,0.000000,No,0000-00-00,31,308,61,72,413,39,,"No
+ ","     ",215
+293,"United States",Indianapolis,"North America","Indianapolis Data 
+Exchange",http://www.indyx.net/info,Unknown,0,0,39.77511,-86.10947,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",215
+294,"United States","Los Angeles","North 
+America",6IIX,http://www.6iix.net/,Unknown,0,0,33.97000,-118.25000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",215
+295,"United States","Los Angeles","North America","Calren2 
+South",,Unknown,0,0,33.97000,-118.25000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",215
+296,"United States","Los Angeles","North America","Equinix Los Angeles 
+IBX",,Unknown,0,0,33.97000,-118.25000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",215
+297,"United States","Los Angeles","North America","Los Angeles 
+International Internet 
+Exchange",http://www.laiix.net/,Active,19960000,117076,33.97000,-118.25000,32,9200000,0,4600000,0.000000,Yes,2018-07-08,21,146,16,19,118,24,http://www.laiix.net/members/,"No
+ ","     ",215
+298,"United States","Los Angeles","North 
+America",MAE-LA,,Defunct,0,0,33.97000,-118.25000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",215
+299,"United States","Los Angeles","North America","Pac Bell Los Angeles 
+Network Access 
+Point",,Defunct,0,0,33.97000,-118.25000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",215
+300,"United States","Los Angeles","North America","Equinix-LA(former 
+Paix)",,Planned,0,0,33.97000,-118.25000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",215
+301,"United States","Los Angeles","North America","Pihana Los 
+Angeles",,"Not an 
+exchange",0,0,33.97000,-118.25000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",215
+302,"United States",Louisville,"North America","Louisville 
+NAP",http://www.louisvillenap.net/,Unknown,0,0,38.20451,-85.70698,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",215
+303,"United States",Madison,"North America","Madison Internet 
+Exchange",https://kb.wisc.edu/ns/page.php?id=6636,Active,20000000,0,43.12000,-89.52000,22,0,0,0,0.000000,No,0000-00-00,31,308,28,34,198,39,https://kb.wisc.edu/ns/page.php?id=6636,"No
+ ","     ",215
+304,"United States","Marina del Rey","North America","ISI 
+DMZ/Gigapop",,"Not an 
+exchange",0,0,33.99000,-118.46000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",215
+305,"United States",Miami,"North America","BellSouth Multimedia Internet
+ 
+Exchange",,Defunct,0,0,25.83000,-80.29000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",215
+306,"United States",Miami,"North America","AMPATH - Florida 
+International University/CIARA",http://www.ampath.net/,"Not an 
+exchange",20060000,0,25.83000,-80.29000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,http://www.ampath.net/peering.php,"No
+ ","     ",215
+307,"United States",Miami,"North America","NAP of the 
+Americas",http://www.verizonenterprise.com/,Active,20040812,128,25.83000,-80.29000,87,250000000,0,0,0.000000,Yes,0000-00-00,6,31,8,9,62,6,,"No
+ ","     ",215
+308,"United States",Miami,"North 
+America",Equinix-Miami,https://www.equinix.com/locations/united-states-colocation/miami-data-centers/,Active,20121203,0,25.83000,-80.29000,0,0,0,0,0.000000,No,0000-00-00,31,308,61,72,413,39,,Yes,MIA,215
+309,"United
+ States",Minneapolis,"North America","Northern Lights 
+GigaPoP",http://www.northernlights.gigapop.net,"Not an 
+exchange",20000000,0,44.98550,-93.27190,0,0,0,0,0.000000,No,0000-00-00,,,,,,,http://www.northernlights.gigapop.net/participants.shtml,"No
+ ","     ",215
+310,"United States","Moffett Field","North 
+America",AMES-MIX,,Defunct,0,0,37.41000,-122.05000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",215
+311,"United States","Moffett Field","North 
+America",MAE-West,http://www.mae.net/fac/,Defunct,0,0,37.41000,-122.05000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",215
+312,"United States","Moffett Field","North 
+America",NGIX-West,,Unknown,19980000,0,37.41000,-122.05000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",215
+313,"United States",Nashville,"North America","Nashville City 
+Net",http://www.nap.nashville.tn.us/,Unknown,0,0,36.17000,-86.78000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",215
+314,"United States",Nashville,"North America","Nashville 
+NAP",,Unknown,0,0,36.17000,-86.78000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",215
+315,"United States","New Jersey","North America","MAGPI 
+Gigapop",http://www.magpi.org/,Active,20060000,0,40.72000,-74.17000,0,0,0,0,0.000000,No,0000-00-00,31,308,61,72,413,39,,"No
+ ","     ",215
+316,"United States","New York","North 
+America",6IIX,http://www.6iix.net/,Unknown,0,0,40.75000,-74.00000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",215
+317,"United States","New York","North America","Equinix New York 
+IBX",https://www.equinix.com/,Active,20030311,0,40.75000,-74.00000,66,0,0,0,0.000000,No,0000-00-00,31,308,61,72,413,39,https://www.equinix.com/resources/,Yes,LGA,215
+318,"United
+ States","New York","North 
+America",MAE-NY,,Defunct,0,0,40.75000,-74.00000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",215
+319,"United States","New York","North 
+America",MetroIX,http://www.metroix.net/,Unknown,0,0,40.75000,-74.00000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",215
+320,"United States","New York","North America","New York International 
+Internet 
+Exchange",http://www.nyiix.net/,Active,19960000,157,40.75000,-74.00000,174,680000000,0,340000000,0.000000,Yes,2018-02-06,4,23,4,5,27,4,http://www.nyiix.net/members/,Yes,LGA,215
+321,"United
+ States","New York","North America","Big Apple Peering 
+Exchange",http://www.ny6ix.net/,Active,20010000,0,40.75000,-74.00000,14,0,0,0,0.000000,No,0000-00-00,31,308,26,29,171,39,http://www.ny6ix.net/,"No
+ ","     ",215
+322,"United States","New York","North 
+America",NY-RIX,,Unknown,0,0,40.75000,-74.00000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",215
+323,"United States","New York","North America","Equinix-NY(former 
+Paix)",https://www.equinix.com/,Active,20000314,243176,40.75000,-74.00000,80,0,0,0,0.000000,Yes,0000-00-00,31,308,61,72,413,39,,"No
+ ","     ",215
+324,"United States",,"North 
+America",OhioEP,,Defunct,0,0,,,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",215
+325,"United States","Palo Alto","North America","Equinix Palo 
+Alto",https://www.equinix.com/services/interconnection-connectivity/,Active,19941200,1278261,37.44000,-122.15000,92,41000000,0,0,0.000000,Yes,0000-00-00,13,79,61,72,413,14,,Yes,PAO,215
+326,"United
+ States",Pennsauken,"North America","Sprint 
+NAP",http://www.merit.edu/nsf.architecture/Sprint/index.html,Defunct,0,0,39.95620,-75.05800,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",215
+327,"United States",Philadelphia,"North America","Equinix-Philly(former 
+Paix)",,Planned,0,0,40.11691,-75.01428,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",215
+328,"United States",Philadelphia,"North America","The Philadelphia 
+Internet 
+Exchange",http://www.phlix.net/,Defunct,20130100,0,40.11691,-75.01428,0,0,0,0,0.000000,No,0000-00-00,31,308,58,67,395,39,http://phlix.net/,"No
+ ","     ",215
+329,"United States",Phoenix,"North 
+America",PhoenixNAP,http://www.phoenixnap.net,Defunct,0,0,33.45070,-112.06840,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",215
+330,"United States",Pittsburgh,"North America","Three Rivers Optical 
+Exchange",https://www.3rox.net/index.php,Active,20120529,0,40.45000,-79.95000,0,0,0,0,0.000000,No,0000-00-00,31,308,61,72,413,39,,"No
+ ","     ",215
+331,"United States",Pittsburgh,"North America","Pittsburgh Exchange 
+Point",http://www.pitx.net/,Unknown,0,0,40.45000,-79.95000,0,0,0,0,0.000000,No,2008-12-08,,,,,,,http://www.pitx.net/members.html,"No
+ ","     ",215
+332,"United States",Portland,"North America","Northwest Access 
+Exchange",http://www.nwax.net/,Active,20021200,233920,45.52000,-122.68000,89,80000000,0,0,0.000000,Yes,2018-04-16,10,58,9,10,63,11,http://www.nwax.net/Members,Yes,PDX,215
+333,"United
+ States","Salt Lake City","North America","Utah Regional Exchange 
+Point",http://www.utah.rep.net/,Unknown,19960423,0,40.77000,-111.90000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,http://www.utah.rep.net/people.html,"No
+ ","     ",215
+334,"United States","San Antonio","North America","San Antonio Metro 
+Access 
+Point",http://www.fc.net/map/samap/,Unknown,0,0,29.47335,-98.53556,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",215
+335,"United States","San Diego","North America","Equinix-SD(former 
+Paix)",,Planned,0,0,32.72000,-117.16000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",215
+336,"United States","San Diego","North America","San Diego Network 
+Access 
+Point",http://www.sdsc.edu/sdnap/,Active,19980200,0,32.72000,-117.16000,0,0,0,0,0.000000,Yes,0000-00-00,31,308,28,34,198,39,http://www.sdsc.edu/sdnap/title-members.htm,"No
+ ","     ",215
+337,"United States","San Francisco","North America","Equinix San 
+Francisco",,Active,20010700,0,37.78000,-122.43000,0,0,0,0,0.000000,No,0000-00-00,31,308,61,72,413,39,,"No
+ ","     ",215
+338,"United States","San Francisco","North 
+America",PB-NAP,,Defunct,0,0,37.78000,-122.43000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",215
+339,"United States","San Jose","North America","Equinix IBX San 
+Jose",https://www.equinix.com/,Active,20000525,0,37.33000,-121.88000,212,0,0,0,0.000000,No,0000-00-00,31,308,18,21,127,39,,"No
+ ","     ",215
+340,"United States","San Jose","North 
+America",MAE-West-ATM,,Defunct,0,0,37.33000,-121.88000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",215
+341,"United States","Santa Clara","North 
+America",6IIX,http://www.6iix.net/,Defunct,20010000,0,37.35000,-121.95000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",215
+342,"United States",Seattle,"North 
+America",NIX,,Defunct,0,0,47.61000,-122.33000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",215
+343,"United States",Seattle,"North America","NWnet 
+Gigapop",,Unknown,0,0,47.61000,-122.33000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",215
+344,"United States",Seattle,"North 
+America",Equinix-Seattle,http://www.equinix.com/locations/united-states-colocation/seattle-data-centers,Active,20000313,113,47.61000,-122.33000,0,0,0,0,0.000000,Yes,0000-00-00,31,308,61,72,413,39,,Yes,SEA,215
+345,"United
+ States",Seattle,"North America","Seattle Internet 
+Exchange",https://www.seattleix.net/,Active,19970620,416751,47.61000,-122.33000,271,1027436322,756000000,450000000,0.000000,Yes,2018-07-18,2,14,2,2,15,2,https://www.seattleix.net/participants/,Yes,SEA,215
+346,"United
+ States",Seattle,"North America","Pacific Wave International Peering 
+Exchange",http://pacificwave.net/,"Not an 
+exchange",19960000,0,47.61000,-122.33000,0,0,0,0,0.000000,No,0000-00-00,31,308,61,72,413,39,http://pacificwave.net/participants-affiliations,"No
+ ","     ",215
+347,"United States",Secaucus,"North America","Equinix IBX 
+Secaucus",https://www.equinix.com/,Active,20000314,0,40.79000,-74.06000,0,0,0,0,0.000000,No,0000-00-00,31,308,61,72,413,39,,"No
+ ","     ",215
+348,"United States",Spokane,"North America","Eastern Washington Internet
+ 
+Exchange",http://www.dsource.com/ewix/,Unknown,0,0,47.67276,-117.55223,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",215
+349,"United States","St. Louis","North America","St. Louis Internet 
+Access 
+Consortium",,Unknown,0,0,38.58000,-90.20000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",215
+350,"United States","St. Louis","North America","St. Louis Regional 
+Exchange 
+Point",http://stl-rix.net/,Active,20170119,169658,38.58000,-90.20000,11,1000000,0,0,0.000000,Yes,0000-00-00,,,,,,,,Yes,STL,215
+351,"United
+ States","St. Louis","North 
+America",StLouisNAP,,Defunct,0,0,38.58000,-90.20000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",215
+352,"United States","St. Louis","North 
+America",StLouIX,http://www.stlouix.net/,Defunct,0,0,38.58000,-90.20000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",215
+353,"United States","Takoma Park","North America","Andrew's Basement 
+Exchange",,Planned,0,0,38.98000,-77.00222,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",215
+354,"United States",Houston,"North America","Southeast Texas 
+GigaPOP",http://jason8825.wixsite.com/setg,Active,19970000,0,29.75000,-95.35000,11,0,0,0,0.000000,No,0000-00-00,31,308,61,72,413,39,http://jason8825.wixsite.com/setg/participants-c1ylq,"No
+ ","     ",215
+355,"United States",Tucson,"North America","Tucson 
+Interconnect",http://www.tti.aces.net/,Unknown,0,0,32.21609,-110.97099,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",215
+356,"United States",Tucson,"North America","Tucson Network Access 
+Point",http://www.ttn.rtd.net/,Unknown,0,0,32.21609,-110.97099,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",215
+357,"United States",Vienna,"North 
+America",Equinix-VA,http://www.equinix.com/,Active,20010910,0,38.89362,-77.22228,5,0,0,0,0.000000,No,0000-00-00,31,308,61,72,413,39,,"No
+ ","     ",215
+358,"United States","Washington DC","North 
+America",MAE-East,http://www.mae.net/,Defunct,19931200,0,38.90857,-77.01798,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",215
+359,"United States","Washington DC","North 
+America",MAE-East-ATM,,Defunct,19980700,0,38.90857,-77.01798,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",215
+360,"United States","Washington DC","North 
+America",NeutralNAP,,Defunct,0,0,38.90857,-77.01798,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",215
+361,"Viet Nam","Da Nang city",Asia-Pacific,"Vietnam National Internet 
+Exchange",https://www.vnnic.vn/en/dns-vnix/about-vnix-system,Active,20050700,0,16.06670,108.23330,3,0,0,0,0.000000,No,0000-00-00,3,308,1,43,214,53,https://www.vnnic.vn/en/dns-vnix/vnix-member-isp,"No
+ ","     ",194
+362,"Viet Nam",Hanoi,Asia-Pacific,"Vietnam National Internet 
+Exchange",https://www.vnnic.vn/en/dns-vnix/about-vnix-system,Active,20031108,0,21.03000,105.85000,10,24500000,0,0,0.000000,No,0000-00-00,1,100,1,43,214,18,https://www.vnnic.vn/en/dns-vnix/vnix-member-isp,"No
+ ","     ",194
+363,"Viet Nam","Ho Chi Minh City",Asia-Pacific,"Viet Nam Internet 
+Exchange",http://www.vnnic.vn/en/dns-vnix/about-vnix-system,Active,20040300,0,10.75000,106.67000,15,160000,0,0,0.000000,No,0000-00-00,2,257,1,43,214,42,http://www.vnnic.vn/en/dns-vnix/vnix-member-isp,"No
+ ","     ",194
+364,Zimbabwe,Harare,Africa,"Zimbabwe Internet 
+Exchange",http://www.zispa.org.zw/zinx.html,Defunct,20010700,0,-17.83000,31.02000,0,0,0,0,0.000000,No,0000-00-00,1,308,1,32,370,34,,"No
+ ","     ",73
+367,Botswana,Gaborone,Africa,"Botswana Internet 
+Exchange",http://www.info.bw/bispa/binx.html,Active,20051000,258,-24.67000,25.92000,13,1000000,0,0,0.000000,Yes,0000-00-00,1,203,1,12,244,14,http://www.info.bw/bispa/binx.html,Yes,GBE,73
+369,"United
+ States","San Francisco","North America","San Francisco Metropolitan 
+Internet 
+Exchange",https://www.sfmix.org/,Active,20060500,42,37.78000,-122.43000,50,32000000,0,20000000,0.000000,Yes,2018-07-17,17,134,12,14,88,20,https://www.sfmix.org/participants,Yes,SFO,215
+373,"United
+ States","Los Angeles","North America","Any2 
+California",http://www.coresite.com/,Active,20051200,546436,33.97000,-118.25000,449,68000000,0,0,0.000000,Yes,2009-06-22,12,61,1,1,6,13,http://www.coresite.com/solutions/interconnection/peering-exchanges/any2-internet-peering-exchange/any2-peering-participants,Yes,SNA,215
+387,Australia,Adelaide,Asia-Pacific,"PIPE
+ Networks 
+Adelaide",http://www.pipenetworks.com/pipeix-locations.php,Active,20030000,0,-34.93000,138.52000,13,0,0,0,0.000000,No,0000-00-00,9,308,9,48,255,53,http://www.pipenetworks.com/pipeix-who.php,"No
+ ","     ",194
+388,Australia,Hobart,Asia-Pacific,"PIPE Networks 
+Hobart",http://www.pipenetworks.com/pipeix-locations.php,Active,20030800,0,-42.83000,147.48000,1,0,0,0,0.000000,No,0000-00-00,9,308,14,75,411,53,http://www.pipenetworks.com/pipeix-who.php,"No
+ ","     ",194
+389,Australia,Melbourne,Asia-Pacific,"PIPE Networks 
+Melbourne",http://www.pipenetworks.com/pipeix.php,Active,20030700,0,-37.82000,144.97000,32,0,0,0,0.000000,No,0000-00-00,9,308,7,26,140,53,http://www.pipenetworks.com/pipeix-who.php,"No
+ ","     ",194
+400,Australia,Canberra,Asia-Pacific,"PIPE Networks 
+Canberra",http://www.pipenetworks.com/pipeix.php,Active,20040600,0,-35.30000,149.17999,0,0,0,0,0.000000,No,0000-00-00,9,308,13,72,404,53,http://www.pipenetworks.com/pipeix-who.php,"No
+ ","     ",194
+402,Australia,Sydney,Asia-Pacific,"PIPE Networks 
+Sydney",http://www.pipenetworks.com/pipeix.php,Active,20030000,0,-33.95000,151.17999,92,0,0,0,0.000000,No,0000-00-00,9,308,1,2,23,53,http://www.pipenetworks.com/pipeix-who.php,"No
+ ","     ",194
+415,Brazil,"Rio de Janeiro","Latin America","Ponto de Troca de Tráfego 
+do Rio de 
+Janeiro",https://ix.br/adesao/rj,Active,20100000,0,-22.90000,-43.17000,137,732000000,489000000,150000000,0.000000,No,2018-07-18,2,37,3,3,41,2,https://ix.br/particip/rj,"No
+ ","     ",116
+464,Singapore,Singapore,Asia-Pacific,"Equinix Singapore 
+IBX",https://www.equinix.sg/,Active,20040426,887038,1.37000,103.98000,156,650000000,0,0,0.000000,Yes,0000-00-00,1,12,1,12,65,1,,Yes,QPG,194
+467,"United
+ States","Los Angeles","North America","Equinix Los Angeles 
+IBX",http://www.equinix.com/,Active,20020711,311780,33.97000,-118.25000,72,0,0,0,0.000000,Yes,0000-00-00,31,308,61,72,413,39,,Yes,BUR,215
+479,"Democratic
+ Republic of Congo",Kinshasa,Africa,"Kinshasa Internet 
+Exchange",http://www.ispa-drc.cd/,Active,20021100,358,-4.38000,15.43000,11,579000,185000,100000,0.000000,Yes,2018-05-03,1,224,1,20,314,16,http://www.ispa-drc.cd/index.php?option=com_content&amp;view=article&amp;id=2&amp;Itemid=4,Yes,FIH,73
+491,"United
+ States",Tampa,"North America","Tampa Internet 
+Exchange",http://tampaix.net,Unknown,20050516,0,27.95000,-82.45000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,http://tampaix.net/participants.shtml,"No
+ ","     ",215
+499,Bulgaria,Varna,Europe,"Varna Internet 
+Exchange",,Unknown,0,0,43.19400,27.89757,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",301
+504,France,Marseille,Europe,"Marseille Internet 
+Exchange",http://www.ma-ix.net/,Defunct,20050000,0,43.45000,5.23000,0,0,0,0,0.000000,No,0000-00-00,8,308,16,172,413,131,http://www.ma-ix.net/members.php,"No
+ ","     ",301
+506,Italy,Florence,Europe,"Tuscany Internet 
+Exchange",https://www.tix.it/en/web/guest/home,Active,20030000,0,43.80000,11.20000,33,680980,326240000,100000000,0.000000,No,2017-10-31,6,216,5,76,144,102,https://www.tix.it/en/elencoisp,"No
+ ","     ",301
+508,Netherlands,Leeuwarden,Europe,"Friese Internet 
+Exchange",http://www.fr-ix.nl/,Active,20060126,0,53.22000,5.57000,38,3600000,1,1000000,0.000000,No,2018-07-18,3,191,5,71,124,97,http://www.fr-ix.nl/index.php?option=com_content&amp;view=article&amp;id=121&amp;Itemid=107,"No
+ ","     ",301
+509,Poland,Warsaw,Europe,"Equinix IX Warsaw 
+(ex-PLIX)",http://www.plix.pl/pl,Active,20060402,302931,52.23000,21.00000,266,818000000,448000000,100000000,0.000000,Yes,2018-07-18,1,19,1,9,11,12,http://www.plix.pl/pl/member,Yes,WAW,301
+513,Romania,Suceava,Europe,"Suceava
+ Internet 
+Exchange",http://www.svix.ro/default.html,Defunct,0,0,47.66350,26.27320,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",301
+516,Russia,Krasnoyarsk,Europe,"Krasnoyarsk Internet 
+Exchange",http://www.red-ix.ru/,Active,20060000,0,56.17000,92.50000,50,88000000,55000000,22000000,0.000000,No,2018-07-18,8,70,5,54,94,40,http://www.red-ix.ru/members/,"No
+ ","     ",301
+531,"United 
+Kingdom",London,Europe,SovEx,http://www.sovex.net,Defunct,0,0,51.48000,-0.45000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,http://www.sovex.net/index.php?page=participants,"No
+ ","     ",301
+532,"United Kingdom",London,Europe,"Redbus Internet 
+Exchange",http://www.rbiex.net,Defunct,20040413,0,51.48000,-0.45000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,http://www.rbiex.net/members.rsp,"No
+ ","     ",301
+534,Russia,Chelyabinsk,Europe,"Chelyabinsk Peering 
+Point",http://chel-pp.net.ru,Unknown,0,0,55.30000,61.53000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,http://chel-pp.net.ru/en/peers/,"No
+ ","     ",301
+539,Philippines,Manila,Asia-Pacific,"Philippine Open Internet 
+Exchange",http://phopenix.net/,Active,20070000,725737,14.58000,120.95000,60,59000000,38000000,10000000,0.000000,Yes,2018-07-17,1,102,1,31,162,20,http://phopenix.net/members/,Yes,MNL,194
+545,Angola,Luanda,Africa,"Ponto
+ de Intercambio Internet 
+Angola",http://www.aapsi.og.ao/index.php/infraestruturas/ponto-de-intercambio-internet,Planned,0,0,-8.85000,13.23000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",73
+546,Burundi,Bujumbura,Africa,"BurundiX Internet Exchange 
+Point",http://www.burundix.bi,Defunct,20140321,0,-3.36138,29.35988,0,0,0,0,0.000000,No,2015-12-19,1,302,1,37,411,31,http://burundix.bi/index.php/membres/?lang=en,"No
+ ","     ",73
+547,Zambia,Lusaka,Africa,"Zambia Internet Exchange 
+Point",http://www.ispa.org.zm,Active,20060200,0,-15.41639,28.28428,13,103000,0,0,0.000000,No,0000-00-00,1,265,1,15,255,21,http://www.ispa.org.zm/members.html,"No
+ ","     ",73
+550,"United 
+Kingdom",London,Europe,EarthNAP,http://www.earthnap.net/,"Not an 
+exchange",20070226,0,51.48000,-0.45000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",301
+556,Germany,Frankfurt,Europe,"KleyReX Internet 
+Exchange",http://www.kleyrex.net/,Active,20020900,0,50.12000,8.68000,138,3060000,0,0,0.000000,No,2011-02-01,10,168,4,20,32,88,http://www.kleyrex.net/teilnehmer.php,"No
+ ","     ",301
+559,Estonia,Tallinn,Europe,"Tallinn Internet Exchange 
+(TLLIX)",https://www.citictel-cpc.com/EN/HK/Pages/product-services/tallinn-internet-exchange,Active,20051100,0,59.35000,24.80000,10,1100000,0,200000,0.000000,No,2018-02-27,1,195,1,105,214,98,,"No
+ ","     ",301
+564,"United Kingdom",Manchester,Europe,"Manchester Commercial Internet 
+Exchange",http://www.mcix.co.uk,Unknown,0,0,53.35000,-2.27000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,http://www.mcix.co.uk/pp_participants.php,"No
+ ","     ",301
+572,Netherlands,Amsterdam,Europe,"Neutral Internet 
+Exchange",https://www.nl-ix.net/,Active,20020301,242337,52.30000,4.77000,654,1900000000,1300000000,700000000,0.000000,Yes,2018-07-18,2,8,2,4,5,7,https://www.nl-ix.net/network/connected-networks/,Yes,AMS,301
+573,Sweden,Gävle,Europe,"Gästrikland-Hälsingland
+ Regional Internet 
+Exchange",http://www.rix-gh.se/,Unknown,0,0,60.72000,17.17000,0,0,0,0,0.000000,No,2009-09-10,,,,,,,http://www.ripe.net/perl/whois?gh-rix,"No
+ ","     ",301
+574,Slovakia,Bratislava,Europe,"NIX.SK - 
+exSitelIX",https://www.nix.sk/sk,Active,20050801,0,48.20000,17.20000,45,60000000,0,14000000,0.000000,No,2018-07-17,,,,,,,https://www.nix.sk/en/networks,"No
+ ","     ",301
+583,"Puerto Rico","San Juan","North America","Internet Exchange of 
+Puerto 
+Rico",http://www.ix.pr/,Active,20060416,0,18.47000,-66.11000,2,0,0,0,0.000000,Yes,0000-00-00,1,308,1,70,404,39,http://www.ix.pr/members.php,"No
+ ","     ",215
+586,"United States",Dayton,"North America","Dayton Metro Internet 
+Exchange",http://www.donet.com/~dmix/,Active,20030624,0,39.77000,-84.20000,4,0,0,0,0.000000,No,0000-00-00,31,308,56,65,381,39,http://www.donet.com/~dmix/,"No
+ ","     ",215
+587,"United States","New York","North America","Peer 1 Internet 
+Exchange",https://www.cogecopeer1.com/,Active,20040109,0,40.75000,-74.00000,0,0,0,0,0.000000,No,0000-00-00,31,308,61,72,413,39,,"No
+ ","     ",215
+589,"United States",Richardson,"North America","North Texas 
+GigaPOP",http://www.northtexasgigapop.org/,Active,20040820,0,32.96000,-96.74000,14,0,0,0,0.000000,No,0000-00-00,31,308,49,58,333,39,,"No
+ ","     ",215
+592,"United States",Honolulu,"North 
+America",DRFxchange,https://www.drfortress.com/services/internet-exchange/drfxchange/,Active,20070108,0,21.30000,-157.83000,14,0,0,0,0.000000,No,0000-00-00,31,308,36,42,244,39,https://www.drfortress.com/services/internet-exchange/peering-and-connectivity/,"No
+ ","     ",215
+593,Egypt,Cairo,Africa,"Middle East Internet 
+eXchange",http://www.gpxglobal.net/,Active,20070500,0,30.13000,31.40000,10,15,0,0,0.000000,No,2015-10-11,2,304,1,18,299,32,,"No
+ ","     ",73
+597,"United States",Portland,"North 
+America",MaineXchangePoint,http://www.mainexp.net,Unknown,0,0,45.52000,-122.68000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",215
+599,Netherlands,"Den Haag",Europe,"Den Haag Internet 
+Exchange",,Defunct,19970000,0,52.07050,4.30070,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",301
+601,Malaysia,"Kuala Lumpur",Asia-Pacific,"Malaysia Internet 
+Exchange",http://www.myix.my/,Active,20061215,709838,3.13000,101.70000,75,249000000,0,0,0.000000,Yes,0000-00-00,1,215,1,36,187,38,http://www.myix.my/our-members/ordinary,Yes,KUL,194
+606,Tanzania,Arusha,Africa,"Arusha
+ Internet Exchange 
+Point",http://www.aixp.or.tz/,Active,20060626,793,-3.33000,36.62000,6,100000,0,0,0.000000,Yes,0000-00-00,2,301,2,26,351,30,,Yes,ARK,73
+612,"Czech
+ Republic",Brno,Europe,"Commercial Brno Internet 
+Exchange",http://www.cbix.cz/en,Defunct,20070512,0,49.15000,16.70000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,http://www.cbix.cz/en/connected-networks,"No
+ ","     ",301
+613,"Czech Republic",Prague,Europe,"Neutral czFree 
+eXchange",http://www.nfx.cz/,Active,20070000,0,50.08000,14.43000,13,53000000,28000000,8000000,0.000000,No,2018-07-18,3,83,3,102,208,48,http://www.nfx.cz/clenove,"No
+ ","     ",301
+616,Nigeria,Lagos,Africa,"IXPN - 
+Lagos",http://ixp.net.ng/,Active,20070500,3697,6.55000,3.35000,52,84000000,0,21000000,0.000000,Yes,2018-07-17,1,189,1,5,149,9,http://ixp.net.ng/member-list/,Yes,LOS,73
+621,"El
+ Salvador","San Salvador","Latin America","IXP de El 
+Salvador",,Planned,0,0,13.69000,-89.19000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",116
+623,"United States",Helena,"North America","Northwest Internet 
+Exchange",http://www.nwix.org,Unknown,20060200,0,46.58000,-112.03000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,http://www.nwix.org/members.html,"No
+ ","     ",215
+624,"United States",Missoula,"North America","Northwest Internet 
+Exchange",http://www.nwix.org,Unknown,20041215,0,46.86000,-114.04000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,http://www.nwix.org/members.html,"No
+ ","     ",215
+625,"United States",Phoenix,"North America","Phoenix Internet 
+Exchange",http://www.phx-ix.net,Unknown,0,0,33.45070,-112.06840,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",215
+626,"United Kingdom",London,Europe,"Meridian Gate Internet 
+Exchange",http://www.meriex.net,Defunct,0,0,51.48000,-0.45000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,http://www.meriex.net/participants.php,"No
+ ","     ",301
+627,Sweden,Stockholm,Europe,"Stockholm Internet 
+Exchange",https://www.sthix.net/,Active,20070000,0,59.33000,18.05000,136,129000000,82000000,40000000,0.000000,No,2018-07-18,2,64,2,29,49,35,https://www.sthix.net/index.php/home/connected-networks/,"No
+ ","     ",301
+628,France,Paris,Europe,"Paris Operators for Universal Internet 
+eXchange",http://www.pouix.net/,Defunct,0,0,48.80000,2.33000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,http://www.pouix.net/members-en,"No
+ ","     ",301
+629,France,Paris,Europe,"French National Internet Exchange 
+IPv6",http://www.fnix6.net/,Active,20021101,0,48.80000,2.33000,16,0,0,0,0.000000,No,0000-00-00,8,308,6,108,228,131,http://www.fnix6.net/members/,"No
+ ","     ",301
+630,"United States","Kansas City","North America","Kansas City Internet 
+Exchange",http://www.kcix.net/,Active,20060000,114943,39.10000,-94.58000,72,26000000,0,16000000,0.000000,Yes,2018-07-17,31,308,25,28,168,39,http://www.kcix.net/,Yes,MCI,215
+655,"United
+ States",Houston,"North America",TexasSEGP,http://www.texassegp.org,"Not
+ an 
+exchange",0,0,29.75000,-95.35000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,http://www.texassegp.org/participants/index.php,"No
+ ","     ",215
+656,Japan,Akita,Asia-Pacific,"Akita Regional 
+IX",http://www.jetro.go.jp/en/invest/region/akita/#p2,Unknown,0,0,40.00000,140.00000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",194
+657,"United States",Berkeley,"North 
+America",6TAP,http://www.6tap.net/,"Not an 
+exchange",0,0,37.87000,-122.27000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,http://www.6tap.net/6tap/6tap-participants.html,"No
+ ","     ",215
+693,Lebanon,Beirut,Europe,"Beirut Internet 
+Exchange",http://www.beirutix.net/,Active,20071206,786,33.82000,35.48000,12,61800,0,0,0.000000,Yes,2015-08-08,1,273,1,158,370,121,http://www.beirutix.net/members-list.htm,Yes,BEY,301
+699,"Cote
+ D'Ivoire",Abidjan,Africa,"Côte d'Ivoire Internet Exchange 
+Point",http://www.ciixp.ci,Defunct,20060000,0,5.25000,-3.93000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",73
+703,"United States",Billings,"North America","Yellowstone Regional 
+Internet 
+Exchange",http://www.yrix.org/,Active,20030000,0,45.77000,-108.48000,8,0,0,0,0.000000,No,0000-00-00,31,308,46,55,320,39,http://www.yrix.org/participants.php,"No
+ ","     ",215
+704,"United Kingdom",Manchester,Europe,"Enlightened Internet 
+Exchange",,Defunct,20050604,0,53.35000,-2.27000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",301
+705,Germany,Stuttgart,Europe,"Stuttgarter Internet 
+Exchange",http://www.stuttgart-ix.de/,Active,20050400,0,48.83000,9.20000,25,3232306,0,500000,0.000000,No,2018-07-23,11,174,15,95,191,91,http://www.stuttgart-ix.de/teilnehmer/,"No
+ ","     ",301
+712,France,Alsace,Europe,EuroGIX,http://www.eurogix.net/fr/,Active,20020304,0,50.40000,6.00000,9,348000,0,0,0.000000,No,2017-01-14,5,245,14,155,351,113,http://www.eurogix.net/fr/membres-eurogix,"No
+ ","     ",301
+716,Germany,Hamburg,Europe,"Hansestadt Hamburg Commercial Internet 
+Exchange",http://www.hhcix.de/,Defunct,20030117,0,53.55000,10.03000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",301
+717,Germany,Frankfurt,Europe,"Frankfurt Network Access 
+Point",http://www.franap.net/,Unknown,20031001,0,50.12000,8.68000,0,0,0,0,0.000000,No,0000-00-00,13,308,17,135,299,131,,"No
+ ","     ",301
+718,Germany,Darmstadt,Europe,"Metropolitan Area Network 
+Darmstadt",http://www.tu-darmstadt.de/hrz/manda/,Unknown,0,0,49.87490,8.51474,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",301
+723,Poland,Kraków,Europe,"Krakowski Traffic Exchange 
+Point",http://cix.krakow.pl/,Active,20091100,0,50.08000,19.80000,52,0,0,0,0.000000,No,0000-00-00,7,308,5,51,88,131,http://cix.krakow.pl/?page_id=14,"No
+ ","     ",301
+725,Poland,Wroclaw,Europe,"Wroclaw Internet 
+eXchange",http://wrix.org/,Active,20010200,0,51.11670,17.03330,16,0,0,0,0.000000,No,0000-00-00,7,308,9,144,320,131,http://wrix.org/uczestnicy/,"No
+ ","     ",301
+739,Bangladesh,Dhaka,Asia-Pacific,"Bangladesh Society of Internet 
+Exchange",http://www.bsixbd.net/news.php,Deprecated,20040500,0,23.77000,90.38000,0,0,0,0,0.000000,No,0000-00-00,2,308,2,76,413,53,,"No
+ ","     ",194
+748,Australia,Melbourne,Asia-Pacific,AUSIX.net,http://www.ausix.net/,Unknown,20020000,0,-37.82000,144.97000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",194
+765,Rwanda,Kigali,Africa,"Rwanda Internet 
+exchange",http://www.rinex.org.rw/,Active,20030000,2807,-1.97000,30.12000,9,2387592,0,500000,0.000000,Yes,2018-07-23,1,200,1,12,244,12,http://www.rinex.org.rw/member.html,Yes,KGL,73
+767,Norway,Oslo,Europe,"Free
+ Internet eXchange 
+Oslo",http://www.fixo.no/static/index,Active,20080116,0,59.95000,10.70000,55,0,0,0,0.000000,No,0000-00-00,5,308,3,49,84,131,http://www.fixo.no/static/members,"No
+ ","     ",301
+803,Netherlands,Rotterdam,Europe,"Rotterdam Internet 
+eXchange",https://r-ix.nl/,Active,20070000,27648,51.95000,4.45000,29,250000000,0,40000000,0.000000,Yes,2018-02-28,5,308,3,42,76,131,https://r-ix.nl/content/customerlist,"No
+ ","     ",301
+804,Romania,Bucharest,Europe,InterLAN-IX,http://interlan.ro/,Active,20070000,260894,44.50000,26.13000,83,143000000,84000000,20000000,0.000000,Yes,2018-07-18,2,98,1,47,82,58,http://interlan.ro/?t=5,Yes,OTP,301
+805,Russia,"St.
+ 
+Petersburg",Europe,NW-IX,http://net.energo.ru/prer/,Unknown,0,0,59.93000,30.30000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,http://net.energo.ru/prer/ww9.html,"No
+ ","     ",301
+807,Australia,Lismore,Asia-Pacific,"lismore internet 
+exchange",,Unknown,0,0,-28.80732,153.28318,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",194
+834,China,"Hong Kong",Asia-Pacific,"Equinix Hong 
+Kong",https://www.equinix.hk/services/interconnection-connectivity/internet-exchange/,Active,20090000,0,22.33000,114.18000,0,0,0,0,0.000000,No,0000-00-00,4,308,5,76,413,53,,"No
+ ","     ",194
+838,France,Paris,Europe,"Gigabit European Internet 
+eXchange",http://ether.geix.net,Defunct,0,0,48.80000,2.33000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,http://ether.geix.net,"No
+ ","     ",301
+864,Sweden,Gothenburg,Europe,"Gothenburg Internet 
+Exchange",http://www.gix.se/,Active,20051221,0,57.67000,12.30000,15,0,0,0,0.000000,No,0000-00-00,9,308,5,112,236,131,http://www.gix.se/whois.php,"No
+ ","     ",301
+879,Sweden,Malmö,Europe,"Internet exchange point of the Oresund 
+Region",http://www.ixor.se/,Active,20091014,0,55.57000,13.07000,19,48000,0,0,0.000000,No,0000-00-00,8,279,4,89,178,125,http://www.ixor.se/members/,"No
+ ","     ",301
+880,Poland,Katowice,Europe,"Tysiaclecie Internet 
+Exchange",http://www.ix.1000lecie.pl/src/login.php,Unknown,20040400,0,50.23000,19.03000,0,0,0,0,0.000000,No,0000-00-00,7,308,10,149,333,131,,"No
+ ","     ",301
+881,Germany,Leipzig,Europe,"European Commercial Internet Exchange 
+Leipzig",http://www.lei.ecix.de/index.shtml,Planned,0,0,51.34170,12.25355,0,0,0,0,0.000000,No,0000-00-00,,,,,,,http://www.lei.ecix.de/members.shtml,"No
+ ","     ",301
+884,"United States",Tampa,"North America","Tampa Internet 
+Exchange",http://www.tpaix.net/,Active,20151005,58319,27.95000,-82.45000,12,3000000,0,500000,0.000000,Yes,2018-07-17,,,,,,,http://tampix.com/members.html,"No
+ ",TPA,215
+885,"United States","New York","North America","New York City 
+Exchange",,,0,0,40.75000,-74.00000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",215
+890,"United Kingdom",Edinburgh,Europe,"UNION 
+IXP",http://www.uixp.net/,Unknown,0,0,55.92000,-3.17000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",301
+892,Taiwan,Taipei,Asia-Pacific,TaipeiGigaPoP,http://www.ascc.sinica.edu.tw/,,0,0,25.03000,121.52000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",194
+894,Japan,Tokyo,Asia-Pacific,"JPNAP Tokyo II - 
+Ikebukuro",http://www.jpnap.net/english/jpnap-tokyo-ii/index.html,Active,20080401,0,35.55000,139.78000,4,78000000,37000000,11000000,0.000000,No,2018-07-18,6,91,10,67,381,16,http://www.jpnap.net/english/jpnap-tokyo-ii/customer.html,"No
+ ","     ",194
+897,Ukraine,"Donetsk ",Europe,"Donetsk Internet 
+Exchange",http://www.ix.dn.ua/,Active,20011223,745,48.08000,37.75000,12,1300000,0,0,0.000000,No,2014-06-09,4,195,5,123,270,98,http://www.ix.dn.ua/networks/index.html,"No
+ ","     ",301
+898,"United States","San Jose","North America","KDWEB 
+Exchange",http://www.kd-web.net/,"Not an 
+exchange",0,0,37.33000,-121.88000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",215
+907,Indonesia,Jakarta,Asia-Pacific,"Biznet Internet 
+Exchange",http://www.biznetnetworks.com/en/company/network/biznet-internet-exchange/,Active,20060000,0,-6.17444,106.82944,39,5500000,0,0,0.000000,No,2018-07-16,4,170,4,42,211,30,http://www.biznetnetworks.com/en/company/network/biznet-internet-exchange/,"No
+ ","     ",194
+909,"United States",Albuquerque,"North America","New Mexico Internet 
+Exchange",http://www.nmix.net/index.html,Active,20080000,0,35.08000,-106.65000,0,0,0,0,0.000000,No,0000-00-00,31,308,61,72,413,39,,"No
+ ","     ",215
+917,Poland,Poznan,Europe,"Poznan Internet 
+Exchange",https://www.pozix.pl/,Active,20060310,0,52.42000,16.83000,15,172000000,90000000,21000000,0.000000,No,2018-07-17,4,115,4,35,58,66,https://www.pozix.pl/en/,"No
+ ","     ",301
+918,Poland,Warsaw,Europe,"Thinx 
+Poland",http://www.atman.pl/main-eng.html,Active,20060000,0,52.23000,21.00000,187,31000000,15700000,4000000,0.000000,No,2018-07-17,3,63,2,17,26,34,http://www.atman.pl/Members-list-clinks-eng-74.html,"No
+ ","     ",301
+923,Kazakhstan,Almaty,Europe,"Kazakhstan Internet Exchange (Kaz-IX), 
+Almaty",http://www.kaz-ix.kz/web/,Unknown,0,0,43.21688,76.66398,0,0,0,0,0.000000,No,0000-00-00,,,,,,,http://www.kaz-ix.kz/web/parter.php,"No
+ ","     ",301
+925,"United States",Chicago,"North America","Chicago Internet 
+Exchange",http://www.chicagoix.net,Unknown,20080411,142,41.85000,-87.65000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,http://www.chicagoix.net/?page=members,"No
+ ","     ",215
+926,Lithuania,Vilnius,Europe,"Lithuanian Internet service providers 
+exchange 
+unit",http://is.lt/lt/titulinis.html,Active,20080000,0,54.63000,25.28000,24,0,0,0,0.000000,No,0000-00-00,2,308,1,89,178,131,,"No
+ ","     ",301
+928,"United States",Chicago,"North America","CoreSite - 
+Any2",http://www.coresite.com/data-centers/locations/chicago,Active,20080100,0,41.85000,-87.65000,10,5000000,0,0,0.000000,No,0000-00-00,22,154,49,58,333,25,http://www.coresite.com/solutions/interconnection/peering-exchanges/any2-internet-peering-exchange/any2-peering-participants,"No
+ ","     ",215
+932,Angola,Luanda,Africa,"Angola Internet 
+Exchange",http://www.aapsi.og.ao/aapsi/index.php/,Active,20060317,617,-8.85000,13.23000,21,0,0,0,0.000000,Yes,0000-00-00,2,225,2,16,270,17,http://www.aapsi.og.ao/aapsi/index.php/membros/associados,Yes,NDD,73
+933,Ukraine,Odessa,Europe,"Odessa
+ Internet 
+Exchange",http://www.od-ix.net/,Active,20070900,0,46.43000,30.77000,25,28700,0,0,0.000000,No,2017-09-21,5,214,4,85,168,101,http://www.od-ix.net/?page_id=43,"No
+ ","     ",301
+946,"United States",Phoenix,"North America","Digital Realty Phoenix 
+Internet 
+Exchange",https://ix.digitalrealty.com/,Active,20080602,135596,33.45070,-112.06840,12,1000000,0,300000,0.000000,Yes,2018-07-17,24,179,40,47,270,28,https://ix.digitalrealty.com/,Yes,PHX,215
+970,Ukraine,,Europe,"Leontovich
+ 9 IX ",,Unknown,20080000,0,,,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No 
+","     ",301
+971,China,Beijing,Asia-Pacific,"CNC Beijing 
+NAP",,Unknown,20080000,0,39.93000,116.28000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",194
+972,Indonesia,Jakarta,Asia-Pacific,"PT. Cyberindo 
+Aditama",http://www.cbn.net.id,Unknown,20080000,0,-6.17444,106.82944,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",194
+973,France,Saint-Etienne,Europe,"PhibIX Gix &amp; 
+Nap",http://www.phibix.net,Defunct,20080000,0,45.43333,4.40000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",301
+974,Canada,Toronto,"North America","Peer1 Internet Exchange - 
+Toronto",http://www.peer1.com/infrastructure/pix,"Not an 
+exchange",20080000,0,43.67000,-79.40000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,http://www.peer1.com/infrastructure/participants,"No
+ ","     ",215
+975,Canada,Vancouver,"North America","Peer1 Internet Exchange - 
+Vancouver",http://www.peer1.com/infrastructure/pix,"Not an 
+exchange",20080000,0,49.18000,-123.17000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,http://www.peer1.com/infrastructure/participants,"No
+ ","     ",215
+978,Ukraine,Kherson,Europe,"Kherson Internet 
+Exchange",http://www.ix.ks.ua/,Unknown,20080000,0,46.63000,32.57000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",301
+979,Ukraine,Zaporozhye,Europe,"Zaporozhye Internet 
+Exchange",,Unknown,20080000,0,47.85614,35.03527,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",301
+982,Haiti,"Port au Prince","Latin America","AHTIC Internet Exchange 
+Point",http://ixp.ht/,Active,20090505,187,18.57000,-72.30000,4,2653990,0,0,0.000000,Yes,2018-07-23,1,232,1,45,314,35,,Yes,PAP,116
+984,"Dominican
+ Republic","Santo Domingo","Latin America","NAP del 
+Caribe",http://www.napdelcaribe.net.do/,Active,20080700,0,18.43000,-69.88000,15,0,0,0,0.000000,No,0000-00-00,1,308,1,59,413,55,http://www.napdelcaribe.net.do/?page_id=38,"No
+ ","     ",116
+985,Colombia,Bogota,"Latin America","NAP de las Americas 
+Colombia",http://www.verizonenterprise.com/infrastructure/data-centers/latin-america/nap-de-las-americas-colombia/,Unknown,20080300,0,4.70000,-74.13000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",116
+987,"Sint Maarten",Philipsburg,"Latin America","Open Caribbean Internet 
+eXchange",http://www.ocix.net/,Active,20081000,0,18.02600,-63.04582,8,1400000,924000,300000,0.000000,No,2018-07-17,1,193,1,46,320,25,http://www.ocix.net/ocix/index.php?option=com_content&amp;task=view&amp;id=14&amp;Itemid=23,"No
+ ","     ",116
+988,Curaçao,Willemstad,"Latin America","Caribbean Internet 
+Exchange",https://cw.ams-ix.net/,Active,20090420,0,12.12240,-68.88240,14,16100008,9300002,2000004,0.000020,No,2018-07-17,1,126,1,32,255,11,https://cw.ams-ix.net/connected_parties,"No
+ ","     ",116
+1006,Bolivia,"Santa Cruz de la Sierra","Latin America","IX de 
+Bolivia",,Defunct,20120000,0,-17.78337,-63.18226,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",116
+1008,Australia,Canberra,Asia-Pacific,"IX Australia 
+ACT",https://www.ix.asn.au/peering/,Active,20081001,0,-35.30000,149.17999,7,1000000,0,0,0.000000,No,0000-00-00,5,203,11,59,333,35,https://www.ix.asn.au/peers-act/,"No
+ ","     ",194
+1018,Brazil,Salvador,"Latin America","Ponto de Troca de Trafego do 
+Salvador",https://ix.br/adesao/ba,Active,20080000,0,-13.02000,-38.52000,39,13660000,8000000,2000000,0.000000,No,2018-07-18,13,157,6,7,99,16,https://ix.br/particip/ba,"No
+ ","     ",116
+1020,India,Bangalore,Asia-Pacific,"National Internet Exchange of 
+India",http://nixi.in/index.php?option=com_noclocation&amp;task=click&amp;id=60&amp;Itemid=28,Active,20080000,0,12.95000,77.65000,4,2200,2000,0,0.000000,No,2018-04-23,7,306,6,58,320,52,http://nixi.in/index.php?option=com_noclocation&amp;task=click&amp;id=60&amp;Itemid=28,"No
+ ","     ",194
+1021,India,Hyderabad,Asia-Pacific,"National Internet Exchange of 
+India",http://nixi.in/index.php?option=com_noclocation&amp;task=click&amp;id=59&amp;Itemid=28,Active,20080000,0,17.45000,78.47000,8,14,0,0,0.000000,No,2018-07-17,6,297,7,62,351,50,http://nixi.in/index.php?option=com_noclocation&amp;task=click&amp;id=59&amp;Itemid=28,"No
+ ","     ",194
+1022,India,Ahmedabad,Asia-Pacific,"National Internet Exchange of 
+India",http://nixi.in/index.php?option=com_noclocation&amp;task=click&amp;id=58&amp;Itemid=28,Active,20080000,0,23.07000,72.63000,4,10,0,1,0.000000,No,2018-07-14,4,291,8,71,395,47,http://nixi.in/index.php?option=com_noclocation&amp;task=click&amp;id=58&amp;Itemid=28,"No
+ ","     ",194
+1023,India,Mohali,Asia-Pacific,"National Internet Exchange of 
+India",http://nixi.in/index.php?option=com_noclocation&amp;task=click&amp;id=56&amp;Itemid=28,Planned,0,0,30.69832,76.66236,0,0,0,0,0.000000,No,0000-00-00,,,,,,,http://nixi.in/index.php?option=com_noclocation&amp;task=click&amp;id=56&amp;Itemid=28,"No
+ ","     ",194
+1024,India,Lucknow,Asia-Pacific,"National Internet Exchange of 
+India",http://nixi.in/index.php?option=com_noclocation&amp;task=click&amp;id=57&amp;Itemid=28,Planned,0,0,26.84862,80.80243,0,0,0,0,0.000000,No,0000-00-00,,,,,,,http://nixi.in/index.php?option=com_noclocation&amp;task=click&amp;id=57&amp;Itemid=28,"No
+ ","     ",194
+1029,Malawi,Blantyre,Africa,"Malawi 
+IXP",http://www.mispa.org.mw/mix.html,Active,20081201,168,-15.78333,35.00000,21,10000,0,0,0.000000,Yes,0000-00-00,1,291,1,4,130,28,http://www.mispa.org.mw/members.html,"No
+ ",BLZ,73
+1044,Russia,Vladivostok,Europe,"MSK-IX 
+Vladivostok",http://www.msk-ix.ru/eng/,Active,20080000,457,43.12000,131.89999,14,528000,0,0,0.000000,No,2013-12-09,19,235,17,118,255,107,http://www.msk-ix.ru/en/members/,"No
+ ","     ",301
+1046,Russia,Rostov-on-Don,Europe,"MSK-IX 
+Rostov-on-Don",http://www.msk-ix.ru/eng/,Active,20090000,0,47.25000,39.82000,15,4160000,0,0,0.000000,No,2014-08-20,15,169,16,116,244,89,http://www.msk-ix.ru/en/members/,"No
+ ","     ",301
+1052,Germany,Hamburg,Europe,"European Commercial Internet Exchange 
+Hamburg",https://www.ecix.net/,Active,20090121,210399,53.55000,10.03000,55,0,0,0,0.000000,Yes,0000-00-00,13,308,10,71,124,131,https://www.ecix.net/connected-networks,Yes,FRA,301
+1064,"Saudi
+ Arabia",Riyadh,Europe,"Internet Exchange of Saudi 
+Arabia",http://www.ix.net.sa/,Unknown,20090100,0,24.72000,46.72000,0,0,0,0,0.000000,No,0000-00-00,1,308,1,162,381,131,,"No
+ ","     ",301
+1065,Bahrain,Manama,Europe,"Gateway Gulf Internet Exchange 
+Bahrain",http://www.gatewaygulf.bh/content/internet-exchange,Active,20090401,24,26.27000,50.65000,3,0,0,0,0.000000,Yes,0000-00-00,1,308,1,166,395,131,,"No
+ ",BAH,301
+1076,Poland,,Europe,"Silesian Internet 
+Exchange",,Unknown,0,0,,,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No ","  
+   ",301
+1077,"United States",Boston,"North America","Massachusetts Internet 
+Exchange",http://mass-ix.net/,Active,20150514,228031,42.37000,-71.03000,43,17600000,0,4400000,0.000000,Yes,2018-07-17,23,165,24,27,159,27,http://mass-ix.net/peering.html,Yes,BVY,215
+1088,Brazil,Londrina,"Latin
+ America","Ponto de Troca de Trafego do 
+Londrina",https://ix.br/adesao/lda,Active,20090215,0,-23.33000,-51.13000,16,10000000,6000000,2000000,0.000000,No,2018-07-18,11,145,13,16,162,14,https://ix.br/particip/lda,"No
+ ","     ",116
+1089,Brazil,Fortaleza,"Latin America","Ponto de Troca de Trafego do 
+Fortaleza",https://ix.br/adesao/ce,Active,20081001,0,-3.78000,-38.53000,31,62900000,43000000,15000000,0.000000,No,2018-07-18,7,122,12,14,140,9,https://ix.br/particip/ce,"No
+ ","     ",116
+1092,Brazil,"Porto Alegre","Latin America","Ponto de Troca de Trafego do
+ Porto 
+Alegre",https://ix.br/adesao/rs,Active,20020400,0,-30.00000,-51.18000,141,180000000,98000000,30000000,0.000000,No,2018-07-18,3,41,2,2,31,3,https://ix.br/particip/rs,"No
+ ","     ",116
+1097,France,Paris,Europe,"Equinix 
+Paris",http://www.equinix-ix.fr/,Active,20080000,86,48.80000,2.33000,350,0,0,0,0.000000,Yes,0000-00-00,8,308,1,6,8,131,http://www.equinix-ix.fr/members.php,Yes,CDG,301
+1105,Ireland,Cork,Europe,"Cork
+ Neutral Internet 
+Exchange",http://www.cnix.ie,Active,20090717,0,51.85000,-8.48000,24,0,0,0,0.000000,No,0000-00-00,2,308,2,116,244,131,http://www.cnix.ie/members.html,"No
+ ","     ",301
+1108,Ireland,Galway,Europe,"eXchange 
+West",http://www.exwest.net/,Active,20090604,0,53.28000,-9.02000,2,0,0,0,0.000000,No,0000-00-00,2,308,3,158,370,131,http://www.exwest.net/,"No
+ ","     ",301
+1109,Brazil,,"Latin 
+America",LNCC,http://www.lncc.br/frame.html,Unknown,0,0,,,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",116
+1110,Brazil,"São Paulo","Latin America","An Academic Network at Sao 
+Paulo",http://www.ansp.br/,"Not an 
+exchange",0,0,-23.62000,-46.65000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,http://www.ansp.br/index.php/us/participants,"No
+ ","     ",116
+1112,Panama,,"Latin America","NAP Panamericano 
+S.A.",,Unknown,0,0,,,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No ","     
+",116
+1117,Bahrain,Manama,Europe,"Bahrain Internet 
+Exchange",http://www.bix.bh/,"Not an 
+exchange",20030813,0,26.27000,50.65000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",301
+1124,France,Paris,Europe,France-IX,https://www.franceix.net/en/,Active,20101100,396504,48.80000,2.33000,346,954000000,703000000,364000000,0.000000,Yes,2018-07-18,1,9,2,7,9,8,https://www.franceix.net/en/france-ix-paris/members-in-paris/,Yes,CDG,301
+1128,Italy,Padova,Europe,"VSIX
+ NAP del Nord 
+Est",https://www.vsix.it/,Active,20090901,0,45.40000,11.85000,40,22000000,14000000,3000000,0.000000,No,2018-07-18,4,148,4,75,140,80,https://www.vsix.it/it/chi-siamo/aderenti.htm,"No
+ ","     ",301
+1132,Italy,Udine,Europe,"Friuli Venezia Giulia Internet 
+Exchange",http://www.inasset.it/,Active,20090000,0,46.03000,13.18000,11,0,0,0,0.000000,No,0000-00-00,7,308,7,131,288,131,http://www.inasset.it/en/data-center/connectivity,"No
+ ","     ",301
+1134,Russia,Ulyanovsk,Europe,"Ulyanovsk Internet 
+Exchange",http://www.uln-ix.ru/,Active,20090508,0,54.32000,48.33000,17,3280000,0,0,0.000000,No,2017-03-28,16,180,14,105,214,92,http://www.uln-ix.ru/partners/,"No
+ ","     ",301
+1135,Russia,Ulyanovsk,Europe,"Simbirsk Internet 
+Exchange",http://simix.net.ru/,,0,0,54.32000,48.33000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,http://simix.net.ru/,"No
+ ","     ",301
+1137,Bulgaria,Sofia,Europe,"Bulgarian Internet 
+eXchange",https://www.bix.bg/en/home.html,Active,20090801,251741,42.65000,23.38000,77,199000000,134000000,35000000,0.000000,Yes,2018-07-18,3,47,2,40,73,29,https://www.bix.bg/en/members/public_peers.html,Yes,SOF,301
+1144,"United
+ States",Medford,"North America","Southern Oregon Access 
+Exchange",http://www.soax.org/,,0,0,42.33190,-122.86190,0,0,0,0,0.000000,No,0000-00-00,,,,,,,http://www.soax.org/members,"No
+ ","     ",215
+1149,"United States","New York","North America","Digital Realty New York
+ Internet 
+Exchange",https://ix.digitalrealty.com/,Active,20090000,145825,40.75000,-74.00000,68,86000000,0,32000000,0.000000,Yes,2018-07-17,11,60,10,11,64,12,https://ix.digitalrealty.com/,Yes,LGA,215
+1187,Turkey,Istanbul,Europe,"Terremark
+ 
+IST-IX",http://www.verizonenterprise.com/,Active,20100000,28,40.97000,28.82000,8,0,0,0,0.000000,No,0000-00-00,1,308,2,144,320,131,,"No
+ ","     ",301
+1194,Bulgaria,Sofia,Europe,"Balkan Internet 
+Exchange",http://www.b-ix.net/,Active,20100000,0,42.65000,23.38000,47,200000000,132000000,65000000,0.000000,No,2018-07-18,2,42,3,63,110,25,http://www.b-ix.net/members/peers/,"No
+ ","     ",301
+1195,Canada,Montreal,"North America","Peer1 Internet Exchange - 
+Montreal",http://www.peer1.com/infrastructure/pix,"Not an 
+exchange",20100000,0,45.47000,-73.75000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,http://www.peer1.com/infrastructure/participants,"No
+ ","     ",215
+1198,Argentina,Neuquén,"Latin America","CABASE IXP 
+Neuquén",http://www.cabase.org.ar/nap-neuquen/,Active,20100510,37,-38.93330,-68.13330,23,2210000,0,0,0.000000,Yes,0000-00-00,2,178,3,24,214,21,http://www.cabase.org.ar/nap-neuquen/,"No
+ ",NQN,116
+1199,Brazil,Campinas,"Latin America","Ponto de Troca de Trafego do 
+Campinas",https://ix.br/adesao/cas,Active,20091130,0,-22.90000,-47.08000,27,45000000,31000000,8000000,0.000000,No,2018-07-18,12,147,9,10,130,15,https://ix.br/particip/cas,"No
+ ","     ",116
+1200,Brazil,Recife,"Latin America","Ponto de Troca de Trafego do 
+Recife",https://ix.br/adesao/pe,Active,20091201,0,-8.07000,-34.85000,33,4100000,2500000,500000,0.000000,No,2018-07-18,14,161,16,19,178,17,https://ix.br/particip/pe,"No
+ ","     ",116
+1206,"United States",Dallas,"North America","Digital Realty Dallas 
+Internet 
+Exchange",https://ix.digitalrealty.com/,Active,20070000,156,32.77000,-96.77000,9,28,0,18,0.000000,Yes,2018-07-17,30,303,36,42,244,38,https://ix.digitalrealty.com/,Yes,DFW,215
+1207,Kenya,Mombasa,Africa,"AMS-IX
+ East 
+Africa",https://eastafrica.ams-ix.net,Defunct,20100800,0,-4.05000,39.66670,0,0,0,0,0.000000,No,2015-06-09,,,,,,,https://eastafrica.ams-ix.net/connected_parties,"No
+ ","     ",73
+1223,Russia,Kazan,Europe,"MSK-IX 
+Kazan",http://www.msk-ix.ru/eng/,Active,20100500,0,55.81749,49.10889,8,1120000,0,0,0.000000,No,2013-12-09,17,190,19,135,299,96,"
+ http://www.msk-ix.ru/en/members/","No ","     ",301
+1225,Austria,Klagenfurt,Europe,"Alpes Adria Internet 
+Exchange",http://www.aaix.at/,Active,20100000,295,46.65000,14.33000,8,150000,0,0,0.000000,Yes,0000-00-00,2,259,4,123,270,117,http://www.aaix.at/,Yes,KLU,301
+1230,France,Toulouse,Europe,TouIX,http://www.touix.net/,Active,20090416,0,43.60530,1.44280,13,0,0,0,0.000000,No,0000-00-00,8,308,9,131,288,131,http://www.touix.net/en/membres,"No
+ ","     ",301
+1231,France,"Saint Etienne",Europe,"The Saint-Etienne Internet eXchange 
+Point",http://www.saintetix.net/,Defunct,20110100,0,45.43470,4.39030,0,0,0,0,0.000000,No,0000-00-00,,,,,,,http://www.saintetix.net/en/members-area,"No
+ ","     ",301
+1232,"United Kingdom",Leeds,Europe,"Leeds Internet 
+Exchange",http://ixleeds.net,Active,20100920,11779,53.80000,-1.55000,25,2300000,900000,400000,0.000000,Yes,2018-07-17,5,186,7,108,228,95,https://www.ixleeds.net/content/members.html,Yes,LBA,301
+1233,Italy,Milan,Europe,"Milan
+ Neutral Access 
+Point",https://www.minap.it/,Active,20080000,0,45.45000,9.17000,9,0,0,0,0.000000,No,0000-00-00,7,308,6,112,236,131,https://www.minap.it/members/,"No
+ ","     ",301
+1234,Luxembourg,Luxembourg,Europe,"Luxembourg Commercial Internet 
+Exchange",http://www.lu-cix.lu/,Active,20100000,0,49.62000,6.22000,80,31000000,0,0,0.000000,No,2017-02-22,1,85,1,39,68,49,http://www.lu-cix.lu/members-list.html,"No
+ ","     ",301
+1236,Latvia,Riga,Europe,"Santa Monica Internet Local 
+Exchange",http://www.smile-ixp.net/,Active,20051011,327,56.97000,24.05000,36,8900000,0,0,0.000000,No,0000-00-00,1,137,1,80,156,76,,"No
+ ","     ",301
+1237,Moldova,Chisinau,Europe,"Moldova Internet 
+Exchange",http://www.moldtelecom.md/en/operators/exchange/,"Not an 
+exchange",0,0,46.99985,28.78814,0,0,0,0,0.000000,No,0000-00-00,,,,,,,http://www.moldtelecom.md/common/PDF/PDF_content/Operatori/Internet_Exchange_lista_ro.pdf,"No
+ ","     ",301
+1238,Poland,Lodz,Europe,"Lodz Internet 
+Exchange",http://www.lix.net.pl/,Active,20090000,0,51.75920,19.45600,18,0,0,0,0.000000,No,2017-09-11,5,130,7,105,214,72,http://www.lix.net.pl/uczestnicy/,"No
+ ","     ",301
+1239,Sweden,Boras,Europe,"Boras Internet 
+Exchange",http://www.bor-ix.net/,,0,0,57.72100,12.93980,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",301
+1240,Ukraine,Kiev,Europe,"Digital Telecom Internet 
+Exchange",https://dtel-ix.net/,Active,20090000,0,50.40000,30.45000,140,667000000,378800000,100040000,2.587120,No,2018-07-18,2,22,2,23,37,13,https://dtel-ix.net/en/members,"No
+ ","     ",301
+1241,Russia,Simferopol,Europe,"Crimea Internet 
+Exchange",https://crimea-ix.net/,Active,20060220,0,44.95210,34.10240,30,41500000,24000000,5000000,0.000000,No,2018-07-18,9,82,12,98,198,47,https://crimea-ix.net/members.html,"No
+ ","     ",301
+1261,Denmark,Copenhagen,Europe,"Copenhagen Internet 
+Exchange",http://www.cophix.net/,Defunct,0,0,55.67000,12.57000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,http://www.cophix.net/members,"No
+ ","     ",301
+1263,Indonesia,Jakarta,Asia-Pacific,"Matrix Cable System Internet 
+Exchange",https://nap.net.id/mcixservice.html,Active,20110000,290490,-6.17444,106.82944,68,10000000,0,0,0.000000,Yes,0000-00-00,2,131,2,13,72,24,,Yes,JKT,194
+1264,"New
+ Zealand",Hamilton,Asia-Pacific,"Hamilton Internet 
+Exchange",http://hix.nzix.net/,Active,20100000,0,-37.76692,175.28687,2,0,0,0,0.000000,No,0000-00-00,3,308,6,72,404,53,http://hix.nzix.net/peers.html,"No
+ ","     ",194
+1265,"United States",Minneapolis,"North America","Midwest Internet 
+Cooperative 
+Exchange",http://www.micemn.net/,Active,20110111,0,44.98550,-93.27190,64,177000000,1,60000000,0.000000,No,2018-07-18,7,40,16,19,118,8,http://www.micemn.net/participants.html,"No
+ ",MSP,215
+1267,"United States",Guam,"North America","Guam Internet 
+Exchange",http://www.gu-ix.net/,Active,20110000,0,13.47511,144.74844,3,1000000,0,0,0.000000,No,0000-00-00,26,203,58,67,395,30,http://www.gu-ix.net/members.html,"No
+ ","     ",215
+1269,Russia,"St. Petersburg",Europe,"DataIX St 
+Petersburg",http://www.dataix.ru/,Active,20101020,0,59.93000,30.30000,298,500000000,0,120000000,0.000000,No,2018-07-17,5,24,8,64,113,14,http://www.dataix.ru/members/,"No
+ ",LED,301
+1270,Russia,Moscow,Europe,"DataIX 
+Moscow",http://www.dataix.ru/,Active,20101020,0,55.75000,37.60000,282,1200000000,0,300000000,0.000000,No,2018-07-17,4,11,10,69,118,9,http://www.dataix.ru/eng/members/,"No
+ ","     ",301
+1271,Germany,Munich,Europe,"DE-CIX 
+Munich",https://www.de-cix.net/en/locations/germany/munich,Active,20100400,230724,48.13000,11.70000,40,15900000,10400000,4000000,0.000000,Yes,2018-07-18,7,112,14,83,162,64,https://www.de-cix.net/en/locations/germany/munich/connected-networks,"No
+ ","     ",301
+1272,Singapore,Singapore,Asia-Pacific,"Singapore Internet 
+Exchange",http://www.sgix.sg/,Active,20100607,279103,1.37000,103.98000,92,150000000,114000000,50000000,0.000000,Yes,2018-07-18,2,72,2,14,77,12,http://www.sgix.sg/peering-members/,Yes,QPG,194
+1274,Brazil,Americana,"Latin
+ America","Ponto de Troca de Trafego do 
+Americana",http://ptt.br/adesao/ame/,Unknown,20101220,0,-22.75583,-47.26861,0,0,0,0,0.000000,No,2014-12-17,,,,,,,http://ame.ptt.br/particip.html,"No
+ ","     ",116
+1275,Brazil,"Campina Grande","Latin America","Ponto de Troca de Trafego 
+do Campina 
+Grande",https://ix.br/adesao/cpv,Active,20100928,0,-7.22000,-35.88000,39,38000000,24000000,4000000,0.000000,No,2018-07-18,8,123,18,24,214,10,https://ix.br/particip/cpv,"No
+ ","     ",116
+1276,Brazil,Goiânia,"Latin America","Ponto de Troca de Trafego do 
+Goiânia",https://ix.br/adesao/gyn,Active,20101020,0,-16.67000,-49.25000,24,4400000,2800000,1000000,0.000000,No,2018-07-18,16,176,17,20,187,19,https://ix.br/particip/gyn,"No
+ ","     ",116
+1283,Laos,Vientiane,Asia-Pacific,"Lao National Internet 
+Center",http://www.lanic.la,Active,20100901,0,17.95000,102.57000,7,1000,0,0,0.000000,No,0000-00-00,1,299,1,59,333,51,,"No
+ ","     ",194
+1285,Pakistan,Karachi,Asia-Pacific,"Zero Point Internet 
+Exchange",http://zpix.pk/,Active,20110110,0,24.90000,67.13000,4,3600,0,0,0.000000,No,0000-00-00,1,295,1,67,381,49,,"No
+ ","     ",194
+1288,"United States",Phoenix,"North America","Arizona Internet 
+Exchange",http://arizonaix.net/,Defunct,20110000,0,33.45070,-112.06840,0,0,0,0,0.000000,No,2016-09-01,29,253,49,58,333,36,http://arizonaix.net/peers.pl,"No
+ ","     ",215
+1297,Grenada,"St. Georges","Latin America","Grenada Internet 
+Exchange",https://ixgd.wordpress.com/,Active,20110512,153,12.05363,-61.74995,9,3000,0,0,0.000000,Yes,2013-12-04,1,296,1,50,351,53,https://ixgd.wordpress.com/membership/,Yes,GND,116
+1299,"British
+ Virgin Islands","Road Town","Latin America","British Virgin Islands 
+IXP",,Planned,0,0,18.41667,-64.61667,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",116
+1303,Lesotho,Maseru,Africa,"Lesotho Internet 
+Exchange",,,0,0,-29.32630,27.50110,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",73
+1306,"South Africa",Johannesburg,Africa,"NAPAfrica 
+Johannesburg",https://www.napafrica.net/,Active,20120000,0,-26.13000,28.23000,252,440000000,0,110000000,0.000000,No,2018-07-17,1,61,1,1,12,2,https://www.napafrica.net/who-is-peering/,"No
+ ","     ",73
+1308,"South Africa","Cape Town",Africa,"NAPAfrica Cape 
+Town",https://www.napafrica.net/,Active,20120000,19292,-33.98000,18.60000,120,84000000,0,20000000,0.000000,Yes,2018-07-17,2,104,4,16,270,3,https://www.napafrica.net/peering-clients/,"No
+ ","     ",73
+1312,Sudan,Khartoum,Africa,"Sudan Internet Exchange 
+Point",http://www.sixp.sd/,Active,20111000,726,15.60214,32.58693,7,16400,0,0,0.000000,Yes,2016-09-01,1,288,1,23,333,25,http://www.sixp.sd/brtg.php,Yes,KRT,73
+1316,Canada,Winnipeg,"North
+ America","Manitoba Internet 
+Exchange",http://www.mbix.ca/,Active,20130729,223257,49.88330,-97.15000,22,1100000,500000,200000,0.000000,Yes,2018-07-17,6,242,6,33,191,34,http://www.mbix.ca/peers/,Yes,YWG,215
+1317,"United
+ States",Jacksonville,"North America","Jacksonville Internet 
+Exchange",http://jxix.org/,Active,20120102,1055,30.33218,-81.65565,10,0,0,0,0.000000,Yes,0000-00-00,31,308,45,54,314,39,http://jxix.org/index.php/participants/,Yes,JAX,215
+1319,China,"Hong
+ Kong",Asia-Pacific,"AMS-IX Hong 
+Kong",https://ams-ix.hk/,Active,20120401,0,22.33000,114.18000,43,32571000,22215000,12060000,0.967810,No,2018-07-18,2,107,2,30,159,21,https://ams-ix.hk/connected_parties,"No
+ ","     ",194
+1332,"United Kingdom",Manchester,Europe,"IXManchester powered by 
+LINX",https://www.linx.net/,Active,20120429,4695,53.35000,-2.27000,89,63000000,44000000,20000000,0.000000,Yes,2018-07-17,3,94,4,38,66,54,https://www.linx.net/tech-info-help/members-by-ip-asn,Yes,MAN,301
+1341,"United
+ Arab Emirates",Dubai,Europe,"UAE-IX by 
+DE-CIX",https://www.uae-ix.net/,Active,20120224,2438,25.25000,55.33000,54,80000000,57000000,35000000,0.000000,Yes,2018-07-18,1,75,1,54,94,43,https://www.uae-ix.net/customers-partners/customers/,Yes,DXB,301
+1348,"United
+ States",Boston,"North America","Boston Internet 
+Exchange",https://www.markleygroup.com/services/boston-internet-exchange,Active,20120409,115229,42.37000,-71.03000,61,0,0,0,0.000000,Yes,0000-00-00,31,308,14,16,101,39,https://www.markleygroup.com/services/boston-internet-exchange,Yes,BOS,215
+1350,Serbia,Belgrade,Europe,"Serbian
+ Open 
+Exchange",http://www.sox.rs/,Active,20100900,0,44.82958,20.46547,23,100000000,0,0,0.000000,No,0000-00-00,1,48,1,98,198,30,http://www.sox.rs/en/?id=News&amp;lang=en,"No
+ ","     ",301
+1362,"South Africa",Durban,Africa,"Durban Internet 
+eXchange",https://wiki.inx.net.za/display/pub/DINX+-+Durban+Internet+Exchange,Active,20120914,5292,-29.97000,30.95000,17,21800,0,0,0.000000,Yes,2017-05-20,6,290,5,26,351,27,,Yes,DUR,73
+1364,Dominica,Roseau,"Latin
+ America","Dominica National Internet Exchange 
+Point",http://www.danix.dm/,Active,20130227,52,15.30000,-61.40000,4,67470,0,0,0.000000,Yes,2017-02-22,1,272,1,50,351,49,,"No
+ ",DOM,116
+1365,Estonia,Tallinn,Europe,"Tallinn Governmental Internet 
+Exchange",http://www.rtix.ee/,Active,20090700,113938,59.35000,24.80000,11,0,0,0,0.000000,Yes,0000-00-00,3,308,3,149,333,131,,Yes,TLL,301
+1367,Vanuatu,"Port
+ Vila",Asia-Pacific,"Vanuatu Internet 
+Exchange",http://www.vix.vu/,Active,20130214,67,-17.75000,168.32000,6,81900,0,0,0.000000,Yes,0000-00-00,1,270,1,62,351,45,,Yes,VLI,194
+1373,France,Grenoble,Europe,GrenoblIX,http://www.grenoblix.net/fr/,Active,20130000,0,45.19000,5.72000,8,0,0,0,0.000000,No,0000-00-00,8,308,12,149,333,131,http://communication.rezopole.net/participants.php?ix=grenoblix,"No
+ ","     ",301
+1375,France,Valence,Europe,"The Ardèche and Drôme Internet eXchange 
+Point 
+",http://www.adn-ix.net/en/,Defunct,20120000,0,44.93330,4.89170,0,0,0,0,0.000000,No,0000-00-00,,,,,,,http://www.adn-ix.net/en/adnix-members,"No
+ ","     ",301
+1383,Russia,Saratov,Europe,"Saratov Internet 
+Exchange",http://saratov-ix.ru/,Active,20050000,0,51.53330,46.03330,9,163000,0,0,0.000000,No,0000-00-00,21,256,18,123,270,116,http://saratov-ix.ru/members/,"No
+ ","     ",301
+1384,Russia,Stavropol,Europe,"MSK-IX 
+Stavropol",http://www.msk-ix.ru/eng/,Active,20090000,0,45.05000,41.96670,7,240000,0,0,0.000000,No,2013-12-09,18,231,20,144,320,105,http://www.msk-ix.ru/en/members/,"No
+ ","     ",301
+1385,Romania,Bucharest,Europe,Balcan-IX,http://www.balcan-ix.net/,Active,20080000,0,44.50000,26.13000,33,54000000,0,12000000,0.000000,No,2018-07-17,3,118,3,89,178,68,http://www.balcan-ix.net/ro/balcan-ix-partners/,"No
+ ","     ",301
+1403,Argentina,"Bahía Blanca","Latin America","CABASE IXP Bahía 
+Blanca",http://www.cabase.org.ar/nap-bahia-blanca-2/,Active,20130427,0,-38.71440,-62.26740,17,713000,0,0,0.000000,No,0000-00-00,7,219,5,28,236,31,http://www.cabase.org.ar/nap-bahia-blanca-2/,"No
+ ","     ",116
+1404,Argentina,Córdoba,"Latin America","CABASE IXP 
+Córdoba",http://www.cabase.org.ar/nap-cordoba/,Active,20120424,12416,-31.40360,-64.18580,25,175000,0,0,0.000000,Yes,0000-00-00,9,250,2,21,191,39,http://www.cabase.org.ar/nap-cordoba/,Yes,COR,116
+1405,Argentina,"Mar
+ del Tuyú","Latin America","CABASE IXP De la 
+Costa",http://www.cabase.org.ar/nap-de-la-costa/,Active,20111129,0,-36.57940,-56.69250,10,919000,0,0,0.000000,No,0000-00-00,6,212,10,46,320,30,http://www.cabase.org.ar/nap-de-la-costa/,"No
+ ","     ",116
+1406,Argentina,"La Plata","Latin America","CABASE IXP La 
+Plata",http://www.cabase.org.ar/nap-la-plata/,Active,20120606,0,-34.92920,-57.96000,17,85000,0,0,0.000000,No,0000-00-00,11,269,6,32,255,48,http://www.cabase.org.ar/nap-la-plata/,"No
+ ","     ",116
+1407,Argentina,"Mar del Plata","Latin America","CABASE IXP Mar del 
+Plata",http://www.cabase.org.ar/nap-mar-del-plata/,Active,20121107,0,-37.93000,-57.58000,11,968000,0,0,0.000000,No,0000-00-00,5,210,9,41,299,29,http://www.cabase.org.ar/nap-mar-del-plata/,"No
+ ","     ",116
+1408,Argentina,Mendoza,"Latin America","CABASE IXP 
+Mendoza",http://www.cabase.org.ar/nap-mendoza/,Active,20111020,0,-32.89050,-68.84200,18,2160000,0,0,0.000000,No,0000-00-00,3,180,6,32,255,22,http://www.cabase.org.ar/nap-mendoza/,"No
+ ","     ",116
+1409,Argentina,Rosario,"Latin America","CABASE IXP 
+Rosario",http://www.cabase.org.ar/nap-rosario/,Active,20110331,0,-32.95000,-60.65000,23,2290000,0,0,0.000000,Yes,0000-00-00,1,177,3,24,214,20,http://www.cabase.org.ar/nap-rosario/,Yes,ROS,116
+1410,Argentina,"Santa
+ Fe","Latin America","CABASE IXP Santa 
+Fe",http://www.cabase.org.ar/nap-santa-fe/,Active,20111122,0,-31.62710,-60.70360,6,122000,0,0,0.000000,No,0000-00-00,10,261,12,50,351,45,http://www.cabase.org.ar/nap-santa-fe/,"No
+ ","     ",116
+1440,Brazil,Belém,"Latin America","Ponto de Troca de Trafego do 
+Belém",https://ix.br/adesao/bel,Active,20110600,0,-1.46670,-48.48330,17,705000,482000,100000,0.000000,No,2018-07-18,21,228,19,27,228,34,https://ix.br/particip/bel,"No
+ ","     ",116
+1441,Brazil,"Caxias do Sul","Latin America","Ponto de Troca de Trafego 
+do Caxias do 
+Sul",https://ix.br/adesao/cxj,Active,20130600,0,-29.16670,-51.18330,5,1000000,615000,500000,0.000000,No,2018-07-18,22,238,26,55,370,37,https://ix.br/particip/cxj,"No
+ ","     ",116
+1442,Brazil,Manaus,"Latin America","Ponto de Troca de Trafego do 
+Manaus",https://ix.br/adesao/mao,Active,20130100,0,-3.12920,-60.02140,10,1000000,630000,100000,0.000000,No,2018-07-18,27,268,25,41,299,47,https://ix.br/particip/mao,"No
+ ","     ",116
+1443,Brazil,Natal,"Latin America","Ponto de Troca de Trafego do 
+Natal",https://ix.br/adesao/nat,Active,20110600,0,-5.76670,-35.20000,15,1900000,1200000,300000,0.000000,No,2018-07-18,19,202,20,30,244,27,https://ix.br/particip/nat,"No
+ ","     ",116
+1444,Brazil,"São José dos Campos","Latin America","Ponto de Troca de 
+Trafego do São José dos 
+Campos",https://ix.br/adesao/sjc,Active,20110000,0,-23.18270,-45.88300,10,300000,200000,40000,0.000000,No,2018-07-18,25,258,21,32,255,44,https://ix.br/particip/sjc,"No
+ ","     ",116
+1445,Brazil,"São José do Rio Preto","Latin America","Ponto de Troca de 
+Trafego do São José do Rio 
+Preto",https://ix.br/adesao/sjp,Active,20130100,0,-20.80810,-49.38110,14,882000,576000,200000,0.000000,No,2018-07-18,24,255,24,40,288,43,https://ix.br/particip/sjp,"No
+ ","     ",116
+1446,Brazil,Vitória,"Latin America","Ponto de Troca de Trafego do 
+Vitória",https://ix.br/adesao/vix,Active,20120000,0,-20.31890,-40.33780,23,4000000,2700000,500000,0.000000,No,2018-07-18,17,186,14,17,171,24,https://ix.br/particip/vix,"No
+ ","     ",116
+1461,Canada,Calgary,"North America","Calgary Internet 
+Exchange",https://www.yycix.ca/,Active,20130103,223760,51.05440,-114.06690,38,9500000,6000000,2100000,0.000000,Yes,2018-07-18,5,217,4,29,171,32,https://yycix.ca/peers.html,Yes,YYC,215
+1472,Australia,Brisbane,Asia-Pacific,"Queensland
+ Internet 
+Exchange",https://www.ix.asn.au/peering/,Active,20110000,0,-27.38000,153.10001,55,34000000,17300000,9000000,0.000000,No,2018-07-18,4,120,8,29,149,23,https://www.ix.asn.au/peers-qld/,"No
+ ","     ",194
+1473,Australia,Adelaide,Asia-Pacific,"South Australia Internet 
+Exchange",http://www.ix.asn.au/peering.html,Active,20130227,0,-34.93000,138.52000,21,16000000,5910000,2200000,0.000000,No,2018-07-17,6,218,10,49,270,39,https://www.ix.asn.au/peers-sa/,"No
+ ","     ",194
+1474,Tunisia,Tunis,Africa,"Tunisian Internet Exchange 
+Point",http://www.ati.tn/?page_id=1618&amp;lang=en,Active,20110000,1325,36.81881,10.16596,5,0,0,0,0.000000,Yes,2015-03-05,1,49,1,11,236,1,,Yes,TUN,73
+1484,"United
+ States",Phoenix,"North 
+America",Phoenix-IX,http://phoenix-ix.net/,Active,20120901,116404,33.45070,-112.06840,64,16900000,0,0,0.000000,Yes,2017-05-04,20,143,15,18,110,23,http://phoenix-ix.net/participants.html,Yes,PHX,215
+1499,Armenia,Yerevan,Europe,"Armenian
+ Internet Traffic 
+Exchange",http://www.armix.am/eng/index.php,Active,20100000,2394,40.13000,44.47000,8,20000000,0,0,0.000000,Yes,0000-00-00,1,308,1,142,314,131,http://www.armix.am/eng/members.php,Yes,EVN,301
+1506,Norway,Oslo,Europe,"Norwegian
+ Internet Exchange Oslo 
+2",http://www.uio.no/tjenester/it/nett/fastnett/nix/,Active,20000500,0,59.95000,10.70000,22,4720327,0,3500000,0.000000,No,2018-07-23,2,138,1,43,78,77,http://www.uio.no/tjenester/it/nett/fastnett/nix/nix-ops.html,"No
+ ","     ",301
+1507,Norway,Bergen,Europe,"Bergen Internet 
+Exchange",http://www.nix.no/,Active,20040000,0,60.38000,5.34000,6,342180,0,50000,0.000000,No,2018-07-23,4,239,4,123,270,109,http://www.uio.no/tjenester/it/nett/fastnett/nix/nix-ops.html,"No
+ ","     ",301
+1508,Norway,Trondheim,Europe,"Trondheim Internet 
+Exchange",http://www.nix.no/,Active,20050000,0,63.47000,10.93000,5,432913,0,140000,0.000000,No,2018-07-23,3,237,4,123,270,108,http://www.uio.no/tjenester/it/nett/fastnett/nix/nix-ops.html,"No
+ ","     ",301
+1511,Norway,Stavanger,Europe,"Stavanger Internet 
+exchange",http://www.nix.no/,Unknown,20070000,0,58.97000,5.71000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,http://www.uio.no/tjenester/it/nett/fastnett/nix/nix-ops.html,"No
+ ","     ",301
+1512,Norway,Tromsø,Europe,"Tromsø Internet 
+exchange",http://www.nix.no/,Unknown,20070000,0,69.66670,18.93330,0,0,0,0,0.000000,No,0000-00-00,,,,,,,http://www.uio.no/tjenester/it/nett/fastnett/nix/nix-ops.html,"No
+ ","     ",301
+1515,Finland,Oulu,Europe,"Finnish Communication and Internet Exchange 
+Oulu",https://www.ficix.fi/,Active,20080000,0,65.05000,25.46670,7,900000,0,0,0.000000,No,0000-00-00,4,213,1,80,156,100,https://www.ficix.fi/membership/ficix-jasenet/,"No
+ ","     ",301
+1516,Finland,Espoo,Europe,"Finnish Communication and Internet Exchange 
+Espoo",https://www.ficix.fi/,Active,19930000,0,60.21000,24.66000,12,19100000,0,0,0.000000,No,0000-00-00,2,111,3,94,187,63,https://www.ficix.fi/membership/,"No
+ ","     ",301
+1521,Slovakia,Košice,Europe,"Slovak Internet Exchange 
+Košice",http://www.six.sk/,Active,20080600,0,48.71670,21.25000,4,227711,0,90000,0.000000,No,2018-07-23,2,260,2,162,381,118,http://www.six.sk/index.php?page=siete&amp;city=ke,"No
+ ","     ",301
+1526,Cambodia,"Phnom Penh",Asia-Pacific,"HTN-Cambodia Internet 
+Exchange",http://www.htnetworks.com.kh/index.php/ixservices,Active,20130000,0,11.55000,104.85000,16,0,0,0,0.000000,No,0000-00-00,2,308,2,57,314,53,,"No
+ ","     ",194
+1530,Bolivia,"La Paz","Latin America","IXP 
+MegaLink",https://ixp.megalink.com/,Active,20131101,289,-16.50000,-68.15000,6,1000,0,0,0.000000,Yes,0000-00-00,2,299,2,57,381,54,,Yes,LPB,116
+1540,Canada,Winnipeg,"North
+ America","Winnipeg Internet 
+Exchange",http://wpgix.ca/,Active,20130500,119466,49.88330,-97.15000,25,6900000,2,1000000,0.000000,Yes,2018-07-18,4,164,4,29,171,26,http://wpgix.ca/?page_id=13,Yes,YWG,215
+1541,"Republic
+ of Congo",Brazzaville,Africa,"Congo Brazzaville 
+IX",http://www.cgix-congo.cg/,Active,20130510,0,-4.26780,15.29190,7,20,0,0,0.000000,No,0000-00-00,1,305,1,23,333,33,http://www.cgix-congo.cg/membre.html,"No
+ ","     ",73
+1544,Pakistan,,Asia-Pacific,"Pakistan Internet 
+Exchange",,Planned,20000000,0,,,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",194
+1546,Indonesia,Jakarta,Asia-Pacific,"NEX Internet 
+Exchange",https://www.nexdatacenter.com/solution/internet-exchange,Active,20100000,0,-6.17444,106.82944,12,495000,0,0,0.000000,No,0000-00-00,5,208,3,38,191,37,https://www.nexdatacenter.com/solution/internet-exchange,"No
+ ","     ",194
+1548,Indonesia,Jakarta,Asia-Pacific,"PT. Cyberplus Media 
+Pratama",http://www.cyberplus.net.id/,Planned,20130000,0,-6.17444,106.82944,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",194
+1549,Indonesia,Surabaya,Asia-Pacific,"IIX Jawa 
+Timur",http://www2.jatim.apjii.or.id/,Active,20080000,0,-7.24917,112.75083,7,0,0,0,0.000000,No,0000-00-00,6,308,6,51,288,53,,"No
+ ","     ",194
+1550,Indonesia,Jakarta,Asia-Pacific,"OpenIXP Internet exchange 
+Point",http://www.openixp.net/,Active,20050000,14,-6.17444,106.82944,790,21900000,0,0,0.000000,Yes,2017-10-25,1,45,5,43,214,7,http://www.openixp.net/routedasn.html,Yes,PCB,194
+1553,"United
+ States",Buffalo,"North America","Buffalo Niagara International Internet
+ 
+Exchange",http://www.bniix.net/,Active,20110500,0,42.88640,-78.87860,8,0,0,0,0.000000,No,0000-00-00,31,308,46,55,320,39,,"No
+ ","     ",215
+1554,Canada,Toronto,"North America","Greater Toronto International 
+Internet Exchange",http://www.iixpeering.net/peering/gtiix.php,"Not an 
+exchange",20110600,0,43.67000,-79.40000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,http://www.iixpeering.net/peering/about-members.php,"No
+ ","     ",215
+1555,"United States",Chicago,"North America","Greater Chicago 
+International Internet 
+Exchange",https://www.consoleconnect.com/,Active,20121200,0,41.85000,-87.65000,2,0,0,0,0.000000,No,0000-00-00,31,308,60,70,404,39,,"No
+ ","     ",215
+1574,"Republic of Congo",Pointe-Noire,Africa,"CG-IX 
+Pointe-Noire",,Planned,0,0,-4.76920,11.86640,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",73
+1575,Pakistan,,Asia-Pacific,"Transworld Internet 
+Exchange",http://www.saifgroup.com/transworld.php,Planned,0,0,,,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",194
+1576,Lithuania,Vilnius,Europe,"Lithuania Internet 
+Exchange",http://www.lixp.lt/en,Active,20100000,170179,54.63000,25.28000,18,28000000,21000000,13550000,0.000000,Yes,2018-06-24,1,171,2,158,370,90,http://lixp.lt/en/network/member,Yes,VNO,301
+1585,Australia,Sydney,Asia-Pacific,"New
+ South Wales 
+IX",http://www.ix.asn.au/peering.html,Active,20130000,121329,-33.95000,151.17999,190,190000000,70300000,67000000,0.000000,Yes,2018-07-17,1,56,2,3,30,9,https://www.ix.asn.au/peers-nsw/,Yes,SYD,194
+1587,Mongolia,Ulaanbaatar,Asia-Pacific,"Mangolian
+ Internet Exchange and Mangolian National Data 
+Center",http://www.datacenter.gov.mn/,Planned,0,0,47.90882,106.86346,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",194
+1588,Ukraine,Kiev,Europe,"Giganet Internet 
+Exchange",http://giganet.ua/ru,Active,20120000,275694,50.40000,30.45000,103,813000000,472,120000000,0.000000,Yes,2018-07-18,1,16,3,32,53,10,http://giganet.ua/ru/members,Yes,KBP,301
+1608,"United
+ Kingdom",,Europe,"eXpress 
+IX",http://packetexchange.com/services-global-remote-peering.html,Planned,0,0,,,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",301
+1611,"United 
+Kingdom",Macclesfield,Europe,Edge-IX,http://www.edge-ix.net/,Defunct,20130000,0,53.25810,-2.12740,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",301
+1616,Canada,Montreal,"North America","Quebec Internet 
+Exchange",https://qix.ca/index,Active,20130100,123119,45.47000,-73.75000,61,68000000,43000000,20000000,0.000000,Yes,2018-07-18,2,88,3,16,101,15,https://qix.ca/members?lang=en,Yes,YUL,215
+1623,Bulgaria,Sofia,Europe,NetIX,http://www.netix.net/,Active,20130101,586505,42.65000,23.38000,100,175000000,215000000,90000000,0.000000,Yes,2018-07-18,1,34,1,29,49,21,http://netix.net/members,Yes,SOF,301
+1636,Poland,Warsaw,Europe,"TPIX
+ - Internet 
+Exchange",http://www.tpix.pl/en/,Active,20101100,0,52.23000,21.00000,214,334000000,198000000,50000000,0.000000,No,2018-07-18,2,44,3,21,34,27,http://www.tpix.pl/en/uczestnicy_en.html,"No
+ ","     ",301
+1645,Poland,Warsaw,Europe,"Krajowa Izba Komunikacji 
+Ethernetowej",http://www.kike.pl/,Active,20090000,0,52.23000,21.00000,11,0,0,0,0.000000,No,0000-00-00,7,308,8,131,288,131,http://www.tanielacze.pl/?page_id=257,"No
+ ","     ",301
+1656,France,Marseille,Europe,"France-IX 
+Marseille",https://www.franceix.net/en/,Active,20110000,0,43.45000,5.23000,40,86000000,26000000,56000000,0.000000,No,2018-07-18,2,78,2,7,9,45,https://www.franceix.net/en/france-ix-marseille/members-in-marseille/,"No
+ ","     ",301
+1658,France,Paris,Europe,"FR-IX 
+75",https://www.fr-ix.fr/,Active,20100505,0,48.80000,2.33000,18,0,0,0,0.000000,No,0000-00-00,8,308,7,118,255,131,https://mon.nap75.fr-ix.fr/p-liste.php,"No
+ ","     ",301
+1663,Germany,Frankfurt,Europe,"European Commercial Internet Exchange 
+Frankfurt",https://www.ecix.net/,Active,20130408,254607,50.12000,8.68000,98,0,0,0,0.000000,Yes,0000-00-00,13,308,2,18,28,131,https://www.ecix.net/connected-networks,"No
+ ","     ",301
+1667,Germany,Düsseldorf,Europe,"OpenCarrier e.G. Member IX 
+Düsseldorf",http://www.opencarrier.eu/,Active,20070500,0,51.28000,6.76000,23,0,0,0,0.000000,No,0000-00-00,13,308,12,78,149,131,http://www.opencarrier.eu/2-mitglieder.html,"No
+ ","     ",301
+1669,Canada,Calgary,"North 
+America",AlbertaIX,https://www.albertaix.ca/,Defunct,20140123,0,51.05440,-114.06690,0,0,0,0,0.000000,No,0000-00-00,8,308,9,67,395,39,https://www.albertaix.ca/peers/,"No
+ ","     ",215
+1670,Germany,Frankfurt,Europe,"OpenCarrier e.G. Member IX 
+Frankfurt",http://www.opencarrier.eu/,Active,20070500,0,50.12000,8.68000,23,0,0,0,0.000000,No,0000-00-00,13,308,12,78,149,131,http://www.opencarrier.eu/2-mitglieder.html,"No
+ ","     ",301
+1672,Canada,Victoria,"North America","Victoria Transit 
+Exchange",,,0,0,48.42840,-123.36560,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",215
+1678,"United States",Reston,"North America","LINX 
+NoVa",https://www.linx.net/tech-info-help/network-topology,Active,20140300,86573,38.95669,-77.34210,45,19000000,15500000,8000000,0.000000,Yes,2018-07-17,25,192,28,34,198,29,https://www.linx.net/tech-info-help/members-by-ip-asn,Yes,IAD,215
+1680,"United
+ States",Medford,"North America","Southern Oregon Access 
+Exchange",https://www.soax.org/,Active,20130000,0,42.33190,-122.86190,5,0,0,0,0.000000,No,0000-00-00,31,308,55,64,370,39,https://www.soax.org/index.php/members,"No
+ ","     ",215
+1683,Peru,Lima,"Latin America","NAP Inca",,"Not an 
+exchange",20110000,0,-12.00000,-77.12000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",116
+1693,Canada,Halifax,"North America","Halifax Internet 
+Exchange",https://hfxix.ca/,Active,20150501,213,44.67000,-63.61000,19,150000,0,0,0.000000,Yes,0000-00-00,8,308,8,47,270,39,https://hfxix.ca/peering-lan-ip-assignments/,Yes,YHZ,215
+1701,"United
+ Kingdom",Edinburgh,Europe,"IXScotland powered by 
+LINX",https://www.linx.net/about/our-network/,Active,20131000,830,55.92000,-3.17000,26,1000000,443000,100000,0.000000,Yes,2018-07-17,7,243,6,104,211,111,https://portal.linx.net/members/list-ip-asn,Yes,EDI,301
+1702,Kosovo,Prishtinë,Europe,"KOSIX
+ Internet Exchange 
+Point",http://www.kosix.net/,Active,20110623,0,42.66670,21.16670,4,60000,0,0,0.000000,No,0000-00-00,1,274,1,162,381,122,http://www.kosix.net/en-us/members/listofmembers.aspx,"No
+ ","     ",301
+1705,Afghanistan,Kabul,Asia-Pacific,"National Internet Exchange of 
+Afghanistan",http://www.nixa.af/,Planned,20110500,0,34.55395,68.91754,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",194
+1707,Tajikistan,Dushanbe,Asia-Pacific,"Tajik Internet Exchange 
+Point",,Defunct,20050000,0,38.56967,68.77498,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",194
+1708,Algeria,Algiers,Africa,"Algeria Internet 
+Exchange",,Planned,20130000,0,36.72273,3.06988,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",73
+1709,Uzbekistan,Tashkent,Asia-Pacific,"Uzbekistan Internet 
+Exchange",http://tas-ix.uz/,Active,20041224,0,41.26670,69.21670,42,0,0,0,0.000000,No,0000-00-00,1,308,1,24,130,53,http://tas-ix.uz/pages/azolar,"No
+ ","     ",194
+1710,Azerbaijan,Baku,Europe,"Azerbaijan Internet exchange",,"Not an 
+exchange",20130000,0,40.45113,49.86832,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",301
+1719,"United States",Boston,"North America","Coresite - Any 
+2",http://www.coresite.com/solutions/interconnection/peering-exchanges/any2-internet-peering-exchange,Active,20130000,0,42.37000,-71.03000,5,0,0,0,0.000000,No,0000-00-00,31,308,61,72,413,39,http://www.coresite.com/solutions/interconnection/peering-exchanges/any2-internet-peering-exchange/any2-peering-participants,"No
+ ","     ",215
+1720,"United States",Denver,"North America","Coresite - Any 
+2",http://www.coresite.com/solutions/interconnection/Peering-Exchanges/ANY2,Active,20130000,0,39.75000,-105.00000,45,0,0,0,0.000000,No,0000-00-00,31,308,21,24,140,39,http://www.coresite.com/solutions/interconnection/Peering-Exchanges/ANY2/ANY2-Peering-Participants,"No
+ ","     ",215
+1721,"United States",Miami,"North America","Coresite - Any 
+2",http://www.coresite.com/solutions/interconnection/Peering-Exchanges/ANY2,Active,20130000,0,25.83000,-80.29000,3,0,0,0,0.000000,No,0000-00-00,31,308,61,72,413,39,http://www.coresite.com/solutions/interconnection/Peering-Exchanges/ANY2/ANY2-Peering-Participants,"No
+ ","     ",215
+1722,"United States","New York","North America","Coresite - Any 
+2",http://www.coresite.com/solutions/interconnection/Peering-Exchanges/ANY2,Active,20130000,0,40.75000,-74.00000,8,0,0,0,0.000000,No,0000-00-00,31,308,61,72,413,39,http://www.coresite.com/solutions/interconnection/Peering-Exchanges/ANY2/ANY2-Peering-Participants,Yes,EWR,215
+1723,"United
+ States",Reston,"North America","Coresite - Any 2 
+NorthEast",http://www.coresite.com/solutions/interconnection/Peering-Exchanges/ANY2,Active,20130000,0,38.95669,-77.34210,23,0,0,0,0.000000,No,0000-00-00,31,308,23,26,149,39,http://www.coresite.com/solutions/interconnection/Peering-Exchanges/ANY2/ANY2-Peering-Participants,"No
+ ","     ",215
+1724,"United States","San Jose","North America","Coresite - Any 2 
+Northern 
+California",http://www.coresite.com/solutions/interconnection/Peering-Exchanges/ANY2,Active,20130000,0,37.33000,-121.88000,24,0,0,0,0.000000,No,0000-00-00,31,308,13,15,94,39,http://www.coresite.com/solutions/interconnection/Peering-Exchanges/ANY2/ANY2-Peering-Participants,"No
+ ","     ",215
+1758,"Czech 
+Republic",Prague,Europe,Peering.cz,https://www.peering.cz/,Active,20121017,252241,50.08000,14.43000,121,700000000,0,100000000,0.000000,Yes,2018-05-01,2,33,1,29,49,20,https://www.peering.cz/en/traffic,Yes,PRG,301
+1778,"United
+ States","New York","North America","DE-CIX New 
+York",https://www.de-cix.net/en/locations/united-states/new-york,Active,20130000,410841,40.75000,-74.00000,145,246000000,204000000,170000000,0.000000,Yes,2018-07-18,9,55,5,6,36,10,https://www.de-cix.net/en/locations/united-states/new-york/connected-networks,Yes,LGA,215
+1781,Denmark,Copenhagen,Europe,"Netnod
+ 
+Copenhagen",https://www.netnod.se/,Active,20140500,0,55.67000,12.57000,50,94000000,57000000,20000000,0.000000,No,2018-07-18,1,69,2,64,113,39,https://www.netnod.se/ix/networks,"No
+ ","     ",301
+1782,"Saint Lucia",Castries,"Latin America","Saint Lucia 
+IXP",,Active,20140600,87,14.02000,-61.00000,5,0,0,0,0.000000,Yes,0000-00-00,1,308,1,59,413,55,,Yes,SLU,116
+1783,Palestine,Ramallah,Europe,"Palestinian
+ Internet 
+Exchange",http://pix.ps/,Active,20120604,270,31.90380,35.20340,10,27300,0,0,0.000000,Yes,2014-09-01,1,285,1,142,314,127,http://pix.ps/index.php?option=com_content&amp;view=article&amp;id=54&amp;Itemid=53,Yes,GZA,301
+1784,Namibia,Windhoek,Africa,"Windhoek
+ 
+IXP",http://www.ixp.org.na,Active,20140307,102,-22.56429,17.08514,5,50000,0,0,0.000000,Yes,0000-00-00,1,276,1,32,370,23,,Yes,WDH,73
+1789,Bolivia,"La
+ Paz","Latin America","Punto de Intercambio de Trafico de 
+Bolivia",http://www.pit.bo/,Active,20131113,0,-16.50000,-68.15000,6,175000,0,0,0.000000,No,0000-00-00,1,250,1,50,351,39,http://www.pit.bo/index.php/isp-conectados,"No
+ ","     ",116
+1790,France,Saint-Denis,Europe,"Réunion Internet 
+Exchange",https://www.renater.fr/reunix?lang=en,Active,20060200,0,-20.89070,55.45510,10,0,0,0,0.000000,No,0000-00-00,8,308,10,135,299,131,"https://www.renater.fr/connected-members,579","No
+ ","     ",301
+1792,France,Cayenne,Europe,Guyanix,https://www.renater.fr/guyanix,Active,20131001,0,4.92240,-52.31350,9,0,0,0,0.000000,No,0000-00-00,8,308,16,172,413,131,https://www.renater.fr/les-membres-connectes-1885?lang=fr,"No
+ ","     ",301
+1795,"United States",Bend,"North America","Central Oregon Internet 
+eXchange",http://www.centraloregonix.org/,Active,20110512,0,44.05640,-121.30810,4,0,0,0,0.000000,No,0000-00-00,31,308,56,65,381,39,http://www.centraloregonix.org/members/,"No
+ ","     ",215
+1801,"Cote D'Ivoire",Abidjan,Africa,"Côte d'Ivoire Internet Exchange 
+Point",www.civix.ci,Active,20131003,100,5.25000,-3.93000,9,43000,0,0,0.000000,Yes,0000-00-00,1,271,1,26,351,22,http://www.civix.ci/index.php?option=com_content&amp;view=article&amp;id=10&amp;Itemid=132&amp;lang=en,Yes,ABJ,73
+1802,Canada,Vancouver,"North
+ America","Vancouver Internet 
+Exchange",http://www.vanix.ca/,Active,20131130,0,49.18000,-123.17000,49,4800000,3000000,1000000,0.000000,No,2018-07-18,3,121,2,13,85,17,http://www.vanix.ca/participants/,"No
+ ","     ",215
+1803,"Trinidad and Tobago",Barataria,"Latin America","Trinidad and 
+Tobago Internet 
+Exchange",https://ix.tt/,Active,20140418,94,10.64688,-61.46287,8,350000,0,0,0.000000,Yes,0000-00-00,1,236,1,48,333,36,https://ix.tt/membership/founding-members/,Yes,POS,116
+1804,Swaziland,Mbabane,Africa,"Mbabane
+ Internet Exchange",,"Not an 
+exchange",20140410,0,-26.31667,31.13333,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",73
+1805,Tunisia,Enfidha,Africa,"Enfidha Internet 
+Exchange",,Active,20130000,99,36.13440,10.37935,2,0,0,0,0.000000,Yes,0000-00-00,2,308,2,38,413,34,,"No
+ ","     ",73
+1806,"Costa Rica","San Jose","Latin America","Punto de Intercambio 
+Neutro de 
+Internet",https://www.crix.cr/,Active,20140429,1140,9.93504,-84.08300,27,2500000,2230000,400000,0.000000,Yes,2018-07-17,1,241,1,22,198,38,https://www.crix.cr/miembros,"No
+ ","     ",116
+1807,Brazil,Cuiabá,"Latin America","Ponto de Troca de Tráfego do 
+Cuiabá",https://ix.br/adesao/cgb,Active,20140700,0,-15.60140,-56.09790,16,235000,80000,10000,0.000000,No,2018-07-18,23,252,21,32,255,41,https://ix.br/particip/cgb,"No
+ ","     ",116
+1808,Brazil,Lajeado,"Latin America","Ponto de Troca de Trafego do 
+Lajeado",https://ix.br/adesao/laj,Active,20130300,0,-29.45960,-51.96490,15,11700000,6500000,1000000,0.000000,No,2018-07-18,20,220,21,32,255,32,https://ix.br/particip/laj,"No
+ ","     ",116
+1809,Brazil,"São Carlos","Latin America","Ponto de Troca de Trafego do 
+Central Paulista 
+",http://ptt.br/adesao/sca,Defunct,20131000,0,-22.00870,-47.89090,0,0,0,0,0.000000,No,2017-10-27,26,267,27,57,381,46,http://ptt.br/particip/sca,"No
+ ","     ",116
+1810,"United States","New York","North America","AMS-IX New 
+York",https://nynj.ams-ix.net/,Active,20140417,133958,40.75000,-74.00000,18,9947000,2913000,2000625,0.446280,Yes,2018-07-18,19,142,39,46,255,22,https://nynj.ams-ix.net/connected_parties,Yes,LGA,215
+1811,Gambia,Serrekunda,Africa,"Serrekunda
+ Internet Exchange 
+Point",http://www.sixp.gm/,Active,20130725,110,13.43637,-16.66660,7,501330,0,0,0.000000,Yes,2017-09-18,1,226,1,12,244,18,http://www.sixp.gm/about.html,Yes,BJL,73
+1812,Belarus,Minsk,Europe,"Belarus
+ National Internet Exchange 
+Point",,Unknown,0,0,53.88401,27.45489,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",301
+1813,"United Kingdom",Cardiff,Europe,"IXCardiff by 
+LINX",https://www.linx.net/,Active,20141015,0,51.48158,-3.17909,26,213000,24000,20000,0.000000,No,2018-07-17,6,227,5,76,144,103,https://www.linx.net/ix-cardiff/tech-info-help/members-by-ip-asn,"No
+ ","     ",301
+1814,Jamaica,Kingston,"Latin America","Jamaica Internet Exchange 
+Point",,Active,20140831,314,17.93000,-76.78000,4,0,0,0,0.000000,Yes,0000-00-00,1,308,1,59,413,55,,Yes,KIN,116
+1815,France,Nantes,Europe,"Ouest
+ 
+IX",http://www.ouestix.fr/,Active,20140402,0,47.21840,-1.55360,10,0,0,0,0.000000,No,0000-00-00,8,308,10,135,299,131,http://www.ouestix.fr/membres/,"No
+ ","     ",301
+1816,"United States",Milwaukee,"North America","Milwaukee Internet 
+Exchange",HTTP://www.mkeix.net/,Active,20110000,911,43.03890,-87.90650,17,1800000,0,200000,0.000000,Yes,2018-07-17,27,221,36,42,244,33,http://www.mkeix.net/participants/,Yes,MKE,215
+1817,Argentina,"Buenos
+ Aires","Latin America","NAP CABASE La 
+Matanza",,Planned,0,0,-34.57000,-58.42000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",116
+1818,Argentina,Corrientes,"Latin America","NAP CABASE 
+Corrientes",,Planned,0,0,-27.48429,-58.78247,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",116
+1819,Argentina,Resistencia,"Latin America","CABASE IXP 
+Resistencia",,Active,20170217,0,-27.46064,-59.06539,12,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",116
+1820,Argentina,Posadas,"Latin America","CABASE IXP 
+Posadas",http://www.cabase.org.ar/nap-posadas/,Active,20131128,12437,-27.36708,-55.89608,15,627000,0,0,0.000000,Yes,0000-00-00,8,222,8,39,270,33,http://www.cabase.org.ar/nap-posadas/,Yes,PSS,116
+1821,Argentina,Paraná,"Latin
+ America","NAP CABASE 
+Paraná",,Planned,0,0,-31.73301,-60.52991,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",116
+1822,Argentina,Bariloche,"Latin America","CABASE IXP 
+Bariloche",http://www.cabase.org.ar/nap-bariloche/,Active,20140915,0,-41.13350,-71.31030,8,0,0,0,0.000000,No,0000-00-00,12,308,12,50,351,55,http://www.cabase.org.ar/nap-bariloche/,"No
+ ","     ",116
+1823,Argentina,"Puerto Madryn","Latin America","CABASE IXP Puerto 
+Madryn",http://www.cabase.org.ar/nap-puerto-madryn/,Active,20141030,0,-42.76940,-65.03170,10,0,0,0,0.000000,No,0000-00-00,12,308,11,48,333,55,http://www.cabase.org.ar/nap-puerto-madryn/,"No
+ ","     ",116
+1824,Thailand,Bangkok,Asia-Pacific,"TOT 
+NIX",www.tot.co.th/index.php?lang=en,"Not an 
+exchange",20070600,0,13.92000,100.60000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",194
+1825,Thailand,Bangkok,Asia-Pacific,"True International Gateway 
+NIX",http://www.trueintergateway.com,"Not an 
+exchange",20070700,0,13.92000,100.60000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",194
+1826,Thailand,Bangkok,Asia-Pacific,"CS Loxinfo 
+NIX",http://www.csloxinfo.com/th/home,"Not an 
+exchange",20080800,0,13.92000,100.60000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",194
+1827,Thailand,Bangkok,Asia-Pacific,"Super Broadband Network 
+IX",http://www.sbn.co.th,"Not an 
+exchange",20091000,0,13.92000,100.60000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",194
+1828,Thailand,Bangkok,Asia-Pacific,"JASTEL IX",www.jastel.co.th,"Not an 
+exchange",20100100,0,13.92000,100.60000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",194
+1829,Thailand,Bangkok,Asia-Pacific,"BB Connect 
+IX",www.bbconnect.co.th,"Not an 
+exchange",20120700,0,13.92000,100.60000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",194
+1830,Thailand,Bangkok,Asia-Pacific,"TCC Technology 
+IX",www.tcc-technology.com,"Not an 
+exchange",20120800,0,13.92000,100.60000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",194
+1831,Thailand,Bangkok,Asia-Pacific,"Symphony 
+IX",www.symphony.net.th,"Not an 
+exchange",20131200,0,13.92000,100.60000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",194
+1832,Brazil,Curitiba,"Latin America","Ponto de Troca de Trafego do 
+Curitiba",https://ix.br/adesao/pr,Active,20070000,0,-25.52000,-49.17000,80,103000000,71000000,20000000,0.000000,No,2018-07-18,4,77,4,4,68,5,https://ix.br/particip/pr,"No
+ ","     ",116
+1833,Brazil,Maringá,"Latin America","Ponto de Troca de Trafego do 
+Maringa",https://ix.br/adesao/mgf,Active,20131100,0,-23.42100,-51.93310,23,10000000,7000000,2000000,0.000000,No,2018-07-18,18,197,14,17,171,26,https://ix.br/particip/mgf,"No
+ ","     ",116
+1834,Japan,Okinawa,Asia-Pacific,"BBIX 
+Okinawa",http://www.bbix.net/en/service/ix/,Defunct,20060900,0,26.21240,127.68090,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",194
+1835,Singapore,Singapore,Asia-Pacific,"BBIX 
+Singapore",HTTP://www.bbix.net/,Active,20141001,0,1.37000,103.98000,47,0,0,0,0.000000,No,0000-00-00,3,308,4,76,413,53,,"No
+ ","     ",194
+1836,China,"Hong Kong",Asia-Pacific,"BBIX Hong 
+Kong",http://www.bbix.net/en/service/ix/,Active,20141001,0,22.33000,114.18000,27,0,0,0,0.000000,No,0000-00-00,4,308,5,76,413,53,,"No
+ ","     ",194
+1837,France,Nice,Europe,"NicIX - 
+Alpes-Maritimes",http://www.nicix.net/en,Defunct,20140619,0,43.71020,7.26200,0,0,0,0,0.000000,No,2017-02-23,7,274,15,166,395,122,,"No
+ ","     ",301
+1838,Benin,Cotonou,Africa,"Benin 
+IX",https://benin-ix.org.bj/,Active,20131200,159,6.36183,2.39768,6,943000,0,0,0.000000,Yes,2016-02-25,1,211,1,26,351,15,https://benin-ix.org.bj/,Yes,COO,73
+1839,"Burkina
+ Faso",Ouagadougou,Africa,"Burkina Faso 
+IXP",www.bfix.bf,Active,20150626,0,12.37140,-1.51970,8,0,0,0,0.000000,No,0000-00-00,1,308,1,21,320,34,http://www.bfix.bf/index.php/system-messages/peering,"No
+ ","     ",73
+1840,"South Africa",Durban,Africa,"NAPAfrica 
+Durban",http://www.napafrica.com,Active,20140000,8810,-29.97000,30.95000,53,3600000,0,900000,0.000000,Yes,2018-07-17,5,172,6,38,413,7,https://www.napafrica.net/peering-clients/,Yes,DUR,73
+1841,"United
+ States","San Francisco","North America","AMS-IX Bay 
+Area",https://bay.ams-ix.net/,Active,20140910,42,37.78000,-122.43000,25,27200000,20620000,12065000,3.006790,Yes,2018-07-18,18,141,27,32,178,21,https://bay.ams-ix.net/connected_parties,Yes,SFO,215
+1842,India,Mumbai,Asia-Pacific,"Mumbai
+ Internet 
+Exchange",https://www.mumbai-ix.net/en,Active,20140815,3672,19.00000,72.80000,100,92000000,12500000,20000000,0.000000,Yes,2018-06-19,8,308,1,15,86,53,https://www.mumbai-ix.net/en/participants,Yes,BOM,194
+1843,Seychelles,Victoria,Africa,"Seychelles
+ Internet Exchange 
+Point",,Planned,20150205,0,-4.61764,55.44766,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",73
+1844,Mexico,"Mexico DF","North America","Mexico 
+IXP",http://ixp.mx/,Active,20140430,1018,19.41894,-99.13408,10,1000000,0,0,0.000000,Yes,0000-00-00,1,203,1,53,299,30,http://www.ixp.mx/informacion_gral/socios.html,Yes,MEX,215
+1845,"United
+ States",Miami,"North America","South Florida Internet 
+Exchange",https://www.communityix.org/,Active,20140000,0,25.83000,-80.29000,91,216000000,0,0,0.000000,No,2017-10-12,8,50,11,12,66,9,https://www.communityix.org/index.php/about-fl-ix/fl-ix-networks/,"No
+ ","     ",215
+1846,"United States",Philadelphia,"North America","Philadelphia Internet
+ 
+Exchange",http://phlix.net,Unknown,0,0,40.11691,-75.01428,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",215
+1847,"United States",Chicago,"North America","AMS-IX 
+Chicago",https://chi.ams-ix.net/,Active,20141007,119518,41.85000,-87.65000,23,57700000,43200000,30430000,2.777780,Yes,2018-07-18,16,127,40,47,270,19,https://chi.ams-ix.net/connected_parties,Yes,ORD,215
+1848,Angola,Luanda,Africa,ANGONIX,http://www.angonix.net/,Active,20150309,3334,-8.85000,13.23000,17,10400000,0,2600000,0.000000,Yes,2018-07-17,1,173,1,10,228,8,http://www.angonix.net/customers-partners/customers/,Yes,LAD,73
+1849,Albania,Tirana,Europe,"Albania
+ 
+IX",https://www.albtelecom.al/en/smart-business/smart-business-services/dedicated-services/infrastructure/alb-ix/,"Not
+ an 
+exchange",20110000,0,41.32750,19.81870,0,0,0,0,0.000000,No,0000-00-00,1,308,1,144,320,131,https://www.albtelecom.al/en/smart-business/smart-business-services/dedicated-services/infrastructure/alb-ix/,"No
+ ","     ",301
+1850,Australia,Sydney,Asia-Pacific,Pacific-IX,http://www.vocus.com.au/pacificix/,Active,20110216,0,-33.95000,151.17999,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",194
+1851,Australia,Canberra,Asia-Pacific,"TransACT 
+IX",http://www.transact.com.au/en-ACT/wholesale/products/wholesale-ip,Unknown,0,0,-35.30000,149.17999,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",194
+1852,Canada,Toronto,"North America","Equinix 
+Toronto",https://www.equinix.com/locations/canada-colocation/toronto-data-center/tr1/,Active,0,0,43.67000,-79.40000,15,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",215
+1853,Denmark,Copenhagen,Europe,Content-IX,http://www.content-ix.dk,Unknown,20120200,0,55.67000,12.57000,0,0,0,0,0.000000,No,0000-00-00,3,308,3,135,299,131,http://www.globalconnect.dk/produkter/internet/ip-transit/content-ix-medlemsliste,"No
+ ","     ",301
+1854,France,Lille,Europe,Lillix,http://www.lillix.fr/,Active,20140627,0,50.62920,3.05730,16,0,0,0,0.000000,No,0000-00-00,8,308,8,123,270,131,http://www.lillix.fr/membres/,"No
+ ","     ",301
+1855,Germany,Bremen,Europe,BREM-IX,https://www.brem-ix.net/,Active,20130000,0,53.07930,8.80170,10,647000,0,0,0.000000,No,2017-02-22,12,229,17,135,299,104,https://www.brem-ix.net/,"No
+ ","     ",301
+1856,Germany,Dortmund,Europe,"Dortmund Internet 
+exchange",https://www.do-ix.net/,Active,20130901,0,51.51610,7.46830,7,0,0,0,0.000000,No,0000-00-00,13,308,19,144,320,131,https://www.do-ix.net/members/,"No
+ ","     ",301
+1857,Japan,Niigata,Asia-Pacific,Echigo-IX,http://www.echigo-ix.jp/,Active,20110900,0,37.92000,139.05000,6,0,0,0,0.000000,No,0000-00-00,9,308,9,65,370,53,http://www.echigo-ix.jp/list.html,"No
+ ","     ",194
+1858,Japan,Tokyo,Asia-Pacific,"Tokyo Lambda 
+Exchange",http://www.t-lex.net,Unknown,20040300,0,35.55000,139.78000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",194
+1859,Liechtenstein,Eschen,Europe,"Rheintal Internet 
+Exchange",https://www.rheintal-ix.net/,Active,20111027,0,47.20950,9.52200,13,536000,117000,50000,0.000000,No,2018-07-18,1,249,1,123,270,115,https://www.rheintal-ix.net/rheintal_ix/participants/,"No
+ ","     ",301
+1860,Russia,Ufa,Europe,"DataIX 
+Ufa",http://www.dataix.ru/,Active,20130000,0,54.73880,55.97210,94,80000000,0,10000000,0.000000,No,2018-07-17,6,54,2,10,13,33,http://www.dataix.ru/eng/members/,"No
+ ","     ",301
+1861,Russia,Novosibirsk,Europe,"DataIX 
+Novosibirsk",http://www.dataix.ru/,Active,20120000,0,55.03000,82.90000,27,8000000,0,1500000,0.000000,No,2017-11-01,12,132,21,172,413,73,http://www.dataix.ru/eng/members/,"No
+ ","     ",301
+1862,Russia,Khabarovsk,Europe,"DataIX 
+Khabarovsk",http://www.dataix.ru/,Active,20130000,0,48.50270,135.06630,30,1600,0,0,0.000000,No,2017-11-08,20,240,2,10,13,110,http://www.dataix.ru/eng/members/,"No
+ ","     ",301
+1863,Russia,Omsk,Europe,"Omsk Internet 
+exchange",http://www.omsk-ix.ru/,Active,20060000,0,54.98850,73.32420,15,17000000,9100000,2000000,0.000000,No,2018-07-18,10,97,15,112,236,57,http://www.omsk-ix.ru/members,"No
+ ","     ",301
+1864,Russia,"St. 
+Petersburg",Europe,PIRIX,http://pirix.ru/,Active,20080000,0,59.93000,30.30000,50,7900000,5100000,3600000,0.000000,No,2018-06-29,11,110,5,54,94,62,http://pirix.ru/members/,"No
+ ","     ",301
+1865,Spain,Barcelona,Europe,"WAPOP Africa Interconnect 
+Exchange",www.afr-ix.com,"Not an 
+exchange",20130000,0,41.28000,2.07000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",301
+1866,Thailand,Bangkok,Asia-Pacific,"Bangkok Neutral Internet 
+Exchange",https://bknix.co.th/en/index.php,Active,20150209,14361,13.92000,100.60000,19,27700000,13200000,3500000,12.878790,Yes,2018-07-17,1,159,2,51,288,27,https://bknix.co.th/en/members,Yes,BKK,194
+1867,Russia,Krasnodar,Europe,"Sea-IX
+ Internet 
+exchange",http://sea-ix.ru/,Active,20121008,0,45.03930,38.98720,42,35000000,20000000,4800000,0.000000,No,2018-07-18,13,151,10,69,118,82,http://sea-ix.ru/participants.shtml,"No
+ ","     ",301
+1868,Ukraine,Khmelnytsky,Europe,"Khmelnytsky Internet exchange 
+point",http://ix.km.ua/,Active,20030809,0,49.42300,26.98710,4,136136,0,52000,0.000000,No,2018-07-23,6,263,6,155,351,120,http://ix.km.ua/members.html,"No
+ ","     ",301
+1869,"United States",Cheyenne,"North America","Big Horn 
+Fiber",https://www.vcn.com/business/,Active,20130000,0,41.14000,-104.82020,12,0,0,0,0.000000,No,0000-00-00,31,308,40,47,270,39,,"No
+ ","     ",215
+1870,"United States","Los Angeles","North America","CENIC International 
+Internet 
+eXchange",http://www.ciix.net/,Active,19960000,0,33.97000,-118.25000,6,0,0,0,0.000000,No,0000-00-00,31,308,53,62,351,39,http://www.ciix.net/participants/,"No
+ ","     ",215
+1871,"United States",Carrollton,"North 
+America",CyrusOne,https://cyrusone.com/data-center-technology-benefits/proven-innovative-data-center-technology/cyrusone-national-internet-exchange-ix/interconnection-peering-exchange/,Active,20110000,0,32.97560,-96.89000,0,0,0,0,0.000000,No,0000-00-00,31,308,61,72,413,39,,"No
+ ","     ",215
+1872,"United States","Salt Lake City","North America","Salt Lake 
+Internet 
+Exchange",http://www.slix.net/,Active,20140000,0,40.77000,-111.90000,18,0,0,0,0.000000,No,0000-00-00,31,308,34,40,228,39,http://www.slix.net/,"No
+ ","     ",215
+1873,"United States",Atlanta,"North America","South East Network Access 
+Point",http://www.southeastnap.com/,Active,20120000,0,33.86000,-84.40000,7,0,0,0,0.000000,No,0000-00-00,31,308,49,58,333,39,http://www.southeastnap.com/members/,"No
+ ","     ",215
+1874,"United States","St. George","North America","Southern Utah Peering
+ Regional 
+Network",www.suprnet.net,Active,20060500,713,37.09650,-113.56840,15,0,0,0,0.000000,Yes,0000-00-00,31,308,44,52,288,39,www.suprnet.net,Yes,SGU,215
+1875,"United
+ States",Atlanta,"North America","Digital Realty Atlanta Internet 
+Exchange",https://ix.digitalrealty.com/,Active,20070000,267648,33.86000,-84.40000,136,580000000,0,160000000,0.000000,Yes,2018-07-17,5,27,6,7,37,5,http://tieatl-server1.telx.com/participants/,Yes,ATL,215
+1876,"United
+ States",Duluth,"North America","Twin Ports Internet 
+Exchange",HTTP://www.tp-ix.net/,Active,20121101,0,46.78670,-92.10050,2,0,0,0,0.000000,No,0000-00-00,31,308,61,72,413,39,,"No
+ ","     ",215
+1877,France,Paris,Europe,Hopus,http://hopus.net,"Not an 
+exchange",20140100,0,48.80000,2.33000,0,0,0,0,0.000000,No,2018-07-17,,,,,,,http://hopus.net,"No
+ ","     ",301
+1878,"United States",Reno,"North America","Tahoe Internet Exchange 
+",http://www.tahoeix.org/,Active,20140912,387,39.46926,-119.76983,14,135483,0,0,0.000000,Yes,2018-07-23,28,247,40,47,270,35,http://www.tahoeix.org/,Yes,RNO,215
+1879,"New
+ Zealand",Auckland,Asia-Pacific,"MegaPort-IX 
+Auckland",https://www.megaport.com/,Active,20141120,17870,-37.02000,174.80000,71,27155400,12400980,7100000,0.000000,Yes,0000-00-00,3,308,4,67,381,53,,Yes,SYD,194
+1880,"New
+ Zealand",Auckland,Asia-Pacific,"Auckland Internet 
+Exchange",https://ix.nz/,Active,20141107,0,-37.02000,174.80000,73,34000000,22000000,10000000,0.000000,No,2018-07-17,3,308,7,76,413,53,https://ix.nz/service/peering/,"No
+ ","     ",194
+1881,Madagascar,Antananarivo,Africa,"Madagascar Global Internet 
+Exchange",https://www.mgix.mg/,Active,20160316,1463,-18.87795,47.50888,9,11800,0,0,0.000000,Yes,2017-01-23,1,289,1,26,351,26,https://wiki.mgix.mg/display/PUB/Peers,"No
+ ","     ",73
+1882,Canada,Edmonton,"North America","YEGIX Edmonton Internet 
+Exchange",HTTP://www.yegix.ca/,Active,20150130,0,53.54440,-113.49090,11,0,0,0,0.000000,No,0000-00-00,,,,,,,http://www.yegix.ca/peers.html,"No
+ ","     ",215
+1883,"United States",Chicago,"North America","United IX 
+Chicago",https://unitedix.net/,Active,20140000,232018,41.85000,-87.65000,28,0,0,0,0.000000,Yes,0000-00-00,31,308,31,37,211,39,https://unitedix.net/location/chicago/networks,Yes,ORD,215
+1884,Nigeria,Abuja,Africa,"IXPN
+ - 
+Abuja",http://ixp.net.ng/,Active,20110728,0,9.25000,7.00000,8,0,0,0,0.000000,No,0000-00-00,2,308,2,34,381,34,http://ixp.net.ng/abuja-member-list/,"No
+ ","     ",73
+1885,Nigeria,"Port Harcourt",Africa,"IXPN - Port 
+Harcourt",http://ixp.net.ng,Defunct,20120517,0,4.82416,6.96351,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",73
+1886,Nigeria,Kano,Africa,"IXPN - 
+Kano",http://ixp.net.ng,Planned,0,0,11.99788,8.47086,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",73
+1887,Gabon,Libreville,Africa,"Gabon Internet 
+Exchange",http://www.gabix.ga/,Active,20140000,117,0.41620,9.46730,4,100000,0,0,0.000000,Yes,0000-00-00,1,308,1,34,381,34,http://www.gabix.ga/membres,Yes,LBV,73
+1888,Mauritania,Nouakchott,Africa,"Mauritania
+ 
+IX",,Planned,0,0,18.08421,-15.96436,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",73
+1889,"United Kingdom",Brighton,Europe,"IX 
+Brighton",http://ixbrighton.com/,Active,20150000,0,50.82250,-0.13720,5,0,0,0,0.000000,No,0000-00-00,8,308,8,158,370,131,http://ixbrighton.com/members/,"No
+ ","     ",301
+1890,Italy,Palermo,Europe,"DE-CIX 
+Palermo",https://www.de-cix.net/en/locations/italy/palermo,Active,20150902,0,38.18000,13.10000,5,1800000,1000000,600000,0.000000,No,2018-07-18,5,182,8,172,413,93,https://www.de-cix.net/en/locations/italy/palermo/connected-networks,"No
+ ","     ",301
+1891,"United States",Indianapolis,"North 
+America",Midwest-IX,https://www.midwest-ix.com/,Active,20150000,225394,39.77511,-86.10947,25,16400000,0,4100000,0.000000,Yes,2018-07-17,31,308,32,38,214,39,https://www.midwest-ix.com/members.html,Yes,ORD,215
+1892,Bulgaria,Sofia,Europe,T-CIX,http://www.t-cix.net/index.php?lang=bg,Active,20150518,115926,42.65000,23.38000,20,0,0,0,0.000000,Yes,0000-00-00,4,308,4,101,205,131,http://www.t-cix.net/index.php?page=members&amp;lang=eng,Yes,SOF,301
+1893,"United
+ States",Richmond,"North America","Richmond Virginia Internet 
+Exchange",http://rva-ix.net/,Active,20150215,111356,37.54070,-77.43600,12,0,0,0,0.000000,Yes,0000-00-00,31,308,53,62,351,39,http://rva-ix.net/participants/,Yes,RIC,215
+1894,France,Marseille,Europe,"DE-CIX
+ 
+Marseille",https://www.de-cix.net/en/locations/france/marseille,Active,20150900,0,43.45000,5.23000,35,28500000,20000000,8000000,0.000000,No,2018-07-18,6,247,16,172,413,114,https://www.de-cix.net/en/locations/france/marseille/connected-networks,"No
+ ",MRS,301
+1895,Turkey,Istanbul,Europe,"DE-CIX 
+Istanbul",https://www.de-cix.net/en/locations/turkey/istanbul,Active,20150000,6170,40.97000,28.82000,17,56000000,38600000,10000000,0.000000,Yes,2018-07-18,1,308,1,135,299,131,https://www.de-cix.net/en/locations/turkey/istanbul/connected-networks,Yes,IST,301
+1896,Austria,Salzburg,Europe,"Salzburg
+ Internet 
+eXchange",https://www.saix.at/,Active,20150515,1282,47.80000,13.00000,31,0,0,0,0.000000,Yes,2017-09-24,4,286,2,95,191,128,https://www.saix.at/members.html,Yes,SZG,301
+1897,Liberia,Monrovia,Africa,"Liberia
+ Internet Exchange 
+Point",https://www.lixpa.org.lr/,Active,20150804,47,6.31617,-10.80272,5,2000,0,0,0.000000,Yes,0000-00-00,1,298,1,26,351,29,https://www.lixpa.org.lr/,Yes,ROB,73
+1898,"Papua
+ New Guinea","Port 
+Moresby",Asia-Pacific,PNG-IXP,http://pngixp.com/,Active,20150901,0,-9.51360,147.21880,5,0,0,0,0.000000,No,0000-00-00,1,308,1,65,370,53,http://pngixp.com/index.php/2015/09/05/members/,"No
+ ","     ",194
+1900,"United States",Omaha,"North 
+America",OmahaIX,http://www.omahaix.com/,Active,20140100,0,41.25240,-95.99800,20,66000000,41000000,20000000,0.000000,No,2018-07-18,14,109,35,41,236,16,http://www.omahaix.com/?page=participants&amp;v=all,"No
+ ","     ",215
+1901,"United States",Denver,"North America","Interconnection eXchange 
+Denver",http://ix-denver.org,Active,20150000,223187,39.75000,-105.00000,30,0,0,0,0.000000,Yes,0000-00-00,,,,,,,https://ix-denver.org/members/,Yes,DEN,215
+1902,Iran,Tehran,Europe,"Tehran
+ 
+IX",http://www.tehran-ix.ir/,Active,20160515,0,35.71028,51.42357,44,215000000,0,0,0.000000,No,0000-00-00,1,133,1,89,178,74,http://www.tehran-ix.ir/members,"No
+ ","     ",301
+1903,Honduras,Tegucigalpa,"Latin America","IXP-HN Puntos de Intercambio 
+de Tráfico – 
+Honduras",http://www.ixp.hn,Active,20150700,144,14.07230,-87.19210,8,0,0,0,0.000000,Yes,0000-00-00,1,308,1,59,413,55,http://www.ixp.hn/?p=20,Yes,TGU,116
+1904,Mauritania,Nouakchott,Africa,RIMIX,,Planned,20151202,0,18.08421,-15.96436,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",73
+1905,"United States",Detroit,"North 
+America",DET-IX,http://www.detroitix.com/,Active,20150331,0,42.34453,-83.05988,24,31000000,19000000,10000000,0.000000,No,2018-07-18,15,124,32,38,214,18,http://www.detroitix.com/,"No
+ ","     ",215
+1906,Cambodia,"Phnom Penh",Asia-Pacific,"Cambodian Network 
+Exchange",http://cnx.net.kh/,Active,20081201,6717,11.55000,104.85000,29,6000000,3500000,1000000,0.000000,Yes,2018-07-17,1,175,1,34,178,31,http://cnx.net.kh/member/,Yes,PNH,194
+1907,"United
+ States",Montgomery,"North America","Montgomery Internet 
+Exchange",HTTP://www.mix-al.net/,Active,20160100,119205,32.34401,-86.38612,17,0,0,0,0.000000,Yes,0000-00-00,,,,,,,http://www.mgmix.net/members.html,Yes,MGM,215
+1909,"Democratic
+ Republic of Congo",Lubumbashi,Africa,"Lubumbashi Internet 
+Exchange",http://www.ispa-drc.cd/index.php?option=com_content&amp;view=article&amp;id=21&amp;Itemid=21,Planned,0,0,-11.67533,27.43215,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",73
+1910,"Democratic Republic of Congo",Goma,Africa,"Goma Internet 
+Exchange",http://www.ispa-drc.cd/index.php?option=com_content&amp;view=article&amp;id=20&amp;Itemid=20,Unknown,0,0,,,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",73
+1911,Tanzania,Dodoma,Africa,"Dodoma Internet Exchange 
+Point",,Unknown,0,0,-6.20600,35.79500,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",73
+1912,Tanzania,Mwanza,Africa,"Mwanza Internet Exchange 
+Point",http://tispa.or.tz/projects/#1501660639135-870ca90b-91d7,Active,20160601,0,-2.52600,32.90000,7,2400,164,10,0.000000,No,2018-07-17,3,308,3,38,413,34,,"No
+ ","     ",73
+1913,China,Beijing,Asia-Pacific,"CHN 
+IX",http://www.chn-ix.net/,Active,20151201,0,39.93000,116.28000,20,60000000,0,0,0.000000,No,0000-00-00,4,308,4,72,404,53,http://www.chn-ix.net/customer.html,"No
+ ","     ",194
+1914,Germany,Wuppertal,Europe,"United 
+Peering",https://united-peering.net/,Active,20150910,100,51.25620,7.15080,13,0,0,0,0.000000,Yes,0000-00-00,13,308,16,118,255,131,,Yes,SGE,301
+1915,Singapore,Singapore,Asia-Pacific,"MegaPort
+ IX 
+Singapore",https://www.megaport.com/,Active,0,0,1.37000,103.98000,26,21000000,12500000,7300000,0.000000,Yes,0000-00-00,3,308,4,76,413,53,https://www.megaport.com/services/ix-connected-networks/,Yes,QPG,194
+1916,Australia,Sydney,Asia-Pacific,"Megaport
+ IX 
+Sydney",https://www.megaport.com/megaport-exchange/,Active,20130900,112442,-33.95000,151.17999,217,124321560,79663550,29158000,0.000000,Yes,0000-00-00,9,308,15,76,413,53,https://www.megaport.com/services/ix-connected-networks/,Yes,SYD,194
+1917,Morocco,Casablanca,Africa,"Casablanca
+ Internet 
+Exchange",http://www.casix.ma,Unknown,20160300,0,33.57245,-7.65744,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",73
+1918,Belize,"Belize City ","Latin America","Belize Internet Exchange 
+Point",,Active,20160427,175,17.51587,-88.20404,9,12361,0,30000,0.000000,Yes,2018-07-23,1,308,1,59,413,55,,Yes,BZE,116
+1919,Germany,Düsseldorf,Europe,"DE-CIX
+ 
+Düsseldorf",https://www.de-cix.net/en/locations/germany/dusseldorf,Active,20110000,220073,51.28000,6.76000,29,8400000,4000000,2000000,0.000000,Yes,2018-07-18,13,308,20,166,395,131,https://www.de-cix.net/en/locations/germany/dusseldorf/connected-networks,"No
+ ","     ",301
+1920,Qatar,Doha,Europe,"Qatar Internet Exchange 
+Point",http://ixp.qa,Active,20160604,0,25.25000,51.57000,4,0,0,0,0.000000,No,0000-00-00,1,308,1,162,381,131,,"No
+ ","     ",301
+1921,Niger,Niamey,Africa,,,Unknown,0,0,13.48243,2.17493,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",73
+1924,Kenya,Mombasa,Africa,"Mombasa Internet Exchange 
+Point",,Active,20160601,639,-4.05000,39.66670,5,0,0,0,0.000000,Yes,0000-00-00,2,308,2,36,395,34,,"No
+ ","     ",73
+1925,Lesotho,Maseru,Africa,"Lesotho Internet Exchange 
+Point",http://www.lixp.co.ls,Active,20110000,0,-29.32630,27.50110,0,0,0,0,0.000000,No,0000-00-00,1,308,1,38,413,34,,"No
+ ","     ",73
+1926,China,Beijing,Asia-Pacific,"CNIX China Internet 
+Exchange",HTTP://www.cnix.com.cn/,Active,20150300,0,39.93000,116.28000,17,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",194
+1927,"United States",Portland,"North America","Northern New England 
+Neutral Internet 
+Exchange",http://www.nnenix.net,Active,20170000,224721,45.52000,-122.68000,4,0,0,0,0.000000,Yes,0000-00-00,,,,,,,http://www.nnenix.net/participants/,"No
+ ",BGR,215
+1928,Senegal,Dakar,Africa,"Senegal 
+IX",www.senix.sn,Active,20170829,0,14.73000,-17.50000,3,28000,0,2000,0.000000,No,2018-02-06,,,,,,,,"No
+ ","     ",73
+1929,Djibouti,"Djibouti 
+City",Africa,DJIX,http://www.djiboutidatacenter.com/en/page/djibouti-ix-djix,Active,20170000,0,11.82510,42.59030,8,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",73
+1930,Timor-Leste,Dili,Asia-Pacific,"Timor-Leste Internet 
+Exchange",,Active,20161109,0,-8.55690,125.56030,3,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",194
+1931,Chile,Santiago,"Latin America","PIT Chile - 
+Santiago",HTTP://www.pitchile.cl/,Active,20160701,6197,-33.38000,-70.78000,38,232000000,165000000,35000000,0.000000,Yes,2018-07-17,,,,,,,http://www.pitchile.cl/wp/graficos-con-indicadores,Yes,SCL,116
+1932,"United
+ States","Los Angeles","North America","Megaport IX Los 
+Angeles",https://www.megaport.com/services/ix-connected-networks/,Active,20161104,227545,33.97000,-118.25000,20,12000670,6973570,5200000,0.000000,Yes,0000-00-00,,,,,,,https://www.megaport.com/services/ix-connected-networks/,Yes,BUR,215
+1933,Georgia,Tbilisi,Europe,"Georgian
+ Internet Exchange 
+Point",http://gix.ge/,Active,20160928,0,41.68000,44.95000,8,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",301
+1934,"United Kingdom",Liverpool,Europe,"IX 
+Liverpool",https://www.ixliverpool.net/,Active,20160000,0,53.42003,-3.05093,2,0,0,0,0.000000,No,0000-00-00,,,,,,,http://www.ixliverpool.net/our-members/,"No
+ ","     ",301
+1935,"United States",Dallas,"North America","DE-CIX 
+Dallas",https://www.de-cix.net/en/locations/united-states/dallas,Active,20161115,0,32.77000,-96.77000,20,45900000,33400000,22000000,0.000000,No,2018-07-18,,,,,,,https://www.de-cix.net/en/locations/united-states/dallas/connected-networks,"No
+ ","     ",215
+1936,Spain,Madrid,Europe,"DE-CIX 
+Madrid",https://www.de-cix.net/en/locations/spain/madrid,Active,20160601,0,40.43000,-3.70000,86,96000000,60800000,20000000,0.000000,No,2018-07-18,,,,,,,https://www.de-cix.net/en/locations/spain/madrid/connected-networks,"No
+ ","     ",301
+1937,Argentina,"San Luis","Latin America","CABASE IXP San 
+Luis",http://www.cabase.org.ar/nap-san-luis/,Active,20141014,0,-33.90361,-68.37764,7,0,0,0,0.000000,No,0000-00-00,,,,,,,http://www.cabase.org.ar/nap-san-luis/,"No
+ ","     ",116
+1938,Argentina,Junin,"Latin America","CABASE IXP 
+Junin",http://www.cabase.org.ar/8430-2/,Active,20150327,0,-34.59076,-60.99045,8,0,0,0,0.000000,No,0000-00-00,,,,,,,http://www.cabase.org.ar/8430-2/,"No
+ ","     ",116
+1939,Argentina,Pergamino,"Latin America","CABASE IXP 
+Pergamino",http://www.cabase.org.ar/ixp-pergamino/,Active,20151125,0,-33.89357,-60.60045,8,0,0,0,0.000000,No,0000-00-00,,,,,,,http://www.cabase.org.ar/ixp-pergamino/,"No
+ ","     ",116
+1940,Argentina,Tucuman,"Latin America","CABASE IXP 
+Tucuman",http://www.cabase.org.ar/ixp-tucuman/,Active,20151124,0,-27.02088,-66.44136,3,0,0,0,0.000000,No,0000-00-00,,,,,,,http://www.cabase.org.ar/ixp-tucuman/,"No
+ ","     ",116
+1941,Argentina,"Saenz Peña","Latin America","CABASE IXP Saenz 
+Peña",http://www.cabase.org.ar/ixp-saenz-pena/,Active,20160426,0,-34.59915,-58.54120,13,0,0,0,0.000000,No,0000-00-00,,,,,,,http://www.cabase.org.ar/ixp-saenz-pena/,"No
+ ","     ",116
+1942,Argentina,Pilar,"Latin America","CABASE IXP Norte de Gran Buenos 
+Aires",http://www.cabase.org.ar/ixp-gba-zona-norte/,Active,20160419,0,-34.49344,-58.98695,13,0,0,0,0.000000,No,0000-00-00,,,,,,,http://www.cabase.org.ar/ixp-gba-zona-norte/,"No
+ ","     ",116
+1943,Argentina,"San Salvador de Jujuy","Latin America","CABASE IXP 
+Jujuy",http://www.cabase.org.ar/,Active,20160322,0,-24.20532,-65.37560,7,0,0,0,0.000000,No,0000-00-00,,,,,,,http://www.cabase.org.ar/ixp-jujuy/,"No
+ ","     ",116
+1944,Argentina,"Buenos Aires","Latin America","CABASE IXP Oeste de Gran 
+Buenos 
+Aires",http://www.cabase.org.ar/ixp-gba-zona-oeste/,Active,20160705,0,-34.57000,-58.42000,7,0,0,0,0.000000,No,0000-00-00,,,,,,,http://www.cabase.org.ar/ixp-gba-zona-oeste/,"No
+ ","     ",116
+1945,Argentina,"Buenos Aires","Latin America","CABASE IXP Ruteo 
+Central",http://www.cabase.org.ar,Unknown,0,0,-34.57000,-58.42000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,http://www.cabase.org.ar/ruteo-central/,"No
+ ","     ",116
+1946,Paraguay,Asunción,"Latin America","Punto de Intercambio de Tráfico 
+de 
+Paraguay",http://ix.py/,Active,20160000,2221,-25.24000,-57.52000,15,1800000,0,200000,0.000000,Yes,2018-07-17,,,,,,,http://ix.py/,Yes,ASU,116
+1947,India,Kolkata,Asia-Pacific,"IIFON
+ IX 
+Kolkata",http://iifon.org/,Active,20160000,0,22.57000,88.40000,4,400000,0,0,0.000000,No,2018-07-17,,,,,,,http://iifon.org/about/member-partners/,"No
+ ","     ",194
+1948,India,Mumbai,Asia-Pacific,"AMS-IX 
+India",https://ams-ix.in/,Active,20170202,0,19.00000,72.80000,10,6600000,3500000,900000,0.000000,No,2018-07-17,,,,,,,https://ams-ix.in/connected_parties,"No
+ ","     ",194
+1949,Chile,Santiago,"Latin 
+America",SCL-IX,https://www.sclix.cl/,Active,20161028,0,-33.38000,-70.78000,11,0,0,0,0.000000,No,0000-00-00,,,,,,,https://www.sclix.cl/participantes/,"No
+ ","     ",116
+1950,Canada,"St. John's","North America","Newfoundland Labrador Internet
+ 
+Exchange",http://nlix.ca,Planned,0,0,47.56512,-52.70798,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",215
+1951,Spain,Valencia,Europe,"Neutral Internet Exchange 
+Valencia",https://www.nixval.com/internet-exchange/,Active,20090000,0,39.40797,-0.50160,13,8000000,0,1000000,0.000000,No,2018-07-17,,,,,,,https://www.nixval.com/internet-exchange/,"No
+ ","     ",301
+1952,Cameroon,Yaounde,Africa,"Cameroon Internet Exchange 
+Point",,Active,0,0,3.87350,11.51642,0,1000,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",73
+1953,"Puerto Rico","San Juan","North America","Puerto Rico Bridge 
+Initiative",http://www.prbridgeinitiative.org,Planned,0,0,18.47000,-66.11000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",215
+1954,Bhutan,Thimphu,Asia-Pacific,"Bhutan 
+IX",,Unknown,0,0,27.48000,89.59000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",194
+1955,Morocco,Rabat,Africa,"Maroc Internet Exchange 
+Point",http://www.marix.ma,Unknown,20161100,0,34.05000,-6.77000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",73
+1956,"United States",Ashburn,"North America","Megaport IX 
+Ashburn",https://www.megaport.com,Active,20161104,0,39.02000,-77.46000,16,13601900,10352860,5300000,0.000000,No,0000-00-00,,,,,,,https://www.megaport.com/services/ix-connected-networks/,"No
+ ","     ",215
+1957,Australia,Brisbane,Asia-Pacific,"Megaport IX 
+Brisbane",https://www.megaport.com/megaport-exchange/,Active,20130900,18999,-27.38000,153.10001,87,13967770,8592020,2500000,0.000000,Yes,0000-00-00,,,,,,,https://www.megaport.com/services/ix-connected-networks/,Yes,SYD,194
+1958,Australia,Melbourne,Asia-Pacific,"Megaport
+ IX 
+Melbourne",https://www.megaport.com/megaport-exchange/,Active,20130900,198652,-37.82000,144.97000,104,35648970,23280540,7500000,0.000000,Yes,0000-00-00,,,,,,,https://www.megaport.com/services/ix-connected-networks/,Yes,SYD,194
+1959,Australia,Perth,Asia-Pacific,"Megaport
+ IX 
+Perth",https://www.megaport.com/megaport-exchange/,Active,20130000,16056,-31.93000,115.95000,33,5548910,2259620,486000,0.000000,Yes,0000-00-00,,,,,,,https://www.megaport.com/services/ix-connected-networks/,Yes,SYD,194
+1960,Ecuador,Pasaje,"Latin
+ America","IXP-APROSVA 
+Pasaje",http://www.aprosva.ec/,Active,20171123,0,-3.32664,-79.84297,11,350000,0,0,0.000000,No,0000-00-00,,,,,,,http://aprosva.ec/wp-content/uploads/2016/04/IXP-APROSVA-PASAJE-v3.pdf,"No
+ ","     ",116
+1961,Iran,Tabriz,Europe,"Tabriz 
+IX",http://tabriz-ix.ir/,Active,20160000,0,38.05774,46.31062,6,2600000,0,0,0.000000,No,0000-00-00,,,,,,,http://tabriz-ix.ir/members,"No
+ ","     ",301
+1962,Iran,Shiraz,Europe,"Shiraz 
+IX",http://www.shiraz-ix.ir/,Active,20160000,0,29.59177,52.58370,10,5500000,0,0,0.000000,No,0000-00-00,,,,,,,http://www.shiraz-ix.ir/members,"No
+ ","     ",301
+1963,Iran,Mashhad,Europe,"Mashhad 
+IX",http://mashhad-ix.ir/,Active,20160000,0,36.31070,59.59946,7,570000,0,0,0.000000,No,0000-00-00,,,,,,,http://mashhad-ix.ir/members,"No
+ ","     ",301
+1964,Lebanon,Beirut,Europe,"Advanced Internet 
+Exchange",http://a-ix.org/,Active,20170509,602,33.82000,35.48000,27,0,0,0,0.000000,Yes,0000-00-00,,,,,,,http://a-ix.org/about-us/listofmembers/,Yes,KYE,301
+1965,Canada,Moncton,"North
+ America","Moncton Internet 
+Exchange",http://monctonix.ca/,Active,20180122,0,46.11323,-64.87064,5,0,0,0,0.000000,Yes,0000-00-00,,,,,,,http://monctonix.ca/#peers,Yes,YQM,215
+1966,Canada,Saskatoon,"North
+ America","YXEIX Saskatoon Internet 
+Exchange",http://www.yxeix.ca/,Active,20170718,225423,52.14246,-106.62720,6,0,0,0,0.000000,Yes,0000-00-00,,,,,,,http://www.yxeix.ca/peers.html,Yes,YXE,215
+1967,Argentina,Viedma,"Latin
+ America","CABASE IXP 
+VIEDMA",http://www.cabase.org.ar/ixp-viedma/,Active,20160330,0,-40.82502,-63.03516,8,0,0,0,0.000000,No,0000-00-00,,,,,,,http://www.cabase.org.ar/ixp-viedma/,"No
+ ","     ",116
+1968,Argentina,Tandil,"Latin America","CABASE IXP 
+TANDIL",http://www.cabase.org.ar/ixp-tandil/,Active,20161229,0,-37.31952,-59.17772,8,0,0,0,0.000000,No,0000-00-00,,,,,,,http://www.cabase.org.ar/ixp-tandil/,"No
+ ","     ",116
+1969,Argentina,Salta,"Latin America","CABASE IXP 
+SALTA",http://www.cabase.org.ar/ixp-salta/,Active,20160626,0,-24.79607,-65.50067,10,0,0,0,0.000000,No,0000-00-00,,,,,,,http://www.cabase.org.ar/ixp-salta/,"No
+ ","     ",116
+1970,Argentina,"Rio Gallegos","Latin America","CABASE IXP RIO 
+GALLEGOS",http://www.cabase.org.ar/ixp-rio-gallegos/,Active,20161115,0,-51.62643,-69.34179,3,0,0,0,0.000000,No,0000-00-00,,,,,,,http://www.cabase.org.ar/ixp-rio-gallegos/,"No
+ ","     ",116
+1971,Argentina,"San Juan","Latin America","CABASE IXP SAN 
+JUAN",http://www.cabase.org.ar/nap-san-luis/,Active,20170426,0,-31.53177,-68.56770,8,0,0,0,0.000000,No,0000-00-00,,,,,,,http://www.cabase.org.ar/nap-san-luis/,"No
+ ","     ",116
+1972,Ecuador,Guayaquil,"Latin America","IXP 
+Ecuador",http://www.ixp.ec/,Active,20170700,483,-2.15000,-79.88000,9,964000,622000,50000,0.000000,Yes,2018-06-11,,,,,,,http://www.ixp.ec/#2,Yes,GYE,116
+1973,Togo,Lome,Africa,"Togo
+ Internet Exchange 
+Point",http://www.tgix.tg/,Active,20170615,294,6.17000,1.25000,4,16914,0,0,0.000000,Yes,2018-07-23,,,,,,,http://www.tgix.tg/membres-connectes,Yes,LFW,73
+1974,Russia,Krasnoyarsk,Europe,Sibir-IX,http://www.sibir-ix.ru/provider/,Active,20170300,0,56.17000,92.50000,55,19600000,9100000,3600000,0.000000,No,2018-07-17,,,,,,,http://www.sibir-ix.ru/provider-list/,"No
+ ","     ",301
+1975,India,"New Delhi",Asia-Pacific,"Extreme IX New 
+Delhi",https://extreme-ix.org/,Active,20160623,0,28.58000,77.20000,68,0,0,0,0.000000,No,0000-00-00,,,,,,,http://extreme-ix.org/members/peers/,"No
+ ","     ",194
+1976,Russia,Moscow,Europe,SVAO-IX,http://www.svao-ix.ru/,Active,20040400,0,55.75000,37.60000,76,0,0,0,0.000000,No,0000-00-00,,,,,,,http://www.svao-ix.ru/regpartners/,"No
+ ","     ",301
+1977,"United Arab Emirates",Fujairah,Europe,"SMARTHUB Internet 
+Exchange",http://www.smarthubix.ae/,Active,20130300,0,25.14363,56.29187,18,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",301
+1978,Bulgaria,Sofia,Europe,"Megaport MegaIX 
+Sofia",https://www.megaport.com/om-nix/,Active,20160600,0,42.65000,23.38000,16,18517060,10255100,2300000,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",301
+1979,Austria,Innsbruck,Europe,Tirol-IX,http://www.citynet.at/de/Ueber-Uns/Tirol-IX,Unknown,0,0,47.26286,11.40090,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",301
+1980,Russia,Moscow,Europe,DataLine-IX,https://www.dtln.ru/en/services/telecom/dataline-ix,Active,0,0,55.75000,37.60000,84,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",301
+1981,Philippines,"Quezon City",Asia-Pacific,"Bayan Telecommunications 
+Internet and Gaming 
+Exchange",,Unknown,0,0,14.68395,120.99216,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",194
+1982,Switzerland,Zurich,Europe," Global Internet Exchange &amp; Peering 
+Network",http://www.ge-cix.net/,Unknown,0,0,47.48000,8.53000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,http://www.ge-cix.net/get-connected/asns/,"No
+ ","     ",301
+1983,China,Guangzhou,Asia-Pacific,"CN-IX 
+Guangzhou",http://www.wexchange.com.cn/,Unknown,0,0,23.13915,113.24146,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",194
+1984,China,Shanghai,Asia-Pacific,"CN-IX 
+Shanghai",http://www.wexchange.com.cn,Unknown,0,0,31.40000,121.47000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",194
+1985,Kyrgyzstan,Bishkek,Asia-Pacific,KG-IX,http://kg-ix.net/,Active,20180214,0,42.87679,74.45178,4,4000000,1600000,200000,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",194
+1986,Denmark,Copenhagen,Europe,"STHIX 
+Copenhagen",https://www.sthix.net/,Active,20170915,0,55.67000,12.57000,8,0,0,0,0.000000,No,0000-00-00,,,,,,,https://www.sthix.net/index.php/connected-networks-cph/,"No
+ ","     ",301
+1987,Russia,Moscow,Europe,W-IX,https://www.w-ix.ru/,Active,20081225,0,55.75000,37.60000,177,0,0,0,0.000000,No,2017-09-27,,,,,,,https://www.w-ix.ru/members/,"No
+ ","     ",301
+1988,Russia,Yaroslavl,Europe,"Yaroslavl Internet 
+Exchange",http://yar-ix.net/,Active,0,0,57.65238,39.72444,9,132000,59000,16000,0.000000,No,2018-07-17,,,,,,,http://yar-ix.net/members/,"No
+ ","     ",301
+1989,Russia,Tomsk,Europe,"Tomsk Internet 
+eXchange",http://tskix.ru/site/page?view=about,Active,20130524,0,56.49969,84.99420,43,1400000,888000,696000,0.000000,No,2018-07-17,,,,,,,http://tskix.ru/site/userslist,"No
+ ","     ",301
+1990,Germany,Berlin,Europe,Community-IX,https://www.community-ix.de/,Active,20160000,0,52.38000,13.52000,14,11000000,0,5000000,0.000000,No,2018-07-17,,,,,,,https://www.community-ix.de/peers/,"No
+ ","     ",301
+1991,Russia,Yaroslavl,Europe,Volga-IX,http://volga-ix.ru/,Unknown,0,0,57.65238,39.72444,0,0,0,0,0.000000,No,0000-00-00,,,,,,,http://volga-ix.ru/,"No
+ ","     ",301
+1992,Burundi,Bujumbura,Africa,"Burundi Internet Exchange 
+Point",http://www.bdixp.bi/,Active,20170929,80,-3.36138,29.35988,8,2740,0,0,0.000000,Yes,0000-00-00,,,,,,,,Yes,BJM,73
+1993,Zimbabwe,Harare,Africa,"Harare
+ Internet 
+Exchange",http://www.hix.org.zw,Active,20171107,92,-17.83000,31.02000,7,128,9900,0,0.000000,Yes,2018-07-17,,,,,,,http://portal.hix.org.zw/api/v4/member-export/ixf/0.6,Yes,HRE,73
+1994,"United
+ States",Pittsburgh,"North America","Pittsburgh Internet 
+Exchange",https://pit-ix.net,Active,20171001,0,40.45000,-79.95000,3,0,0,0,0.000000,No,0000-00-00,,,,,,,https://pit-ix.net/participants/,"No
+ ","     ",215
+1995,Brazil,Aracaju,"Latin America","IX.br (PTT.br) 
+Aracaju",https://ix.br/adesao/se,Active,20170500,0,-10.94406,-37.07077,19,500000,264000,50000,0.000000,No,2018-07-17,,,,,,,https://ix.br/particip/se,"No
+ ","     ",116
+1996,Brazil,"Foz do Iguaçu","Latin America","IX.br (PTT.br) Foz do 
+Iguaçu",https://ix.br/adesao/igu,Active,20170000,0,-25.45296,-54.73734,10,900000,595000,150000,0.000000,No,2018-07-17,,,,,,,https://ix.br/particip/igu,"No
+ ","     ",116
+1997,Albania,Tirana,Europe,"Albanian Neutral Internet 
+eXchange",https://www.anix.al/,Active,20180000,0,41.32750,19.81870,3,87000,46000,20000,0.000000,No,2018-07-17,,,,,,,https://www.anix.al/,"No
+ ","     ",301
+1998,Montenegro,Podgorica,Europe,"Montenegro Internet eXchange 
+Point",http://www.mixp.me/eng/,Active,20150722,0,42.37000,19.25000,5,0,0,0,0.000000,No,0000-00-00,,,,,,,http://www.mixp.me/eng/Members.php,"No
+ ","     ",301
+1999,Kyrgyzstan,Bishkek,Asia-Pacific,"Kyrgyz 
+IXP",,Unknown,20020000,0,42.87679,74.45178,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",194
+2000,Netherlands,Amsterdam,Europe,"Asteroid Amsterdam 
+IXP",https://www.asteroidhq.com/ixp-locations/1,Active,20170000,0,52.30000,4.77000,16,9000000,0,7000000,0.000000,No,0000-00-00,,,,,,,https://www.asteroidhq.com/ixp-locations/1/networks-connected,"No
+ ","     ",301
+2001,Chile,Concepcion,"Latin America","PITChile Concepcion"," 
+http://www.pitconcepcion.cl",Active,20180105,0,-36.83330,-73.05000,4,2400000,1500000,246000,0.000000,No,2018-07-17,,,,,,,http://www.pitconcepcion.cl/nuestros-miembros,"No
+ ","     ",116
+2002,"United States",McAllen,"North America","MEX-IX 
+McAllen",http://mcallendc.com/,Planned,20171000,0,26.17580,-98.23860,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",215
+2003,India,Mumbai,Asia-Pacific,"Bharat IX - 
+Mumbai",https://www.bharatix.net,Planned,20171002,0,19.00000,72.80000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,https://www.bharatix.net/who-is-peering/,"No
+ ","     ",194
+2004,India,Mumbai,Asia-Pacific,"Extreme IX 
+Mumbai",https://extreme-ix.org,Active,20160623,0,19.00000,72.80000,57,0,0,0,0.000000,No,0000-00-00,,,,,,,https://extreme-ix.org/members/peers/,"No
+ ","     ",194
+2005,"United States",Dallas,"North America","Megaport Dallas"," 
+https://www.megaport.com",Active,0,0,32.77000,-96.77000,13,7577100,5300000,2300000,0.000000,No,0000-00-00,,,,,,,https://www.megaport.com/services/ix-connected-networks/,"No
+ ","     ",215
+2006,China,"Hong Kong",Asia-Pacific,"Megaport Hong 
+Kong",https://www.megaport.com,Active,0,0,22.33000,114.18000,7,180000,102000,45000,0.000000,No,0000-00-00,,,,,,,https://www.megaport.com/services/ix-connected-networks/,"No
+ ","     ",194
+2007,"United States","Las Vegas","North America","Megaport Las 
+Vegas",https://www.megaport.com,Planned,0,0,35.99463,-115.11897,0,0,0,0,0.000000,No,0000-00-00,,,,,,,https://www.megaport.com/services/ix-connected-networks/,"No
+ ","     ",215
+2008,"United States",Seattle,"North America","Megaport 
+Seattle",https://www.megaport.com,Active,0,0,47.61000,-122.33000,11,9500000,6500000,5300000,0.000000,No,0000-00-00,,,,,,,https://www.megaport.com/services/ix-connected-networks/,"No
+ ","     ",215
+2009,Canada,Toronto,"North America","Megaport 
+Toronto",https://www.megaport.com,Active,0,0,43.67000,-79.40000,4,118460,36000,14000,0.000000,No,0000-00-00,,,,,,,https://www.megaport.com/services/ix-connected-networks/,"No
+ ","     ",215
+2010,India,Chennai,Asia-Pacific,"Extreme IX 
+Chennai",http://extreme-ix.org/,Active,20160623,0,13.07000,80.20000,3,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",194
+2011,India,Hyderabad,Asia-Pacific,"Extreme IX 
+Hyderabad",http://extreme-ix.org/,Active,20160623,0,17.45000,78.47000,6,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",194
+2012,Lithuania,Vilnius,Europe,"Baltic Internet 
+Exchange",https://www.balt.net/other-services/internet-and-private-networks/balt-ix-internet-exchange/,Active,20170000,0,54.63000,25.28000,27,32000000,18000000,4000000,0.000000,No,2018-07-17,,,,,,,https://www.balt.net/other-services/internet-and-private-networks/balt-ix-internet-exchange/,"No
+ ","     ",301
+2013,Ireland,Dublin,Europe," Equinix 
+Dublin",https://ix.equinix.com/home/,Planned,20180222,0,53.33000,-6.25000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",301
+2014,Germany,Frankfurt,Europe,"Equinix 
+Frankfurt",https://ix.equinix.com/home/,Planned,20180000,0,50.12000,8.68000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",301
+2015,"United Kingdom",London,Europe,"Equinix London"," 
+https://www.equinix.de/services/interconnection-connectivity/internet-exchange/",Planned,20180000,0,51.48000,-0.45000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",301
+2016,Sweden,Stockholm,Europe,"Equinix Stockholm"," 
+https://www.equinix.se/services/interconnection-connectivity/internet-exchange/",Planned,20180000,0,59.33000,18.05000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",301
+2017,"United Kingdom",Manchester,Europe,"Equinix Manchester"," 
+http://www.equinix.co.uk/services/interconnection-connectivity/internet-exchange/",Planned,20180000,0,53.35000,-2.27000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",301
+2018,Italy,Milan,Europe,"Equinix Milan"," 
+https://www.equinix.it/services/interconnection-connectivity/internet-exchange/",Planned,20180000,0,45.45000,9.17000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",301
+2019,Mali,Bamako,Africa,"Mali 
+IX",www.mlix.ml,Active,20180223,0,12.61255,-8.13560,3,50000,15000,10000,0.000000,No,2018-07-17,,,,,,,http://www.mlix.ml/membres/,"No
+ ","     ",73
+2020,Myanmar,Yangon,Asia-Pacific,"Myanmar Internet 
+Exchange",http://www.mm-ix.net/index.php,Active,20170900,0,16.90377,96.02942,11,0,0,0,0.000000,No,0000-00-00,,,,,,,http://www.mm-ix.net/members.php?idx=10,"No
+ ","     ",194
+2021,France,Clermont-Ferrand,Europe,AuvernIX,http://www.auvernix.org/,Active,20121030,0,45.78706,3.07771,8,400000,66000,10000,0.000000,No,2018-07-17,,,,,,,http://www.auvernix.org/les-membres-du-gix/,"No
+ ","     ",301
+2022,Poland,Katowice,Europe,EPIX.Katowice,www.epix.net.pl,Active,20130000,0,50.23000,19.03000,430,500000000,0,100000000,0.000000,No,2018-07-17,,,,,,,https://www.epix.net.pl/o-epix/uczestnicy/,"No
+ ","     ",301
+2023,Poland,Warsaw,Europe,EPIX.Warszawa-KIX,www.epix.net.pl,Active,20130000,0,52.23000,21.00000,350,800000000,0,150000000,0.000000,No,2018-07-17,,,,,,,https://www.epix.net.pl/o-epix/uczestnicy/,"No
+ ","     ",301
+2024,Chile,Temuco,"Latin America","PIT Chile 
+Temuco",http://www.pittemuco.cl/,Active,0,0,-38.72908,-72.63774,4,194000,120000,27000,0.000000,No,2018-07-17,,,,,,,,"No
+ ","     ",116
+2025,Chile,Arica,"Latin America","PIT Chile Arica"," 
+http://www.pitarica.cl",Unknown,0,0,,,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",116
+2026,Chile,Osorno,"Latin America","PIT Chile Osorno"," 
+http://www.pitosorno.cl",Active,0,0,-40.57370,-73.16915,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",116
+2027,Latvia,Riga,Europe,"MSK-IX Riga"," 
+http://www.msk-ix.ru/en/ix/rix",Active,20180000,0,56.97000,24.05000,3,0,0,0,0.000000,No,0000-00-00,,,,,,,https://www.msk-ix.ru/en/members/,"No
+ ","     ",301
+2028,"Saudi Arabia",Riyadh,Europe,"Saudi Internet 
+Exchange",www.ixp.sa,Unknown,0,0,24.72000,46.72000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",301
+2029,"Trinidad and Tobago","Princes Town","Latin 
+America",TTIX2,https://ix.tt,Active,20170131,0,10.26570,-61.38167,5,0,0,0,0.000000,No,0000-00-00,,,,,,,https://ix.tt/membership/founding-members/,"No
+ ","     ",116
+2030,Canada,Ottawa,"North America","National Capital Internet 
+Exchange",,Unknown,0,0,45.40000,-75.72000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",215
+2031,"United States",Baltimore,"North America","Baltimore 
+IX",https://baltimoreix.net,Planned,0,0,39.30000,-76.62000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",215
+2032,Netherlands,Amsterdam,Europe,"Equinix 
+Amsterdam",https://ix.equinix.com/home/,Active,0,0,52.30000,4.77000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",301
+2033,Portugal,Lisbon,Europe,"Equinix 
+Lisbon",https://ix.equinix.com/,Planned,20180000,0,38.73000,-9.15000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",301
+2034,Spain,Madrid,Europe,"Equinix 
+Madrid",https://ix.equinix.com/,Planned,20180000,0,40.43000,-3.70000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",301
+2035,"Saint Vincent and the Grenadines",Kingston,"Latin 
+America",SVGIX,,Unknown,20160126,0,,,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",116
+2036,Tanzania,Zanzibar,Africa,"Zanzibar Internet Exchange 
+Point",,Active,20180528,0,-6.09990,39.10081,3,3200,985,156,0.000000,No,2018-07-17,,,,,,,,"No
+ ","     ",73
+2037,India," Amaravati",Asia-Pacific,"Amaravati Internet 
+Exchange",https://www.amr-ix.net/,Active,20180517,0,,,5,0,0,0,0.000000,No,0000-00-00,,,,,,,https://www.amr-ix.net/members/,"No
+ ","     ",194
+2038,"United States",Philadelphia,"North America","Philadelphia Internet
+ Exchange"," 
+http://phillyix.net",Active,20180500,0,40.11691,-75.01428,4,0,0,0,0.000000,No,0000-00-00,,,,,,,http://phillyix.net/members/,"No
+ ","     ",215
+2039,India,Indore,Asia-Pacific,"India Internet 
+Exchange",https://www.india-ix.com/,Active,20160301,0,,,0,10000000,3000000,200000,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",194
+2040,India,Kochi,Asia-Pacific,"India Internet 
+Exchange",https://www.india-ix.com/,Planned,0,0,,,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",194
+2041,"Bosnia and Herzegovina",Sarajevo,Europe,"Bosnia and Herzegovina 
+Neutral Internet 
+Exhacange",http://bhnix.ba/en/home/,Planned,20180000,0,,,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",301
+2042,Switzerland,Lausanne,Europe," 
+RomandIX",http://www.romandix.ch,Active,20180000,0,46.52839,6.51241,9,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",301
+2043,Lithuania,Vilnius,Europe,"Lithuanian peering 
+center",http://www.datalogistics.lt/en/node/99,Active,0,0,54.63000,25.28000,22,0,0,0,0.000000,No,0000-00-00,,,,,,,http://www.datalogistics.lt/en/node/99,"No
+ ","     ",301
+2044,India,Guntur,Asia-Pacific,"Remki Internet 
+Exchange",https://internet-exchange.remki.net/,Unknown,20170000,0,,,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",194
+2045,India,"New Delhi",Asia-Pacific,"ANI Peering 
+Exchange",https://aninetwork.in/aniix/index.html,Active,20180000,0,28.58000,77.20000,15,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",194
+2046,India,Guwahati,Asia-Pacific,"National Internet Exchange of 
+India",http://nixi.in/en,Unknown,20180000,0,,,0,0,0,0,0.000000,No,2018-07-17,,,,,,,http://nixi.in/en/connected-parties,"No
+ ","     ",194
+2047,"United States",Fremont,"North America"," Fremont Cabal Internet 
+Exchange",http://fcix.net/,Active,20180400,0,37.56283,-122.00044,15,0,0,0,0.000000,No,0000-00-00,,,,,,,http://fcix.net/participants/,"No
+ ","     ",215
+2048,Australia,Melbourne,Asia-Pacific,"Equinix 
+Melbourne",https://ix.equinix.com,Active,0,0,-37.82000,144.97000,0,0,0,0,0.000000,No,0000-00-00,,,,,,,,"No
+ ","     ",194
+</body></html>
