@@ -80,7 +80,7 @@ If you want to style the MapTable elements with some existing styles, you can pr
 
 ```html
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-<link rel="stylesheet" href="/maptable.css">
+<link rel="stylesheet" href="../maptable.css">
 ```
 
 ## Declaring MapTable elements
