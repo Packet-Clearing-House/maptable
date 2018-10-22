@@ -25,9 +25,9 @@ var package = require('./package.json');
 gulp.task('browser-sync', function() {
   browserSync.init({
     server: {
-      baseDir: ["./examples", "./dev"]
+      baseDir: ["./docs", "./dev"]
     },
-    files: ['./examples/**/*.*', './dev/**/*.*'],
+    files: ['./docs/**/*.*', './dev/**/*.*'],
     port: 5000,
   });
 });
