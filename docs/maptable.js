@@ -2391,7 +2391,6 @@ this.d3.maptable = (function () {
             sortableColums[i].setAttribute('class', 'mt-table-sortable');
           }
           this.sorting.forEach(function (column) {
-            console.log(_this3.container);
             _this3.container.querySelector('#column_header_' + utils.sanitizeKey(column.key)).setAttribute('class', 'mt-table-sortable sort_' + column.mode);
           });
           this.maptable.data = this.maptable.data.sort(function (a, b) {

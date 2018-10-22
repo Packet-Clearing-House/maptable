@@ -14,7 +14,6 @@ var headerComment = require('gulp-header-comment');
 var rimraf = require('gulp-rimraf');
 
 var rename = require('gulp-rename');
-var jeditor = require('gulp-json-editor');
 var _ = require('underscore');
 
 var reload = browserSync.reload;
@@ -46,7 +45,7 @@ function buildJs(dest) {
       babel({ runtimeHelpers: true })
     ]
   }).then( function ( bundle ) {
-    bundle.write({
+    return bundle.write({
       format: 'iife',
       moduleName: 'd3.maptable',
       globals: {
@@ -56,7 +55,12 @@ function buildJs(dest) {
      sourceMap: true,
      dest: dest + '/maptable.js'
     });
-    browserSync.reload();
+  })
+  .then(() => {
+    return gulp.src([dest + '/maptable.js', dest + '/maptable.css']).pipe(gulp.dest('./docs/'));
+  })
+  .then(() => {
+    return browserSync.reload();
   });
 }
 
@@ -78,7 +82,8 @@ gulp.task('compress:js', function() {
     .pipe(rename({
       suffix: '.min'
     }))
-    .pipe(gulp.dest('./dist'));
+    .pipe(gulp.dest('./dist'))
+    .pipe(gulp.dest('./docs'));
 });
 
 // CSS
@@ -86,6 +91,7 @@ function buildCss(dest) {
   return gulp.src('./src/*.css')
   .pipe(compressCss())
   .pipe(gulp.dest(dest))
+  .pipe(gulp.dest('./docs'))
   .pipe(reload({stream:true}));
 }
 gulp.task('build:css:dev', function() {
@@ -93,25 +99,6 @@ gulp.task('build:css:dev', function() {
 });
 gulp.task('build:css:dist', function() {
   return buildCss('./dist');
-});
-
-// Bower
-gulp.task('bower', function () {
-  return gulp.src('./package.json')
-    .pipe(rename('bower.json'))
-    .pipe(jeditor(function (json) {
-      return _.pick(json, [
-        'name',
-        'version',
-        'description',
-        'main',
-        'keywords',
-        'author',
-        'license',
-        'dependencies'
-      ]);
-    }))
-    .pipe(gulp.dest('.'));
 });
 
 // Clean
@@ -127,4 +114,4 @@ gulp.task('clean:js:dev', function() {
 
 
 gulp.task('default', gulpSequence('clean:js:dev', ['build:js:dev', 'build:css:dev'], 'browser-sync', 'watch'));
-gulp.task('dist', gulpSequence('clean:js:dist', ['build:js:dist', 'build:css:dist'], 'compress:js', 'bower'));
+gulp.task('dist', gulpSequence('clean:js:dist', ['build:js:dist', 'build:css:dist'], 'compress:js'));

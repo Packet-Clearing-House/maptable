@@ -33,6 +33,10 @@
       salary: {
         filterMethod: 'compare',
         filterInputType: 'number',
+        cellContent: function(d) {
+          const v = parseInt(d.salary.replace(/[^0-9]+/g, ''), 10);
+          return '$' + v.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+        },
         dataParse: function(val) {
           return parseInt(val.replace(/[^0-9]+/g, ''), 10);
         }
