@@ -83,7 +83,9 @@ export default class Table {
         this.sorting = [this.options.defaultSorting];
       }
     }
-    this.render();
+
+    // render is triggered by MapTable
+    // this.render();
 
     // On complete
     if (this.options.onComplete && this.options.onComplete.constructor === Function) {
@@ -208,7 +210,6 @@ export default class Table {
         this.sorting = [this.sorting[sortIndex]];
       }
     }
-
     this.render();
   }
 }

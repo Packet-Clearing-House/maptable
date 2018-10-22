@@ -2327,7 +2327,9 @@ this.d3.maptable = (function () {
             this.sorting = [this.options.defaultSorting];
           }
         }
-        this.render();
+
+        // render is triggered by MapTable
+        // this.render();
 
         // On complete
         if (this.options.onComplete && this.options.onComplete.constructor === Function) {
@@ -2449,7 +2451,6 @@ this.d3.maptable = (function () {
               this.sorting = [this.sorting[sortIndex]];
             }
           }
-
           this.render();
         }
       }]);
