@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="/vendor/bootstrap.min.css">
+    <link rel="stylesheet" href="/maptable.css">
+    <title>MapTable example</title>
+    <style media="screen">
+        body {
+          background-color: #86B2DF;
+        }
+        .starsMarker {
+          opacity: 0.9;
+        }
+      </style>
+</head>
+<body>
+
+<script src="/vendor/d3.min.js" charset="utf-8"></script>
+<script src="/vendor/topojson.min.js"></script>
+<script src="/maptable.js"></script>
+
+<div id="vizContainer" class='container'></div>
+
+<script>
+    var viz = d3.maptable('#vizContainer')
+    .csv('basic.csv')
+    .map({
+      path: 'ne_110m_admin_0_countries.json',
+      countries: {
+        attr: {
+          fill: '#999'
+        }
+      },
+      markers: {
+        className: 'starsMarker',
+        customTag: function(markerObject){
+          return markerObject.append("svg:image")
+            .attr("xlink:href", "star.svg")
+            .attr("width", "13")
+            .attr("height", "27");
+        },
+        attrX: 'x',
+        attrY: 'y',
+        attrXDelta: -6,
+        attrYDelta: -13
+      }
+    })
+    .render();
+</script>
+</body>
+</html>
