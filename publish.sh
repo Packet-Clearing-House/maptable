@@ -46,6 +46,4 @@ git push origin $VERSION
 # Publish on npm
 npm publish ./
 
-# Publish on bower
-bower register maptable git://github.com/Packet-Clearing-House/maptable.git
 exit 0
