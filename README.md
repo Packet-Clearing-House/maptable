@@ -12,11 +12,11 @@ MapTable's primary function is to convert any dataset to a customizable set of c
 
 This library was originally conceived to render the [home page](https://pch.net) and next generation of [IXP directory](https://www.pch.net/ixp/dir) for Packet Clearing House ([PCH](https://pch.net)).
 
-You can also browse [other code samples and **examples**](http://packet-clearing-house.github.io/maptable/)
+You can also browse [other code samples and **examples**](https://packet-clearing-house.github.io/maptable/)
 
-[<img src="http://packet-clearing-house.github.io/maptable/screenshots/minimal.png">](http://packet-clearing-house.github.io/maptable/#minimal) [<img src="http://packet-clearing-house.github.io/maptable/screenshots/table-only.png">](http://packet-clearing-house.github.io/maptable/#table-only) [<img src="http://packet-clearing-house.github.io/maptable/screenshots/custom-markers.png">](http://packet-clearing-house.github.io/maptable/#custom-markers)
+[<img src="https://packet-clearing-house.github.io/maptable/screenshots/minimal.png">](https://packet-clearing-house.github.io/maptable/#minimal) [<img src="https://packet-clearing-house.github.io/maptable/screenshots/table-only.png">](https://packet-clearing-house.github.io/maptable/#table-only) [<img src="https://packet-clearing-house.github.io/maptable/screenshots/custom-markers.png">](https://packet-clearing-house.github.io/maptable/#custom-markers)
 
-[<img src="http://packet-clearing-house.github.io/maptable/screenshots/tooltip-country.png">](http://packet-clearing-house.github.io/maptable/#tooltip-country) [<img src="http://packet-clearing-house.github.io/maptable/screenshots/6000-markers.png">](http://packet-clearing-house.github.io/maptable/#6000-markers) [<img src="http://packet-clearing-house.github.io/maptable/screenshots/heatmap.png">](http://packet-clearing-house.github.io/maptable/#heatmap)
+[<img src="https://packet-clearing-house.github.io/maptable/screenshots/tooltip-country.png">](https://packet-clearing-house.github.io/maptable/#tooltip-country) [<img src="https://packet-clearing-house.github.io/maptable/screenshots/6000-markers.png">](https://packet-clearing-house.github.io/maptable/#6000-markers) [<img src="https://packet-clearing-house.github.io/maptable/screenshots/heatmap.png">](https://packet-clearing-house.github.io/maptable/#heatmap)
 
 
 ## Table of Contents
