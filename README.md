@@ -31,7 +31,6 @@ You can also browse [other code samples and **examples**](https://packet-clearin
   *	[Columns details](#columns-details)
        * [columnsDetails format](#columnsdetails-format)
 * [Naming conventions](#naming-conventions)
-* [ScaledValue](#scaledvalue)
   *	[Map](#map)
        * [Options](#options)
 * [Filters](#filters)
@@ -234,56 +233,6 @@ Functions that have `d` as parameter, means that `d` is a JS dictionary that con
 
 Functions that have `groupedData` as parameter, means that `groupedData` is a JS dictionary `{ key: 'groupedByKey', values: [ {d}, ... ] }` that contains the key that have been used to group the data, and the matching values related to that grouping.
 
-## ScaledValue
-
-We use this type to change the attributes of markers and countries.
-
-It can be static value, for example a hex color for `countries.attr.fill = '#FFFFFF'`.
-
-Or if the value of the attribute is depending on the data, the expected value would be an object as explained on the below example.
-
-For example, if we want to have countries background color to be related to a scale from green to red, and be white if the country don't have any related data. The value of `countries.attr.fill` would be:
-
-```js
-{
-  min: 'green', // Color for the minimum value
-  max: 'red', // Color for the maximum value
-  empty: 'white', // Color if no value is affected for that country or marker
-  legend: true, // Works only for the countries.attr.fill at the moment (contributions are welcome)
-  rollup: function (values) { // What is the value that we're attaching to the country / and attribute  
-    // values is an array that contains rows that match that country or marker
-    return values.length; // for example here the count of row, it could be also the mean, sum...
-  }
-}
-```
-
-The value can also be a function that have a parameter a `groupedData` and returns the value. You can define your own logic to generate the attribute value, for example:
-
-```js
-{
-  fill: function(groupedData) {
-    var totalTraffic = 0;
-    groupedData.values.forEach(function(d) {
-        totalTraffic += Number(d.traf);
-    });
-    if (totalTraffic && totalTraffic > 50000000) return 'green';
-    return 'red';
-  },
-}
-```
-
-If you want to attach the data boundaries to the value of an attribute, you may set as values for min and max as `minValue` and `maxValue`. For example, if we want to have markers radius to be related to a scale from minimum value and the maximum value, but also transform the value following a function. The value for the map options on `markers.attr.r` would be:
-
-```js
-{
-  min: 'minValue',
-  max: 'maxValue',
-  transform: function (val) {
-    return Math.sqrt(val);
-  },
-}
-```
-
 
 ### Map
 
@@ -367,81 +316,95 @@ If you want to attach the data boundaries to the value of an attribute, you may 
     - `markers.attrY:` _(string, default: 'cy')_ Attribute to position the marker on the Y-Axis
     - `markers.attrXDelta:` _(integer, default: 0)_ Left relative margin of the marker
     - `markers.attrYDelta:` _(integer, default: 0)_ Top relative margin of the marker
-    - `markers.groupby:` _(function(groupedData))_ Given groupedData (the current row), function that returns a value that we group markers by.
-    - `markers.rollup:` _(function(groupedData))_ Given groupedData (the current row), function that returns a value that we would use for every marker.
+    - `markers.groupBy:` _(function(groupedData))_ Given groupedData (the current row), function that returns a value that we group markers by. See [this example](https://packet-clearing-house.github.io/maptable/#aggregate) for an implementation example.
     - `markers.tooltipClassName:` _(string, default: 'mt-map-tooltip popover bottom')_ Class name of the tooltip used for markers (we're using bootstrap).
     - `markers.tooltip:` _(function(groupedData))_ Function that returns html that we would use as content for the tooltip. We recommend you to use the bootstrap popover..
-    - `markers.attr:` _(object)_ Markers attributes (same naming as SVG attributes).
-        - `markers.attr.fill:` _(ScaledValue)_ Marker background color.
-        - `markers.attr.r.max:` _(ScaledValue)_ Maximum radius.
-        - `markers.attr.r.min:` _(ScaledValue)_ Minimum radius
-        - `markers.attr.r.rollup:` _(function(groupedData), default: values.length)_ Function for the values we're attaching to the radius. Defaults to ``values.length``
-        - `markers.attr.r.transform:` _(function(value, allRows), default: value)_ Function for changing the value for the current radius.  Can simply only accept value ``transform(value)`` to do a simple ``Math.log(value)`` call or be defined to use more advanced logic with ``transform(value, allRows)`` and then iterate over ``allRows`` (all rows from your csv/tsv/json) to calculate relative values like percentile.
-        - `markers.attr.stroke:` _(ScaledValue)_ Marker border color.
-        - `markers.attr.stroke-width:` _(ScaledValue)_ Marker border width.
+    - `markers.attr:` _(object)_ markers attributes (same naming as svg attributes [SVGAttribute], for example: `r`, `fill`, `stroke-width`, `stroke` ...)
+      - `markers.attr.[SVGAttribute]:` _(string or integer)_ Use a string or integer for a static value
+      - `markers.attr.[SVGAttribute]:` _(function)_ Use a function to represent the attribute value based on the dataset, see [this example](https://packet-clearing-house.github.io/maptable/#dynamic-markers) for an implementation example.
+      - `markers.attr.[SVGAttribute]:` _(object)_ Use an object with he following keys to coorelate the value of the attribute with the dataset
+        - `markers.attr.[SVGAttribute].aggregate:` _(object)_ Information on how we aggrgate data. See [this example](https://packet-clearing-house.github.io/maptable/#aggregate) for an implementation example.
+        - `markers.attr.[SVGAttribute].aggregate.key:` _(string)_ Which column we'll use to aggregate the value (it need to be a number)
+        - `markers.attr.[SVGAttribute].aggregate.mode:` _(enum('sum', 'count', 'avg', 'min', 'max', '50percentile', '95percentile'))_ what aggreation function we'll use.
+        - `markers.attr.[SVGAttribute].aggregate.scale:` _(enum('linear', 'sqrt', 'pow2', 'pow3', 'log10'), default: 'linear')_ what scale we'll aggregate the data.
+        - `markers.attr.[SVGAttribute].min:` _(string or integer)_ Attribute value for the minimum value on the scale
+        - `markers.attr.[SVGAttribute].max:` _(string or integer)_ Attribute value for the maximum value on the scale
+        - `markers.attr.[SVGAttribute].empty` _(string or integer)_ Attribute value if no data is linked to that country
+        - `markers.attr.[SVGAttribute].rollup:` **DEPRECATED (use aggregate instead)**  _(function(groupedData), default: groupedData => groupedData.length)_ Function for the values we're attaching to the country and attribute. return value needs to be an array that contains rows that match that country or marker. Defaults to ``values.length``, the count of matching markers
+        - `markers.attr.[SVGAttribute].transform:` _(function(value, allRows), default: value)_ Function for changing the value for the current country. Can  only accept value ``transform(value)`` to do a simple ``Math.log(value)`` call or be defined to use more advanced logic with ``transform(value, allRows)`` and then iterate over ``allRows`` (all rows from your csv/tsv/json) to calculate relative values like percentile. (It's recommended to use `aggreggate` if you want to have a different scale).
 
        *Example (grouping by value):*
 
        ```js
-       markers: {
-         tooltip: function(a) {
-           out = '<div class="arrow"></div>';
-           out += '<span class="badge pull-right"> ' + a.values.length + '</span><h3 class="popover-title"> ' + a.key + '</h3>';
-           out += '<div class="popover-content">';
-           for (i = 0; i < a.values.length; i++) out += " • " + a.values[i].long_name + "<br>";
-           out += "</div>";
-           return out;
-         },
-         attr: {
-           r: {
-             min: "minValue",
-             max: "maxValue",
-             transform: function(v) {
-               return 3 * Math.sqrt(v);
-             },
-             rollup: function(values) {
-               return values.length;
-             },
-           },
-           fill: "yellow",
-           stroke: "#d9d9d9",
-           "stroke-width": 0.5
+        markers: {
+          tooltip: function(a) {
+            out = '<div class="arrow"></div>';
+            out += '<span class="badge pull-right"> ' + a.values.length + '</span><h3 class="popover-title"> ' + a.key + '</h3>';
+            out += '<div class="popover-content">';
+            for (i = 0; i < a.values.length; i++) out += " • " + a.values[i].long_name + "<br>";
+            out += "</div>";
+            return out;
+          },
+          attr: {
+            r: {
+              min: 1,
+              max: 10,
+              aggregate: {
+                mode: "avg",
+                key: "traffic",
+                scale: "log10",
+            }
+          },
+          fill: function(groupedData) {
+            var totalTraffic = 0;
+            groupedData.values.forEach(function(d) {
+              totalTraffic += Number(d.traf);
+            });
+            if (totalTraffic && totalTraffic > 50000000) return 'green';
+            return 'red';
+          },
+          stroke: "#d9d9d9",
+          "stroke-width": 0.5
          }
        },
        ```
        *Example (with custom tag - Advanced feature):*
 
        ```js
-       markers: {
-         className: 'starsMarker',
-         customTag: function(markerObject){
-           return markerObject.append("svg:image")
-             .attr("xlink:href", "https://www.example.com/star.svg")
-             .attr("width", "13")
-             .attr("height", "27");
-         },
-         attrX: 'x',
-         attrY: 'y',
-         attrXDelta: -6,
-         attrYDelta: -13
-       },
+        markers: {
+          className: 'starsMarker',
+          customTag: function(markerObject){
+            return markerObject.append("svg:image")
+              .attr("xlink:href", "https://www.example.com/star.svg")
+              .attr("width", "13")
+              .attr("height", "27");
+          },
+          attrX: 'x',
+          attrY: 'y',
+          attrXDelta: -6,
+          attrYDelta: -13
+        },
        ```
 
 - `countries:` _(object, enabled by default)_ Add countries on the map. You can **not** use this with `map.heatmap`.  Set it to `false` to disable it.
     - `countries.tooltip:` _(function(groupedData))_ Function that returns html that we would use as content for the tooltip. We recommend you to use the bootstrap popover. The parameter is `groupedData` (check above on the naming conventions for more details).
-    - `countries.attr:` _(object)_ Markers attributes (same naming as svg attributes).
-        - `countries.attr.fill:` _(ScaledValue)_ Marker background color.
-        - `countries.attr.r:` _(ScaledValue)_ Marker radius.
-        - `countries.attr.stroke:` _(ScaledValue)_ Marker border color.
-        - `countries.attr.stroke-width:` _(ScaledValue)_ Marker border width.
-        - `countries.attr.min:` _(ScaledValue)_ Color for the minimum value
-        - `countries.attr.max:` _(ScaledValue)_ Color for the maximum value
-        - `countries.attr.minNegative:` _(ScaledValue, optional)_ Color for the minimum (closest to 0) negative value. Use this and ``maxNegative`` if you want to show different colors on the map for negative values.  It is optional.
-        - `countries.attr.maxNegative:` _(ScaledValue, optional)_ Color for the maximum (farthest from 0) negative.
-        - `countries.attr.empty` _(ScaledValue)_ Color if no value is affected for that country
-        - `countries.attr.legend:` _(bool, default: false)_ show or hide the legend
-        - `countries.attr.rollup:` _(function(groupedData), default: values.length)_ Function for the values we're attaching to the country and attribute. return value needs to be an array that contains rows that match that country or marker. Defaults to ``values.length``, the  count of matching countries
-        - `countries.attr.transform:` _(function(value, allRows), default: value)_ Function for changing the value for the current country.  Can simply only accept value ``transform(value)`` to do a simple ``Math.log(value)`` call or be defined to use more advanced logic with ``transform(value, allRows)`` and then iterate over ``allRows`` (all rows from your csv/tsv/json) to calculate relative values like percentile.
+    - `countries.attr:` _(object)_ Countries attributes (same naming as svg attributes [SVGAttribute], for example: `fill`, `stroke-width`, `stroke` ...)
+      - `countries.attr.[SVGAttribute]:` _(string or integer)_ Use a string or integer for a static value
+      - `countries.attr.[SVGAttribute]:` _(function)_ Use a function to represent the attribute value based on the dataset, see this example for more details.
+      - `countries.attr.[SVGAttribute]:` _(object)_ Use an object with he following keys to coorelate the value of the attribute with the dataset
+        - `countries.attr.[SVGAttribute].aggregate:` _(object)_ Information on how we aggrgate data. See [this example](https://packet-clearing-house.github.io/maptable/#aggregate) for an implementation example.
+        - `countries.attr.[SVGAttribute].aggregate.key:` _(string)_ Which column we'll use to aggregate the value (it need to be a number)
+        - `countries.attr.[SVGAttribute].aggregate.mode:` _(enum('sum', 'count', 'avg', 'min', 'max', '50percentile', '95percentile'))_ what aggreation function we'll use.
+        - `countries.attr.[SVGAttribute].aggregate.scale:` _(enum('linear', 'sqrt', 'pow2', 'pow3', 'log10'), default: 'linear')_ what scale we'll aggregate the data.
+        - `countries.attr.[SVGAttribute].min:` _(string or integer)_ Attribute value for the minimum value on the scale
+        - `countries.attr.[SVGAttribute].max:` _(string or integer)_ Attribute value for the maximum value on the scale
+        - `countries.attr.[SVGAttribute].minNegative:` _(string or integer, optional)_ Attribute value for the minimum (closest to 0) negative value. Use this and `maxNegative` if you want to show different colors on the map for negative values.  It is optional. see [this example](https://packet-clearing-house.github.io/maptable/#negative-values) for an implementation example.
+        - `countries.attr.[SVGAttribute].maxNegative:` _(string or integer, optional)_ Attribute value for the maximum (farthest from 0) negative.
+        - `countries.attr.[SVGAttribute].empty` _(string or integer)_ Attribute value if no data is linked to that country
+        - `countries.attr.[SVGAttribute].legend:` _(bool, default: false)_ show or hide the legend
+        - `countries.attr.[SVGAttribute].rollup:` _(function(groupedData), default: groupedData => groupedData.length)_ **DEPRECATED (use aggregate instead)** Function for the values we're attaching to the country and attribute. return value needs to be an array that contains rows that match that country or marker. Defaults to ``values.length``, the count of matching countries
+        - `countries.attr.[SVGAttribute].transform:` _(function(value, allRows), default: value)_ Function for changing the value for the current country. Can  only accept value ``transform(value)`` to do a simple ``Math.log(value)`` call or be defined to use more advanced logic with ``transform(value, allRows)`` and then iterate over ``allRows`` (all rows from your csv/tsv/json) to calculate relative values like percentile. (It's recommended to use `aggreggate` if you want to have a different scale).
+
        *Example*
 
        ```js
@@ -458,20 +421,22 @@ If you want to attach the data boundaries to the value of an attribute, you may 
            return out;
          },
          attr: {
-           fill: {
-             min: "#a9b6c2",
-             max: "#6c89a3",
-             empty: "#f9f9f9",
-             rollup: function(values) {
-               return values.length;
-             },
+            fill: {
+              min: "#a9b6c2",
+              max: "#6c89a3",
+              empty: "#f9f9f9",
+              aggregate: {
+                mode: "sum",
+                key: "traffic",
+                scale: "sqrt"
+              }
            },
            stroke: "#d9d9d9",
            "stroke-width": 0.5
          },
        },
        ```
-- `heatmap:` _(object, default: null)_ Add a heatmap on the map - we use concentrated circles on every location in the dataset. You can **not** use this with `map.countries.`
+- `heatmap:` _(object, default: null)_ Add a heatmap on the map - we use concentrated circles on every location in the dataset. You can **not** use this with `map.countries.`. See [this example](https://packet-clearing-house.github.io/maptable/#heatmap) for an implementation example.
     - `heatmap.weightByAttribute:` _(function(d), default: null)_ Which attribute we would weight the gradient. it takes a anonymous function that exposes `d` as one row, and expect a float as returned value.
     - `heatmap.colorStrength:` _(float, default: 1)_ Adjusts heatmap color strength, (0 make things transparent, 1 normal behavior, > 1 to make the color darker)
     - `heatmap.weightByAttributeScale:` _('log' or 'linear', default: 'linear')_ Which scale we would use for the weight (only if `weightByAttribute` is set).
