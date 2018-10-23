@@ -62,6 +62,7 @@ export default class Table {
         output += (d.nowrap) ? ' nowrap' : '';
         return output;
       })
+      .attr('data-key', d => utils.sanitizeKey(d.key))
       .attr('onselectstart', 'return false;')
       .attr('unselectable', 'on')
       .attr('style', d => ((d.nowrap) ? 'white-space:nowrap;' : ''))

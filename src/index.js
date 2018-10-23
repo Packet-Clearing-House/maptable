@@ -82,6 +82,11 @@ d3.maptable = function (target) {
 
     const customOptions = utils.extendRecursive(defaultOptions, options);
     maptableObject = new MapTable(target, customOptions);
+
+    // public functions
+    return {
+      render: () => maptableObject.render(),
+    };
   };
   return maptable;
 };

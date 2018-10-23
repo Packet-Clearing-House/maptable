@@ -1,6 +1,7 @@
 import Legend from './Legend';
 import Watermark from './Watermark';
 import StackBlur from './StackBlur';
+import utils from '../utils';
 /**
  * Used the name GeoMap instead of Map to avoid collision with the native Map class of JS
  */
@@ -710,6 +711,50 @@ export default class GeoMap {
         d.attr[attrKey] = attrValue(d);
       });
     } else if (typeof (attrValue) === 'object') {
+      let scaleToUse = d3.scale.linear();
+      if (attrValue.aggregate) {
+        const key = (typeof (attrValue.aggregate.key) === 'function') ? attrValue.aggregate.key() : attrValue.aggregate.key;
+        const mode = (typeof (attrValue.aggregate.mode) === 'function') ? attrValue.aggregate.mode() : attrValue.aggregate.mode;
+        const scale = (typeof (attrValue.aggregate.scale) === 'function') ? attrValue.aggregate.scale() : attrValue.aggregate.scale;
+        if (!key || !mode) {
+          throw new Error(`MapTable: You should provide values 'key' & 'mode' for attr.${attrKey}.aggregate`);
+        }
+        if (mode === 'sum') {
+          attrValue.rollup = groupedData => (
+            groupedData.map(d => Number(d[key])).reduce((a, c) => a + c, 0)
+          );
+        } else if (mode === 'avg') {
+          attrValue.rollup = groupedData => (
+            groupedData.map(d => Number(d[key])).reduce((a, c) => a + c, 0) / groupedData.length
+          );
+        } else if (mode === 'count') {
+          attrValue.rollup = groupedData => groupedData.length;
+        } else if (mode === 'min') {
+          attrValue.rollup = (groupedData) => {
+            const groupedValues = groupedData.map(d => Number(d[key]));
+            return groupedValues.reduce((min, p) => (p < min ? p : min), groupedValues[0]);
+          };
+        } else if (mode === 'max') {
+          attrValue.rollup = (groupedData) => {
+            const groupedValues = groupedData.map(d => Number(d[key]));
+            return groupedValues.reduce((max, p) => (p > max ? p : max), groupedValues[0]);
+          };
+        } else if (mode.indexOf('percentile') !== -1) {
+          const percentile = utils.toNumber(mode);
+          attrValue.rollup = (groupedData) => {
+            const groupedValues = groupedData.map(d => Number(d[key]));
+            return utils.quantile(groupedValues, percentile);
+          };
+        }
+        if (scale.indexOf('log') !== -1) {
+          scaleToUse = d3.scale.log().base(utils.toNumber(scale) || 10);
+        } else if (scale.indexOf('pow') !== -1) {
+          scaleToUse = d3.scale.pow().exponent(utils.toNumber(scale) || 1);
+        } else if (scale === 'sqrt') {
+          scaleToUse = d3.scale.sqrt();
+        }
+      }
+
       // Dynamic value based on a scale
       if (!attrValue.rollup) {
         attrValue.rollup = d => d.length;
@@ -745,16 +790,17 @@ export default class GeoMap {
       const useNegative = (attrValue.maxNegative && attrValue.minNegative);
       let scaleFunction;
       let scaleNegativeFunction;
+
       if (useNegative) {
-        scaleFunction = d3.scale.linear()
+        scaleFunction = scaleToUse
           .domain([0, scaleDomain[1]])
           .range([minValue, maxValue]);
 
-        scaleNegativeFunction = d3.scale.linear()
+        scaleNegativeFunction = scaleToUse
           .domain([scaleDomain[0], 0])
           .range([attrValue.maxNegative, attrValue.minNegative]);
       } else {
-        scaleFunction = d3.scale.linear()
+        scaleFunction = scaleToUse
           .domain(scaleDomain)
           .range([minValue, maxValue]);
       }
