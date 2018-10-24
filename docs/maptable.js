@@ -2317,7 +2317,8 @@ this.d3.maptable = (function () {
           return 'column_header_' + utils.sanitizeKey(d.key);
         });
 
-        this.render();
+        // render is triggered by MapTable
+        // this.render();
 
         // On complete
         if (this.options.onComplete && this.options.onComplete.constructor === Function) {

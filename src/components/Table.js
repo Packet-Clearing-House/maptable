@@ -88,7 +88,8 @@ export default class Table {
       .text(d => d.title)
       .attr('id', d => `column_header_${utils.sanitizeKey(d.key)}`);
 
-    this.render();
+    // render is triggered by MapTable
+    // this.render();
 
     // On complete
     if (this.options.onComplete && this.options.onComplete.constructor === Function) {
