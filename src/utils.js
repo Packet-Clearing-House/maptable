@@ -84,6 +84,17 @@ function quantile(array, percentile) {
   return result;
 }
 
+function uniqueValues(arr) {
+  if (!arr) return arr;
+  const a = [];
+  for (let i = 0, l = arr.length; i < l; i += 1) {
+    if (a.indexOf(arr[i]) === -1 && arr[i] !== '') {
+      a.push(arr[i]);
+    }
+  }
+  return a;
+}
+
 export default {
   rangeToBool,
   appendOptions,
@@ -92,4 +103,5 @@ export default {
   toNumber,
   keyToTile,
   quantile,
+  uniqueValues,
 };

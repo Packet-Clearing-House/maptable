@@ -361,12 +361,20 @@ export default class GeoMap {
     // Build Country Legend
     this.legendCountry = {};
 
-    if (this.options.countries.attr.fill
-        && this.options.countries.attr.fill.legend
-        && this.options.countries.attr.fill.min
-        && this.options.countries.attr.fill.max) {
+    if (this.shouldRenderLegend()) {
       this.legendCountry.fill = new Legend(this);
     }
+  }
+
+  shouldRenderLegend() {
+    const f = this.options.countries.attr.fill;
+    if (!f) return false;
+    if (!f.legend || !f.min || !f.max) return false;
+    if (f.aggregate && f.aggregate.scale) {
+      const scale = (typeof (f.aggregate.scale) === 'function') ? f.aggregate.scale() : f.aggregate.scale;
+      if (scale !== 'linear') return false;
+    }
+    return true;
   }
 
   /**
@@ -711,47 +719,60 @@ export default class GeoMap {
         d.attr[attrKey] = attrValue(d);
       });
     } else if (typeof (attrValue) === 'object') {
+      let scale = 'linear';
       let scaleToUse = d3.scale.linear();
       if (attrValue.aggregate) {
         const key = (typeof (attrValue.aggregate.key) === 'function') ? attrValue.aggregate.key() : attrValue.aggregate.key;
         const mode = (typeof (attrValue.aggregate.mode) === 'function') ? attrValue.aggregate.mode() : attrValue.aggregate.mode;
-        const scale = (typeof (attrValue.aggregate.scale) === 'function') ? attrValue.aggregate.scale() : attrValue.aggregate.scale;
+        scale = (typeof (attrValue.aggregate.scale) === 'function') ? attrValue.aggregate.scale() : attrValue.aggregate.scale;
         if (!key || !mode) {
           throw new Error(`MapTable: You should provide values 'key' & 'mode' for attr.${attrKey}.aggregate`);
         }
+
+        // Custom aggregate mode
         if (mode === 'sum') {
           attrValue.rollup = groupedData => (
             groupedData.map(d => Number(d[key])).reduce((a, c) => a + c, 0)
           );
         } else if (mode === 'avg') {
-          attrValue.rollup = groupedData => (
-            groupedData.map(d => Number(d[key])).reduce((a, c) => a + c, 0) / groupedData.length
-          );
+          attrValue.rollup = (groupedData) => {
+            if (!groupedData.length) return 0;
+            return groupedData
+              .map(d => Number(d[key])).reduce((a, c) => a + c, 0) / groupedData.length;
+          };
         } else if (mode === 'count') {
           attrValue.rollup = groupedData => groupedData.length;
         } else if (mode === 'min') {
           attrValue.rollup = (groupedData) => {
+            if (!groupedData.length) return 0;
             const groupedValues = groupedData.map(d => Number(d[key]));
             return groupedValues.reduce((min, p) => (p < min ? p : min), groupedValues[0]);
           };
         } else if (mode === 'max') {
           attrValue.rollup = (groupedData) => {
+            if (!groupedData.length) return 0;
             const groupedValues = groupedData.map(d => Number(d[key]));
             return groupedValues.reduce((max, p) => (p > max ? p : max), groupedValues[0]);
           };
         } else if (mode.indexOf('percentile') !== -1) {
           const percentile = utils.toNumber(mode);
           attrValue.rollup = (groupedData) => {
+            if (!groupedData.length) return 0;
             const groupedValues = groupedData.map(d => Number(d[key]));
             return utils.quantile(groupedValues, percentile);
           };
         }
-        if (scale.indexOf('log') !== -1) {
-          scaleToUse = d3.scale.log().base(utils.toNumber(scale) || 10);
-        } else if (scale.indexOf('pow') !== -1) {
-          scaleToUse = d3.scale.pow().exponent(utils.toNumber(scale) || 1);
-        } else if (scale === 'sqrt') {
-          scaleToUse = d3.scale.sqrt();
+
+        // Custom scale
+        if (scale) {
+          if (scale.indexOf('log') !== -1) {
+            scaleToUse = d3.scale.log().base(utils.toNumber(scale) || 10);
+          } else if (scale.indexOf('pow') !== -1) {
+            scaleToUse = d3.scale.pow().exponent(utils.toNumber(scale) || 1);
+          } else if (scale === 'sqrt') {
+            scaleToUse = d3.scale.sqrt();
+          }
+          // Rank scale neeed additional transformations
         }
       }
 
@@ -766,6 +787,30 @@ export default class GeoMap {
       dataset.forEach((d) => {
         d.rollupValue[attrKey] = attrValue.rollup(d.values);
       });
+
+      if (scale === 'rank') {
+        const positiveRanks = utils.uniqueValues([0].concat(dataset
+          .map(d => Math.floor(d.rollupValue[attrKey])).filter(v => v > 0)));
+        const negativeRanks = utils.uniqueValues(dataset
+          .map(d => Math.floor(d.rollupValue[attrKey])).filter(v => v < 0));
+
+        positiveRanks.sort((a, b) => a - b);
+        negativeRanks.sort((a, b) => b - a);
+        console.log(positiveRanks);
+
+        dataset.forEach((d) => {
+          if (d.rollupValue[attrKey] !== 0) {
+            const ranks = d.rollupValue[attrKey] >= 0 ? positiveRanks : negativeRanks;
+            const percentile = Math.round(ranks
+              .indexOf(Math.floor(d.rollupValue[attrKey])) / ranks.length * 100);
+            const newValue = d.rollupValue[attrKey] < 0
+              ? percentile - (percentile * 2)
+              : percentile;
+            d.rollupValue[attrKey] = newValue;
+          }
+        });
+      }
+
       const scaleDomain = d3.extent(dataset, d => Number(d.rollupValue[attrKey]));
       if (attrValue.transform) {
         scaleDomain[0] = attrValue.transform(scaleDomain[0], this.maptable.data);
@@ -792,11 +837,11 @@ export default class GeoMap {
       let scaleNegativeFunction;
 
       if (useNegative) {
-        scaleFunction = scaleToUse
+        scaleFunction = scaleToUse.copy()
           .domain([0, scaleDomain[1]])
           .range([minValue, maxValue]);
 
-        scaleNegativeFunction = scaleToUse
+        scaleNegativeFunction = scaleToUse.copy()
           .domain([scaleDomain[0], 0])
           .range([attrValue.maxNegative, attrValue.minNegative]);
       } else {

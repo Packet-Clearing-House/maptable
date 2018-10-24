@@ -120,6 +120,17 @@ this.d3.maptable = (function () {
       return result;
     }
 
+    function uniqueValues(arr) {
+      if (!arr) return arr;
+      var a = [];
+      for (var i = 0, l = arr.length; i < l; i += 1) {
+        if (a.indexOf(arr[i]) === -1 && arr[i] !== '') {
+          a.push(arr[i]);
+        }
+      }
+      return a;
+    }
+
     var utils = {
       rangeToBool: rangeToBool,
       appendOptions: appendOptions,
@@ -127,7 +138,8 @@ this.d3.maptable = (function () {
       sanitizeKey: sanitizeKey,
       toNumber: toNumber,
       keyToTile: keyToTile,
-      quantile: quantile
+      quantile: quantile,
+      uniqueValues: uniqueValues
     };
 
     var defaultOptions = {
@@ -1223,9 +1235,21 @@ this.d3.maptable = (function () {
           // Build Country Legend
           this.legendCountry = {};
 
-          if (this.options.countries.attr.fill && this.options.countries.attr.fill.legend && this.options.countries.attr.fill.min && this.options.countries.attr.fill.max) {
+          if (this.shouldRenderLegend()) {
             this.legendCountry.fill = new Legend(this);
           }
+        }
+      }, {
+        key: 'shouldRenderLegend',
+        value: function shouldRenderLegend() {
+          var f = this.options.countries.attr.fill;
+          if (!f) return false;
+          if (!f.legend || !f.min || !f.max) return false;
+          if (f.aggregate && f.aggregate.scale) {
+            var scale = typeof f.aggregate.scale === 'function' ? f.aggregate.scale() : f.aggregate.scale;
+            if (scale !== 'linear') return false;
+          }
+          return true;
         }
 
         /**
@@ -1569,14 +1593,17 @@ this.d3.maptable = (function () {
               d.attr[attrKey] = attrValue(d);
             });
           } else if ((typeof attrValue === 'undefined' ? 'undefined' : babelHelpers.typeof(attrValue)) === 'object') {
+            var scale = 'linear';
             var scaleToUse = d3.scale.linear();
             if (attrValue.aggregate) {
               var key = typeof attrValue.aggregate.key === 'function' ? attrValue.aggregate.key() : attrValue.aggregate.key;
               var mode = typeof attrValue.aggregate.mode === 'function' ? attrValue.aggregate.mode() : attrValue.aggregate.mode;
-              var scale = typeof attrValue.aggregate.scale === 'function' ? attrValue.aggregate.scale() : attrValue.aggregate.scale;
+              scale = typeof attrValue.aggregate.scale === 'function' ? attrValue.aggregate.scale() : attrValue.aggregate.scale;
               if (!key || !mode) {
                 throw new Error('MapTable: You should provide values \'key\' & \'mode\' for attr.' + attrKey + '.aggregate');
               }
+
+              // Custom aggregate mode
               if (mode === 'sum') {
                 attrValue.rollup = function (groupedData) {
                   return groupedData.map(function (d) {
@@ -1587,6 +1614,7 @@ this.d3.maptable = (function () {
                 };
               } else if (mode === 'avg') {
                 attrValue.rollup = function (groupedData) {
+                  if (!groupedData.length) return 0;
                   return groupedData.map(function (d) {
                     return Number(d[key]);
                   }).reduce(function (a, c) {
@@ -1599,6 +1627,7 @@ this.d3.maptable = (function () {
                 };
               } else if (mode === 'min') {
                 attrValue.rollup = function (groupedData) {
+                  if (!groupedData.length) return 0;
                   var groupedValues = groupedData.map(function (d) {
                     return Number(d[key]);
                   });
@@ -1608,6 +1637,7 @@ this.d3.maptable = (function () {
                 };
               } else if (mode === 'max') {
                 attrValue.rollup = function (groupedData) {
+                  if (!groupedData.length) return 0;
                   var groupedValues = groupedData.map(function (d) {
                     return Number(d[key]);
                   });
@@ -1618,18 +1648,24 @@ this.d3.maptable = (function () {
               } else if (mode.indexOf('percentile') !== -1) {
                 var percentile = utils.toNumber(mode);
                 attrValue.rollup = function (groupedData) {
+                  if (!groupedData.length) return 0;
                   var groupedValues = groupedData.map(function (d) {
                     return Number(d[key]);
                   });
                   return utils.quantile(groupedValues, percentile);
                 };
               }
-              if (scale.indexOf('log') !== -1) {
-                scaleToUse = d3.scale.log().base(utils.toNumber(scale) || 10);
-              } else if (scale.indexOf('pow') !== -1) {
-                scaleToUse = d3.scale.pow().exponent(utils.toNumber(scale) || 1);
-              } else if (scale === 'sqrt') {
-                scaleToUse = d3.scale.sqrt();
+
+              // Custom scale
+              if (scale) {
+                if (scale.indexOf('log') !== -1) {
+                  scaleToUse = d3.scale.log().base(utils.toNumber(scale) || 10);
+                } else if (scale.indexOf('pow') !== -1) {
+                  scaleToUse = d3.scale.pow().exponent(utils.toNumber(scale) || 1);
+                } else if (scale === 'sqrt') {
+                  scaleToUse = d3.scale.sqrt();
+                }
+                // Rank scale neeed additional transformations
               }
             }
 
@@ -1646,6 +1682,37 @@ this.d3.maptable = (function () {
             dataset.forEach(function (d) {
               d.rollupValue[attrKey] = attrValue.rollup(d.values);
             });
+
+            if (scale === 'rank') {
+              var positiveRanks = utils.uniqueValues([0].concat(dataset.map(function (d) {
+                return Math.floor(d.rollupValue[attrKey]);
+              }).filter(function (v) {
+                return v > 0;
+              })));
+              var negativeRanks = utils.uniqueValues(dataset.map(function (d) {
+                return Math.floor(d.rollupValue[attrKey]);
+              }).filter(function (v) {
+                return v < 0;
+              }));
+
+              positiveRanks.sort(function (a, b) {
+                return a - b;
+              });
+              negativeRanks.sort(function (a, b) {
+                return b - a;
+              });
+              console.log(positiveRanks);
+
+              dataset.forEach(function (d) {
+                if (d.rollupValue[attrKey] !== 0) {
+                  var ranks = d.rollupValue[attrKey] >= 0 ? positiveRanks : negativeRanks;
+                  var _percentile = Math.round(ranks.indexOf(Math.floor(d.rollupValue[attrKey])) / ranks.length * 100);
+                  var newValue = d.rollupValue[attrKey] < 0 ? _percentile - _percentile * 2 : _percentile;
+                  d.rollupValue[attrKey] = newValue;
+                }
+              });
+            }
+
             var scaleDomain = d3.extent(dataset, function (d) {
               return Number(d.rollupValue[attrKey]);
             });
@@ -1673,9 +1740,9 @@ this.d3.maptable = (function () {
             var scaleNegativeFunction = void 0;
 
             if (useNegative) {
-              scaleFunction = scaleToUse.domain([0, scaleDomain[1]]).range([minValue, maxValue]);
+              scaleFunction = scaleToUse.copy().domain([0, scaleDomain[1]]).range([minValue, maxValue]);
 
-              scaleNegativeFunction = scaleToUse.domain([scaleDomain[0], 0]).range([attrValue.maxNegative, attrValue.minNegative]);
+              scaleNegativeFunction = scaleToUse.copy().domain([scaleDomain[0], 0]).range([attrValue.maxNegative, attrValue.minNegative]);
             } else {
               scaleFunction = scaleToUse.domain(scaleDomain).range([minValue, maxValue]);
             }
