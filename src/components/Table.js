@@ -88,14 +88,6 @@ export default class Table {
       .text(d => d.title)
       .attr('id', d => `column_header_${utils.sanitizeKey(d.key)}`);
 
-    if (this.options.defaultSorting) {
-      if (Array.isArray(this.options.defaultSorting) && this.options.defaultSorting.length === 2) {
-        this.sorting = this.options.defaultSorting;
-      } else {
-        this.sorting = [this.options.defaultSorting];
-      }
-    }
-
     // render is triggered by MapTable
     // this.render();
 
@@ -249,6 +241,7 @@ export default class Table {
         this.sorting = [this.sorting[sortIndex]];
       }
     }
+
     this.saveState();
     this.render();
   }

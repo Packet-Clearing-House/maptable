@@ -2317,14 +2317,6 @@ this.d3.maptable = (function () {
           return 'column_header_' + utils.sanitizeKey(d.key);
         });
 
-        if (this.options.defaultSorting) {
-          if (Array.isArray(this.options.defaultSorting) && this.options.defaultSorting.length === 2) {
-            this.sorting = this.options.defaultSorting;
-          } else {
-            this.sorting = [this.options.defaultSorting];
-          }
-        }
-
         // render is triggered by MapTable
         // this.render();
 
@@ -2483,6 +2475,7 @@ this.d3.maptable = (function () {
               this.sorting = [this.sorting[sortIndex]];
             }
           }
+
           this.saveState();
           this.render();
         }
