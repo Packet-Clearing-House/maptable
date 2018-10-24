@@ -31,8 +31,9 @@
             min: '#FFFFFF',
             max: '#0000FF',
             legend: true,
-            rollup: function(groupedData) {
-              return groupedData.length;
+            aggregate: {
+              mode: 'count',
+              key: 'id',
             }
           },
         },

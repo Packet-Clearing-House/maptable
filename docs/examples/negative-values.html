@@ -20,7 +20,7 @@
                 countryIdentifierType: 'name',
                 path: 'ne_110m_admin_0_countries.json',
                 countries: {
-                    attr: { // todo min, max, empty, legend and rollup don't work
+                    attr: {
                         fill: {
                             min: "#B4C3D1",
                             max: "#043864",
@@ -28,10 +28,9 @@
                             maxNegative: "tomato",
                             empty: "#f9f9f9",
                             legend: true,
-                            rollup: function(groupedData) {
-                                if (groupedData[0] != undefined) {
-                                    return groupedData[0].widgets;
-                                }
+                            aggregate: {
+                                mode: 'sum',
+                                key: 'widgets',
                             },
                         },
                         stroke: "#d9d9d9",
