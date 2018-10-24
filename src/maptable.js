@@ -90,24 +90,50 @@ export default class MapTable {
       this.table = new Table(this, this.options.table);
     }
 
-    // Render
-    this.render();
-
     // Restore state
     this.restoreState();
     window.addEventListener('hashchange', () => {
       this.restoreState();
     });
+
+    // Render
+    this.render();
   }
 
   /**
    * Restore state for filters or/and map zooming
    */
   restoreState() {
-    if (this.map) this.map.restoreState();
-    if (this.filters) this.filters.restoreState();
+    // JSON state
+    ['filters', 'zoom'].forEach((k) => {
+      const v = this.parseState(k);
+      if (!v) return;
+      try {
+        const parsedState = JSON.parse(v);
+        this.state[k] = parsedState;
+      } catch (e) {
+        console.log(`Maptable: Invalid URL State for mt-${k} ${e.message}`);
+      }
+    });
+
+    // string state
+    ['sort'].forEach((k) => {
+      const v = this.parseState(k);
+      if (v) this.state[k] = v;
+    });
+
+    if (this.map) this.map.restoreState(this.state.zoom);
+    if (this.table) this.table.restoreState(this.state.sort);
+    if (this.filters) this.filters.restoreState(this.state.filters);
   }
 
+  /**
+   * Extract state from the url
+   */
+  parseState(key) {
+    const params = document.location.href.replace(/%21mt/g, '!mt').split(`!mt-${key}=`);
+    return (params[1]) ? decodeURIComponent(params[1].split('!mt')[0]) : null;
+  }
 
   /**
    * Save the state into the URL hash
@@ -120,10 +146,13 @@ export default class MapTable {
       this.state[stateName] = stateData;
       const newUrl = document.location.href.split('#')[0];
       let stateHash = '';
-      ['filters', 'zoom'].forEach((f) => {
-        if (Object.keys(this.state[f]).length) {
-          stateHash += `!mt-${f}=${encodeURIComponent(JSON.stringify(this.state[f]))}`;
+      ['filters', 'zoom'].forEach((k) => {
+        if (Object.keys(this.state[k]).length) {
+          stateHash += `!mt-${k}=${encodeURIComponent(JSON.stringify(this.state[k]))}`;
         }
+      });
+      ['sort'].forEach((k) => {
+        if (this.state[k]) stateHash += `!mt-${k}=${this.state[k]}`;
       });
       if (stateHash !== '') stateHash = `#${stateHash}`;
       window.history.pushState(null, null, `${newUrl}${stateHash}`);

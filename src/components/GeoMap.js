@@ -606,25 +606,15 @@ export default class GeoMap {
   /**
    * Restore state from the url hash
    */
-  restoreState() {
-    const params = document.location.href.replace(/%21mt/g, '!mt').split('!mt-zoom=');
-    const defaultZoomRaw = (params[1]) ? params[1].split('!mt')[0] : null;
-    if (defaultZoomRaw) {
-      try {
-        const defaultZoom = JSON.parse(decodeURIComponent(defaultZoomRaw));
-        if (defaultZoom && defaultZoom.length === 3) {
-          this.scale = defaultZoom[0];
-          const originalTranslation = this.decodeTranslation([defaultZoom[1], defaultZoom[2]]);
-          this.transX = originalTranslation[0];
-          this.transY = originalTranslation[1];
-          this.zoomListener.scale(defaultZoom[0])
-            .translate(originalTranslation)
-            .event(this.svg);
-        }
-      } catch (e) {
-        console.log(`Maptable: Invalid URL State for mt-zoom ${e.message}`);
-      }
-    }
+  restoreState(defaultZoom) {
+    if (!defaultZoom || defaultZoom.length !== 3) return;
+    this.scale = defaultZoom[0];
+    const originalTranslation = this.decodeTranslation([defaultZoom[1], defaultZoom[2]]);
+    this.transX = originalTranslation[0];
+    this.transY = originalTranslation[1];
+    this.zoomListener.scale(defaultZoom[0])
+      .translate(originalTranslation)
+      .event(this.svg);
   }
 
   /**

@@ -10,12 +10,24 @@ export default class Table {
   constructor(maptable, options) {
     this.maptable = maptable;
     this.options = options;
-    this.sorting = [
-      {
-        key: Object.keys(this.maptable.data[0])[0],
-        mode: 'asc',
-      },
-    ];
+
+    if (this.options.defaultSorting) {
+      if (Array.isArray(this.options.defaultSorting) && this.options.defaultSorting.length === 2) {
+        this.sorting = this.options.defaultSorting;
+      } else {
+        this.sorting = [this.options.defaultSorting];
+      }
+    } else {
+      this.sorting = [
+        {
+          key: Object.keys(this.maptable.data[0])[0],
+          mode: 'asc',
+        },
+      ];
+    }
+
+    this.initialSorting = this.sorting.map(s => `${s.key},${s.mode}`).join(';');
+
     this.isSorting = false;
 
     this.containerSelector = maptable.options.target;
@@ -77,18 +89,39 @@ export default class Table {
       .text(d => d.title)
       .attr('id', d => `column_header_${utils.sanitizeKey(d.key)}`);
 
-    if (this.options.defaultSorting) {
-      if (Array.isArray(this.options.defaultSorting) && this.options.defaultSorting.length === 2) {
-        this.sorting = this.options.defaultSorting;
-      } else {
-        this.sorting = [this.options.defaultSorting];
-      }
-    }
-    this.render();
+    // render is triggered by MapTable
+    // this.render();
 
     // On complete
     if (this.options.onComplete && this.options.onComplete.constructor === Function) {
       this.options.onComplete.bind(this.maptable)();
+    }
+  }
+
+  /**
+   * Restore state from the url hash
+   */
+  restoreState(sortingRaw) {
+    if (!sortingRaw) return;
+    const sortingList = sortingRaw.split(';');
+    const defaultSorting = [];
+    sortingList.forEach((s) => {
+      const sortingData = s.split(',');
+      defaultSorting.push({
+        key: sortingData[0],
+        mode: sortingData[1] || 'asc',
+      });
+    });
+    this.sorting = defaultSorting;
+  }
+
+  /**
+   * Save state into the url hash
+   */
+  saveState() {
+    const encodedSorting = this.sorting.map(s => `${s.key},${s.mode}`).join(';');
+    if (encodedSorting !== this.initialSorting) {
+      this.maptable.saveState('sort', encodedSorting);
     }
   }
 
@@ -210,6 +243,7 @@ export default class Table {
       }
     }
 
+    this.saveState();
     this.render();
   }
 }
