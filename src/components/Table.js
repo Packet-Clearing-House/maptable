@@ -250,5 +250,6 @@ export default class Table {
       }
     }
     this.saveState();
+    this.render();
   }
 }

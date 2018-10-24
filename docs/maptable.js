@@ -2484,6 +2484,7 @@ this.d3.maptable = (function () {
             }
           }
           this.saveState();
+          this.render();
         }
       }]);
       return Table;
