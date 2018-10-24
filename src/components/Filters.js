@@ -195,16 +195,9 @@ export default class Filters {
   /**
    * Restore state from the URL hash
    */
-  restoreState() {
-    const params = document.location.href.replace(/%21mt/g, '!mt').split('!mt-filters=');
-    const defaultCriteria = (params[1]) ? params[1].split('!mt')[0] : null;
-    if (defaultCriteria) {
-      try {
-        this.setFilters(JSON.parse(decodeURIComponent(defaultCriteria)));
-      } catch (e) {
-        console.log(`Maptable: Invalid URL State for mt-filters ${e.message}`);
-      }
-    }
+  restoreState(defaultCriteria) {
+    if (!defaultCriteria) return;
+    this.setFilters(defaultCriteria);
   }
 
   /**

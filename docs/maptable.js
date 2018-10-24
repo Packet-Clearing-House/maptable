@@ -1437,23 +1437,13 @@ this.d3.maptable = (function () {
 
       }, {
         key: 'restoreState',
-        value: function restoreState() {
-          var params = document.location.href.replace(/%21mt/g, '!mt').split('!mt-zoom=');
-          var defaultZoomRaw = params[1] ? params[1].split('!mt')[0] : null;
-          if (defaultZoomRaw) {
-            try {
-              var defaultZoom = JSON.parse(decodeURIComponent(defaultZoomRaw));
-              if (defaultZoom && defaultZoom.length === 3) {
-                this.scale = defaultZoom[0];
-                var originalTranslation = this.decodeTranslation([defaultZoom[1], defaultZoom[2]]);
-                this.transX = originalTranslation[0];
-                this.transY = originalTranslation[1];
-                this.zoomListener.scale(defaultZoom[0]).translate(originalTranslation).event(this.svg);
-              }
-            } catch (e) {
-              console.log('Maptable: Invalid URL State for mt-zoom ' + e.message);
-            }
-          }
+        value: function restoreState(defaultZoom) {
+          if (!defaultZoom || defaultZoom.length !== 3) return;
+          this.scale = defaultZoom[0];
+          var originalTranslation = this.decodeTranslation([defaultZoom[1], defaultZoom[2]]);
+          this.transX = originalTranslation[0];
+          this.transY = originalTranslation[1];
+          this.zoomListener.scale(defaultZoom[0]).translate(originalTranslation).event(this.svg);
         }
 
         /**
@@ -1944,16 +1934,9 @@ this.d3.maptable = (function () {
 
       }, {
         key: 'restoreState',
-        value: function restoreState() {
-          var params = document.location.href.replace(/%21mt/g, '!mt').split('!mt-filters=');
-          var defaultCriteria = params[1] ? params[1].split('!mt')[0] : null;
-          if (defaultCriteria) {
-            try {
-              this.setFilters(JSON.parse(decodeURIComponent(defaultCriteria)));
-            } catch (e) {
-              console.log('Maptable: Invalid URL State for mt-filters ' + e.message);
-            }
-          }
+        value: function restoreState(defaultCriteria) {
+          if (!defaultCriteria) return;
+          this.setFilters(defaultCriteria);
         }
 
         /**
@@ -2264,10 +2247,24 @@ this.d3.maptable = (function () {
 
         this.maptable = maptable;
         this.options = options;
-        this.sorting = [{
-          key: Object.keys(this.maptable.data[0])[0],
-          mode: 'asc'
-        }];
+
+        if (this.options.defaultSorting) {
+          if (Array.isArray(this.options.defaultSorting) && this.options.defaultSorting.length === 2) {
+            this.sorting = this.options.defaultSorting;
+          } else {
+            this.sorting = [this.options.defaultSorting];
+          }
+        } else {
+          this.sorting = [{
+            key: Object.keys(this.maptable.data[0])[0],
+            mode: 'asc'
+          }];
+        }
+
+        this.initialSorting = this.sorting.map(function (s) {
+          return s.key + ',' + s.mode;
+        }).join(';');
+
         this.isSorting = false;
 
         this.containerSelector = maptable.options.target;
@@ -2320,13 +2317,6 @@ this.d3.maptable = (function () {
           return 'column_header_' + utils.sanitizeKey(d.key);
         });
 
-        if (this.options.defaultSorting) {
-          if (Array.isArray(this.options.defaultSorting) && this.options.defaultSorting.length === 2) {
-            this.sorting = this.options.defaultSorting;
-          } else {
-            this.sorting = [this.options.defaultSorting];
-          }
-        }
         this.render();
 
         // On complete
@@ -2335,7 +2325,42 @@ this.d3.maptable = (function () {
         }
       }
 
+      /**
+       * Restore state from the url hash
+       */
+
+
       babelHelpers.createClass(Table, [{
+        key: 'restoreState',
+        value: function restoreState(sortingRaw) {
+          if (!sortingRaw) return;
+          var sortingList = sortingRaw.split(';');
+          var defaultSorting = [];
+          sortingList.forEach(function (s) {
+            var sortingData = s.split(',');
+            defaultSorting.push({
+              key: sortingData[0],
+              mode: sortingData[1] || 'asc'
+            });
+          });
+          this.sorting = defaultSorting;
+        }
+
+        /**
+         * Save state into the url hash
+         */
+
+      }, {
+        key: 'saveState',
+        value: function saveState() {
+          var encodedSorting = this.sorting.map(function (s) {
+            return s.key + ',' + s.mode;
+          }).join(';');
+          if (encodedSorting !== this.initialSorting) {
+            this.maptable.saveState('sort', encodedSorting);
+          }
+        }
+      }, {
         key: 'render',
         value: function render() {
           var _this2 = this;
@@ -2450,6 +2475,7 @@ this.d3.maptable = (function () {
             }
           }
 
+          this.saveState();
           this.render();
         }
       }]);
@@ -2553,14 +2579,14 @@ this.d3.maptable = (function () {
             this.table = new Table(this, this.options.table);
           }
 
-          // Render
-          this.render();
-
           // Restore state
           this.restoreState();
           window.addEventListener('hashchange', function () {
             _this2.restoreState();
           });
+
+          // Render
+          this.render();
         }
 
         /**
@@ -2570,8 +2596,40 @@ this.d3.maptable = (function () {
       }, {
         key: 'restoreState',
         value: function restoreState() {
-          if (this.map) this.map.restoreState();
-          if (this.filters) this.filters.restoreState();
+          var _this3 = this;
+
+          // JSON state
+          ['filters', 'zoom'].forEach(function (k) {
+            var v = _this3.parseState(k);
+            if (!v) return;
+            try {
+              var parsedState = JSON.parse(v);
+              _this3.state[k] = parsedState;
+            } catch (e) {
+              console.log('Maptable: Invalid URL State for mt-' + k + ' ' + e.message);
+            }
+          });
+
+          // string state
+          ['sort'].forEach(function (k) {
+            var v = _this3.parseState(k);
+            if (v) _this3.state[k] = v;
+          });
+
+          if (this.map) this.map.restoreState(this.state.zoom);
+          if (this.table) this.table.restoreState(this.state.sort);
+          if (this.filters) this.filters.restoreState(this.state.filters);
+        }
+
+        /**
+         * Extract state from the url
+         */
+
+      }, {
+        key: 'parseState',
+        value: function parseState(key) {
+          var params = document.location.href.replace(/%21mt/g, '!mt').split('!mt-' + key + '=');
+          return params[1] ? decodeURIComponent(params[1].split('!mt')[0]) : null;
         }
 
         /**
@@ -2583,17 +2641,20 @@ this.d3.maptable = (function () {
       }, {
         key: 'saveState',
         value: function saveState(stateName, stateData) {
-          var _this3 = this;
+          var _this4 = this;
 
           window.clearTimeout(this.saveStateTimeout[stateName]);
           this.saveStateTimeout[stateName] = window.setTimeout(function () {
-            _this3.state[stateName] = stateData;
+            _this4.state[stateName] = stateData;
             var newUrl = document.location.href.split('#')[0];
             var stateHash = '';
-            ['filters', 'zoom'].forEach(function (f) {
-              if (Object.keys(_this3.state[f]).length) {
-                stateHash += '!mt-' + f + '=' + encodeURIComponent(JSON.stringify(_this3.state[f]));
+            ['filters', 'zoom'].forEach(function (k) {
+              if (Object.keys(_this4.state[k]).length) {
+                stateHash += '!mt-' + k + '=' + encodeURIComponent(JSON.stringify(_this4.state[k]));
               }
+            });
+            ['sort'].forEach(function (k) {
+              if (_this4.state[k]) stateHash += '!mt-' + k + '=' + _this4.state[k];
             });
             if (stateHash !== '') stateHash = '#' + stateHash;
             window.history.pushState(null, null, '' + newUrl + stateHash);
