@@ -1819,7 +1819,9 @@ this.d3.maptable = (function () {
         value: function activateTooltip(target, tooltipNode, tooltipContent, isCountry) {
           var self = this;
           target.on(isCountry ? 'mousemove' : 'mouseover', function (d) {
-            tooltipNode.html(tooltipContent(d)).attr('style', 'display:block;position:fixed;');
+            var content = tooltipContent(d);
+            if (!content) return;
+            tooltipNode.html(content).attr('style', 'display:block;position:fixed;');
 
             var mouseLeft = void 0;
             var mouseTop = void 0;

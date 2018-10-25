@@ -927,7 +927,9 @@ export default class GeoMap {
   activateTooltip(target, tooltipNode, tooltipContent, isCountry) {
     const self = this;
     target.on(isCountry ? 'mousemove' : 'mouseover', function (d) {
-      tooltipNode.html(tooltipContent(d)).attr('style', 'display:block;position:fixed;');
+      const content = tooltipContent(d);
+      if (!content) return;
+      tooltipNode.html(content).attr('style', 'display:block;position:fixed;');
 
       let mouseLeft;
       let mouseTop;
