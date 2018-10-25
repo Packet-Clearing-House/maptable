@@ -13,67 +13,85 @@
   <script src="../vendor/topojson.min.js"></script>
   <script src="../maptable.js"></script>
 
-  <div>
-    Country aggregate: <select id="country_agg">
-      <option value="sum">sum</option>
-      <option value="count">count</option>
-      <option value="avg">avg</option>
-      <option value="min">min</option>
-      <option value="max">max</option>
-      <option value="10percentile">10percentile</option>
-      <option value="25percentile">25percentile</option>
-      <option value="50percentile">50percentile</option>
-      <option value="95percentile">95percentile</option>
-    </select>
+  <div class="container">
+    <div class="panel panel-default">
+      <div class="panel-heading">[Example] Aggregate</div>
+      <div class="panel-body">
+        Demonstating: rendering map, filters, table from a CSV.<br/>
+        We aggregate the markers and countries using a a dynamic dropdown.<br>
+        <br>
+        <div class="btn-group">
+          <a href="./aggregate.html" target="_blank" class="btn btn-default">Open in a new window</a>
+          <a href="https://github.com/Packet-Clearing-House/maptable/tree/master/docs/examples/aggregate.html"
+            target="_blank" class="btn btn-default">View source code</a>
+        </div>
+      </div>
+    </div>
 
-    <select id="country_key">
-      <option value="users">users</option>
-      <option value="traf">traf</option>
-      <option value="participants">participants</option>
-      <option value="amount">amount</option>
-    </select>
-    <select id="country_scale">
-      <option value="linear">linear</option>
-      <option value="rank">rank</option>
-      <option value="sqrt">sqrt</option>
-      <option value="pow2">pow2</option>
-      <option value="pow3">pow3</option>
-      <option value="pow4">pow4</option>
-      <option value="log">log</option>
-    </select>
+    <div class="panel panel-default">
+      <div class="panel-body">
+        <div>
+          Country aggregate: <select id="country_agg">
+            <option value="sum">sum</option>
+            <option value="count">count</option>
+            <option value="avg">avg</option>
+            <option value="min">min</option>
+            <option value="max">max</option>
+            <option value="10percentile">10percentile</option>
+            <option value="25percentile">25percentile</option>
+            <option value="50percentile">50percentile</option>
+            <option value="95percentile">95percentile</option>
+          </select>
+
+          <select id="country_key">
+            <option value="users">users</option>
+            <option value="traf">traf</option>
+            <option value="participants">participants</option>
+            <option value="amount">amount</option>
+          </select>
+          <select id="country_scale">
+            <option value="linear">linear</option>
+            <option value="rank">rank</option>
+            <option value="sqrt">sqrt</option>
+            <option value="pow2">pow2</option>
+            <option value="pow3">pow3</option>
+            <option value="pow4">pow4</option>
+            <option value="log">log</option>
+          </select>
+        </div>
+        <div>
+          Markers aggregate: <select id="markers_agg">
+            <option value="sum">sum</option>
+            <option value="count">count</option>
+            <option value="avg">avg</option>
+            <option value="min">min</option>
+            <option value="max">max</option>
+            <option value="10percentile">10percentile</option>
+            <option value="25percentile">25percentile</option>
+            <option value="50percentile">50percentile</option>
+            <option value="95percentile">95percentile</option>
+          </select>
+
+          <select id="markers_key">
+            <option value="users">users</option>
+            <option value="traf">traf</option>
+            <option value="participants">participants</option>
+            <option value="amount">amount</option>
+          </select>
+          <select id="markers_scale">
+            <option value="linear">linear</option>
+            <option value="rank">rank</option>
+            <option value="sqrt">sqrt</option>
+            <option value="pow2">pow2</option>
+            <option value="pow3">pow3</option>
+            <option value="pow4">pow4</option>
+            <option value="log">log</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div id="vizContainer"></div>
   </div>
-  <div>
-    Markers aggregate: <select id="markers_agg">
-      <option value="sum">sum</option>
-      <option value="count">count</option>
-      <option value="avg">avg</option>
-      <option value="min">min</option>
-      <option value="max">max</option>
-      <option value="10percentile">10percentile</option>
-      <option value="25percentile">25percentile</option>
-      <option value="50percentile">50percentile</option>
-      <option value="95percentile">95percentile</option>
-    </select>
-
-    <select id="markers_key">
-      <option value="users">users</option>
-      <option value="traf">traf</option>
-      <option value="participants">participants</option>
-      <option value="amount">amount</option>
-    </select>
-    <select id="markers_scale">
-      <option value="linear">linear</option>
-      <option value="rank">rank</option>
-      <option value="sqrt">sqrt</option>
-      <option value="pow2">pow2</option>
-      <option value="pow3">pow3</option>
-      <option value="pow4">pow4</option>
-      <option value="log">log</option>
-    </select>
-  </div>
-
-  <div id="vizContainer" class='container'></div>
-
   <script>
     var viz = d3.maptable('#vizContainer')
       .csv('advanced.csv')

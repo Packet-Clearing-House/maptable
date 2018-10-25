@@ -1,62 +1,81 @@
 <!DOCTYPE html>
 
 <html lang="en">
-  <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-    <link rel="stylesheet" href="../maptable.css">
-    <title>MapTable example</title>
-  </head>
-  <body>
 
-    <div id="vizContainer" class='container'></div>
+<head>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+  <link rel="stylesheet" href="../maptable.css">
+  <title>MapTable example</title>
+</head>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.16/d3.min.js" charset="utf-8"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/1.6.20/topojson.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.3/FileSaver.min.js"></script>
-    <script src="../maptable.js"></script>
-    <script>
-      var viz = d3.maptable('#vizContainer')
-        .csv('basic.csv')
-        .map({
-          exportSvgClient: true,
-          path: 'ne_110m_admin_0_countries.json',
-          filterCountries: function (country) {
-              return country.id !== 'AQ';
+<body>
+
+  <div class="container">
+    <div class="panel panel-default">
+      <div class="panel-heading">[Example] Heatmap</div>
+      <div class="panel-body">
+        Demonstating: rendering a map and filters.<br />
+        We overlay a heatmap that represent the density of the traffic in different locations<br>
+        <br>
+        <div class="btn-group">
+          <a href="./heatmap.html" target="_blank" class="btn btn-default">Open in a new window</a>
+          <a href="https://github.com/Packet-Clearing-House/maptable/tree/master/docs/examples/heatmap.html" target="_blank"
+            class="btn btn-default">View source code</a>
+        </div>
+      </div>
+    </div>
+
+    <div id="vizContainer"></div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.16/d3.min.js" charset="utf-8"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/1.6.20/topojson.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.3/FileSaver.min.js"></script>
+  <script src="../maptable.js"></script>
+  <script>
+    var viz = d3.maptable('#vizContainer')
+      .csv('basic.csv')
+      .map({
+        exportSvgClient: true,
+        path: 'ne_110m_admin_0_countries.json',
+        filterCountries: function (country) {
+          return country.id !== 'AQ';
+        },
+        heatmap: {
+          weightByAttribute: function (d) {
+            return parseInt(d.traf, 10);
           },
-          heatmap: {
-            weightByAttribute: function(d) {
-              return parseInt(d.traf, 10);
-            },
-            circles: {
-              colorStrength: 1,
-              color: '#043864',
-              blur: 10.0,
-            },
-            borders: {
-              opacity: 0.2,
-            },
+          circles: {
+            colorStrength: 1,
+            color: '#043864',
+            blur: 10.0,
           },
-          markers: {
-            attr: {
-              fill: "yellow",
-    					stroke: "#d9d9d9",
-    					"stroke-width": 0.5,
-              r: {
-      					min: "minValue",
-      					max: "maxValue",
-      					transform: function(v) {
-      						return 3 * Math.sqrt(v);
-      					},
-      					rollup: function(values) {
-      						return values.length;
-      					},
-      				},
-            }
+          borders: {
+            opacity: 0.2,
+          },
+        },
+        markers: {
+          attr: {
+            fill: "yellow",
+            stroke: "#d9d9d9",
+            "stroke-width": 0.5,
+            r: {
+              min: "minValue",
+              max: "maxValue",
+              transform: function (v) {
+                return 3 * Math.sqrt(v);
+              },
+              rollup: function (values) {
+                return values.length;
+              },
+            },
           }
-        })
-        .filters()
-        .render();
-    </script>
-  </body>
+        }
+      })
+      .filters()
+      .render();
+  </script>
+</body>
+
 </html>

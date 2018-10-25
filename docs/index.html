@@ -1,163 +1,123 @@
 <!DOCTYPE HTML>
 <html lang="en-US">
-    <head>
-        <meta charset="UTF-8">
-        <title>Maptable examples</title>
-        <style>
-            body {
-                font-family: sans-serif;
-            }
-            #panel {
-                position: fixed;
-                left: 0px;
-                width: 310px;
-                height: 100%;
-                overflow: auto;
-                background: #fafafa;
-            }
-            h1 {
-                margin-top: 30px;
-                margin-bottom: 40px;
-                margin-left: 20px;
-                font-size: 25px;
-                font-weight: normal;
-            }
-            h2 {
-                font-size: 20px;
-                font-weight: normal;
-            }
-            #panel a[data-value], .navlink {
-                color: #2194CE;
-                text-decoration: none;
-                cursor: pointer;
-                display: block;
-                margin: 5px 20px;
-            }
-            #panel a[data-value].selected {
-				color: #ff0000;
-			}
-            #panel a[data-value]:hover, .navlink:hover {
-               text-decoration: underline;
-            }
-            
-            #viewer {
-                position: absolute;
-                border: 0px;
-                left: 310px;
-                width: calc(100% - 310px);
-                height: 100%;
-                overflow: auto;
-            }
 
-            #viewSrcButton {
-				position: fixed;
-				bottom: 20px;
-				right: 20px;
-				padding: 8px;
-				color: #fff;
-				background-color: #555;
-				opacity: 0.7;
-			}
+<head>
+  <meta charset="UTF-8">
+  <title>Maptable examples</title>
+  <style>
+    body {
+      font-family: sans-serif;
+    }
 
-			#viewSrcButton:hover {
-				cursor: pointer;
-				opacity: 1;
-            }
-            
-            #openButton {
-				position: fixed;
-				bottom: 60px;
-				right: 20px;
-				padding: 8px;
-				color: #fff;
-				background-color: #555;
-				opacity: 0.7;
-			}
+    #panel {
+      position: fixed;
+      left: 0px;
+      width: 310px;
+      height: 100%;
+      overflow: auto;
+      background: #fafafa;
+    }
 
-			#openButton:hover {
-				cursor: pointer;
-				opacity: 1;
-			}
-        
-        </style>
-    </head>
-    <body>
-        <div id="panel" class="collapsed">
-            <h1>MapTable <a href="https://github.com/Packet-Clearing-House/maptable" target="_blank"><img src="https://img.shields.io/github/release/Packet-Clearing-House/maptable.svg" /></a></h1>
-            <a href="https://github.com/Packet-Clearing-House/maptable"  class="navlink" target="_blank">Documentation (Github)</a>
-            <hr>
-            <a href="examples/minimal.html" data-value="minimal" target="viewer">minimal</a>
-            <a href="examples/custom-sort.html" data-value="custom-sort" target="viewer">custom sort</a>
-            <a href="examples/6000-markers.html" data-value="6000-markers" target="viewer">6000 markers</a>
-            <a href="examples/custom-markers.html" data-value="custom-markers" target="viewer">custom markers</a>
-            <a href="examples/dynamic-markers.html" data-value="dynamic-markers" target="viewer">dynamic markers</a>
-            <a href="examples/export-svg-client.html" data-value="export-svg-client" target="viewer">export svg (client side)</a>
-            <a href="examples/multiple-maptable.html" data-value="multiple-maptable" target="viewer">multiple maptables</a>
-            <a href="examples/negative-values.html" data-value="negative-values" target="viewer">negative values</a>
-            <a href="examples/table-only.html" data-value="table-only" target="viewer">table only</a>
-            <a href="examples/tooltip-country.html" data-value="tooltip-country" target="viewer">tooltip country w/ legend</a>
-            <a href="examples/heatmap.html" data-value="heatmap" target="viewer">heatmap</a>
-            <a href="examples/aggregate.html" data-value="aggregate" target="viewer">aggregate</a>
-            <a href="examples/custom-state.html" data-value="custom-state" target="viewer">custom state</a>
-        </div>
-        <iframe id="viewer" name="viewer" allowfullscreen="" allowvr="" onmousewheel=""></iframe>
-    <script>
-        function onReady() {
-            var selected = null;
-            var viewer = document.getElementById( 'viewer' );
+    h1 {
+      margin-top: 30px;
+      margin-bottom: 40px;
+      margin-left: 20px;
+      font-size: 25px;
+      font-weight: normal;
+    }
 
-            var viewSrcButton = document.createElement( 'a' );
-            viewSrcButton.id = 'viewSrcButton';
-            viewSrcButton.target = '_blank';
-            viewSrcButton.textContent = 'View source';
-            viewSrcButton.style.display = 'none';
-            document.body.appendChild( viewSrcButton );
+    h2 {
+      font-size: 20px;
+      font-weight: normal;
+    }
 
-            var openButton = document.createElement( 'a' );
-            openButton.id = 'openButton';
-            openButton.target = '_blank';
-            openButton.textContent = 'Open in new window';
-            openButton.style.display = 'none';
-            document.body.appendChild( openButton );
-            
-            var examples = document.querySelectorAll('a[data-value]');
-            for (var i = 0; i < examples.length; i += 1) {
-                examples[i].addEventListener('click', function () {
-                    selectFile(this.getAttribute('data-value'));
-                });
-            }
-            function selectFile(file) {
-                if (selected) {
-                    document.querySelector('a[data-value="' + selected + '"]').classList.remove('selected');
-                }
-                document.querySelector('a[data-value="' + file + '"]').classList.add('selected');
+    #panel a[data-value],
+    .navlink {
+      color: #2194CE;
+      text-decoration: none;
+      cursor: pointer;
+      display: block;
+      margin: 5px 20px;
+    }
 
-                window.location.hash = file;
-                viewer.focus();
+    #panel a[data-value].selected {
+      color: #ff0000;
+    }
 
-                selected = file;
+    #panel a[data-value]:hover,
+    .navlink:hover {
+      text-decoration: underline;
+    }
 
-                viewSrcButton.style.display = '';
-                viewSrcButton.href = 'https://github.com/Packet-Clearing-House/maptable/tree/master/docs/examples/' + selected + '.html';
-                viewSrcButton.title = 'View source code for ' + selected + ' on GitHub';
+    #viewer {
+      position: absolute;
+      border: 0px;
+      left: 310px;
+      width: calc(100% - 310px);
+      height: 100%;
+      overflow: auto;
+    }
+  </style>
+</head>
 
-                openButton.style.display = '';
-                openButton.href = 'examples/' + selected + '.html';
-            }
+<body>
+  <div id="panel" class="collapsed">
+    <h1>MapTable <a href="https://github.com/Packet-Clearing-House/maptable" target="_blank"><img src="https://img.shields.io/github/release/Packet-Clearing-House/maptable.svg" /></a></h1>
+    <a href="https://github.com/Packet-Clearing-House/maptable" class="navlink" target="_blank">Documentation (Github)</a>
+    <hr>
+    <a href="examples/minimal.html" data-value="minimal" target="viewer">minimal</a>
+    <a href="examples/custom-sort.html" data-value="custom-sort" target="viewer">custom sort</a>
+    <a href="examples/custom-position.html" data-value="custom-position" target="viewer">custom position</a>
+    <a href="examples/custom-state.html" data-value="custom-state" target="viewer">custom state</a>
+    <a href="examples/custom-markers.html" data-value="custom-markers" target="viewer">custom markers</a>
+    <a href="examples/6000-markers.html" data-value="6000-markers" target="viewer">6000 markers</a>
+    <a href="examples/dynamic-markers.html" data-value="dynamic-markers" target="viewer">dynamic markers</a>
+    <a href="examples/export-svg-client.html" data-value="export-svg-client" target="viewer">export svg (client side)</a>
+    <a href="examples/multiple-maptable.html" data-value="multiple-maptable" target="viewer">multiple maptables</a>
+    <a href="examples/negative-values.html" data-value="negative-values" target="viewer">negative values</a>
+    <a href="examples/table-only.html" data-value="table-only" target="viewer">table only</a>
+    <a href="examples/tooltip-country.html" data-value="tooltip-country" target="viewer">tooltip country w/ legend</a>
+    <a href="examples/heatmap.html" data-value="heatmap" target="viewer">heatmap</a>
+    <a href="examples/aggregate.html" data-value="aggregate" target="viewer">aggregate</a>
+  </div>
+  <iframe id="viewer" name="viewer" allowfullscreen="" allowvr="" onmousewheel=""></iframe>
+  <script>
+    function onReady() {
+      var selected = null;
+      var viewer = document.getElementById('viewer');
 
-            function loadFile( file ) {
-                selectFile( file );
-                viewer.src = 'examples/' + file + '.html';
-            }
-            if ( window.location.hash !== '' ) {
-                loadFile(window.location.hash.substring(1));
-            } else {
-                loadFile(examples[0].getAttribute('data-value'));
-            }
+      var examples = document.querySelectorAll('a[data-value]');
+      for (var i = 0; i < examples.length; i += 1) {
+        examples[i].addEventListener('click', function () {
+          selectFile(this.getAttribute('data-value'));
+        });
+      }
+
+      function selectFile(file) {
+        if (selected) {
+          document.querySelector('a[data-value="' + selected + '"]').classList.remove('selected');
         }
+        document.querySelector('a[data-value="' + file + '"]').classList.add('selected');
 
-        document.addEventListener("DOMContentLoaded", onReady);
+        window.location.hash = file;
+        viewer.focus();
 
-    </script> 
-    </body>
+        selected = file;
+      }
+
+      function loadFile(file) {
+        selectFile(file);
+        viewer.src = 'examples/' + file + '.html';
+      }
+      if (window.location.hash !== '') {
+        loadFile(window.location.hash.substring(1));
+      } else {
+        loadFile(examples[0].getAttribute('data-value'));
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", onReady);
+  </script>
+</body>
+
 </html>
