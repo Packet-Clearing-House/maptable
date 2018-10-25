@@ -727,9 +727,11 @@ export default class GeoMap {
           ? attrValue.aggregate.mode.bind(this.maptable)()
           : attrValue.aggregate.mode;
 
-        scale = (typeof (attrValue.aggregate.scale) === 'function')
-          ? attrValue.aggregate.scale.bind(this.maptable)()
-          : attrValue.aggregate.scale;
+        if (typeof (attrValue.aggregate.scale) === 'function') {
+          scale = attrValue.aggregate.scale.bind(this.maptable)();
+        } else if (attrValue.aggregate.scale) {
+          scale = attrValue.aggregate.scale;
+        }
 
         if (!key || !mode) {
           throw new Error(`MapTable: You should provide values 'key' & 'mode' for attr.${attrKey}.aggregate`);
@@ -810,7 +812,6 @@ export default class GeoMap {
             : aggregatedValue;
         }
       });
-
       if (scale === 'rank') {
         const positiveRanks = utils.uniqueValues([0].concat(dataset
           .map(d => Math.floor(d.attrProperties[attrKey].value)).filter(v => v > 0)));
@@ -864,7 +865,6 @@ export default class GeoMap {
         scaleFunction = scaleToUse.copy()
           .domain([0, scaleDomain[1]])
           .range([minValue, maxValue]);
-
         scaleNegativeFunction = scaleToUse.copy()
           .domain([scaleDomain[0], 0])
           .range([attrValue.maxNegative, attrValue.minNegative]);
@@ -873,6 +873,7 @@ export default class GeoMap {
           .domain(scaleDomain)
           .range([minValue, maxValue]);
       }
+
 
       dataset.forEach((d) => {
         let scaledValue;
@@ -889,10 +890,11 @@ export default class GeoMap {
 
           if (useNegative && originalValue < 0) {
             scaledValue = scaleNegativeFunction(originalValue);
-          } if (originalValue === 0 && attrValue.empty) {
-            scaledValue = attrValue.empty;
           } else {
             scaledValue = scaleFunction(originalValue);
+          }
+          if (originalValue === 0 && attrValue.empty) {
+            scaledValue = attrValue.empty;
           }
         }
         d.attr[attrKey] = scaledValue;

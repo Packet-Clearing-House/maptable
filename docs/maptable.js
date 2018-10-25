@@ -1594,7 +1594,11 @@ this.d3.maptable = (function () {
 
               mode = typeof attrValue.aggregate.mode === 'function' ? attrValue.aggregate.mode.bind(this.maptable)() : attrValue.aggregate.mode;
 
-              scale = typeof attrValue.aggregate.scale === 'function' ? attrValue.aggregate.scale.bind(this.maptable)() : attrValue.aggregate.scale;
+              if (typeof attrValue.aggregate.scale === 'function') {
+                scale = attrValue.aggregate.scale.bind(this.maptable)();
+              } else if (attrValue.aggregate.scale) {
+                scale = attrValue.aggregate.scale;
+              }
 
               if (!key || !mode) {
                 throw new Error('MapTable: You should provide values \'key\' & \'mode\' for attr.' + attrKey + '.aggregate');
@@ -1694,7 +1698,6 @@ this.d3.maptable = (function () {
                 d.attrProperties[attrKey].formatted = c && c.cellContent ? c.cellContent.bind(_this6.maptable)(datum) : aggregatedValue;
               }
             });
-
             if (scale === 'rank') {
               var positiveRanks = utils.uniqueValues([0].concat(dataset.map(function (d) {
                 return Math.floor(d.attrProperties[attrKey].value);
@@ -1752,7 +1755,6 @@ this.d3.maptable = (function () {
 
             if (useNegative) {
               scaleFunction = scaleToUse.copy().domain([0, scaleDomain[1]]).range([minValue, maxValue]);
-
               scaleNegativeFunction = scaleToUse.copy().domain([scaleDomain[0], 0]).range([attrValue.maxNegative, attrValue.minNegative]);
             } else {
               scaleFunction = scaleToUse.domain(scaleDomain).range([minValue, maxValue]);
@@ -1771,10 +1773,11 @@ this.d3.maptable = (function () {
 
                 if (useNegative && originalValue < 0) {
                   scaledValue = scaleNegativeFunction(originalValue);
-                }if (originalValue === 0 && attrValue.empty) {
-                  scaledValue = attrValue.empty;
                 } else {
                   scaledValue = scaleFunction(originalValue);
+                }
+                if (originalValue === 0 && attrValue.empty) {
+                  scaledValue = attrValue.empty;
                 }
               }
               d.attr[attrKey] = scaledValue;
