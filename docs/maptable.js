@@ -2743,35 +2743,51 @@ this.d3.maptable = (function () {
         }
 
         /**
-         * Restore state for filters or/and map zooming
+         * Load state from url
+         * @param stateName: name of the state (either filters or zoom)
+         * @param isJson: do we need to decode a json from the state?
+         */
+
+      }, {
+        key: 'loadState',
+        value: function loadState(stateName, isJson) {
+          // JSON state
+          if (isJson) {
+            var v = this.parseState(stateName);
+            if (!v) return;
+            try {
+              var parsedState = JSON.parse(v);
+              this.state[stateName] = parsedState;
+            } catch (e) {
+              console.log('Maptable: Invalid URL State for mt-' + stateName + ' ' + e.message);
+            }
+          } else {
+            var _v = this.parseState(stateName);
+            if (_v) this.state[stateName] = _v;
+          }
+        }
+
+        /**
+         * Restore state for filters or/and map zooming and/or sorting
          */
 
       }, {
         key: 'restoreState',
         value: function restoreState() {
-          var _this3 = this;
+          if (this.map) {
+            this.loadState('zoom', true);
+            this.map.restoreState(this.state.zoom);
+          }
 
-          // JSON state
-          ['filters', 'zoom'].forEach(function (k) {
-            var v = _this3.parseState(k);
-            if (!v) return;
-            try {
-              var parsedState = JSON.parse(v);
-              _this3.state[k] = parsedState;
-            } catch (e) {
-              console.log('Maptable: Invalid URL State for mt-' + k + ' ' + e.message);
-            }
-          });
+          if (this.filters) {
+            this.loadState('filters', true);
+            this.filters.restoreState(this.state.filters);
+          }
 
-          // string state
-          ['sort'].forEach(function (k) {
-            var v = _this3.parseState(k);
-            if (v) _this3.state[k] = v;
-          });
-
-          if (this.map) this.map.restoreState(this.state.zoom);
-          if (this.table) this.table.restoreState(this.state.sort);
-          if (this.filters) this.filters.restoreState(this.state.filters);
+          if (this.table) {
+            this.loadState('sort', false);
+            this.table.restoreState(this.state.sort);
+          }
         }
 
         /**
@@ -2808,12 +2824,12 @@ this.d3.maptable = (function () {
       }, {
         key: 'saveState',
         value: function saveState(stateName, stateData) {
-          var _this4 = this;
+          var _this3 = this;
 
           window.clearTimeout(this.saveStateTimeout[stateName]);
           this.saveStateTimeout[stateName] = window.setTimeout(function () {
-            _this4.state[stateName] = stateData;
-            _this4.updateState();
+            _this3.state[stateName] = stateData;
+            _this3.updateState();
           }, 200);
         }
 
@@ -2824,17 +2840,18 @@ this.d3.maptable = (function () {
       }, {
         key: 'updateState',
         value: function updateState() {
-          var _this5 = this;
+          var _this4 = this;
 
           var newUrl = document.location.href.split('#')[0];
           var stateHash = '';
-          ['filters', 'zoom'].forEach(function (k) {
-            if (_this5.state[k] && Object.keys(_this5.state[k]).length) {
-              stateHash += '!mt-' + k + '=' + encodeURIComponent(JSON.stringify(_this5.state[k]));
+          Object.keys(this.state).forEach(function (k) {
+            if (!_this4.state[k]) return;
+            var stateValue = _this4.state[k];
+            if (babelHelpers.typeof(_this4.state[k]) === 'object') {
+              if (!Object.keys(_this4.state[k]).length) return;
+              stateValue = JSON.stringify(_this4.state[k]);
             }
-          });
-          ['sort'].forEach(function (k) {
-            if (_this5.state[k]) stateHash += '!mt-' + k + '=' + _this5.state[k];
+            stateHash += '!mt-' + k + '=' + encodeURIComponent(stateValue);
           });
           if (stateHash !== '') stateHash = '#' + stateHash;
           window.history.pushState(null, null, '' + newUrl + stateHash);
@@ -2988,6 +3005,15 @@ this.d3.maptable = (function () {
         return {
           render: function render() {
             return maptableObject.render();
+          },
+          loadState: function loadState(stateName, isJson) {
+            return maptableObject.loadState(stateName, isJson);
+          },
+          deleteState: function deleteState(stateName) {
+            return maptableObject.deleteState(stateName);
+          },
+          saveState: function saveState(stateName, stateData) {
+            return maptableObject.saveState(stateName, stateData);
           }
         };
       };

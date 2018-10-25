@@ -99,30 +99,45 @@ export default class MapTable {
   }
 
   /**
-   * Restore state for filters or/and map zooming
+   * Load state from url
+   * @param stateName: name of the state (either filters or zoom)
+   * @param isJson: do we need to decode a json from the state?
    */
-  restoreState() {
+  loadState(stateName, isJson) {
     // JSON state
-    ['filters', 'zoom'].forEach((k) => {
-      const v = this.parseState(k);
+    if (isJson) {
+      const v = this.parseState(stateName);
       if (!v) return;
       try {
         const parsedState = JSON.parse(v);
-        this.state[k] = parsedState;
+        this.state[stateName] = parsedState;
       } catch (e) {
-        console.log(`Maptable: Invalid URL State for mt-${k} ${e.message}`);
+        console.log(`Maptable: Invalid URL State for mt-${stateName} ${e.message}`);
       }
-    });
+    } else {
+      const v = this.parseState(stateName);
+      if (v) this.state[stateName] = v;
+    }
+  }
 
-    // string state
-    ['sort'].forEach((k) => {
-      const v = this.parseState(k);
-      if (v) this.state[k] = v;
-    });
+  /**
+   * Restore state for filters or/and map zooming and/or sorting
+   */
+  restoreState() {
+    if (this.map) {
+      this.loadState('zoom', true);
+      this.map.restoreState(this.state.zoom);
+    }
 
-    if (this.map) this.map.restoreState(this.state.zoom);
-    if (this.table) this.table.restoreState(this.state.sort);
-    if (this.filters) this.filters.restoreState(this.state.filters);
+    if (this.filters) {
+      this.loadState('filters', true);
+      this.filters.restoreState(this.state.filters);
+    }
+
+    if (this.table) {
+      this.loadState('sort', false);
+      this.table.restoreState(this.state.sort);
+    }
   }
 
   /**
@@ -163,13 +178,14 @@ export default class MapTable {
   updateState() {
     const newUrl = document.location.href.split('#')[0];
     let stateHash = '';
-    ['filters', 'zoom'].forEach((k) => {
-      if (this.state[k] && Object.keys(this.state[k]).length) {
-        stateHash += `!mt-${k}=${encodeURIComponent(JSON.stringify(this.state[k]))}`;
+    Object.keys(this.state).forEach((k) => {
+      if (!this.state[k]) return;
+      let stateValue = this.state[k];
+      if (typeof (this.state[k]) === 'object') {
+        if (!Object.keys(this.state[k]).length) return;
+        stateValue = JSON.stringify(this.state[k]);
       }
-    });
-    ['sort'].forEach((k) => {
-      if (this.state[k]) stateHash += `!mt-${k}=${this.state[k]}`;
+      stateHash += `!mt-${k}=${encodeURIComponent(stateValue)}`;
     });
     if (stateHash !== '') stateHash = `#${stateHash}`;
     window.history.pushState(null, null, `${newUrl}${stateHash}`);

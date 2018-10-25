@@ -86,6 +86,9 @@ d3.maptable = function (target) {
     // public functions
     return {
       render: () => maptableObject.render(),
+      loadState: (stateName, isJson) => maptableObject.loadState(stateName, isJson),
+      deleteState: stateName => maptableObject.deleteState(stateName),
+      saveState: (stateName, stateData) => maptableObject.saveState(stateName, stateData),
     };
   };
   return maptable;
