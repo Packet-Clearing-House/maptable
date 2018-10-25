@@ -1651,6 +1651,8 @@ this.d3.maptable = (function () {
                   });
                   return utils.quantile(groupedValues, percentile);
                 };
+              } else if (typeof attrValue.rollup === 'function') {
+                attrValue.rollup = attrValue.rollup.bind(this.maptable);
               }
 
               // Custom scale
@@ -1689,7 +1691,7 @@ this.d3.maptable = (function () {
                 d.attrProperties[attrKey].columnDetails = c;
                 var datum = {};
                 datum[key] = aggregatedValue;
-                d.attrProperties[attrKey].formatted = c && c.cellContent ? c.cellContent(datum) : aggregatedValue;
+                d.attrProperties[attrKey].formatted = c && c.cellContent ? c.cellContent.bind(_this6.maptable)(datum) : aggregatedValue;
               }
             });
 
@@ -1726,8 +1728,8 @@ this.d3.maptable = (function () {
               return Number(d.attrProperties[attrKey].value);
             });
             if (attrValue.transform) {
-              scaleDomain[0] = attrValue.transform(scaleDomain[0], this.maptable.data);
-              scaleDomain[1] = attrValue.transform(scaleDomain[1], this.maptable.data);
+              scaleDomain[0] = attrValue.transform.bind(this.maptable)(scaleDomain[0], this.maptable.data);
+              scaleDomain[1] = attrValue.transform.bind(this.maptable)(scaleDomain[1], this.maptable.data);
             }
 
             var minValue = attrValue.min;
@@ -1765,7 +1767,7 @@ this.d3.maptable = (function () {
                 scaledValue = attrValue.empty;
               } else {
                 var originalValueRaw = d.attrProperties[attrKey].value;
-                var originalValue = attrValue.transform ? attrValue.transform(originalValueRaw, _this6.maptable.data) : originalValueRaw;
+                var originalValue = attrValue.transform ? attrValue.transform.bind(_this6.maptable)(originalValueRaw, _this6.maptable.data) : originalValueRaw;
 
                 if (useNegative && originalValue < 0) {
                   scaledValue = scaleNegativeFunction(originalValue);
@@ -1811,7 +1813,7 @@ this.d3.maptable = (function () {
               inlineFilters = this.maptable.filters.getDescription();
             }
 
-            this.container.querySelector('#mt-map-title').innerHTML = this.options.title.content(showing, total, inlineFilters, this.maptable.data, this.maptable.rawData, this.dataCountries);
+            this.container.querySelector('#mt-map-title').innerHTML = this.options.title.content.bind(this.maptable)(showing, total, inlineFilters, this.maptable.data, this.maptable.rawData, this.dataCountries);
           }
         }
       }, {
@@ -1819,7 +1821,7 @@ this.d3.maptable = (function () {
         value: function activateTooltip(target, tooltipNode, tooltipContent, isCountry) {
           var self = this;
           target.on(isCountry ? 'mousemove' : 'mouseover', function (d) {
-            var content = tooltipContent(d);
+            var content = tooltipContent.bind(this.maptable)(d);
             if (!content) return;
             tooltipNode.html(content).attr('style', 'display:block;position:fixed;');
 
@@ -2603,11 +2605,11 @@ this.d3.maptable = (function () {
               var el1 = a[column.key];
               var el2 = b[column.key];
               if (columnDetails.dataParse) {
-                el1 = columnDetails.dataParse(el1);
-                el2 = columnDetails.dataParse(el2);
+                el1 = columnDetails.dataParse.bind(_this3.maptable)(el1);
+                el2 = columnDetails.dataParse.bind(_this3.maptable)(el2);
               } else if (columnDetails.virtual) {
-                el2 = columnDetails.virtual(a);
-                el2 = columnDetails.virtual(b);
+                el2 = columnDetails.virtual.bind(_this3.maptable)(a);
+                el2 = columnDetails.virtual.bind(_this3.maptable)(b);
               } else if (columnDetails.filterType === 'compare') {
                 el1 = Number(el1);
                 el2 = Number(el2);

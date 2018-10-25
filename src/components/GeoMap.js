@@ -767,6 +767,8 @@ export default class GeoMap {
             const groupedValues = groupedData.map(d => Number(d[key]));
             return utils.quantile(groupedValues, percentile);
           };
+        } else if (typeof (attrValue.rollup) === 'function') {
+          attrValue.rollup = attrValue.rollup.bind(this.maptable);
         }
 
         // Custom scale
@@ -804,7 +806,7 @@ export default class GeoMap {
           const datum = {};
           datum[key] = aggregatedValue;
           d.attrProperties[attrKey].formatted = (c && c.cellContent)
-            ? c.cellContent(datum)
+            ? c.cellContent.bind(this.maptable)(datum)
             : aggregatedValue;
         }
       });
@@ -833,8 +835,10 @@ export default class GeoMap {
 
       const scaleDomain = d3.extent(dataset, d => Number(d.attrProperties[attrKey].value));
       if (attrValue.transform) {
-        scaleDomain[0] = attrValue.transform(scaleDomain[0], this.maptable.data);
-        scaleDomain[1] = attrValue.transform(scaleDomain[1], this.maptable.data);
+        scaleDomain[0] = attrValue.transform
+          .bind(this.maptable)(scaleDomain[0], this.maptable.data);
+        scaleDomain[1] = attrValue.transform
+          .bind(this.maptable)(scaleDomain[1], this.maptable.data);
       }
 
       let minValue = attrValue.min;
@@ -880,7 +884,8 @@ export default class GeoMap {
         } else {
           const originalValueRaw = d.attrProperties[attrKey].value;
           const originalValue = (attrValue.transform)
-            ? attrValue.transform(originalValueRaw, this.maptable.data) : originalValueRaw;
+            ? attrValue.transform.bind(this.maptable)(originalValueRaw, this.maptable.data)
+            : originalValueRaw;
 
           if (useNegative && originalValue < 0) {
             scaledValue = scaleNegativeFunction(originalValue);
@@ -919,7 +924,7 @@ export default class GeoMap {
       }
 
       this.container.querySelector('#mt-map-title').innerHTML = this.options.title
-        .content(showing, total, inlineFilters, this.maptable.data,
+        .content.bind(this.maptable)(showing, total, inlineFilters, this.maptable.data,
           this.maptable.rawData, this.dataCountries);
     }
   }
@@ -927,7 +932,7 @@ export default class GeoMap {
   activateTooltip(target, tooltipNode, tooltipContent, isCountry) {
     const self = this;
     target.on(isCountry ? 'mousemove' : 'mouseover', function (d) {
-      const content = tooltipContent(d);
+      const content = tooltipContent.bind(this.maptable)(d);
       if (!content) return;
       tooltipNode.html(content).attr('style', 'display:block;position:fixed;');
 

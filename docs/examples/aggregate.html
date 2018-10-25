@@ -125,23 +125,7 @@
           type: 'dropdown'
         }
       })
-      .render(attachAggregateHeader);
-
-    function attachAggregateHeader() {
-      const v = this;
-      const headers = document.querySelectorAll('#vizContainer .mt-table-sortable');
-      const allowedPivot = ['users', 'traf', 'participants', 'amount'];
-      for (let i = 0; i < headers.length; i += 1) {
-        const headerKey = headers[i].getAttribute('data-key');
-        if (allowedPivot.indexOf(headerKey) !== -1) {
-          headers[i].addEventListener('click', function () {
-            document.getElementById('country_key').value = this.getAttribute('data-key');
-            document.getElementById('markers_key').value = this.getAttribute('data-key');
-            v.render();
-          })
-        }
-      }
-    }
+      .render();
 
     document.getElementById('country_agg').addEventListener('change', viz.render);
     document.getElementById('country_key').addEventListener('change', viz.render);
