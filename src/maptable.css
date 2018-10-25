@@ -29,7 +29,7 @@
 .mt-map-tooltip {
   color: #222;
   background-color: rgba(255, 255, 255, 0.9);
-  min-width: 100px;
+  min-width: 200px;
   max-width: 300px;
   position: absolute;
 }

@@ -15,19 +15,22 @@
 
   <div class="container">
     <div class="panel panel-default">
-      <div class="panel-heading">[Example] Minimal</div>
+      <div class="panel-heading">[Example] Custom position</div>
       <div class="panel-body">
-        Demonstating: rendering a map, filters and table from csv. (Most basic example)<br />
+        Demonstating: rendering a map, filters in a different order<br />
         <br>
         <div class="btn-group">
-          <a href="./minimal.html" target="_blank" class="btn btn-default">Open in a new window</a>
-          <a href="https://github.com/Packet-Clearing-House/maptable/tree/master/docs/examples/minimal.html"
+          <a href="./custom-position.html" target="_blank" class="btn btn-default">Open in a new window</a>
+          <a href="https://github.com/Packet-Clearing-House/maptable/tree/master/docs/examples/custom-position.html"
             target="_blank" class="btn btn-default">View source code</a>
         </div>
       </div>
     </div>
 
-    <div id="vizContainer"></div>
+    <div id="vizContainer">
+      <div id='mt-filters' class='panel panel-default'></div>
+      <div id='mt-map'></div>
+    </div>
   </div>
   <script>
     var viz = d3.maptable('#vizContainer')
@@ -36,7 +39,6 @@
         path: 'ne_110m_admin_0_countries.json'
       })
       .filters()
-      .table()
       .render();
   </script>
 </body>

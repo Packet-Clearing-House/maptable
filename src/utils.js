@@ -58,11 +58,6 @@ function keyToTile(k) {
   return upperK.replace(/_/g, ' ');
 }
 
-/**
- *
- * @param k
- * @returns {string}
- */
 function sanitizeKey(k) {
   return k.toLowerCase()
     .replace(/ /g, '_')
@@ -70,10 +65,43 @@ function sanitizeKey(k) {
     .replace(/'/g, '');
 }
 
+function toNumber(str) {
+  if (!str || str === '') return null;
+  return Number(str.toString().replace(/[^0-9.]+|\s+/gmi, ''));
+}
+
+function quantile(array, percentile) {
+  array.sort((a, b) => a - b);
+  const index = percentile / 100.0 * (array.length - 1);
+  let result;
+  if (Math.floor(index) === index) {
+    result = array[index];
+  } else {
+    const i = Math.floor(index);
+    const fraction = index - i;
+    result = array[i] + (array[i + 1] - array[i]) * fraction;
+  }
+  return result;
+}
+
+function uniqueValues(arr) {
+  if (!arr) return arr;
+  const a = [];
+  for (let i = 0, l = arr.length; i < l; i += 1) {
+    if (a.indexOf(arr[i]) === -1 && arr[i] !== '') {
+      a.push(arr[i]);
+    }
+  }
+  return a;
+}
+
 export default {
   rangeToBool,
   appendOptions,
   extendRecursive,
   sanitizeKey,
+  toNumber,
   keyToTile,
+  quantile,
+  uniqueValues,
 };

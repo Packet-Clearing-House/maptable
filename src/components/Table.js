@@ -74,6 +74,7 @@ export default class Table {
         output += (d.nowrap) ? ' nowrap' : '';
         return output;
       })
+      .attr('data-key', d => utils.sanitizeKey(d.key))
       .attr('onselectstart', 'return false;')
       .attr('unselectable', 'on')
       .attr('style', d => ((d.nowrap) ? 'white-space:nowrap;' : ''))
@@ -198,11 +199,11 @@ export default class Table {
         let el1 = a[column.key];
         let el2 = b[column.key];
         if (columnDetails.dataParse) {
-          el1 = columnDetails.dataParse(el1);
-          el2 = columnDetails.dataParse(el2);
+          el1 = columnDetails.dataParse.bind(this.maptable)(el1);
+          el2 = columnDetails.dataParse.bind(this.maptable)(el2);
         } else if (columnDetails.virtual) {
-          el2 = columnDetails.virtual(a);
-          el2 = columnDetails.virtual(b);
+          el2 = columnDetails.virtual.bind(this.maptable)(a);
+          el2 = columnDetails.virtual.bind(this.maptable)(b);
         } else if (columnDetails.filterType === 'compare') {
           el1 = Number(el1);
           el2 = Number(el2);

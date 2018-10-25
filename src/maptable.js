@@ -8,11 +8,9 @@ export default class MapTable {
   constructor(target, options) {
     this.options = options;
 
-    this.state = {
-      filters: {},
-      zoom: {},
-    };
+    this.state = {};
     this.saveStateTimeout = {};
+    this.removeStateTimeout = null;
 
     this.node = document.querySelector(target);
     this.node.setAttribute('style', 'position:relative;');
@@ -101,42 +99,71 @@ export default class MapTable {
   }
 
   /**
-   * Restore state for filters or/and map zooming
+   * Load state from url
+   * @param stateName: name of the state (either filters or zoom)
+   * @param isJson: do we need to decode a json from the state?
+   * @return loaded state
    */
-  restoreState() {
+  loadState(stateName, isJson) {
     // JSON state
-    ['filters', 'zoom'].forEach((k) => {
-      const v = this.parseState(k);
-      if (!v) return;
+    if (isJson) {
+      const v = this.parseState(stateName);
+      if (!v) return null;
       try {
         const parsedState = JSON.parse(v);
-        this.state[k] = parsedState;
+        this.state[stateName] = parsedState;
       } catch (e) {
-        console.log(`Maptable: Invalid URL State for mt-${k} ${e.message}`);
+        console.log(`Maptable: Invalid URL State for mt-${stateName} ${e.message}`);
+        return null;
       }
-    });
+    } else {
+      const v = this.parseState(stateName);
+      if (v) this.state[stateName] = v;
+    }
+    return this.state[stateName];
+  }
 
-    // string state
-    ['sort'].forEach((k) => {
-      const v = this.parseState(k);
-      if (v) this.state[k] = v;
-    });
+  /**
+   * Restore state for filters or/and map zooming and/or sorting
+   */
+  restoreState() {
+    if (this.map) {
+      this.loadState('zoom', true);
+      this.map.restoreState(this.state.zoom);
+    }
 
-    if (this.map) this.map.restoreState(this.state.zoom);
-    if (this.table) this.table.restoreState(this.state.sort);
-    if (this.filters) this.filters.restoreState(this.state.filters);
+    if (this.filters) {
+      this.loadState('filters', true);
+      this.filters.restoreState(this.state.filters);
+    }
+
+    if (this.table) {
+      this.loadState('sort', false);
+      this.table.restoreState(this.state.sort);
+    }
   }
 
   /**
    * Extract state from the url
+   * @param stateName: name of the state (either filters or zoom)
    */
-  parseState(key) {
-    const params = document.location.href.replace(/%21mt/g, '!mt').split(`!mt-${key}=`);
+  parseState(stateName) {
+    const params = document.location.href.replace(/%21mt/g, '!mt').split(`!mt-${stateName}=`);
     return (params[1]) ? decodeURIComponent(params[1].split('!mt')[0]) : null;
   }
 
   /**
-   * Save the state into the URL hash
+   * Remove state
+   * @param stateName: name of the state (either filters or zoom)
+   */
+  removeState(stateName) {
+    window.clearTimeout(this.saveStateTimeout[stateName]);
+    delete this.state[stateName];
+    this.updateState();
+  }
+
+  /**
+   * Save the state in this.state
    * @param stateName: name of the state (either filters or zoom)
    * @param stateData: object, contain state information
    */
@@ -144,19 +171,27 @@ export default class MapTable {
     window.clearTimeout(this.saveStateTimeout[stateName]);
     this.saveStateTimeout[stateName] = window.setTimeout(() => {
       this.state[stateName] = stateData;
-      const newUrl = document.location.href.split('#')[0];
-      let stateHash = '';
-      ['filters', 'zoom'].forEach((k) => {
-        if (Object.keys(this.state[k]).length) {
-          stateHash += `!mt-${k}=${encodeURIComponent(JSON.stringify(this.state[k]))}`;
-        }
-      });
-      ['sort'].forEach((k) => {
-        if (this.state[k]) stateHash += `!mt-${k}=${this.state[k]}`;
-      });
-      if (stateHash !== '') stateHash = `#${stateHash}`;
-      window.history.pushState(null, null, `${newUrl}${stateHash}`);
+      this.updateState();
     }, 200);
+  }
+
+  /**
+   * Update state into the URL hash
+   */
+  updateState() {
+    const newUrl = document.location.href.split('#')[0];
+    let stateHash = '';
+    Object.keys(this.state).forEach((k) => {
+      if (!this.state[k]) return;
+      let stateValue = this.state[k];
+      if (typeof (this.state[k]) === 'object') {
+        if (!Object.keys(this.state[k]).length) return;
+        stateValue = JSON.stringify(this.state[k]);
+      }
+      stateHash += `!mt-${k}=${encodeURIComponent(stateValue)}`;
+    });
+    if (stateHash !== '') stateHash = `#${stateHash}`;
+    window.history.pushState(null, null, `${newUrl}${stateHash}`);
   }
 
   render() {
@@ -174,8 +209,12 @@ export default class MapTable {
     }
 
     // On complete
-    if (this.options.onComplete && this.options.onComplete.constructor === Function) {
-      this.options.onComplete.bind(this.maptable)();
+    if (!this.firstExecution
+      && this.options.onComplete
+      && this.options.onComplete.constructor === Function
+    ) {
+      this.options.onComplete.bind(this)();
+      this.firstExecution = true;
     }
   }
 

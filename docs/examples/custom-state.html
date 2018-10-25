@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <link rel="stylesheet" href="../vendor/bootstrap.min.css">
+  <link rel="stylesheet" href="../maptable.css">
+  <title>MapTable example</title>
+</head>
+
+<body>
+
+  <script src="../vendor/d3.min.js" charset="utf-8"></script>
+  <script src="../vendor/topojson.min.js"></script>
+  <script src="../maptable.js"></script>
+
+
+  <div class="container">
+    <div class="panel panel-default">
+      <div class="panel-heading">[Example] Custom state</div>
+      <div class="panel-body">
+        Demonstating: rendering a map, filters and table.<br />
+        Countries and markers are aggregated dynamically using the current sort (for only specified columns).<br>
+        The selected aggegate is stateful and saved in the hash of the URL (we used custom state management provided by Maptable).<br>
+        The map have a title that disply the number of rows, selected filters and seleced aggregate<br>
+        Countries have a tooltip that show the aggregated value.<br>
+        <br>
+        <div class="btn-group">
+          <a href="./custom-state.html" target="_blank" class="btn btn-default">Open in a new window</a>
+          <a href="https://github.com/Packet-Clearing-House/maptable/tree/master/docs/examples/custom-state.html" target="_blank"
+            class="btn btn-default">View source code</a>
+        </div>
+      </div>
+    </div>
+
+    <div id="vizContainer"></div>
+  </div>
+
+  <script>
+    var currentAggregateKey = null;
+    var initialLoad = true;
+    var allowedPivot = ['traf', 'users', 'participants', 'amount'];
+    var pivotMode = {
+      traf: 'sum',
+      users: 'sum',
+      participants: 'max',
+      amount: 'avg',
+    };
+
+    var modeFormatted = {
+      count: 'Total',
+      sum: 'Total',
+      min: 'Minimum',
+      max: 'Maximum',
+      avg: 'Average',
+    };
+
+    function getAggregateKey() {
+      if (initialLoad) {
+        currentAggregateKey = this.loadState('pivot');
+        initialLoad = false;
+      }
+      if (!currentAggregateKey) return 'id';
+      return currentAggregateKey;
+    }
+
+    function getAggregateMode() {
+      if (!currentAggregateKey) return 'count';
+      return pivotMode[currentAggregateKey];
+    }
+
+    var viz = d3.maptable('#vizContainer')
+      .csv('advanced.csv')
+      .map({
+        path: 'ne_110m_admin_0_countries.json',
+        countryIdentifierKey: 'country',
+        countryIdentifierType: 'name',
+        title: {
+          bgColor: "white",
+          fontSize: "11",
+          content: function (countShown, countTotal, filtersDescription, rawData, data) {
+            var out = '';
+            if (countShown === 0 || countTotal === 0) {
+              out = "No data shown";
+            } else if (countShown < countTotal) {
+              out =
+                `Showing <tspan font-weight="bold">${countShown} </tspan> rows from 
+                <tspan font-weight="bold"> ${countTotal} </tspan>`;
+            } else {
+              out = `<tspan font-weight="bold">${countTotal}</tspan> rows shown`;
+            }
+            if (filtersDescription !== '') out += " — " + filtersDescription;
+            if (this.map.dataCountries.length) {
+              var attrProperties = this.map.dataCountries[0].attrProperties.fill;
+              if (attrProperties.key === 'id' && attrProperties.mode === 'count') {
+                out += ` - Number of locations by Country`;
+              } else {
+                var key = attrProperties.columnDetails && attrProperties.columnDetails.title ?
+                  attrProperties.columnDetails.title :
+                  attrProperties.key;
+                out +=
+                  ` - ${modeFormatted[attrProperties.mode]} <tspan font-weight="bold">${key}</tspan> by Country`;
+              }
+            }
+            return out;
+          },
+          source: function () {
+            return 'Source: <a xlink:href="https://packet-clearing-house.github.io/maptable/" target="_blank">' +
+              '<tspan font-weight="bold">https://packet-clearing-house.github.io/maptable/</tspan></a>';
+          }
+        },
+        countries: {
+          attr: {
+            fill: {
+              empty: '#FFFFFF',
+              min: '#FFFFFF',
+              max: '#0000FF',
+              aggregate: {
+                key: getAggregateKey,
+                mode: getAggregateMode,
+                scale: 'rank',
+              }
+            },
+          },
+          tooltip: function (a) {
+            if (!a.values.length || a.attrProperties.fill.value === 0) return null;
+            var statusClass = '';
+            out = '<div class="arrow"></div>';
+            if (a.values.length > 4) {
+              out += '<span class="pull-right"> ' + a.values.length + ' rows</span>';
+            }
+            out += '<h3 class="popover-title"> ' + a.values[0].country + '</h3>';
+            out += '<div class="popover-content">';
+            out += modeFormatted[a.attrProperties.fill.mode] + ' ';
+            if (a.attrProperties.fill.key !== 'id') {
+              out += a.attrProperties.fill.columnDetails.title + ' ';
+            }
+            out += a.attrProperties.fill.formatted;
+            if (a.attrProperties.fill.mode === 'count') {
+              out += ' rows';
+            }
+            out += "</div>";
+            return out;
+          },
+        },
+        markers: {
+          groupBy: function (a) {
+            return a.city + ", " + a.country;
+          },
+          attr: {
+            r: {
+              min: 1,
+              max: 9,
+              aggregate: {
+                key: getAggregateKey,
+                mode: getAggregateMode,
+                scale: 'rank',
+              }
+            },
+            fill: "red",
+            stroke: "#d9d9d9",
+            "stroke-width": 0.5
+          },
+        },
+      })
+      .table()
+      .filters({
+        show: ['country', 'city']
+      })
+      .columns({
+        country: {
+          type: 'dropdown'
+        },
+        traf: {
+          cellContent: function (d) {
+            return getHumanSize(d.traf);
+          }
+        }
+      })
+      .render(attachAggregateHeader);
+
+    function attachAggregateHeader() {
+      var v = this;
+      var headers = document.querySelectorAll('#vizContainer th.mt-table-sortable');
+      for (let i = 0; i < headers.length; i += 1) {
+        headers[i].addEventListener('click', function () {
+          var headerKey = this.getAttribute('data-key');
+          if (allowedPivot.indexOf(headerKey) !== -1) {
+            currentAggregateKey = headerKey;
+            v.saveState('pivot', currentAggregateKey);
+          } else {
+            currentAggregateKey = null;
+            v.removeState('pivot');
+          }
+          v.render();
+        });
+      }
+    }
+
+    function getHumanSize(size) {
+      var k = 1000; // or 1024 for binary
+      var bytes = (Number(size) * k);
+      var sizes = ['B', 'K', 'M', 'G', 'T', 'P', 'E', 'Z', 'Y'];
+      var i = Math.floor(Math.log(bytes) / Math.log(k));
+      var raw = bytes / Math.pow(k, i);
+      return (Math.round(raw * 100) / 100) + sizes[i];
+    }
+  </script>
+
+
+</body>
+
+</html>

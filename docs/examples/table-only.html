@@ -1,61 +1,78 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <link rel="stylesheet" href="../vendor/bootstrap.min.css">
   <link rel="stylesheet" href="../maptable.css">
   <title>MapTable example</title>
 </head>
+
 <body>
 
   <script src="../vendor/d3.min.js" charset="utf-8"></script>
   <script src="../vendor/topojson.min.js"></script>
   <script src="../maptable.js"></script>
 
-<div id="vizContainer" class='container'></div>
+  <div class="container">
+    <div class="panel panel-default">
+      <div class="panel-heading">[Example] Minimal</div>
+      <div class="panel-body">
+        Demonstating: rendering a table and filters with virtual columns, data transformations<br />
+        <br>
+        <div class="btn-group">
+          <a href="./table-only.html" target="_blank" class="btn btn-default">Open in a new window</a>
+          <a href="https://github.com/Packet-Clearing-House/maptable/tree/master/docs/examples/table-only.html" target="_blank"
+            class="btn btn-default">View source code</a>
+        </div>
+      </div>
+    </div>
 
-<script>
+    <div id="vizContainer"></div>
+  </div>
+  <script>
     var viz = d3.maptable('#vizContainer')
-    .json('table.json')
-    .columns({
-      position: {
-        filterMethod: 'dropdown',
-      },
-      office: {
-        filterMethod: 'dropdown',
-      },
-      start_date: {
-        filterMethod: 'compare',
-        filterInputType: 'date',
-        dataParse: function(val) {
-          return new Date(val).getTime();
-        }
-      },
-      salary: {
-        filterMethod: 'compare',
-        filterInputType: 'number',
-        cellContent: function(d) {
-          const v = parseInt(d.salary.replace(/[^0-9]+/g, ''), 10);
-          return '$' + v.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+      .json('table.json')
+      .columns({
+        position: {
+          filterMethod: 'dropdown',
         },
-        dataParse: function(val) {
-          return parseInt(val.replace(/[^0-9]+/g, ''), 10);
+        office: {
+          filterMethod: 'dropdown',
+        },
+        start_date: {
+          filterMethod: 'compare',
+          filterInputType: 'date',
+          dataParse: function (val) {
+            return new Date(val).getTime();
+          }
+        },
+        salary: {
+          filterMethod: 'compare',
+          filterInputType: 'number',
+          cellContent: function (d) {
+            const v = parseInt(d.salary.replace(/[^0-9]+/g, ''), 10);
+            return '$' + v.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+          },
+          dataParse: function (val) {
+            return parseInt(val.replace(/[^0-9]+/g, ''), 10);
+          }
+        },
+        links: {
+          virtual: function (d) {
+            return '<a href="#' + d.extn + '">Link</a>';
+          }
         }
-      },
-      links: {
-        virtual: function(d) {
-          return '<a href="#' + d.extn+ '">Link</a>';
-        }
-      }
-    })
-    .filters({
-      show: ['name', 'position', 'office', 'salary', 'start_date']
-    })
-    .table({
-      show: ['name', 'position', 'office', 'salary', 'start_date', 'links']
-    })
-    .render();
-</script>
+      })
+      .filters({
+        show: ['name', 'position', 'office', 'salary', 'start_date']
+      })
+      .table({
+        show: ['name', 'position', 'office', 'salary', 'start_date', 'links']
+      })
+      .render();
+  </script>
 
 
 </body>
+
 </html>

@@ -1,6 +1,7 @@
 import Legend from './Legend';
 import Watermark from './Watermark';
 import StackBlur from './StackBlur';
+import utils from '../utils';
 /**
  * Used the name GeoMap instead of Map to avoid collision with the native Map class of JS
  */
@@ -360,12 +361,22 @@ export default class GeoMap {
     // Build Country Legend
     this.legendCountry = {};
 
-    if (this.options.countries.attr.fill
-        && this.options.countries.attr.fill.legend
-        && this.options.countries.attr.fill.min
-        && this.options.countries.attr.fill.max) {
+    if (this.shouldRenderLegend()) {
       this.legendCountry.fill = new Legend(this);
     }
+  }
+
+  shouldRenderLegend() {
+    const f = this.options.countries.attr.fill;
+    if (!f) return false;
+    if (!f.legend || !f.min || !f.max) return false;
+    if (f.aggregate && f.aggregate.scale) {
+      const scale = (typeof (f.aggregate.scale) === 'function')
+        ? f.aggregate.scale.bind(this.maptable)()
+        : f.aggregate.scale;
+      if (scale !== 'linear') return false;
+    }
+    return true;
   }
 
   /**
@@ -403,12 +414,13 @@ export default class GeoMap {
     Object.keys(this.options.countries.attr).forEach((attrKey) => {
       const attrValue = this.options.countries.attr[attrKey];
       if (typeof (attrValue) === 'object' && attrValue.legend) {
-        const scaleDomain = d3.extent(this.dataCountries, d => Number(d.rollupValue[attrKey]));
+        const scaleDomain = d3.extent(this.dataCountries,
+          d => Number(d.attrProperties[attrKey].value));
         this.legendCountry[attrKey].updateExtents(scaleDomain);
 
         // When we mouseover the legend, it should highlight the indice selected
         countryItem.on('mouseover', (d) => {
-          this.legendCountry[attrKey].indiceChange(d.rollupValue[attrKey]);
+          this.legendCountry[attrKey].indiceChange(d.attrProperties[attrKey].value);
         })
           .on('mouseout', () => {
             this.legendCountry[attrKey].indiceChange(NaN);
@@ -434,7 +446,7 @@ export default class GeoMap {
     // We merge both data
     this.dataMarkers.forEach((d) => {
       d.attr = {};
-      d.rollupValue = {};
+      d.attrProperties = {};
     });
 
     // We calculate attributes values
@@ -617,6 +629,8 @@ export default class GeoMap {
       encodedTranslation[1]];
     if (exportedData[0] !== 1 && exportedData[1] !== 0 && exportedData[2] !== 0) {
       this.maptable.saveState('zoom', exportedData);
+    } else {
+      this.maptable.removeState('zoom');
     }
   }
 
@@ -700,6 +714,78 @@ export default class GeoMap {
         d.attr[attrKey] = attrValue(d);
       });
     } else if (typeof (attrValue) === 'object') {
+      let scale = 'linear';
+      let key = null;
+      let mode = 'count';
+      let scaleToUse = d3.scale.linear();
+      if (attrValue.aggregate) {
+        key = (typeof (attrValue.aggregate.key) === 'function')
+          ? attrValue.aggregate.key.bind(this.maptable)()
+          : attrValue.aggregate.key;
+
+        mode = (typeof (attrValue.aggregate.mode) === 'function')
+          ? attrValue.aggregate.mode.bind(this.maptable)()
+          : attrValue.aggregate.mode;
+
+        if (typeof (attrValue.aggregate.scale) === 'function') {
+          scale = attrValue.aggregate.scale.bind(this.maptable)();
+        } else if (attrValue.aggregate.scale) {
+          scale = attrValue.aggregate.scale;
+        }
+
+        if (!key || !mode) {
+          throw new Error(`MapTable: You should provide values 'key' & 'mode' for attr.${attrKey}.aggregate`);
+        }
+
+        // Custom aggregate mode
+        if (mode === 'sum') {
+          attrValue.rollup = groupedData => (
+            groupedData.map(d => Number(d[key])).reduce((a, c) => a + c, 0)
+          );
+        } else if (mode === 'avg') {
+          attrValue.rollup = (groupedData) => {
+            if (!groupedData.length) return 0;
+            return groupedData
+              .map(d => Number(d[key])).reduce((a, c) => a + c, 0) / groupedData.length;
+          };
+        } else if (mode === 'count') {
+          attrValue.rollup = groupedData => groupedData.length;
+        } else if (mode === 'min') {
+          attrValue.rollup = (groupedData) => {
+            if (!groupedData.length) return 0;
+            const groupedValues = groupedData.map(d => Number(d[key]));
+            return groupedValues.reduce((min, p) => (p < min ? p : min), groupedValues[0]);
+          };
+        } else if (mode === 'max') {
+          attrValue.rollup = (groupedData) => {
+            if (!groupedData.length) return 0;
+            const groupedValues = groupedData.map(d => Number(d[key]));
+            return groupedValues.reduce((max, p) => (p > max ? p : max), groupedValues[0]);
+          };
+        } else if (mode.indexOf('percentile') !== -1) {
+          const percentile = utils.toNumber(mode);
+          attrValue.rollup = (groupedData) => {
+            if (!groupedData.length) return 0;
+            const groupedValues = groupedData.map(d => Number(d[key]));
+            return utils.quantile(groupedValues, percentile);
+          };
+        } else if (typeof (attrValue.rollup) === 'function') {
+          attrValue.rollup = attrValue.rollup.bind(this.maptable);
+        }
+
+        // Custom scale
+        if (scale) {
+          if (scale.indexOf('log') !== -1) {
+            scaleToUse = d3.scale.log().base(utils.toNumber(scale) || 10);
+          } else if (scale.indexOf('pow') !== -1) {
+            scaleToUse = d3.scale.pow().exponent(utils.toNumber(scale) || 1);
+          } else if (scale === 'sqrt') {
+            scaleToUse = d3.scale.sqrt();
+          }
+          // Rank scale neeed additional transformations
+        }
+      }
+
       // Dynamic value based on a scale
       if (!attrValue.rollup) {
         attrValue.rollup = d => d.length;
@@ -709,12 +795,51 @@ export default class GeoMap {
       }
 
       dataset.forEach((d) => {
-        d.rollupValue[attrKey] = attrValue.rollup(d.values);
+        const aggregatedValue = attrValue.rollup(d.values);
+        if (!d.attrProperties) d.attrProperties = {};
+        if (!d.attrProperties[attrKey]) d.attrProperties[attrKey] = {};
+        d.attrProperties[attrKey].value = aggregatedValue;
+        if (key) {
+          d.attrProperties[attrKey].key = key;
+          d.attrProperties[attrKey].mode = mode;
+          d.attrProperties[attrKey].scale = scale;
+          const c = this.maptable.columnDetails[key];
+          d.attrProperties[attrKey].columnDetails = c;
+          const datum = {};
+          datum[key] = aggregatedValue;
+          d.attrProperties[attrKey].formatted = (c && c.cellContent)
+            ? c.cellContent.bind(this.maptable)(datum)
+            : aggregatedValue;
+        }
       });
-      const scaleDomain = d3.extent(dataset, d => Number(d.rollupValue[attrKey]));
+      if (scale === 'rank') {
+        const positiveRanks = utils.uniqueValues([0].concat(dataset
+          .map(d => Math.floor(d.attrProperties[attrKey].value)).filter(v => v > 0)));
+        const negativeRanks = utils.uniqueValues(dataset
+          .map(d => Math.floor(d.attrProperties[attrKey].value)).filter(v => v < 0));
+
+        positiveRanks.sort((a, b) => a - b);
+        negativeRanks.sort((a, b) => b - a);
+
+        dataset.forEach((d) => {
+          if (d.attrProperties[attrKey].value !== 0) {
+            const ranks = d.attrProperties[attrKey].value >= 0 ? positiveRanks : negativeRanks;
+            const percentile = Math.round(ranks
+              .indexOf(Math.floor(d.attrProperties[attrKey].value)) / ranks.length * 100);
+            const newValue = d.attrProperties[attrKey].value < 0
+              ? percentile - (percentile * 2)
+              : percentile;
+            d.attrProperties[attrKey].value = newValue;
+          }
+        });
+      }
+
+      const scaleDomain = d3.extent(dataset, d => Number(d.attrProperties[attrKey].value));
       if (attrValue.transform) {
-        scaleDomain[0] = attrValue.transform(scaleDomain[0], this.maptable.data);
-        scaleDomain[1] = attrValue.transform(scaleDomain[1], this.maptable.data);
+        scaleDomain[0] = attrValue.transform
+          .bind(this.maptable)(scaleDomain[0], this.maptable.data);
+        scaleDomain[1] = attrValue.transform
+          .bind(this.maptable)(scaleDomain[1], this.maptable.data);
       }
 
       let minValue = attrValue.min;
@@ -735,35 +860,41 @@ export default class GeoMap {
       const useNegative = (attrValue.maxNegative && attrValue.minNegative);
       let scaleFunction;
       let scaleNegativeFunction;
+
       if (useNegative) {
-        scaleFunction = d3.scale.linear()
+        scaleFunction = scaleToUse.copy()
           .domain([0, scaleDomain[1]])
           .range([minValue, maxValue]);
-
-        scaleNegativeFunction = d3.scale.linear()
+        scaleNegativeFunction = scaleToUse.copy()
           .domain([scaleDomain[0], 0])
           .range([attrValue.maxNegative, attrValue.minNegative]);
       } else {
-        scaleFunction = d3.scale.linear()
+        scaleFunction = scaleToUse
           .domain(scaleDomain)
           .range([minValue, maxValue]);
       }
 
+
       dataset.forEach((d) => {
         let scaledValue;
-        if (!d.values.length || Number.isNaN(d.rollupValue[attrKey])) {
+        if (!d.values.length || Number.isNaN(d.attrProperties[attrKey].value)) {
           if (typeof (attrValue.empty) === 'undefined') {
             throw new Error(`MapTable: no empty property found for attr.${attrKey}`);
           }
           scaledValue = attrValue.empty;
         } else {
-          const originalValueRaw = d.rollupValue[attrKey];
+          const originalValueRaw = d.attrProperties[attrKey].value;
           const originalValue = (attrValue.transform)
-            ? attrValue.transform(originalValueRaw, this.maptable.data) : originalValueRaw;
+            ? attrValue.transform.bind(this.maptable)(originalValueRaw, this.maptable.data)
+            : originalValueRaw;
+
           if (useNegative && originalValue < 0) {
             scaledValue = scaleNegativeFunction(originalValue);
           } else {
             scaledValue = scaleFunction(originalValue);
+          }
+          if (originalValue === 0 && attrValue.empty) {
+            scaledValue = attrValue.empty;
           }
         }
         d.attr[attrKey] = scaledValue;
@@ -795,14 +926,17 @@ export default class GeoMap {
       }
 
       this.container.querySelector('#mt-map-title').innerHTML = this.options.title
-        .content(showing, total, inlineFilters, this.maptable.data, this.maptable.rawData);
+        .content.bind(this.maptable)(showing, total, inlineFilters, this.maptable.data,
+          this.maptable.rawData, this.dataCountries);
     }
   }
 
   activateTooltip(target, tooltipNode, tooltipContent, isCountry) {
     const self = this;
     target.on(isCountry ? 'mousemove' : 'mouseover', function (d) {
-      tooltipNode.html(tooltipContent(d)).attr('style', 'display:block;position:fixed;');
+      const content = tooltipContent.bind(this.maptable)(d);
+      if (!content) return;
+      tooltipNode.html(content).attr('style', 'display:block;position:fixed;');
 
       let mouseLeft;
       let mouseTop;
