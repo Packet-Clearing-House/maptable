@@ -1499,6 +1499,8 @@ this.d3.maptable = (function () {
           var exportedData = [this.scale, encodedTranslation[0], encodedTranslation[1]];
           if (exportedData[0] !== 1 && exportedData[1] !== 0 && exportedData[2] !== 0) {
             this.maptable.saveState('zoom', exportedData);
+          } else {
+            this.maptable.removeState('zoom');
           }
         }
       }, {
@@ -2641,11 +2643,9 @@ this.d3.maptable = (function () {
 
         this.options = options;
 
-        this.state = {
-          filters: {},
-          zoom: {}
-        };
+        this.state = {};
         this.saveStateTimeout = {};
+        this.removeStateTimeout = null;
 
         this.node = document.querySelector(target);
         this.node.setAttribute('style', 'position:relative;');
@@ -2776,17 +2776,31 @@ this.d3.maptable = (function () {
 
         /**
          * Extract state from the url
+         * @param stateName: name of the state (either filters or zoom)
          */
 
       }, {
         key: 'parseState',
-        value: function parseState(key) {
-          var params = document.location.href.replace(/%21mt/g, '!mt').split('!mt-' + key + '=');
+        value: function parseState(stateName) {
+          var params = document.location.href.replace(/%21mt/g, '!mt').split('!mt-' + stateName + '=');
           return params[1] ? decodeURIComponent(params[1].split('!mt')[0]) : null;
         }
 
         /**
-         * Save the state into the URL hash
+         * Remove state
+         * @param stateName: name of the state (either filters or zoom)
+         */
+
+      }, {
+        key: 'removeState',
+        value: function removeState(stateName) {
+          window.clearTimeout(this.saveStateTimeout[stateName]);
+          delete this.state[stateName];
+          this.updateState();
+        }
+
+        /**
+         * Save the state in this.state
          * @param stateName: name of the state (either filters or zoom)
          * @param stateData: object, contain state information
          */
@@ -2799,19 +2813,31 @@ this.d3.maptable = (function () {
           window.clearTimeout(this.saveStateTimeout[stateName]);
           this.saveStateTimeout[stateName] = window.setTimeout(function () {
             _this4.state[stateName] = stateData;
-            var newUrl = document.location.href.split('#')[0];
-            var stateHash = '';
-            ['filters', 'zoom'].forEach(function (k) {
-              if (Object.keys(_this4.state[k]).length) {
-                stateHash += '!mt-' + k + '=' + encodeURIComponent(JSON.stringify(_this4.state[k]));
-              }
-            });
-            ['sort'].forEach(function (k) {
-              if (_this4.state[k]) stateHash += '!mt-' + k + '=' + _this4.state[k];
-            });
-            if (stateHash !== '') stateHash = '#' + stateHash;
-            window.history.pushState(null, null, '' + newUrl + stateHash);
+            _this4.updateState();
           }, 200);
+        }
+
+        /**
+         * Update state into the URL hash
+         */
+
+      }, {
+        key: 'updateState',
+        value: function updateState() {
+          var _this5 = this;
+
+          var newUrl = document.location.href.split('#')[0];
+          var stateHash = '';
+          ['filters', 'zoom'].forEach(function (k) {
+            if (_this5.state[k] && Object.keys(_this5.state[k]).length) {
+              stateHash += '!mt-' + k + '=' + encodeURIComponent(JSON.stringify(_this5.state[k]));
+            }
+          });
+          ['sort'].forEach(function (k) {
+            if (_this5.state[k]) stateHash += '!mt-' + k + '=' + _this5.state[k];
+          });
+          if (stateHash !== '') stateHash = '#' + stateHash;
+          window.history.pushState(null, null, '' + newUrl + stateHash);
         }
       }, {
         key: 'render',

@@ -66,8 +66,8 @@ Here is minimum amount of HTML to render a MapTable with Map, Filter and Table.
 <script src="maptable.min.js"></script> <!-- You can import it from cdnjs.com or bower -->
 <script>
   var viz = d3.maptable('#vizContainer')
-              .csv('/examples/data/ixp.csv')
-              .map({ path: '/examples/maps/world-110m.json' }) // You can remove this line if you want to disable the map
+              .csv('dataset.csv')
+              .map({ path: 'world-110m.json' }) // You can remove this line if you want to disable the map
               .filters() // You can remove this line if you want to disable filters
               .table() // You can remove this line if you want to disable the table
               .render(); // This is important to render the visualization
