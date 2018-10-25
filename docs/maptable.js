@@ -1246,7 +1246,7 @@ this.d3.maptable = (function () {
           if (!f) return false;
           if (!f.legend || !f.min || !f.max) return false;
           if (f.aggregate && f.aggregate.scale) {
-            var scale = typeof f.aggregate.scale === 'function' ? f.aggregate.scale() : f.aggregate.scale;
+            var scale = typeof f.aggregate.scale === 'function' ? f.aggregate.scale.bind(this.maptable)() : f.aggregate.scale;
             if (scale !== 'linear') return false;
           }
           return true;
@@ -1295,13 +1295,13 @@ this.d3.maptable = (function () {
             var attrValue = _this4.options.countries.attr[attrKey];
             if ((typeof attrValue === 'undefined' ? 'undefined' : babelHelpers.typeof(attrValue)) === 'object' && attrValue.legend) {
               var scaleDomain = d3.extent(_this4.dataCountries, function (d) {
-                return Number(d.rollupValue[attrKey]);
+                return Number(d.attrProperties[attrKey].value);
               });
               _this4.legendCountry[attrKey].updateExtents(scaleDomain);
 
               // When we mouseover the legend, it should highlight the indice selected
               countryItem.on('mouseover', function (d) {
-                _this4.legendCountry[attrKey].indiceChange(d.rollupValue[attrKey]);
+                _this4.legendCountry[attrKey].indiceChange(d.attrProperties[attrKey].value);
               }).on('mouseout', function () {
                 _this4.legendCountry[attrKey].indiceChange(NaN);
               });
@@ -1329,7 +1329,7 @@ this.d3.maptable = (function () {
           // We merge both data
           this.dataMarkers.forEach(function (d) {
             d.attr = {};
-            d.rollupValue = {};
+            d.attrProperties = {};
           });
 
           // We calculate attributes values
@@ -1586,11 +1586,16 @@ this.d3.maptable = (function () {
             });
           } else if ((typeof attrValue === 'undefined' ? 'undefined' : babelHelpers.typeof(attrValue)) === 'object') {
             var scale = 'linear';
+            var key = null;
+            var mode = 'count';
             var scaleToUse = d3.scale.linear();
             if (attrValue.aggregate) {
-              var key = typeof attrValue.aggregate.key === 'function' ? attrValue.aggregate.key() : attrValue.aggregate.key;
-              var mode = typeof attrValue.aggregate.mode === 'function' ? attrValue.aggregate.mode() : attrValue.aggregate.mode;
-              scale = typeof attrValue.aggregate.scale === 'function' ? attrValue.aggregate.scale() : attrValue.aggregate.scale;
+              key = typeof attrValue.aggregate.key === 'function' ? attrValue.aggregate.key.bind(this.maptable)() : attrValue.aggregate.key;
+
+              mode = typeof attrValue.aggregate.mode === 'function' ? attrValue.aggregate.mode.bind(this.maptable)() : attrValue.aggregate.mode;
+
+              scale = typeof attrValue.aggregate.scale === 'function' ? attrValue.aggregate.scale.bind(this.maptable)() : attrValue.aggregate.scale;
+
               if (!key || !mode) {
                 throw new Error('MapTable: You should provide values \'key\' & \'mode\' for attr.' + attrKey + '.aggregate');
               }
@@ -1672,17 +1677,30 @@ this.d3.maptable = (function () {
             }
 
             dataset.forEach(function (d) {
-              d.rollupValue[attrKey] = attrValue.rollup(d.values);
+              var aggregatedValue = attrValue.rollup(d.values);
+              if (!d.attrProperties) d.attrProperties = {};
+              if (!d.attrProperties[attrKey]) d.attrProperties[attrKey] = {};
+              d.attrProperties[attrKey].value = aggregatedValue;
+              if (key) {
+                d.attrProperties[attrKey].key = key;
+                d.attrProperties[attrKey].mode = mode;
+                d.attrProperties[attrKey].scale = scale;
+                var c = _this6.maptable.columnDetails[key];
+                d.attrProperties[attrKey].columnDetails = c;
+                var datum = {};
+                datum[key] = aggregatedValue;
+                d.attrProperties[attrKey].formatted = c && c.cellContent ? c.cellContent(datum) : aggregatedValue;
+              }
             });
 
             if (scale === 'rank') {
               var positiveRanks = utils.uniqueValues([0].concat(dataset.map(function (d) {
-                return Math.floor(d.rollupValue[attrKey]);
+                return Math.floor(d.attrProperties[attrKey].value);
               }).filter(function (v) {
                 return v > 0;
               })));
               var negativeRanks = utils.uniqueValues(dataset.map(function (d) {
-                return Math.floor(d.rollupValue[attrKey]);
+                return Math.floor(d.attrProperties[attrKey].value);
               }).filter(function (v) {
                 return v < 0;
               }));
@@ -1693,20 +1711,19 @@ this.d3.maptable = (function () {
               negativeRanks.sort(function (a, b) {
                 return b - a;
               });
-              console.log(positiveRanks);
 
               dataset.forEach(function (d) {
-                if (d.rollupValue[attrKey] !== 0) {
-                  var ranks = d.rollupValue[attrKey] >= 0 ? positiveRanks : negativeRanks;
-                  var _percentile = Math.round(ranks.indexOf(Math.floor(d.rollupValue[attrKey])) / ranks.length * 100);
-                  var newValue = d.rollupValue[attrKey] < 0 ? _percentile - _percentile * 2 : _percentile;
-                  d.rollupValue[attrKey] = newValue;
+                if (d.attrProperties[attrKey].value !== 0) {
+                  var ranks = d.attrProperties[attrKey].value >= 0 ? positiveRanks : negativeRanks;
+                  var _percentile = Math.round(ranks.indexOf(Math.floor(d.attrProperties[attrKey].value)) / ranks.length * 100);
+                  var newValue = d.attrProperties[attrKey].value < 0 ? _percentile - _percentile * 2 : _percentile;
+                  d.attrProperties[attrKey].value = newValue;
                 }
               });
             }
 
             var scaleDomain = d3.extent(dataset, function (d) {
-              return Number(d.rollupValue[attrKey]);
+              return Number(d.attrProperties[attrKey].value);
             });
             if (attrValue.transform) {
               scaleDomain[0] = attrValue.transform(scaleDomain[0], this.maptable.data);
@@ -1741,16 +1758,19 @@ this.d3.maptable = (function () {
 
             dataset.forEach(function (d) {
               var scaledValue = void 0;
-              if (!d.values.length || Number.isNaN(d.rollupValue[attrKey])) {
+              if (!d.values.length || Number.isNaN(d.attrProperties[attrKey].value)) {
                 if (typeof attrValue.empty === 'undefined') {
                   throw new Error('MapTable: no empty property found for attr.' + attrKey);
                 }
                 scaledValue = attrValue.empty;
               } else {
-                var originalValueRaw = d.rollupValue[attrKey];
+                var originalValueRaw = d.attrProperties[attrKey].value;
                 var originalValue = attrValue.transform ? attrValue.transform(originalValueRaw, _this6.maptable.data) : originalValueRaw;
+
                 if (useNegative && originalValue < 0) {
                   scaledValue = scaleNegativeFunction(originalValue);
+                }if (originalValue === 0 && attrValue.empty) {
+                  scaledValue = attrValue.empty;
                 } else {
                   scaledValue = scaleFunction(originalValue);
                 }
@@ -2746,6 +2766,7 @@ this.d3.maptable = (function () {
          * Load state from url
          * @param stateName: name of the state (either filters or zoom)
          * @param isJson: do we need to decode a json from the state?
+         * @return loaded state
          */
 
       }, {
@@ -2754,17 +2775,19 @@ this.d3.maptable = (function () {
           // JSON state
           if (isJson) {
             var v = this.parseState(stateName);
-            if (!v) return;
+            if (!v) return null;
             try {
               var parsedState = JSON.parse(v);
               this.state[stateName] = parsedState;
             } catch (e) {
               console.log('Maptable: Invalid URL State for mt-' + stateName + ' ' + e.message);
+              return null;
             }
           } else {
             var _v = this.parseState(stateName);
             if (_v) this.state[stateName] = _v;
           }
+          return this.state[stateName];
         }
 
         /**
@@ -3009,8 +3032,8 @@ this.d3.maptable = (function () {
           loadState: function loadState(stateName, isJson) {
             return maptableObject.loadState(stateName, isJson);
           },
-          deleteState: function deleteState(stateName) {
-            return maptableObject.deleteState(stateName);
+          removeState: function removeState(stateName) {
+            return maptableObject.removeState(stateName);
           },
           saveState: function saveState(stateName, stateData) {
             return maptableObject.saveState(stateName, stateData);

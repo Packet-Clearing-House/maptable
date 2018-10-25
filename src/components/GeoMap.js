@@ -371,7 +371,9 @@ export default class GeoMap {
     if (!f) return false;
     if (!f.legend || !f.min || !f.max) return false;
     if (f.aggregate && f.aggregate.scale) {
-      const scale = (typeof (f.aggregate.scale) === 'function') ? f.aggregate.scale() : f.aggregate.scale;
+      const scale = (typeof (f.aggregate.scale) === 'function')
+        ? f.aggregate.scale.bind(this.maptable)()
+        : f.aggregate.scale;
       if (scale !== 'linear') return false;
     }
     return true;
@@ -412,12 +414,13 @@ export default class GeoMap {
     Object.keys(this.options.countries.attr).forEach((attrKey) => {
       const attrValue = this.options.countries.attr[attrKey];
       if (typeof (attrValue) === 'object' && attrValue.legend) {
-        const scaleDomain = d3.extent(this.dataCountries, d => Number(d.rollupValue[attrKey]));
+        const scaleDomain = d3.extent(this.dataCountries,
+          d => Number(d.attrProperties[attrKey].value));
         this.legendCountry[attrKey].updateExtents(scaleDomain);
 
         // When we mouseover the legend, it should highlight the indice selected
         countryItem.on('mouseover', (d) => {
-          this.legendCountry[attrKey].indiceChange(d.rollupValue[attrKey]);
+          this.legendCountry[attrKey].indiceChange(d.attrProperties[attrKey].value);
         })
           .on('mouseout', () => {
             this.legendCountry[attrKey].indiceChange(NaN);
@@ -443,7 +446,7 @@ export default class GeoMap {
     // We merge both data
     this.dataMarkers.forEach((d) => {
       d.attr = {};
-      d.rollupValue = {};
+      d.attrProperties = {};
     });
 
     // We calculate attributes values
@@ -712,11 +715,22 @@ export default class GeoMap {
       });
     } else if (typeof (attrValue) === 'object') {
       let scale = 'linear';
+      let key = null;
+      let mode = 'count';
       let scaleToUse = d3.scale.linear();
       if (attrValue.aggregate) {
-        const key = (typeof (attrValue.aggregate.key) === 'function') ? attrValue.aggregate.key() : attrValue.aggregate.key;
-        const mode = (typeof (attrValue.aggregate.mode) === 'function') ? attrValue.aggregate.mode() : attrValue.aggregate.mode;
-        scale = (typeof (attrValue.aggregate.scale) === 'function') ? attrValue.aggregate.scale() : attrValue.aggregate.scale;
+        key = (typeof (attrValue.aggregate.key) === 'function')
+          ? attrValue.aggregate.key.bind(this.maptable)()
+          : attrValue.aggregate.key;
+
+        mode = (typeof (attrValue.aggregate.mode) === 'function')
+          ? attrValue.aggregate.mode.bind(this.maptable)()
+          : attrValue.aggregate.mode;
+
+        scale = (typeof (attrValue.aggregate.scale) === 'function')
+          ? attrValue.aggregate.scale.bind(this.maptable)()
+          : attrValue.aggregate.scale;
+
         if (!key || !mode) {
           throw new Error(`MapTable: You should provide values 'key' & 'mode' for attr.${attrKey}.aggregate`);
         }
@@ -777,33 +791,47 @@ export default class GeoMap {
       }
 
       dataset.forEach((d) => {
-        d.rollupValue[attrKey] = attrValue.rollup(d.values);
+        const aggregatedValue = attrValue.rollup(d.values);
+        if (!d.attrProperties) d.attrProperties = {};
+        if (!d.attrProperties[attrKey]) d.attrProperties[attrKey] = {};
+        d.attrProperties[attrKey].value = aggregatedValue;
+        if (key) {
+          d.attrProperties[attrKey].key = key;
+          d.attrProperties[attrKey].mode = mode;
+          d.attrProperties[attrKey].scale = scale;
+          const c = this.maptable.columnDetails[key];
+          d.attrProperties[attrKey].columnDetails = c;
+          const datum = {};
+          datum[key] = aggregatedValue;
+          d.attrProperties[attrKey].formatted = (c && c.cellContent)
+            ? c.cellContent(datum)
+            : aggregatedValue;
+        }
       });
 
       if (scale === 'rank') {
         const positiveRanks = utils.uniqueValues([0].concat(dataset
-          .map(d => Math.floor(d.rollupValue[attrKey])).filter(v => v > 0)));
+          .map(d => Math.floor(d.attrProperties[attrKey].value)).filter(v => v > 0)));
         const negativeRanks = utils.uniqueValues(dataset
-          .map(d => Math.floor(d.rollupValue[attrKey])).filter(v => v < 0));
+          .map(d => Math.floor(d.attrProperties[attrKey].value)).filter(v => v < 0));
 
         positiveRanks.sort((a, b) => a - b);
         negativeRanks.sort((a, b) => b - a);
-        console.log(positiveRanks);
 
         dataset.forEach((d) => {
-          if (d.rollupValue[attrKey] !== 0) {
-            const ranks = d.rollupValue[attrKey] >= 0 ? positiveRanks : negativeRanks;
+          if (d.attrProperties[attrKey].value !== 0) {
+            const ranks = d.attrProperties[attrKey].value >= 0 ? positiveRanks : negativeRanks;
             const percentile = Math.round(ranks
-              .indexOf(Math.floor(d.rollupValue[attrKey])) / ranks.length * 100);
-            const newValue = d.rollupValue[attrKey] < 0
+              .indexOf(Math.floor(d.attrProperties[attrKey].value)) / ranks.length * 100);
+            const newValue = d.attrProperties[attrKey].value < 0
               ? percentile - (percentile * 2)
               : percentile;
-            d.rollupValue[attrKey] = newValue;
+            d.attrProperties[attrKey].value = newValue;
           }
         });
       }
 
-      const scaleDomain = d3.extent(dataset, d => Number(d.rollupValue[attrKey]));
+      const scaleDomain = d3.extent(dataset, d => Number(d.attrProperties[attrKey].value));
       if (attrValue.transform) {
         scaleDomain[0] = attrValue.transform(scaleDomain[0], this.maptable.data);
         scaleDomain[1] = attrValue.transform(scaleDomain[1], this.maptable.data);
@@ -844,17 +872,20 @@ export default class GeoMap {
 
       dataset.forEach((d) => {
         let scaledValue;
-        if (!d.values.length || Number.isNaN(d.rollupValue[attrKey])) {
+        if (!d.values.length || Number.isNaN(d.attrProperties[attrKey].value)) {
           if (typeof (attrValue.empty) === 'undefined') {
             throw new Error(`MapTable: no empty property found for attr.${attrKey}`);
           }
           scaledValue = attrValue.empty;
         } else {
-          const originalValueRaw = d.rollupValue[attrKey];
+          const originalValueRaw = d.attrProperties[attrKey].value;
           const originalValue = (attrValue.transform)
             ? attrValue.transform(originalValueRaw, this.maptable.data) : originalValueRaw;
+
           if (useNegative && originalValue < 0) {
             scaledValue = scaleNegativeFunction(originalValue);
+          } if (originalValue === 0 && attrValue.empty) {
+            scaledValue = attrValue.empty;
           } else {
             scaledValue = scaleFunction(originalValue);
           }

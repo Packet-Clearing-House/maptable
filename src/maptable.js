@@ -102,22 +102,25 @@ export default class MapTable {
    * Load state from url
    * @param stateName: name of the state (either filters or zoom)
    * @param isJson: do we need to decode a json from the state?
+   * @return loaded state
    */
   loadState(stateName, isJson) {
     // JSON state
     if (isJson) {
       const v = this.parseState(stateName);
-      if (!v) return;
+      if (!v) return null;
       try {
         const parsedState = JSON.parse(v);
         this.state[stateName] = parsedState;
       } catch (e) {
         console.log(`Maptable: Invalid URL State for mt-${stateName} ${e.message}`);
+        return null;
       }
     } else {
       const v = this.parseState(stateName);
       if (v) this.state[stateName] = v;
     }
+    return this.state[stateName];
   }
 
   /**
