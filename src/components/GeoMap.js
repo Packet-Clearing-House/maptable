@@ -626,6 +626,8 @@ export default class GeoMap {
       encodedTranslation[1]];
     if (exportedData[0] !== 1 && exportedData[1] !== 0 && exportedData[2] !== 0) {
       this.maptable.saveState('zoom', exportedData);
+    } else {
+      this.maptable.removeState('zoom');
     }
   }
 
