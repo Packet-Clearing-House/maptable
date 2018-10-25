@@ -1811,7 +1811,7 @@ this.d3.maptable = (function () {
               inlineFilters = this.maptable.filters.getDescription();
             }
 
-            this.container.querySelector('#mt-map-title').innerHTML = this.options.title.content(showing, total, inlineFilters, this.maptable.data, this.maptable.rawData);
+            this.container.querySelector('#mt-map-title').innerHTML = this.options.title.content(showing, total, inlineFilters, this.maptable.data, this.maptable.rawData, this.dataCountries);
           }
         }
       }, {

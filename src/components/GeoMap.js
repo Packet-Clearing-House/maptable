@@ -919,7 +919,8 @@ export default class GeoMap {
       }
 
       this.container.querySelector('#mt-map-title').innerHTML = this.options.title
-        .content(showing, total, inlineFilters, this.maptable.data, this.maptable.rawData);
+        .content(showing, total, inlineFilters, this.maptable.data,
+          this.maptable.rawData, this.dataCountries);
     }
   }
 
