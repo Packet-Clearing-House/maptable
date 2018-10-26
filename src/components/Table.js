@@ -17,6 +17,9 @@ export default class Table {
       } else {
         this.sorting = [this.options.defaultSorting];
       }
+      this.sorting.forEach((s) => {
+        if (!s.mode) s.mode = 'asc';
+      });
     } else {
       this.sorting = [
         {
@@ -27,7 +30,7 @@ export default class Table {
     }
 
     this.initialSorting = this.sorting.map(s => `${s.key},${s.mode}`).join(';');
-
+    console.log(this.initialSorting);
     this.isSorting = false;
 
     this.containerSelector = maptable.options.target;
