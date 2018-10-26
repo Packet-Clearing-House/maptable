@@ -2446,7 +2446,6 @@ this.d3.maptable = (function () {
         this.initialSorting = this.sorting.map(function (s) {
           return s.key + ',' + s.mode;
         }).join(';');
-        console.log(this.initialSorting);
         this.isSorting = false;
 
         this.containerSelector = maptable.options.target;

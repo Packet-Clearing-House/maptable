@@ -30,7 +30,6 @@ export default class Table {
     }
 
     this.initialSorting = this.sorting.map(s => `${s.key},${s.mode}`).join(';');
-    console.log(this.initialSorting);
     this.isSorting = false;
 
     this.containerSelector = maptable.options.target;
