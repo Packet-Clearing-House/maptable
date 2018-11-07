@@ -1616,11 +1616,14 @@ this.d3.maptable = (function () {
               } else if (mode === 'avg') {
                 attrValue.rollup = function (groupedData) {
                   if (!groupedData.length) return 0;
-                  return groupedData.map(function (d) {
+                  var validData = groupedData.filter(function (d) {
+                    return !Number.isNaN(Number(d[key]));
+                  });
+                  return validData.map(function (d) {
                     return Number(d[key]);
                   }).reduce(function (a, c) {
                     return a + c;
-                  }, 0) / groupedData.length;
+                  }, 0) / validData.length;
                 };
               } else if (mode === 'count') {
                 attrValue.rollup = function (groupedData) {
@@ -1700,12 +1703,12 @@ this.d3.maptable = (function () {
             });
             if (scale === 'rank') {
               var positiveRanks = utils.uniqueValues([0].concat(dataset.map(function (d) {
-                return Math.floor(d.attrProperties[attrKey].value);
+                return Math.floor(d.attrProperties[attrKey].value * 100) / 100;
               }).filter(function (v) {
                 return v > 0;
               })));
               var negativeRanks = utils.uniqueValues(dataset.map(function (d) {
-                return Math.floor(d.attrProperties[attrKey].value);
+                return Math.floor(d.attrProperties[attrKey].value * 100) / 100;
               }).filter(function (v) {
                 return v < 0;
               }));
@@ -1720,7 +1723,8 @@ this.d3.maptable = (function () {
               dataset.forEach(function (d) {
                 if (d.attrProperties[attrKey].value !== 0) {
                   var ranks = d.attrProperties[attrKey].value >= 0 ? positiveRanks : negativeRanks;
-                  var _percentile = Math.round(ranks.indexOf(Math.floor(d.attrProperties[attrKey].value)) / ranks.length * 100);
+                  var pos = ranks.indexOf(Math.floor(d.attrProperties[attrKey].value * 100) / 100);
+                  var _percentile = Math.round(pos / ranks.length * 100);
                   var newValue = d.attrProperties[attrKey].value < 0 ? _percentile - _percentile * 2 : _percentile;
                   d.attrProperties[attrKey].value = newValue;
                 }

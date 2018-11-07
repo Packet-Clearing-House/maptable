@@ -745,8 +745,10 @@ export default class GeoMap {
         } else if (mode === 'avg') {
           attrValue.rollup = (groupedData) => {
             if (!groupedData.length) return 0;
-            return groupedData
-              .map(d => Number(d[key])).reduce((a, c) => a + c, 0) / groupedData.length;
+            const validData = groupedData.filter(d => !Number.isNaN(Number(d[key])));
+            return validData
+              .map(d => Number(d[key]))
+              .reduce((a, c) => a + c, 0) / validData.length;
           };
         } else if (mode === 'count') {
           attrValue.rollup = groupedData => groupedData.length;
@@ -814,9 +816,9 @@ export default class GeoMap {
       });
       if (scale === 'rank') {
         const positiveRanks = utils.uniqueValues([0].concat(dataset
-          .map(d => Math.floor(d.attrProperties[attrKey].value)).filter(v => v > 0)));
+          .map(d => Math.floor(d.attrProperties[attrKey].value * 100) / 100).filter(v => v > 0)));
         const negativeRanks = utils.uniqueValues(dataset
-          .map(d => Math.floor(d.attrProperties[attrKey].value)).filter(v => v < 0));
+          .map(d => Math.floor(d.attrProperties[attrKey].value * 100) / 100).filter(v => v < 0));
 
         positiveRanks.sort((a, b) => a - b);
         negativeRanks.sort((a, b) => b - a);
@@ -824,8 +826,8 @@ export default class GeoMap {
         dataset.forEach((d) => {
           if (d.attrProperties[attrKey].value !== 0) {
             const ranks = d.attrProperties[attrKey].value >= 0 ? positiveRanks : negativeRanks;
-            const percentile = Math.round(ranks
-              .indexOf(Math.floor(d.attrProperties[attrKey].value)) / ranks.length * 100);
+            const pos = ranks.indexOf(Math.floor(d.attrProperties[attrKey].value * 100) / 100);
+            const percentile = Math.round(pos / ranks.length * 100);
             const newValue = d.attrProperties[attrKey].value < 0
               ? percentile - (percentile * 2)
               : percentile;
