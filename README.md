@@ -122,7 +122,7 @@ The MapTable `viz` declaration in the above example is a chain of functions. The
 ```js
 var viz = d3.maptable('#vizContainer')
         .json('dir_data.json', (d) => parseInt(d.traffic) > 0)
-        .map({ path: 'ne_110m_admin_0_countries.json' })
+        .map({ path: 'countries.json' })
         .render();
 ```
 

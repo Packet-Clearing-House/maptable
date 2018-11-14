@@ -1014,10 +1014,8 @@ this.d3.maptable = (function () {
         // Let's build things
         this.loadGeometries();
 
-        // On complete
-        if (this.options.onComplete && this.options.onComplete.constructor === Function) {
-          this.options.onComplete.bind(this.maptable)();
-        }
+        // render is triggered by MapTable
+        // this.render();
       }
 
       babelHelpers.createClass(GeoMap, [{
@@ -1567,7 +1565,7 @@ this.d3.maptable = (function () {
           }
 
           // save state
-          if (this.options.saveState) this.saveState();
+          if (this.maptable.firstExecution && this.options.saveState) this.saveState();
         }
       }, {
         key: 'setAttrValues',
@@ -1800,6 +1798,10 @@ this.d3.maptable = (function () {
           if (this.options.autoFitContent) {
             this.fitContent();
             this.rescale();
+          }
+          // On render
+          if (this.options.onRender && this.options.onRender.constructor === Function) {
+            this.options.onRender.bind(this.maptable)();
           }
         }
       }, {
@@ -2506,11 +2508,6 @@ this.d3.maptable = (function () {
 
         // render is triggered by MapTable
         // this.render();
-
-        // On complete
-        if (this.options.onComplete && this.options.onComplete.constructor === Function) {
-          this.options.onComplete.bind(this.maptable)();
-        }
       }
 
       /**
@@ -2556,15 +2553,24 @@ this.d3.maptable = (function () {
           // Apply Sort
           this.applySort();
 
+          var tableData = this.maptable.data;
+          if (this.options.distinctBy) {
+            tableData = d3.nest().key(function (d) {
+              return d[_this2.options.distinctBy];
+            }).entries(this.maptable.data).map(function (g) {
+              return g.values[0];
+            });
+          }
+
           // Enter
-          this.body.selectAll('tr').data(this.maptable.data).enter().append('tr');
+          this.body.selectAll('tr').data(tableData).enter().append('tr');
 
           // Exit
-          this.body.selectAll('tr').data(this.maptable.data).exit().remove();
+          this.body.selectAll('tr').data(tableData).exit().remove();
 
           // Update
           var uniqueCollapsedRows = [];
-          this.body.selectAll('tr').data(this.maptable.data).attr('class', function (row) {
+          this.body.selectAll('tr').data(tableData).attr('class', function (row) {
             if (_this2.options.rowClassName) {
               return 'line ' + _this2.options.rowClassName(row);
             }
@@ -2593,6 +2599,11 @@ this.d3.maptable = (function () {
             });
             return tds;
           });
+
+          // On render
+          if (this.options.onRender && this.options.onRender.constructor === Function) {
+            this.options.onRender.bind(this.maptable)();
+          }
         }
       }, {
         key: 'applySort',
@@ -2902,17 +2913,25 @@ this.d3.maptable = (function () {
 
           if (this.map) {
             this.map.render();
+            // On complete
+            if (!this.firstExecution && this.options.map.onComplete && this.options.map.onComplete.constructor === Function) {
+              this.options.map.onComplete.bind(this)();
+            }
           }
 
           if (this.table) {
             this.table.render();
+            // On complete
+            if (!this.firstExecution && this.options.table.onComplete && this.options.table.onComplete.constructor === Function) {
+              this.options.table.onComplete.bind(this)();
+            }
           }
 
           // On complete
           if (!this.firstExecution && this.options.onComplete && this.options.onComplete.constructor === Function) {
             this.options.onComplete.bind(this)();
-            this.firstExecution = true;
           }
+          this.firstExecution = true;
         }
       }, {
         key: 'setColumnDetails',
