@@ -202,10 +202,24 @@ export default class MapTable {
 
     if (this.map) {
       this.map.render();
+      // On complete
+      if (!this.firstExecution
+        && this.options.map.onComplete
+        && this.options.map.onComplete.constructor === Function
+      ) {
+        this.options.map.onComplete.bind(this)();
+      }
     }
 
     if (this.table) {
       this.table.render();
+      // On complete
+      if (!this.firstExecution
+        && this.options.table.onComplete
+        && this.options.table.onComplete.constructor === Function
+      ) {
+        this.options.table.onComplete.bind(this)();
+      }
     }
 
     // On complete
@@ -214,8 +228,8 @@ export default class MapTable {
       && this.options.onComplete.constructor === Function
     ) {
       this.options.onComplete.bind(this)();
-      this.firstExecution = true;
     }
+    this.firstExecution = true;
   }
 
   setColumnDetails() {

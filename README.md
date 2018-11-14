@@ -241,7 +241,8 @@ Functions that have `groupedData` as parameter, means that `groupedData` is a JS
 #### Options
 
 - `path:` _(string, **required**)_ URL of the TOPOJSON map, you can get them from Mike Bostock's repo: [world atlas](https://github.com/mbostock/world-atlas) and [us atlas](https://github.com/mbostock/us-atlas). Or use [this tool](https://github.com/melalj/topojson-map-generator) to generate these files as we did on the examples.
-- `onComplete:` _(function, default: null)_ Callback function when the map finished rendering.
+- `onComplete:` _(function, default: null)_ Callback function when the map first loaded.
+- `onRender:` _(function, default: null)_ Callback function when the map finished rendering.
 - `width:` _(integer, default:'window.innerWidth')_ Map Width.
 - `height:` _(integer, default:'window.innerHeight')_ Map Height.
 - `saveState:` _(bool, default: true)_ Save zoom state into the URL
@@ -484,7 +485,8 @@ If you want to add a table on your visualization:
 ### Options
 
 - `show:` _([string, ...], default: null)_ Set the order and the columns that we want to see in the table.
-- `onComplete:` _(function, default: null)_ Callback function when the table finished rendering.
+- `onComplete:` _(function, default: null)_ Callback function when the table first loaded.
+- `onRender:` _(function, default: null)_ Callback function when the table finished rendering.
 - `className:` _(string, default: 'table table-striped table-bordered')_ Table class name
 - `rowClassName:` _(function(d), default: null)_ Function that returns the row class name depending on its content. Useful to highlight rows.
 - `defaultSorting:` _(object or table or object, default: see below)_ How we sort things on the table. You can specify a an array of two objects for secondary sorting.

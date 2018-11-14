@@ -130,10 +130,8 @@ export default class GeoMap {
     // Let's build things
     this.loadGeometries();
 
-    // On complete
-    if (this.options.onComplete && this.options.onComplete.constructor === Function) {
-      this.options.onComplete.bind(this.maptable)();
-    }
+    // render is triggered by MapTable
+    // this.render();
   }
 
   scaleAttributes() {
@@ -699,7 +697,7 @@ export default class GeoMap {
     }
 
     // save state
-    if (this.options.saveState) this.saveState();
+    if (this.maptable.firstExecution && this.options.saveState) this.saveState();
   }
 
   setAttrValues(attrKey, attrValue, dataset) {
@@ -914,6 +912,10 @@ export default class GeoMap {
     if (this.options.autoFitContent) {
       this.fitContent();
       this.rescale();
+    }
+    // On render
+    if (this.options.onRender && this.options.onRender.constructor === Function) {
+      this.options.onRender.bind(this.maptable)();
     }
   }
 

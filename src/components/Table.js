@@ -93,11 +93,6 @@ export default class Table {
 
     // render is triggered by MapTable
     // this.render();
-
-    // On complete
-    if (this.options.onComplete && this.options.onComplete.constructor === Function) {
-      this.options.onComplete.bind(this.maptable)();
-    }
   }
 
   /**
@@ -132,22 +127,31 @@ export default class Table {
     // Apply Sort
     this.applySort();
 
+
+    let tableData = this.maptable.data;
+    if (this.options.distinctBy) {
+      tableData = d3.nest()
+        .key(d => d[this.options.distinctBy])
+        .entries(this.maptable.data)
+        .map(g => g.values[0]);
+    }
+
     // Enter
     this.body.selectAll('tr')
-      .data(this.maptable.data)
+      .data(tableData)
       .enter()
       .append('tr');
 
     // Exit
     this.body.selectAll('tr')
-      .data(this.maptable.data)
+      .data(tableData)
       .exit()
       .remove();
 
     // Update
     const uniqueCollapsedRows = [];
     this.body.selectAll('tr')
-      .data(this.maptable.data)
+      .data(tableData)
       .attr('class', (row) => {
         if (this.options.rowClassName) {
           return `line ${this.options.rowClassName(row)}`;
@@ -182,6 +186,11 @@ export default class Table {
         });
         return tds;
       });
+
+    // On render
+    if (this.options.onRender && this.options.onRender.constructor === Function) {
+      this.options.onRender.bind(this.maptable)();
+    }
   }
 
   applySort() {
