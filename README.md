@@ -597,7 +597,7 @@ Run these commands as your unprivileged user you're doing your development as:
   * Fix dev environment for Ubuntu - [Issue #11](https://github.com/Packet-Clearing-House/maptable/issues/11)
   * Restore ``example`` directory for use with development - [Issue #11](https://github.com/Packet-Clearing-House/maptable/issues/11)
   * Fix some npm packaging breakage - [Issue #11](https://github.com/Packet-Clearing-House/maptable/issues/11)
-* Version 1.0.1 Mar 25 2016
+* Version 1.0.1 March 25 2016
   * First Full featured release
-* Version 1.0.0
+* Version 1.0.0  December 9 2014
   * Initial commit
