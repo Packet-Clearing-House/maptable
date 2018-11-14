@@ -95,13 +95,40 @@ this.d3.maptable = (function () {
       return upperK.replace(/_/g, ' ');
     }
 
-    /**
-     *
-     * @param k
-     * @returns {string}
-     */
     function sanitizeKey(k) {
       return k.toLowerCase().replace(/ /g, '_').replace(/"/g, '').replace(/'/g, '');
+    }
+
+    function toNumber(str) {
+      if (!str || str === '') return null;
+      return Number(str.toString().replace(/[^0-9.]+|\s+/gmi, ''));
+    }
+
+    function quantile(array, percentile) {
+      array.sort(function (a, b) {
+        return a - b;
+      });
+      var index = percentile / 100.0 * (array.length - 1);
+      var result = void 0;
+      if (Math.floor(index) === index) {
+        result = array[index];
+      } else {
+        var i = Math.floor(index);
+        var fraction = index - i;
+        result = array[i] + (array[i + 1] - array[i]) * fraction;
+      }
+      return result;
+    }
+
+    function uniqueValues(arr) {
+      if (!arr) return arr;
+      var a = [];
+      for (var i = 0, l = arr.length; i < l; i += 1) {
+        if (a.indexOf(arr[i]) === -1 && arr[i] !== '') {
+          a.push(arr[i]);
+        }
+      }
+      return a;
     }
 
     var utils = {
@@ -109,7 +136,10 @@ this.d3.maptable = (function () {
       appendOptions: appendOptions,
       extendRecursive: extendRecursive,
       sanitizeKey: sanitizeKey,
-      keyToTile: keyToTile
+      toNumber: toNumber,
+      keyToTile: keyToTile,
+      quantile: quantile,
+      uniqueValues: uniqueValues
     };
 
     var defaultOptions = {
@@ -984,10 +1014,8 @@ this.d3.maptable = (function () {
         // Let's build things
         this.loadGeometries();
 
-        // On complete
-        if (this.options.onComplete && this.options.onComplete.constructor === Function) {
-          this.options.onComplete.bind(this.maptable)();
-        }
+        // render is triggered by MapTable
+        // this.render();
       }
 
       babelHelpers.createClass(GeoMap, [{
@@ -1205,9 +1233,21 @@ this.d3.maptable = (function () {
           // Build Country Legend
           this.legendCountry = {};
 
-          if (this.options.countries.attr.fill && this.options.countries.attr.fill.legend && this.options.countries.attr.fill.min && this.options.countries.attr.fill.max) {
+          if (this.shouldRenderLegend()) {
             this.legendCountry.fill = new Legend(this);
           }
+        }
+      }, {
+        key: 'shouldRenderLegend',
+        value: function shouldRenderLegend() {
+          var f = this.options.countries.attr.fill;
+          if (!f) return false;
+          if (!f.legend || !f.min || !f.max) return false;
+          if (f.aggregate && f.aggregate.scale) {
+            var scale = typeof f.aggregate.scale === 'function' ? f.aggregate.scale.bind(this.maptable)() : f.aggregate.scale;
+            if (scale !== 'linear') return false;
+          }
+          return true;
         }
 
         /**
@@ -1253,13 +1293,13 @@ this.d3.maptable = (function () {
             var attrValue = _this4.options.countries.attr[attrKey];
             if ((typeof attrValue === 'undefined' ? 'undefined' : babelHelpers.typeof(attrValue)) === 'object' && attrValue.legend) {
               var scaleDomain = d3.extent(_this4.dataCountries, function (d) {
-                return Number(d.rollupValue[attrKey]);
+                return Number(d.attrProperties[attrKey].value);
               });
               _this4.legendCountry[attrKey].updateExtents(scaleDomain);
 
               // When we mouseover the legend, it should highlight the indice selected
               countryItem.on('mouseover', function (d) {
-                _this4.legendCountry[attrKey].indiceChange(d.rollupValue[attrKey]);
+                _this4.legendCountry[attrKey].indiceChange(d.attrProperties[attrKey].value);
               }).on('mouseout', function () {
                 _this4.legendCountry[attrKey].indiceChange(NaN);
               });
@@ -1287,7 +1327,7 @@ this.d3.maptable = (function () {
           // We merge both data
           this.dataMarkers.forEach(function (d) {
             d.attr = {};
-            d.rollupValue = {};
+            d.attrProperties = {};
           });
 
           // We calculate attributes values
@@ -1437,23 +1477,13 @@ this.d3.maptable = (function () {
 
       }, {
         key: 'restoreState',
-        value: function restoreState() {
-          var params = document.location.href.replace(/%21mt/g, '!mt').split('!mt-zoom=');
-          var defaultZoomRaw = params[1] ? params[1].split('!mt')[0] : null;
-          if (defaultZoomRaw) {
-            try {
-              var defaultZoom = JSON.parse(decodeURIComponent(defaultZoomRaw));
-              if (defaultZoom && defaultZoom.length === 3) {
-                this.scale = defaultZoom[0];
-                var originalTranslation = this.decodeTranslation([defaultZoom[1], defaultZoom[2]]);
-                this.transX = originalTranslation[0];
-                this.transY = originalTranslation[1];
-                this.zoomListener.scale(defaultZoom[0]).translate(originalTranslation).event(this.svg);
-              }
-            } catch (e) {
-              console.log('Maptable: Invalid URL State for mt-zoom ' + e.message);
-            }
-          }
+        value: function restoreState(defaultZoom) {
+          if (!defaultZoom || defaultZoom.length !== 3) return;
+          this.scale = defaultZoom[0];
+          var originalTranslation = this.decodeTranslation([defaultZoom[1], defaultZoom[2]]);
+          this.transX = originalTranslation[0];
+          this.transY = originalTranslation[1];
+          this.zoomListener.scale(defaultZoom[0]).translate(originalTranslation).event(this.svg);
         }
 
         /**
@@ -1467,6 +1497,8 @@ this.d3.maptable = (function () {
           var exportedData = [this.scale, encodedTranslation[0], encodedTranslation[1]];
           if (exportedData[0] !== 1 && exportedData[1] !== 0 && exportedData[2] !== 0) {
             this.maptable.saveState('zoom', exportedData);
+          } else {
+            this.maptable.removeState('zoom');
           }
         }
       }, {
@@ -1533,7 +1565,7 @@ this.d3.maptable = (function () {
           }
 
           // save state
-          if (this.options.saveState) this.saveState();
+          if (this.maptable.firstExecution && this.options.saveState) this.saveState();
         }
       }, {
         key: 'setAttrValues',
@@ -1551,6 +1583,96 @@ this.d3.maptable = (function () {
               d.attr[attrKey] = attrValue(d);
             });
           } else if ((typeof attrValue === 'undefined' ? 'undefined' : babelHelpers.typeof(attrValue)) === 'object') {
+            var scale = 'linear';
+            var key = null;
+            var mode = 'count';
+            var scaleToUse = d3.scale.linear();
+            if (attrValue.aggregate) {
+              key = typeof attrValue.aggregate.key === 'function' ? attrValue.aggregate.key.bind(this.maptable)() : attrValue.aggregate.key;
+
+              mode = typeof attrValue.aggregate.mode === 'function' ? attrValue.aggregate.mode.bind(this.maptable)() : attrValue.aggregate.mode;
+
+              if (typeof attrValue.aggregate.scale === 'function') {
+                scale = attrValue.aggregate.scale.bind(this.maptable)();
+              } else if (attrValue.aggregate.scale) {
+                scale = attrValue.aggregate.scale;
+              }
+
+              if (!key || !mode) {
+                throw new Error('MapTable: You should provide values \'key\' & \'mode\' for attr.' + attrKey + '.aggregate');
+              }
+
+              // Custom aggregate mode
+              if (mode === 'sum') {
+                attrValue.rollup = function (groupedData) {
+                  return groupedData.map(function (d) {
+                    return Number(d[key]);
+                  }).reduce(function (a, c) {
+                    return a + c;
+                  }, 0);
+                };
+              } else if (mode === 'avg') {
+                attrValue.rollup = function (groupedData) {
+                  if (!groupedData.length) return 0;
+                  var validData = groupedData.filter(function (d) {
+                    return !Number.isNaN(Number(d[key]));
+                  });
+                  return validData.map(function (d) {
+                    return Number(d[key]);
+                  }).reduce(function (a, c) {
+                    return a + c;
+                  }, 0) / validData.length;
+                };
+              } else if (mode === 'count') {
+                attrValue.rollup = function (groupedData) {
+                  return groupedData.length;
+                };
+              } else if (mode === 'min') {
+                attrValue.rollup = function (groupedData) {
+                  if (!groupedData.length) return 0;
+                  var groupedValues = groupedData.map(function (d) {
+                    return Number(d[key]);
+                  });
+                  return groupedValues.reduce(function (min, p) {
+                    return p < min ? p : min;
+                  }, groupedValues[0]);
+                };
+              } else if (mode === 'max') {
+                attrValue.rollup = function (groupedData) {
+                  if (!groupedData.length) return 0;
+                  var groupedValues = groupedData.map(function (d) {
+                    return Number(d[key]);
+                  });
+                  return groupedValues.reduce(function (max, p) {
+                    return p > max ? p : max;
+                  }, groupedValues[0]);
+                };
+              } else if (mode.indexOf('percentile') !== -1) {
+                var percentile = utils.toNumber(mode);
+                attrValue.rollup = function (groupedData) {
+                  if (!groupedData.length) return 0;
+                  var groupedValues = groupedData.map(function (d) {
+                    return Number(d[key]);
+                  });
+                  return utils.quantile(groupedValues, percentile);
+                };
+              } else if (typeof attrValue.rollup === 'function') {
+                attrValue.rollup = attrValue.rollup.bind(this.maptable);
+              }
+
+              // Custom scale
+              if (scale) {
+                if (scale.indexOf('log') !== -1) {
+                  scaleToUse = d3.scale.log().base(utils.toNumber(scale) || 10);
+                } else if (scale.indexOf('pow') !== -1) {
+                  scaleToUse = d3.scale.pow().exponent(utils.toNumber(scale) || 1);
+                } else if (scale === 'sqrt') {
+                  scaleToUse = d3.scale.sqrt();
+                }
+                // Rank scale neeed additional transformations
+              }
+            }
+
             // Dynamic value based on a scale
             if (!attrValue.rollup) {
               attrValue.rollup = function (d) {
@@ -1562,14 +1684,57 @@ this.d3.maptable = (function () {
             }
 
             dataset.forEach(function (d) {
-              d.rollupValue[attrKey] = attrValue.rollup(d.values);
+              var aggregatedValue = attrValue.rollup(d.values);
+              if (!d.attrProperties) d.attrProperties = {};
+              if (!d.attrProperties[attrKey]) d.attrProperties[attrKey] = {};
+              d.attrProperties[attrKey].value = aggregatedValue;
+              if (key) {
+                d.attrProperties[attrKey].key = key;
+                d.attrProperties[attrKey].mode = mode;
+                d.attrProperties[attrKey].scale = scale;
+                var c = _this6.maptable.columnDetails[key];
+                d.attrProperties[attrKey].columnDetails = c;
+                var datum = {};
+                datum[key] = aggregatedValue;
+                d.attrProperties[attrKey].formatted = c && c.cellContent ? c.cellContent.bind(_this6.maptable)(datum) : aggregatedValue;
+              }
             });
+            if (scale === 'rank') {
+              var positiveRanks = utils.uniqueValues([0].concat(dataset.map(function (d) {
+                return Math.floor(d.attrProperties[attrKey].value * 100) / 100;
+              }).filter(function (v) {
+                return v > 0;
+              })));
+              var negativeRanks = utils.uniqueValues(dataset.map(function (d) {
+                return Math.floor(d.attrProperties[attrKey].value * 100) / 100;
+              }).filter(function (v) {
+                return v < 0;
+              }));
+
+              positiveRanks.sort(function (a, b) {
+                return a - b;
+              });
+              negativeRanks.sort(function (a, b) {
+                return b - a;
+              });
+
+              dataset.forEach(function (d) {
+                if (d.attrProperties[attrKey].value !== 0) {
+                  var ranks = d.attrProperties[attrKey].value >= 0 ? positiveRanks : negativeRanks;
+                  var pos = ranks.indexOf(Math.floor(d.attrProperties[attrKey].value * 100) / 100);
+                  var _percentile = Math.round(pos / ranks.length * 100);
+                  var newValue = d.attrProperties[attrKey].value < 0 ? _percentile - _percentile * 2 : _percentile;
+                  d.attrProperties[attrKey].value = newValue;
+                }
+              });
+            }
+
             var scaleDomain = d3.extent(dataset, function (d) {
-              return Number(d.rollupValue[attrKey]);
+              return Number(d.attrProperties[attrKey].value);
             });
             if (attrValue.transform) {
-              scaleDomain[0] = attrValue.transform(scaleDomain[0], this.maptable.data);
-              scaleDomain[1] = attrValue.transform(scaleDomain[1], this.maptable.data);
+              scaleDomain[0] = attrValue.transform.bind(this.maptable)(scaleDomain[0], this.maptable.data);
+              scaleDomain[1] = attrValue.transform.bind(this.maptable)(scaleDomain[1], this.maptable.data);
             }
 
             var minValue = attrValue.min;
@@ -1589,28 +1754,32 @@ this.d3.maptable = (function () {
             var useNegative = attrValue.maxNegative && attrValue.minNegative;
             var scaleFunction = void 0;
             var scaleNegativeFunction = void 0;
-            if (useNegative) {
-              scaleFunction = d3.scale.linear().domain([0, scaleDomain[1]]).range([minValue, maxValue]);
 
-              scaleNegativeFunction = d3.scale.linear().domain([scaleDomain[0], 0]).range([attrValue.maxNegative, attrValue.minNegative]);
+            if (useNegative) {
+              scaleFunction = scaleToUse.copy().domain([0, scaleDomain[1]]).range([minValue, maxValue]);
+              scaleNegativeFunction = scaleToUse.copy().domain([scaleDomain[0], 0]).range([attrValue.maxNegative, attrValue.minNegative]);
             } else {
-              scaleFunction = d3.scale.linear().domain(scaleDomain).range([minValue, maxValue]);
+              scaleFunction = scaleToUse.domain(scaleDomain).range([minValue, maxValue]);
             }
 
             dataset.forEach(function (d) {
               var scaledValue = void 0;
-              if (!d.values.length || Number.isNaN(d.rollupValue[attrKey])) {
+              if (!d.values.length || Number.isNaN(d.attrProperties[attrKey].value)) {
                 if (typeof attrValue.empty === 'undefined') {
                   throw new Error('MapTable: no empty property found for attr.' + attrKey);
                 }
                 scaledValue = attrValue.empty;
               } else {
-                var originalValueRaw = d.rollupValue[attrKey];
-                var originalValue = attrValue.transform ? attrValue.transform(originalValueRaw, _this6.maptable.data) : originalValueRaw;
+                var originalValueRaw = d.attrProperties[attrKey].value;
+                var originalValue = attrValue.transform ? attrValue.transform.bind(_this6.maptable)(originalValueRaw, _this6.maptable.data) : originalValueRaw;
+
                 if (useNegative && originalValue < 0) {
                   scaledValue = scaleNegativeFunction(originalValue);
                 } else {
                   scaledValue = scaleFunction(originalValue);
+                }
+                if (originalValue === 0 && attrValue.empty) {
+                  scaledValue = attrValue.empty;
                 }
               }
               d.attr[attrKey] = scaledValue;
@@ -1629,6 +1798,10 @@ this.d3.maptable = (function () {
           if (this.options.autoFitContent) {
             this.fitContent();
             this.rescale();
+          }
+          // On render
+          if (this.options.onRender && this.options.onRender.constructor === Function) {
+            this.options.onRender.bind(this.maptable)();
           }
         }
       }, {
@@ -1649,7 +1822,7 @@ this.d3.maptable = (function () {
               inlineFilters = this.maptable.filters.getDescription();
             }
 
-            this.container.querySelector('#mt-map-title').innerHTML = this.options.title.content(showing, total, inlineFilters, this.maptable.data, this.maptable.rawData);
+            this.container.querySelector('#mt-map-title').innerHTML = this.options.title.content.bind(this.maptable)(showing, total, inlineFilters, this.maptable.data, this.maptable.rawData, this.dataCountries);
           }
         }
       }, {
@@ -1657,7 +1830,9 @@ this.d3.maptable = (function () {
         value: function activateTooltip(target, tooltipNode, tooltipContent, isCountry) {
           var self = this;
           target.on(isCountry ? 'mousemove' : 'mouseover', function (d) {
-            tooltipNode.html(tooltipContent(d)).attr('style', 'display:block;position:fixed;');
+            var content = tooltipContent.bind(this.maptable)(d);
+            if (!content) return;
+            tooltipNode.html(content).attr('style', 'display:block;position:fixed;');
 
             var mouseLeft = void 0;
             var mouseTop = void 0;
@@ -1944,16 +2119,9 @@ this.d3.maptable = (function () {
 
       }, {
         key: 'restoreState',
-        value: function restoreState() {
-          var params = document.location.href.replace(/%21mt/g, '!mt').split('!mt-filters=');
-          var defaultCriteria = params[1] ? params[1].split('!mt')[0] : null;
-          if (defaultCriteria) {
-            try {
-              this.setFilters(JSON.parse(decodeURIComponent(defaultCriteria)));
-            } catch (e) {
-              console.log('Maptable: Invalid URL State for mt-filters ' + e.message);
-            }
-          }
+        value: function restoreState(defaultCriteria) {
+          if (!defaultCriteria) return;
+          this.setFilters(defaultCriteria);
         }
 
         /**
@@ -2264,10 +2432,26 @@ this.d3.maptable = (function () {
 
         this.maptable = maptable;
         this.options = options;
-        this.sorting = [{
-          key: Object.keys(this.maptable.data[0])[0],
-          mode: 'asc'
-        }];
+
+        if (this.options.defaultSorting) {
+          if (Array.isArray(this.options.defaultSorting) && this.options.defaultSorting.length === 2) {
+            this.sorting = this.options.defaultSorting;
+          } else {
+            this.sorting = [this.options.defaultSorting];
+          }
+          this.sorting.forEach(function (s) {
+            if (!s.mode) s.mode = 'asc';
+          });
+        } else {
+          this.sorting = [{
+            key: Object.keys(this.maptable.data[0])[0],
+            mode: 'asc'
+          }];
+        }
+
+        this.initialSorting = this.sorting.map(function (s) {
+          return s.key + ',' + s.mode;
+        }).join(';');
         this.isSorting = false;
 
         this.containerSelector = maptable.options.target;
@@ -2305,6 +2489,8 @@ this.d3.maptable = (function () {
           var output = d.sorting ? 'mt-table-sortable' : '';
           output += d.nowrap ? ' nowrap' : '';
           return output;
+        }).attr('data-key', function (d) {
+          return utils.sanitizeKey(d.key);
         }).attr('onselectstart', 'return false;').attr('unselectable', 'on').attr('style', function (d) {
           return d.nowrap ? 'white-space:nowrap;' : '';
         }).on('click', function (d) {
@@ -2320,22 +2506,46 @@ this.d3.maptable = (function () {
           return 'column_header_' + utils.sanitizeKey(d.key);
         });
 
-        if (this.options.defaultSorting) {
-          if (Array.isArray(this.options.defaultSorting) && this.options.defaultSorting.length === 2) {
-            this.sorting = this.options.defaultSorting;
-          } else {
-            this.sorting = [this.options.defaultSorting];
-          }
-        }
-        this.render();
-
-        // On complete
-        if (this.options.onComplete && this.options.onComplete.constructor === Function) {
-          this.options.onComplete.bind(this.maptable)();
-        }
+        // render is triggered by MapTable
+        // this.render();
       }
 
+      /**
+       * Restore state from the url hash
+       */
+
+
       babelHelpers.createClass(Table, [{
+        key: 'restoreState',
+        value: function restoreState(sortingRaw) {
+          if (!sortingRaw) return;
+          var sortingList = sortingRaw.split(';');
+          var defaultSorting = [];
+          sortingList.forEach(function (s) {
+            var sortingData = s.split(',');
+            defaultSorting.push({
+              key: sortingData[0],
+              mode: sortingData[1] || 'asc'
+            });
+          });
+          this.sorting = defaultSorting;
+        }
+
+        /**
+         * Save state into the url hash
+         */
+
+      }, {
+        key: 'saveState',
+        value: function saveState() {
+          var encodedSorting = this.sorting.map(function (s) {
+            return s.key + ',' + s.mode;
+          }).join(';');
+          if (encodedSorting !== this.initialSorting) {
+            this.maptable.saveState('sort', encodedSorting);
+          }
+        }
+      }, {
         key: 'render',
         value: function render() {
           var _this2 = this;
@@ -2343,15 +2553,24 @@ this.d3.maptable = (function () {
           // Apply Sort
           this.applySort();
 
+          var tableData = this.maptable.data;
+          if (this.options.distinctBy) {
+            tableData = d3.nest().key(function (d) {
+              return d[_this2.options.distinctBy];
+            }).entries(this.maptable.data).map(function (g) {
+              return g.values[0];
+            });
+          }
+
           // Enter
-          this.body.selectAll('tr').data(this.maptable.data).enter().append('tr');
+          this.body.selectAll('tr').data(tableData).enter().append('tr');
 
           // Exit
-          this.body.selectAll('tr').data(this.maptable.data).exit().remove();
+          this.body.selectAll('tr').data(tableData).exit().remove();
 
           // Update
           var uniqueCollapsedRows = [];
-          this.body.selectAll('tr').data(this.maptable.data).attr('class', function (row) {
+          this.body.selectAll('tr').data(tableData).attr('class', function (row) {
             if (_this2.options.rowClassName) {
               return 'line ' + _this2.options.rowClassName(row);
             }
@@ -2380,6 +2599,11 @@ this.d3.maptable = (function () {
             });
             return tds;
           });
+
+          // On render
+          if (this.options.onRender && this.options.onRender.constructor === Function) {
+            this.options.onRender.bind(this.maptable)();
+          }
         }
       }, {
         key: 'applySort',
@@ -2401,11 +2625,11 @@ this.d3.maptable = (function () {
               var el1 = a[column.key];
               var el2 = b[column.key];
               if (columnDetails.dataParse) {
-                el1 = columnDetails.dataParse(el1);
-                el2 = columnDetails.dataParse(el2);
+                el1 = columnDetails.dataParse.bind(_this3.maptable)(el1);
+                el2 = columnDetails.dataParse.bind(_this3.maptable)(el2);
               } else if (columnDetails.virtual) {
-                el2 = columnDetails.virtual(a);
-                el2 = columnDetails.virtual(b);
+                el2 = columnDetails.virtual.bind(_this3.maptable)(a);
+                el2 = columnDetails.virtual.bind(_this3.maptable)(b);
               } else if (columnDetails.filterType === 'compare') {
                 el1 = Number(el1);
                 el2 = Number(el2);
@@ -2450,6 +2674,7 @@ this.d3.maptable = (function () {
             }
           }
 
+          this.saveState();
           this.render();
         }
       }]);
@@ -2462,11 +2687,9 @@ this.d3.maptable = (function () {
 
         this.options = options;
 
-        this.state = {
-          filters: {},
-          zoom: {}
-        };
+        this.state = {};
         this.saveStateTimeout = {};
+        this.removeStateTimeout = null;
 
         this.node = document.querySelector(target);
         this.node.setAttribute('style', 'position:relative;');
@@ -2553,29 +2776,94 @@ this.d3.maptable = (function () {
             this.table = new Table(this, this.options.table);
           }
 
-          // Render
-          this.render();
-
           // Restore state
           this.restoreState();
           window.addEventListener('hashchange', function () {
             _this2.restoreState();
           });
+
+          // Render
+          this.render();
         }
 
         /**
-         * Restore state for filters or/and map zooming
+         * Load state from url
+         * @param stateName: name of the state (either filters or zoom)
+         * @param isJson: do we need to decode a json from the state?
+         * @return loaded state
+         */
+
+      }, {
+        key: 'loadState',
+        value: function loadState(stateName, isJson) {
+          // JSON state
+          if (isJson) {
+            var v = this.parseState(stateName);
+            if (!v) return null;
+            try {
+              var parsedState = JSON.parse(v);
+              this.state[stateName] = parsedState;
+            } catch (e) {
+              console.log('Maptable: Invalid URL State for mt-' + stateName + ' ' + e.message);
+              return null;
+            }
+          } else {
+            var _v = this.parseState(stateName);
+            if (_v) this.state[stateName] = _v;
+          }
+          return this.state[stateName];
+        }
+
+        /**
+         * Restore state for filters or/and map zooming and/or sorting
          */
 
       }, {
         key: 'restoreState',
         value: function restoreState() {
-          if (this.map) this.map.restoreState();
-          if (this.filters) this.filters.restoreState();
+          if (this.map) {
+            this.loadState('zoom', true);
+            this.map.restoreState(this.state.zoom);
+          }
+
+          if (this.filters) {
+            this.loadState('filters', true);
+            this.filters.restoreState(this.state.filters);
+          }
+
+          if (this.table) {
+            this.loadState('sort', false);
+            this.table.restoreState(this.state.sort);
+          }
         }
 
         /**
-         * Save the state into the URL hash
+         * Extract state from the url
+         * @param stateName: name of the state (either filters or zoom)
+         */
+
+      }, {
+        key: 'parseState',
+        value: function parseState(stateName) {
+          var params = document.location.href.replace(/%21mt/g, '!mt').split('!mt-' + stateName + '=');
+          return params[1] ? decodeURIComponent(params[1].split('!mt')[0]) : null;
+        }
+
+        /**
+         * Remove state
+         * @param stateName: name of the state (either filters or zoom)
+         */
+
+      }, {
+        key: 'removeState',
+        value: function removeState(stateName) {
+          window.clearTimeout(this.saveStateTimeout[stateName]);
+          delete this.state[stateName];
+          this.updateState();
+        }
+
+        /**
+         * Save the state in this.state
          * @param stateName: name of the state (either filters or zoom)
          * @param stateData: object, contain state information
          */
@@ -2588,16 +2876,32 @@ this.d3.maptable = (function () {
           window.clearTimeout(this.saveStateTimeout[stateName]);
           this.saveStateTimeout[stateName] = window.setTimeout(function () {
             _this3.state[stateName] = stateData;
-            var newUrl = document.location.href.split('#')[0];
-            var stateHash = '';
-            ['filters', 'zoom'].forEach(function (f) {
-              if (Object.keys(_this3.state[f]).length) {
-                stateHash += '!mt-' + f + '=' + encodeURIComponent(JSON.stringify(_this3.state[f]));
-              }
-            });
-            if (stateHash !== '') stateHash = '#' + stateHash;
-            window.history.pushState(null, null, '' + newUrl + stateHash);
+            _this3.updateState();
           }, 200);
+        }
+
+        /**
+         * Update state into the URL hash
+         */
+
+      }, {
+        key: 'updateState',
+        value: function updateState() {
+          var _this4 = this;
+
+          var newUrl = document.location.href.split('#')[0];
+          var stateHash = '';
+          Object.keys(this.state).forEach(function (k) {
+            if (!_this4.state[k]) return;
+            var stateValue = _this4.state[k];
+            if (babelHelpers.typeof(_this4.state[k]) === 'object') {
+              if (!Object.keys(_this4.state[k]).length) return;
+              stateValue = JSON.stringify(_this4.state[k]);
+            }
+            stateHash += '!mt-' + k + '=' + encodeURIComponent(stateValue);
+          });
+          if (stateHash !== '') stateHash = '#' + stateHash;
+          window.history.pushState(null, null, '' + newUrl + stateHash);
         }
       }, {
         key: 'render',
@@ -2609,16 +2913,25 @@ this.d3.maptable = (function () {
 
           if (this.map) {
             this.map.render();
+            // On complete
+            if (!this.firstExecution && this.options.map.onComplete && this.options.map.onComplete.constructor === Function) {
+              this.options.map.onComplete.bind(this)();
+            }
           }
 
           if (this.table) {
             this.table.render();
+            // On complete
+            if (!this.firstExecution && this.options.table.onComplete && this.options.table.onComplete.constructor === Function) {
+              this.options.table.onComplete.bind(this)();
+            }
           }
 
           // On complete
-          if (this.options.onComplete && this.options.onComplete.constructor === Function) {
-            this.options.onComplete.bind(this.maptable)();
+          if (!this.firstExecution && this.options.onComplete && this.options.onComplete.constructor === Function) {
+            this.options.onComplete.bind(this)();
           }
+          this.firstExecution = true;
         }
       }, {
         key: 'setColumnDetails',
@@ -2742,6 +3055,22 @@ this.d3.maptable = (function () {
 
         var customOptions = utils.extendRecursive(defaultOptions, options);
         maptableObject = new MapTable(target, customOptions);
+
+        // public functions
+        return {
+          render: function render() {
+            return maptableObject.render();
+          },
+          loadState: function loadState(stateName, isJson) {
+            return maptableObject.loadState(stateName, isJson);
+          },
+          removeState: function removeState(stateName) {
+            return maptableObject.removeState(stateName);
+          },
+          saveState: function saveState(stateName, stateData) {
+            return maptableObject.saveState(stateName, stateData);
+          }
+        };
       };
       return maptable;
     };
