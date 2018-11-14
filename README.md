@@ -542,6 +542,13 @@ Run these commands as your unprivileged user you're doing your development as:
 
 
 ## Release History
+* Version 1.7.0 November 14 2018 (Also includes items in unreleased 1.6.1)
+  * Allow map to be re-rendered with a column sort - [Issue #88](https://github.com/Packet-Clearing-House/maptable/issues/88)
+  * Fix cellContent: function(d) is called twice for every cell - [Issue #87](https://github.com/Packet-Clearing-House/maptable/issues/87)
+  * Fix Examples JS errors, padding  - [Issue #86](https://github.com/Packet-Clearing-House/maptable/issues/86)
+  * Support secondary sorting in defaultSorting  - [Issue #78](https://github.com/Packet-Clearing-House/maptable/issues/78)
+  * Provide dataset to map.title.content function to have better customizations  - [Issue #77](https://github.com/Packet-Clearing-House/maptable/issues/77)
+  * Be able to set a property (like attr.fill) of an attribute based on the data  - [Issue #76](https://github.com/Packet-Clearing-House/maptable/issues/76)
 * Version 1.6.0 July 16 2018
   * Add ability to support secondary sorting in defaultSorting - [Issue #78](https://github.com/Packet-Clearing-House/maptable/issues/78)
   * Add ability to provide dataset to map.title.content function to have better customizations - [Issue #77](https://github.com/Packet-Clearing-House/maptable/issues/77)
