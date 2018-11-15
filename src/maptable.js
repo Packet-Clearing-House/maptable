@@ -191,7 +191,9 @@ export default class MapTable {
       stateHash += `!mt-${k}=${encodeURIComponent(stateValue)}`;
     });
     if (stateHash !== '') stateHash = `#${stateHash}`;
-    window.history.pushState(null, null, `${newUrl}${stateHash}`);
+    if (document.location.href !== `${newUrl}${stateHash}`) {
+      window.history.pushState(null, null, `${newUrl}${stateHash}`);
+    }
   }
 
   render() {

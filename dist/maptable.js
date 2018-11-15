@@ -2901,7 +2901,9 @@ this.d3.maptable = (function () {
             stateHash += '!mt-' + k + '=' + encodeURIComponent(stateValue);
           });
           if (stateHash !== '') stateHash = '#' + stateHash;
-          window.history.pushState(null, null, '' + newUrl + stateHash);
+          if (document.location.href !== '' + newUrl + stateHash) {
+            window.history.pushState(null, null, '' + newUrl + stateHash);
+          }
         }
       }, {
         key: 'render',
