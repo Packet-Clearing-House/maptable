@@ -1291,7 +1291,7 @@ this.d3.maptable = (function () {
           // Update Legend
           Object.keys(this.options.countries.attr).forEach(function (attrKey) {
             var attrValue = _this4.options.countries.attr[attrKey];
-            if ((typeof attrValue === 'undefined' ? 'undefined' : babelHelpers.typeof(attrValue)) === 'object' && attrValue.legend) {
+            if ((typeof attrValue === 'undefined' ? 'undefined' : babelHelpers.typeof(attrValue)) === 'object' && attrValue.legend && _this4.legendCountry[attrKey] != undefined) {
               var scaleDomain = d3.extent(_this4.dataCountries, function (d) {
                 return Number(d.attrProperties[attrKey].value);
               });
@@ -2656,7 +2656,7 @@ this.d3.maptable = (function () {
           }).indexOf(key);
           var sortValue = { key: key };
           if (sortIndex === -1) {
-            sortValue.mode = 'asc';
+            sortValue.mode = 'desc';
             if (d3.event && d3.event.shiftKey) {
               this.sorting[1] = sortValue;
             } else {
