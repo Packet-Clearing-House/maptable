@@ -236,7 +236,7 @@ export default class Table {
     const sortIndex = this.sorting.map(d => d.key).indexOf(key);
     const sortValue = { key };
     if (sortIndex === -1) {
-      sortValue.mode = 'asc';
+      sortValue.mode = 'desc';
       if (d3.event && d3.event.shiftKey) {
         this.sorting[1] = sortValue;
       } else {

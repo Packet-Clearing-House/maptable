@@ -544,6 +544,11 @@ Run these commands as your unprivileged user you're doing your development as:
 
 
 ## Release History
+* Version 1.7.2 November 15 2018 
+  * Change first click on column head to be Descending instead of Ascending  - [Issue #95](https://github.com/Packet-Clearing-House/maptable/issues/95)
+  * Fix  some corner cases this.legendCountry[attrKey] is not defined in GeoMap.js  - [Issue #96](https://github.com/Packet-Clearing-House/maptable/issues/96)
+* Version 1.7.1 November 14 2018 
+  * Fix Excessive updates to window history - [Issue #93](https://github.com/Packet-Clearing-House/maptable/issues/93)
 * Version 1.7.0 November 14 2018 (Also includes items in unreleased 1.6.1)
   * Allow map to be re-rendered with a column sort - [Issue #88](https://github.com/Packet-Clearing-House/maptable/issues/88)
   * Fix cellContent: function(d) is called twice for every cell - [Issue #87](https://github.com/Packet-Clearing-House/maptable/issues/87)
