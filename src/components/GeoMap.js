@@ -893,9 +893,6 @@ export default class GeoMap {
           } else {
             scaledValue = scaleFunction(originalValue);
           }
-          if (originalValue === 0 && attrValue.empty) {
-            scaledValue = attrValue.empty;
-          }
         }
         d.attr[attrKey] = scaledValue;
       });

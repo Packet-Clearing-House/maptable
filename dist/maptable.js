@@ -1778,9 +1778,6 @@ this.d3.maptable = (function () {
                 } else {
                   scaledValue = scaleFunction(originalValue);
                 }
-                if (originalValue === 0 && attrValue.empty) {
-                  scaledValue = attrValue.empty;
-                }
               }
               d.attr[attrKey] = scaledValue;
             });
