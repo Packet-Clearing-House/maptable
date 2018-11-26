@@ -544,6 +544,8 @@ Run these commands as your unprivileged user you're doing your development as:
 
 
 ## Release History
+* Version 1.7.3 November 26 2018 
+  * Changed the rank worked so that value of ``0`` is included in ranks.
 * Version 1.7.2 November 15 2018 
   * Change first click on column head to be Descending instead of Ascending  - [Issue #95](https://github.com/Packet-Clearing-House/maptable/issues/95)
   * Fix  some corner cases this.legendCountry[attrKey] is not defined in GeoMap.js  - [Issue #96](https://github.com/Packet-Clearing-House/maptable/issues/96)
