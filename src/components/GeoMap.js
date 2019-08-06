@@ -411,7 +411,7 @@ export default class GeoMap {
     // Update Legend
     Object.keys(this.options.countries.attr).forEach((attrKey) => {
       const attrValue = this.options.countries.attr[attrKey];
-      if (typeof (attrValue) === 'object' && attrValue.legend && this.legendCountry[attrKey] != undefined) {
+      if (typeof (attrValue) === 'object' && attrValue.legend && this.legendCountry[attrKey] !== undefined) {
         const scaleDomain = d3.extent(this.dataCountries,
           d => Number(d.attrProperties[attrKey].value));
         this.legendCountry[attrKey].updateExtents(scaleDomain);
