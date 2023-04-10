@@ -19,7 +19,8 @@ You can also browse [other code samples and **examples**](https://packet-clearin
 
 ## Table of Contents
 
-* [Dependencies](#dependencies)
+- [Dependencies](#dependencies)
+
 - [Declaring MapTable elements](#declaring-maptable-elements)
 - [Import datasets](#import-datasets)
 - [Map datasets](#map-datasets)
@@ -111,8 +112,11 @@ You instantiate the MapTable library into the `viz` variable based on the `#vizC
 The MapTable `viz` declaration in the above example is a chain of functions. The possible functions that you can use are:
 
 - [viz.json(jsonPath\[, preFilter\])](#viz-json) with `jsonPath` as string and `preFilter` as function that filters the dataset upfront.
+- [viz.jsonData(jsonData\[, preFilter\])](#viz-json) with `jsonData` as string and `preFilter` as function that filters the dataset upfront.
 - [viz.csv(csvPath\[, preFilter\])](#viz-csv) with `csvPath` as string and `preFilter`.
+- [viz.csvData(csvData\[, preFilter\])](#viz-csv) with `csvData` as string and `preFilter`.
 - [viz.tsv(tsvPath\[, preFilter\])](#viz-tsv) with `tsvPath` as string and `preFilter`.
+- [viz.tsvData(tsvData\[, preFilter\])](#viz-tsv) with `tsvData` as string and `preFilter`.
 - [viz.columns(columnDetails)](#columns-details) with `columnDetails` as a JS dictionary. You can add/remove it of you want to customize your columns or create virtual columns based on the data.
 - [viz.map(mapOptions)](#map) with `mapOptions` as a JS dictionary. You can add/remove it of you want a map on your visualization.
 - [viz.filters(filtersOptions)](#filters) with `filtersOptions` as a JS dictionary. You can add/remove it of you want filters on your visualization.
@@ -243,7 +247,8 @@ Functions that have `groupedData` as parameter, means that `groupedData` is a JS
 
 #### Options
 
-- `path:` _(string, **required**)_ URL of the TOPOJSON map, you can get them from Mike Bostock's repo: [world atlas](https://github.com/mbostock/world-atlas) and [us atlas](https://github.com/mbostock/us-atlas). Or use [this tool](https://github.com/melalj/topojson-map-generator) to generate these files as we did on the examples.
+- `path:` _(string, **required** if pathData not set)_ URL of the TOPOJSON map, you can get them from Mike Bostock's repo: [world atlas](https://github.com/mbostock/world-atlas) and [us atlas](https://github.com/mbostock/us-atlas). Or use [this tool](https://github.com/melalj/topojson-map-generator) to generate these files as we did on the examples.
+- `pathData:` _(string, **required** if path not set)_ string containing the TOPOJSON map
 - `onComplete:` *(function, default: null)* Callback function when the map first loaded.
 - `onRender:` *(function, default: null)* Callback function when the map finished rendering.
 - `width:` *(integer, default:'window.innerWidth')* Map Width.
@@ -513,7 +518,7 @@ In the version 1.4.0 `exportSvgClient` was added to use only the browser to expo
 
 ## Credits
 
-- Mohammed Elalj [@melalj](https://github.com/melalj) - Original Author & Lead Architect
+- Simo Elalj [@melalj](https://github.com/melalj) - Original Author & Lead Architect
 - Ashley Jones [@Ths2-9Y-LqJt6](https://github.com/Ths2-9Y-LqJt6) - Feature Requester & Deliverer, QA, Love, Release Engineer
 
 ## Contribute
@@ -532,8 +537,8 @@ Install any items with "sudo":
 
 Run these commands as your unprivileged user you're doing your development as:
 
-1. Run `nvm install 6` to install node 6
-1. Run `nvm use 6` to use node 6
+1. Run `nvm install 16` to install node 16
+1. Run `nvm use 16` to use node 16
 1. Run `npm config set python $(which python)` to use set the python path
 1. Run `npm install` to install dependencies
 1. Run `npm run dev` to start the local dev environment on [http://localhost:5000](http://localhost:5000)
@@ -554,7 +559,11 @@ Run these commands as your unprivileged user you're doing your development as:
 
 ## Release History
 
-* Version 1.7.3 November 26 2018
+- Version 2.0.0 April 10 2023
+  - Added `csvData`, `jsonData`, `tsvData`, and `map.pathData`
+  - Fixed case sentivity for table sorting
+  - Tested build with Node 16 (using nvm)
+- Version 1.7.3 November 26 2018
   - Changed the rank worked so that value of ``0`` is included in ranks.
 - Version 1.7.2 November 15 2018
   - Change first click on column head to be Descending instead of Ascending  - [Issue #95](https://github.com/Packet-Clearing-House/maptable/issues/95)
