@@ -50,12 +50,23 @@
               legend: true,
               aggregate: {
                 scale: 'rank',
-                  mode: 'count',
+                mode: 'sum',
                 key: 'widgets',
               },
             },
             stroke: "#d9d9d9",
             "stroke-width": 0.5
+          },
+          tooltip: function(a) {
+            out = '<div class="arrow"></div>';
+            if (a.values.length === 0) {
+              out += '<h3 class="popover-title"> ' + a.key + '</h3>';
+              out += '<div class="popover-content">N/A</div>';
+            } else {
+              out += '<h3 class="popover-title"> ' + a.values[0].country + '</h3>';
+              out += '<div class="popover-content">' + a.values.map(d => `${d.widgets} widgets`).join(', ')+ '</div>';
+            }
+            return out;
           },
         },
         markers: false,
