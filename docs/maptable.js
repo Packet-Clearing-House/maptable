@@ -904,6 +904,71 @@ this.d3.maptable = (function () {
         imageDataRGB: processImageDataRGB
     };
 
+    /* eslint-disable max-len */
+    // Equations based on NOAA’s Solar Calculator; all angles in radians.
+    // http://www.esrl.noaa.gov/gmd/grad/solcalc/
+
+    var π = Math.PI;
+    var radians = π / 180;
+    var degrees = 180 / π;
+
+    function solarGeometricMeanAnomaly(centuries) {
+      return (357.52911 + centuries * (35999.05029 - 0.0001537 * centuries)) * radians;
+    }
+
+    function solarGeometricMeanLongitude(centuries) {
+      var l = (280.46646 + centuries * (36000.76983 + centuries * 0.0003032)) % 360;
+      return (l < 0 ? l + 360 : l) / 180 * π;
+    }
+
+    function solarEquationOfCenter(centuries) {
+      var m = solarGeometricMeanAnomaly(centuries);
+      return (Math.sin(m) * (1.914602 - centuries * (0.004817 + 0.000014 * centuries)) + Math.sin(m + m) * (0.019993 - 0.000101 * centuries) + Math.sin(m + m + m) * 0.000289) * radians;
+    }
+
+    function solarTrueLongitude(centuries) {
+      return solarGeometricMeanLongitude(centuries) + solarEquationOfCenter(centuries);
+    }
+
+    function solarApparentLongitude(centuries) {
+      return solarTrueLongitude(centuries) - (0.00569 + 0.00478 * Math.sin((125.04 - 1934.136 * centuries) * radians)) * radians;
+    }
+
+    function meanObliquityOfEcliptic(centuries) {
+      return (23 + (26 + (21.448 - centuries * (46.8150 + centuries * (0.00059 - centuries * 0.001813))) / 60) / 60) * radians;
+    }
+
+    function obliquityCorrection(centuries) {
+      return meanObliquityOfEcliptic(centuries) + 0.00256 * Math.cos((125.04 - 1934.136 * centuries) * radians) * radians;
+    }
+
+    function solarDeclination(centuries) {
+      return Math.asin(Math.sin(obliquityCorrection(centuries)) * Math.sin(solarApparentLongitude(centuries)));
+    }
+
+    function eccentricityEarthOrbit(centuries) {
+      return 0.016708634 - centuries * (0.000042037 + 0.0000001267 * centuries);
+    }
+
+    function equationOfTime(centuries) {
+      var e = eccentricityEarthOrbit(centuries);
+      var m = solarGeometricMeanAnomaly(centuries);
+      var l = solarGeometricMeanLongitude(centuries);
+      var y = Math.tan(obliquityCorrection(centuries) / 2);
+      y *= y;
+      return y * Math.sin(2 * l) - 2 * e * Math.sin(m) + 4 * e * y * Math.sin(m) * Math.cos(2 * l) - 0.5 * y * y * Math.sin(4 * l) - 1.25 * e * e * Math.sin(2 * m);
+    }
+
+    function antipode(position) {
+      return [position[0] + 180, -position[1]];
+    }
+
+    function solarPosition(time) {
+      var centuries = (time - Date.UTC(2000, 0, 1, 12)) / 864e5 / 36525; // since J2000
+      var longitude = (d3.time.day.utc.floor(time) - time) / 864e5 * 360 - 180;
+      return [longitude - equationOfTime(centuries) * degrees, solarDeclination(centuries) * degrees];
+    }
+
     /**
      * Used the name GeoMap instead of Map to avoid collision with the native Map class of JS
      */
@@ -984,6 +1049,7 @@ this.d3.maptable = (function () {
 
         this.layerGlobal = this.svg.append('g').attr('class', 'mt-map-global');
         this.layerCountries = this.layerGlobal.append('g').attr('class', 'mt-map-countries');
+        this.layerNight = this.layerGlobal.append('g').attr('class', 'mt-map-night');
         this.layerHeatmap = this.layerGlobal.append('g').attr('class', 'mt-map-heatmap');
         this.layerMarkers = this.layerGlobal.append('g').attr('class', 'mt-map-markers');
 
@@ -1058,6 +1124,8 @@ this.d3.maptable = (function () {
 
           // Build heatmap
           if (this.options.heatmap) this.buildHeatmap();
+
+          if (this.options.night) this.buildNight();
         }
 
         /**
@@ -1089,6 +1157,29 @@ this.d3.maptable = (function () {
             this.bordersHeatmap = this.layerHeatmap.append('g').attr('class', 'mt-map-heatmap-borders');
 
             this.bordersHeatmap.selectAll('path.mt-map-heatmap-borders-paths').data([lands, borders]).enter().append('path').attr('class', 'mt-map-heatmap-borders-paths').attr('fill', 'none').attr('stroke-width', this.options.heatmap.borders.stroke).attr('stroke', this.options.heatmap.borders.color).attr('style', 'opacity: ' + this.options.heatmap.borders.opacity).attr('d', this.path);
+          }
+        }
+
+        /**
+         * Logic to build the night position
+         */
+
+      }, {
+        key: 'buildNight',
+        value: function buildNight() {
+          var circle = d3.geo.circle().angle(90);
+
+          // Build vectors
+          this.nightPath = this.layerNight.append('path').attr('class', 'night').attr('d', this.path);
+
+          var solarPositionDated = solarPosition(this.options.night.date || new Date());
+
+          this.nightPath.datum(circle.origin(antipode(solarPositionDated))).attr('d', this.path);
+
+          if (!this.options.night.disableSun) {
+            var sunCoords = this.projection(solarPositionDated);
+
+            this.sunCircle = this.layerNight.append('svg:circle').attr('class', 'sun').attr('cx', sunCoords[0]).attr('cy', sunCoords[1]).attr('r', this.options.night.sunRadius || 10);
           }
         }
 

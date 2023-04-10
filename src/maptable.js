@@ -267,7 +267,7 @@ export default class MapTable {
         sorting: true,
       };
       if (isNumber) {
-        defaultColumns[k].dataParse = val => parseFloat(val);
+        defaultColumns[k].dataParse = (val) => parseFloat(val);
       }
     });
     that.columnDetails = utils.extendRecursive(defaultColumns, this.options.columns);

@@ -105,7 +105,7 @@ d3.maptable = function (target) {
     return {
       render: () => maptableObject.render(),
       loadState: (stateName, isJson) => maptableObject.loadState(stateName, isJson),
-      removeState: stateName => maptableObject.removeState(stateName),
+      removeState: (stateName) => maptableObject.removeState(stateName),
       saveState: (stateName, stateData) => maptableObject.saveState(stateName, stateData),
     };
   };

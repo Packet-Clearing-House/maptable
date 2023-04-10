@@ -450,6 +450,19 @@ Functions that have `groupedData` as parameter, means that `groupedData` is a JS
        },
        ```
 
+- `night:` *(object, default: null)* Add the night layer to the map
+  - `night.date:` *(Date, default: new Date())* Which datetime do we want to display the night layer
+  - `night.disableSun:` *(boolean, default: false)* if you want to disable the sun layer
+  - `night.sunRadius:` *(number, default: 10)* radius of the sun
+
+       *Example*
+
+       ```js
+        night: {
+          date: new Date(Date.parse('2023-01-01T00:00:00Z')),
+       },
+       ```
+
 - `heatmap:` *(object, default: null)* Add a heatmap on the map - we use concentrated circles on every location in the dataset. You can **not** use this with `map.countries.`. See [this example](https://packet-clearing-house.github.io/maptable/#heatmap) for an implementation example.
   - `heatmap.weightByAttribute:` *(function(d), default: null)* Which attribute we would weight the gradient. it takes a anonymous function that exposes `d` as one row, and expect a float as returned value.
   - `heatmap.colorStrength:` *(float, default: 1)* Adjusts heatmap color strength, (0 make things transparent, 1 normal behavior, > 1 to make the color darker)
@@ -559,6 +572,8 @@ Run these commands as your unprivileged user you're doing your development as:
 
 ## Release History
 
+- Version 2.1.0 April 10 2023
+  - Added `map.night` to display the night layer and the sun
 - Version 2.0.0 April 10 2023
   - Added `csvData`, `jsonData`, `tsvData`, and `map.pathData`
   - Fixed case sentivity for table sorting

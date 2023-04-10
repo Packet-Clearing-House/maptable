@@ -72,7 +72,7 @@ function toNumber(str) {
 
 function quantile(array, percentile) {
   array.sort((a, b) => a - b);
-  const index = percentile / 100.0 * (array.length - 1);
+  const index = (percentile / 100.0) * (array.length - 1);
   let result;
   if (Math.floor(index) === index) {
     result = array[index];

@@ -29,7 +29,7 @@ export default class Table {
       ];
     }
 
-    this.initialSorting = this.sorting.map(s => `${s.key},${s.mode}`).join(';');
+    this.initialSorting = this.sorting.map((s) => `${s.key},${s.mode}`).join(';');
     this.isSorting = false;
 
     this.containerSelector = maptable.options.target;
@@ -53,7 +53,7 @@ export default class Table {
 
     if (this.options.show) {
       const arrayDiff = this.options.show
-        .filter(i => Object.keys(this.maptable.columnDetails).indexOf(i) < 0);
+        .filter((i) => Object.keys(this.maptable.columnDetails).indexOf(i) < 0);
       if (arrayDiff.length > 0) {
         throw new Error(`MapTable: invalid columns "${arrayDiff.join(', ')}"`);
       }
@@ -68,7 +68,7 @@ export default class Table {
       .append('tr')
       .selectAll('th')
       .data(this.activeColumns
-        .map(k => utils.extendRecursive({ key: k }, this.maptable.columnDetails[k])))
+        .map((k) => utils.extendRecursive({ key: k }, this.maptable.columnDetails[k])))
       .enter()
       .append('th')
       .attr('class', (d) => {
@@ -76,10 +76,10 @@ export default class Table {
         output += (d.nowrap) ? ' nowrap' : '';
         return output;
       })
-      .attr('data-key', d => utils.sanitizeKey(d.key))
+      .attr('data-key', (d) => utils.sanitizeKey(d.key))
       .attr('onselectstart', 'return false;')
       .attr('unselectable', 'on')
-      .attr('style', d => ((d.nowrap) ? 'white-space:nowrap;' : ''))
+      .attr('style', (d) => ((d.nowrap) ? 'white-space:nowrap;' : ''))
       .on('click', (d) => {
         if (this.isSorting) return;
         this.isSorting = true;
@@ -88,8 +88,8 @@ export default class Table {
         }
         this.isSorting = false;
       })
-      .text(d => d.title)
-      .attr('id', d => `column_header_${utils.sanitizeKey(d.key)}`);
+      .text((d) => d.title)
+      .attr('id', (d) => `column_header_${utils.sanitizeKey(d.key)}`);
 
     // render is triggered by MapTable
     // this.render();
@@ -116,24 +116,22 @@ export default class Table {
    * Save state into the url hash
    */
   saveState() {
-    const encodedSorting = this.sorting.map(s => `${s.key},${s.mode}`).join(';');
+    const encodedSorting = this.sorting.map((s) => `${s.key},${s.mode}`).join(';');
     if (encodedSorting !== this.initialSorting) {
       this.maptable.saveState('sort', encodedSorting);
     }
   }
 
-
   render() {
     // Apply Sort
     this.applySort();
 
-
     let tableData = this.maptable.data;
     if (this.options.distinctBy) {
       tableData = d3.nest()
-        .key(d => d[this.options.distinctBy])
+        .key((d) => d[this.options.distinctBy])
         .entries(this.maptable.data)
-        .map(g => g.values[0]);
+        .map((g) => g.values[0]);
     }
 
     // Enter
@@ -235,7 +233,7 @@ export default class Table {
    * @param columnKey: String - column key
    */
   sortColumn(key) {
-    const sortIndex = this.sorting.map(d => d.key).indexOf(key);
+    const sortIndex = this.sorting.map((d) => d.key).indexOf(key);
     const sortValue = { key };
     if (sortIndex === -1) {
       sortValue.mode = 'desc';

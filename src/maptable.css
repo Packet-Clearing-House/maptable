@@ -116,3 +116,12 @@
   margin-top: -18px;
   display: none;
 }
+
+.mt-map-night .night {
+  opacity: 0.1;
+}
+
+
+.mt-map-night .sun {
+  fill: rgb(224, 224, 59, 0.5);
+}

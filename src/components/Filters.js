@@ -8,7 +8,7 @@ export default class Filters {
 
     if (this.options.show) {
       const arrayDiff = this.options.show
-        .filter(i => Object.keys(this.maptable.columnDetails).indexOf(i) < 0);
+        .filter((i) => Object.keys(this.maptable.columnDetails).indexOf(i) < 0);
       if (arrayDiff.length > 0) {
         throw new Error(`MapTable: invalid columns "${arrayDiff.join(', ')}"`);
       }
@@ -279,8 +279,10 @@ export default class Filters {
     // Filter name select
     const filterNameSelect = document.createElement('select');
     filterNameSelect.setAttribute('class', 'mt-filter-name form-control form-control-inline');
-    utils.appendOptions(filterNameSelect,
-      possibleFilters.map(f => ({ text: f.title, value: f.key })));
+    utils.appendOptions(
+      filterNameSelect,
+      possibleFilters.map((f) => ({ text: f.title, value: f.key })),
+    );
     filterNameSelect.value = filterName;
 
     filterNameSelect.addEventListener('change', function () {
@@ -302,7 +304,7 @@ export default class Filters {
     if (columnDetails.filterMethod !== 'field' && columnDetails.filterMethod !== 'dropdown') {
       filterRange = document.createElement('select');
       filterRange.setAttribute('class', 'mt-filter-range form-control form-control-inline');
-      utils.appendOptions(filterRange, ['any', '=', '≠', '<', '>', '≤', '≥', 'BETWEEN'].map(v => ({ text: v, value: v })));
+      utils.appendOptions(filterRange, ['any', '=', '≠', '<', '>', '≤', '≥', 'BETWEEN'].map((v) => ({ text: v, value: v })));
       filterRange.addEventListener('change', function () {
         that.handleRangeChange(this);
       });
@@ -320,8 +322,10 @@ export default class Filters {
     if (columnDetails.filterMethod === 'compare') {
       ['min', 'max'].forEach((val, i) => {
         const filterInput = document.createElement('input');
-        filterInput.setAttribute('class',
-          `form-control form-control-inline mt-filter-value-${val}`);
+        filterInput.setAttribute(
+          'class',
+          `form-control form-control-inline mt-filter-value-${val}`,
+        );
         filterInput.setAttribute('type', columnDetails.filterInputType);
         filterInput.addEventListener('keyup', this.maptable.render.bind(this.maptable));
         filterInput.addEventListener('change', this.maptable.render.bind(this.maptable));
@@ -345,11 +349,11 @@ export default class Filters {
       const filterSelect = document.createElement('select');
       filterSelect.setAttribute('class', 'form-control form-control-inline mt-filter-value');
 
-      const uniqueValues = d3.nest().key(d => d[filterName])
+      const uniqueValues = d3.nest().key((d) => d[filterName])
         .sortKeys(d3.ascending)
         .entries(this.maptable.rawData);
 
-      utils.appendOptions(filterSelect, [{ text: 'Any', value: '' }].concat(uniqueValues.map(k => ({ text: k.key, value: k.key }))));
+      utils.appendOptions(filterSelect, [{ text: 'Any', value: '' }].concat(uniqueValues.map((k) => ({ text: k.key, value: k.key }))));
 
       filterSelect.addEventListener('change', this.maptable.render.bind(this.maptable));
       filterValue.appendChild(filterSelect);
@@ -385,8 +389,8 @@ export default class Filters {
 
   getPossibleFilters(except) {
     return Object.keys(this.maptable.columnDetails)
-      .map(k => utils.extendRecursive({ key: k }, this.maptable.columnDetails[k]))
-      .filter(v => (this.activeColumns.indexOf(v.key) !== -1)
+      .map((k) => utils.extendRecursive({ key: k }, this.maptable.columnDetails[k]))
+      .filter((v) => (this.activeColumns.indexOf(v.key) !== -1)
         && (
           (except && except === v.key)
           || (this.criteria.indexOf(v.key) === -1 && v.filterMethod && !v.isVirtual)
@@ -456,8 +460,10 @@ export default class Filters {
       const filterName = filterNameSelect.value;
       const possibleFilters = this.getPossibleFilters(filterName);
       filterNameSelect.innerHTML = '';
-      utils.appendOptions(filterNameSelect,
-        possibleFilters.map(f => ({ text: f.title, value: f.key })));
+      utils.appendOptions(
+        filterNameSelect,
+        possibleFilters.map((f) => ({ text: f.title, value: f.key })),
+      );
       filterNameSelect.value = filterName;
     }
 

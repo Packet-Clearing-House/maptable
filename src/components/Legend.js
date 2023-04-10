@@ -6,8 +6,10 @@ export default class Legend {
     this.node = this.map.svg
       .append('g')
       .attr('id', 'mt-map-legend')
-      .attr('transform',
-        `translate(${(this.map.getWidth() - 350)}, ${(this.map.getHeight() - 60)})`);
+      .attr(
+        'transform',
+        `translate(${(this.map.getWidth() - 350)}, ${(this.map.getHeight() - 60)})`,
+      );
 
     this.buildIndice();
   }
