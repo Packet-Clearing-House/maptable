@@ -21,6 +21,12 @@ export default class MapTable {
       d3.csv(this.options.data.path, this.loadData.bind(this));
     } else if (this.options.data.type === 'tsv') {
       d3.tsv(this.options.data.path, this.loadData.bind(this));
+    } else if (this.options.data.type === 'jsonData') {
+      this.loadData(null, JSON.parse(this.options.data.value));
+    } else if (this.options.data.type === 'csvData') {
+      this.loadData(null, d3.csv.parse(this.options.data.value));
+    } else if (this.options.data.type === 'tsvData') {
+      this.loadData(null, d3.tsv.parse(this.options.data.value));
     }
 
     if (this.options.map && this.options.map.heatmap) {
@@ -62,19 +68,29 @@ export default class MapTable {
       mapWrapper.innerHTML = '<div class="mt-loading">Loading...</div>';
       this.node.insertBefore(mapWrapper, this.node.firstChild);
       mapWrapper.querySelector('.mt-loading').style.display = 'block';
-      d3.json(this.options.map.path, (errGeoMap, jsonWorld) => {
-        if (errGeoMap) {
-          throw errGeoMap;
-        }
-        this.map = new GeoMap(this, this.options.map, jsonWorld);
-
-        mapWrapper.querySelector('.mt-loading').style.display = 'none';
-
-        this.buildComponenents();
-      });
+      if (this.options.map.pathData) {
+        this.loadMapData(null, JSON.parse(this.options.map.pathData), mapWrapper);
+      } else if (this.options.map.path) {
+        d3.json(this.options.map.path, (errGeoMap, jsonWorld) => {
+          this.loadMapData(errGeoMap, jsonWorld, mapWrapper);
+        });
+      } else {
+        throw new Error('missing map path|pathData');
+      }
     } else {
       this.buildComponenents();
     }
+  }
+
+  loadMapData(errGeoMap, jsonWorld, mapWrapper) {
+    if (errGeoMap) {
+      throw errGeoMap;
+    }
+    this.map = new GeoMap(this, this.options.map, jsonWorld);
+
+    mapWrapper.querySelector('.mt-loading').style.display = 'none';
+
+    this.buildComponenents();
   }
 
   buildComponenents() {

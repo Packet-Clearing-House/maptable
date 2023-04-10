@@ -19,7 +19,7 @@ d3.maptable = function (target) {
     if (!topojson) {
       throw new Error('Maptable requires topojson.js');
     }
-    if (typeof (mapOptions.path) !== 'string') {
+    if (typeof (mapOptions.path) !== 'string' && typeof (mapOptions.pathData) !== 'string') {
       throw new Error('MapTable: map not provided');
     }
     options.map = mapOptions;
@@ -33,6 +33,12 @@ d3.maptable = function (target) {
     return maptable;
   };
 
+  maptable.jsonData = function (jsonData) {
+    options.data.type = 'jsonData';
+    options.data.value = jsonData;
+    return maptable;
+  };
+
   maptable.csv = function (csvPath, preFilter) {
     options.data.type = 'csv';
     options.data.path = csvPath;
@@ -40,10 +46,22 @@ d3.maptable = function (target) {
     return maptable;
   };
 
+  maptable.csvData = function (csvData) {
+    options.data.type = 'csvData';
+    options.data.value = csvData;
+    return maptable;
+  };
+
   maptable.tsv = function (tsvPath, preFilter) {
     options.data.type = 'tsv';
     options.data.path = tsvPath;
     options.data.preFilter = preFilter;
+    return maptable;
+  };
+
+  maptable.tsvData = function (tsvData) {
+    options.data.type = 'tsvData';
+    options.data.value = tsvData;
     return maptable;
   };
 
@@ -67,8 +85,8 @@ d3.maptable = function (target) {
       throw new Error('MapTable: target not found');
     }
 
-    if (!options.data || !options.data.path) {
-      throw new Error('MapTable: Please provide the path for your dataset json|csv|tsv');
+    if (!options.data || !options.data.type) {
+      throw new Error('MapTable: Please provide the path for your dataset json|jsonData|csv|csvData|tsv|tsvData');
     }
 
     if (options.map && !options.map.heatmap) options.map.heatmap = null;

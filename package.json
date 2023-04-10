@@ -21,7 +21,7 @@
   "scripts": {
     "build": "gulp dist",
     "lint": "./node_modules/.bin/eslint --fix --ext js .",
-    "start": "gulp"
+    "dev": "gulp"
   },
   "devDependencies": {
     "babel": "6.5.2",

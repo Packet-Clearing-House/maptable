@@ -1291,7 +1291,7 @@ this.d3.maptable = (function () {
           // Update Legend
           Object.keys(this.options.countries.attr).forEach(function (attrKey) {
             var attrValue = _this4.options.countries.attr[attrKey];
-            if ((typeof attrValue === 'undefined' ? 'undefined' : babelHelpers.typeof(attrValue)) === 'object' && attrValue.legend && _this4.legendCountry[attrKey] != undefined) {
+            if ((typeof attrValue === 'undefined' ? 'undefined' : babelHelpers.typeof(attrValue)) === 'object' && attrValue.legend && _this4.legendCountry[attrKey] !== undefined) {
               var scaleDomain = d3.extent(_this4.dataCountries, function (d) {
                 return Number(d.attrProperties[attrKey].value);
               });
@@ -2697,6 +2697,12 @@ this.d3.maptable = (function () {
           d3.csv(this.options.data.path, this.loadData.bind(this));
         } else if (this.options.data.type === 'tsv') {
           d3.tsv(this.options.data.path, this.loadData.bind(this));
+        } else if (this.options.data.type === 'jsonData') {
+          this.loadData(null, JSON.parse(this.options.data.value));
+        } else if (this.options.data.type === 'csvData') {
+          this.loadData(null, d3.csv.parse(this.options.data.value));
+        } else if (this.options.data.type === 'tsvData') {
+          this.loadData(null, d3.tsv.parse(this.options.data.value));
         }
 
         if (this.options.map && this.options.map.heatmap) {
@@ -2744,19 +2750,30 @@ this.d3.maptable = (function () {
             mapWrapper.innerHTML = '<div class="mt-loading">Loading...</div>';
             this.node.insertBefore(mapWrapper, this.node.firstChild);
             mapWrapper.querySelector('.mt-loading').style.display = 'block';
-            d3.json(this.options.map.path, function (errGeoMap, jsonWorld) {
-              if (errGeoMap) {
-                throw errGeoMap;
-              }
-              _this.map = new GeoMap(_this, _this.options.map, jsonWorld);
-
-              mapWrapper.querySelector('.mt-loading').style.display = 'none';
-
-              _this.buildComponenents();
-            });
+            if (this.options.map.pathData) {
+              this.loadMapData(null, JSON.parse(this.options.map.pathData), mapWrapper);
+            } else if (this.options.map.path) {
+              d3.json(this.options.map.path, function (errGeoMap, jsonWorld) {
+                _this.loadMapData(errGeoMap, jsonWorld, mapWrapper);
+              });
+            } else {
+              throw new Error('missing map path|pathData');
+            }
           } else {
             this.buildComponenents();
           }
+        }
+      }, {
+        key: 'loadMapData',
+        value: function loadMapData(errGeoMap, jsonWorld, mapWrapper) {
+          if (errGeoMap) {
+            throw errGeoMap;
+          }
+          this.map = new GeoMap(this, this.options.map, jsonWorld);
+
+          mapWrapper.querySelector('.mt-loading').style.display = 'none';
+
+          this.buildComponenents();
         }
       }, {
         key: 'buildComponenents',
@@ -2985,7 +3002,7 @@ this.d3.maptable = (function () {
         if (!topojson) {
           throw new Error('Maptable requires topojson.js');
         }
-        if (typeof mapOptions.path !== 'string') {
+        if (typeof mapOptions.path !== 'string' && typeof mapOptions.pathData !== 'string') {
           throw new Error('MapTable: map not provided');
         }
         options.map = mapOptions;
@@ -2999,6 +3016,12 @@ this.d3.maptable = (function () {
         return maptable;
       };
 
+      maptable.jsonData = function (jsonData) {
+        options.data.type = 'jsonData';
+        options.data.value = jsonData;
+        return maptable;
+      };
+
       maptable.csv = function (csvPath, preFilter) {
         options.data.type = 'csv';
         options.data.path = csvPath;
@@ -3006,10 +3029,22 @@ this.d3.maptable = (function () {
         return maptable;
       };
 
+      maptable.csvData = function (csvData) {
+        options.data.type = 'csvData';
+        options.data.value = csvData;
+        return maptable;
+      };
+
       maptable.tsv = function (tsvPath, preFilter) {
         options.data.type = 'tsv';
         options.data.path = tsvPath;
         options.data.preFilter = preFilter;
+        return maptable;
+      };
+
+      maptable.tsvData = function (tsvData) {
+        options.data.type = 'tsvData';
+        options.data.value = tsvData;
         return maptable;
       };
 
@@ -3039,8 +3074,8 @@ this.d3.maptable = (function () {
           throw new Error('MapTable: target not found');
         }
 
-        if (!options.data || !options.data.path) {
-          throw new Error('MapTable: Please provide the path for your dataset json|csv|tsv');
+        if (!options.data || !options.data.type) {
+          throw new Error('MapTable: Please provide the path for your dataset json|jsonData|csv|csvData|tsv|tsvData');
         }
 
         if (options.map && !options.map.heatmap) options.map.heatmap = null;
