@@ -218,7 +218,9 @@ export default class Table {
         } else if (columnDetails.filterType === 'compare') {
           el1 = Number(el1);
           el2 = Number(el2);
-        } else if (el1 instanceof String && el2 instanceof String) {
+        }
+
+        if (typeof el1 === 'string' && typeof el2 === 'string') {
           el1 = el1.toLowerCase();
           el2 = el2.toLowerCase();
         }
