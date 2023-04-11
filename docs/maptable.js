@@ -1049,8 +1049,10 @@ this.d3.maptable = (function () {
 
         this.layerGlobal = this.svg.append('g').attr('class', 'mt-map-global');
         this.layerCountries = this.layerGlobal.append('g').attr('class', 'mt-map-countries');
-        this.layerNight = this.layerGlobal.append('g').attr('class', 'mt-map-night');
-        this.layerHeatmap = this.layerGlobal.append('g').attr('class', 'mt-map-heatmap');
+
+        if (this.options.night) this.layerNight = this.layerGlobal.append('g').attr('class', 'mt-map-night');
+        if (this.options.timezones) this.layerTimezones = this.layerGlobal.append('g').attr('class', 'mt-map-timezones');
+        if (this.options.heatmap) this.layerHeatmap = this.layerGlobal.append('g').attr('class', 'mt-map-heatmap');
         this.layerMarkers = this.layerGlobal.append('g').attr('class', 'mt-map-markers');
 
         // Add Watermark
@@ -1126,6 +1128,7 @@ this.d3.maptable = (function () {
           if (this.options.heatmap) this.buildHeatmap();
 
           if (this.options.night) this.buildNight();
+          if (this.options.timezones && (this.options.timezones.path || this.options.timezones.pathData)) this.buildTimezone();
         }
 
         /**
@@ -1184,6 +1187,40 @@ this.d3.maptable = (function () {
         }
 
         /**
+         * Logic to build the timezone strips
+         */
+
+      }, {
+        key: 'buildTimezone',
+        value: function buildTimezone() {
+          var _this2 = this;
+
+          if (this.options.timezones.pathData) {
+            this.loadTimezone(null, JSON.parse(this.options.timezones.pathData));
+          } else if (this.options.timezones.path) {
+            d3.json(this.options.timezones.path, function (errGeoMap, jsonTimezones) {
+              _this2.loadTimezone(errGeoMap, jsonTimezones);
+            });
+          }
+        }
+      }, {
+        key: 'loadTimezone',
+        value: function loadTimezone(err, jsonTimezones) {
+          this.dataTimezones = topojson.feature(jsonTimezones, jsonTimezones.objects.timezones).features;
+
+          console.log(this.dataTimezones);
+
+          // Build timezone paths
+          this.layerTimezones.selectAll('.mt-map-timezone').data(this.dataTimezones.filter(function (d) {
+            return d.properties.places !== 'Antarctica';
+          })).enter().insert('path').attr('class', 'mt-map-timezone').attr('d', this.path).attr('fill', function (d) {
+            return d.properties.zone % 2 === 0 ? 'rgba(0,0,0,0.05)' : 'transparent';
+          }).attr('title', function (d) {
+            return JSON.stringify(d.properties);
+          });
+        }
+
+        /**
          * Get Scale for every circle magnitude
          * @param heatmapDataset: heatmap dataset that we use
          * @returns scale: function - Scale function that output a value [0 - 1]
@@ -1215,7 +1252,7 @@ this.d3.maptable = (function () {
       }, {
         key: 'getDatumScale',
         value: function getDatumScale() {
-          var _this2 = this;
+          var _this3 = this;
 
           if (!this.options.heatmap.weightByAttribute) return function () {
             return 1;
@@ -1224,7 +1261,7 @@ this.d3.maptable = (function () {
           var userScale = this.options.heatmap.weightByAttributeScale === 'log' ? d3.scale.log : d3.scale.linear;
           var scale = userScale().domain(dataExtents).range([0.5, 1]);
           return function (d) {
-            var val = _this2.options.heatmap.weightByAttribute(d);
+            var val = _this3.options.heatmap.weightByAttribute(d);
             if (!val) return 0;
             return scale(val);
           };
@@ -1238,7 +1275,7 @@ this.d3.maptable = (function () {
       }, {
         key: 'getHeatmapData',
         value: function getHeatmapData() {
-          var _this3 = this;
+          var _this4 = this;
 
           var canvasHeatmap = d3.select(this.node).append('canvas').attr('id', 'mt-map-heatmap-canvas').attr('width', this.getWidth()).attr('height', this.getHeight()).attr('style', 'display: none;');
 
@@ -1262,7 +1299,7 @@ this.d3.maptable = (function () {
 
           // color strenght factor
           var colorMultiplier = function colorMultiplier(x) {
-            var a = _this3.options.heatmap.circles.colorStrength;
+            var a = _this4.options.heatmap.circles.colorStrength;
             var aa = 1 + (a - 1) / 100;
             if (a > 1) return (2 - aa) * x + aa - 1;
             return a * x;
@@ -1348,16 +1385,16 @@ this.d3.maptable = (function () {
       }, {
         key: 'updateCountries',
         value: function updateCountries() {
-          var _this4 = this;
+          var _this5 = this;
 
           // Data from user input
           var dataByCountry = d3.nest().key(function (d) {
-            return d[_this4.options.countryIdentifierKey];
+            return d[_this5.options.countryIdentifierKey];
           }).entries(this.maptable.data);
 
           // We merge both data
           this.dataCountries.forEach(function (geoDatum) {
-            geoDatum.key = geoDatum.properties[_this4.options.countryIdentifierType];
+            geoDatum.key = geoDatum.properties[_this5.options.countryIdentifierType];
             var matchedCountry = dataByCountry.filter(function (uDatum) {
               return uDatum.key === geoDatum.key;
             });
@@ -1368,7 +1405,7 @@ this.d3.maptable = (function () {
 
           // We calculate attributes values
           Object.keys(this.options.countries.attr).forEach(function (k) {
-            _this4.setAttrValues(k, _this4.options.countries.attr[k], _this4.dataCountries);
+            _this5.setAttrValues(k, _this5.options.countries.attr[k], _this5.dataCountries);
           });
 
           // Update SVG
@@ -1381,18 +1418,18 @@ this.d3.maptable = (function () {
 
           // Update Legend
           Object.keys(this.options.countries.attr).forEach(function (attrKey) {
-            var attrValue = _this4.options.countries.attr[attrKey];
-            if ((typeof attrValue === 'undefined' ? 'undefined' : babelHelpers.typeof(attrValue)) === 'object' && attrValue.legend && _this4.legendCountry[attrKey] !== undefined) {
-              var scaleDomain = d3.extent(_this4.dataCountries, function (d) {
+            var attrValue = _this5.options.countries.attr[attrKey];
+            if ((typeof attrValue === 'undefined' ? 'undefined' : babelHelpers.typeof(attrValue)) === 'object' && attrValue.legend && _this5.legendCountry[attrKey] !== undefined) {
+              var scaleDomain = d3.extent(_this5.dataCountries, function (d) {
                 return Number(d.attrProperties[attrKey].value);
               });
-              _this4.legendCountry[attrKey].updateExtents(scaleDomain);
+              _this5.legendCountry[attrKey].updateExtents(scaleDomain);
 
               // When we mouseover the legend, it should highlight the indice selected
               countryItem.on('mouseover', function (d) {
-                _this4.legendCountry[attrKey].indiceChange(d.attrProperties[attrKey].value);
+                _this5.legendCountry[attrKey].indiceChange(d.attrProperties[attrKey].value);
               }).on('mouseout', function () {
-                _this4.legendCountry[attrKey].indiceChange(NaN);
+                _this5.legendCountry[attrKey].indiceChange(NaN);
               });
             }
           });
@@ -1405,7 +1442,7 @@ this.d3.maptable = (function () {
       }, {
         key: 'updateMarkers',
         value: function updateMarkers() {
-          var _this5 = this;
+          var _this6 = this;
 
           var defaultGroupBy = function defaultGroupBy(a) {
             return a.longitude + ',' + a.latitude;
@@ -1423,7 +1460,7 @@ this.d3.maptable = (function () {
 
           // We calculate attributes values
           Object.keys(this.options.markers.attr).forEach(function (k) {
-            _this5.setAttrValues(k, _this5.options.markers.attr[k], _this5.dataMarkers);
+            _this6.setAttrValues(k, _this6.options.markers.attr[k], _this6.dataMarkers);
           });
 
           // Enter
@@ -1661,7 +1698,7 @@ this.d3.maptable = (function () {
       }, {
         key: 'setAttrValues',
         value: function setAttrValues(attrKey, attrValue, dataset) {
-          var _this6 = this;
+          var _this7 = this;
 
           if (typeof attrValue === 'number' || typeof attrValue === 'string') {
             // Static value
@@ -1783,11 +1820,11 @@ this.d3.maptable = (function () {
                 d.attrProperties[attrKey].key = key;
                 d.attrProperties[attrKey].mode = mode;
                 d.attrProperties[attrKey].scale = scale;
-                var c = _this6.maptable.columnDetails[key];
+                var c = _this7.maptable.columnDetails[key];
                 d.attrProperties[attrKey].columnDetails = c;
                 var datum = {};
                 datum[key] = aggregatedValue;
-                d.attrProperties[attrKey].formatted = c && c.cellContent ? c.cellContent.bind(_this6.maptable)(datum) : aggregatedValue;
+                d.attrProperties[attrKey].formatted = c && c.cellContent ? c.cellContent.bind(_this7.maptable)(datum) : aggregatedValue;
               }
             });
             if (scale === 'rank') {
@@ -1862,7 +1899,7 @@ this.d3.maptable = (function () {
                 scaledValue = attrValue.empty;
               } else {
                 var originalValueRaw = d.attrProperties[attrKey].value;
-                var originalValue = attrValue.transform ? attrValue.transform.bind(_this6.maptable)(originalValueRaw, _this6.maptable.data) : originalValueRaw;
+                var originalValue = attrValue.transform ? attrValue.transform.bind(_this7.maptable)(originalValueRaw, _this7.maptable.data) : originalValueRaw;
 
                 if (useNegative && originalValue < 0) {
                   scaledValue = scaleNegativeFunction(originalValue);
@@ -1895,14 +1932,14 @@ this.d3.maptable = (function () {
       }, {
         key: 'updateTitle',
         value: function updateTitle() {
-          var _this7 = this;
+          var _this8 = this;
 
           if (this.options.title.content) {
             var showing = this.maptable.data.filter(function (d) {
-              return d[_this7.options.latitudeKey] !== 0;
+              return d[_this8.options.latitudeKey] !== 0;
             }).length;
             var total = this.maptable.rawData.filter(function (d) {
-              return d[_this7.options.latitudeKey] !== 0;
+              return d[_this8.options.latitudeKey] !== 0;
             }).length;
 
             var inlineFilters = '';

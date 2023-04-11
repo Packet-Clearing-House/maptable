@@ -1,7 +1,7 @@
 MapTable
 ========
 
-[![GitHub stars](https://img.shields.io/github/stars/Packet-Clearing-House/maptable.svg?style=social&label=Star&maxAge=2592008)]() [![GitHub release](https://img.shields.io/github/release/Packet-Clearing-House/maptable.svg?maxAge=2592058)]() [![license](https://img.shields.io/github/license/Packet-Clearing-House/maptable.svg?maxAge=2592009)]()
+[![GitHub stars](https://img.shields.io/github/stars/Packet-Clearing-House/maptable.svg?style=social&label=Star)]() [![GitHub release](https://img.shields.io/github/release/Packet-Clearing-House/maptable.svg)]() [![license](https://img.shields.io/github/license/Packet-Clearing-House/maptable.svg)]()
 
 MapTable's primary function is to convert any dataset to a customizable set of components of Map, Filters and Table:
 
@@ -462,6 +462,10 @@ Functions that have `groupedData` as parameter, means that `groupedData` is a JS
           date: new Date(Date.parse('2023-01-01T00:00:00Z')),
        },
        ```
+
+- `timezones:` *(object, default: null)* Add the timezones layer to the map
+  - `timezones.path:` *(string, required if pathData not provided)* remote url of the topojson layers of the timezones
+  - `timezones.pathData:` *(string, required if path not provided)* inline data of the topojson layers of the timezones
 
 - `heatmap:` *(object, default: null)* Add a heatmap on the map - we use concentrated circles on every location in the dataset. You can **not** use this with `map.countries.`. See [this example](https://packet-clearing-house.github.io/maptable/#heatmap) for an implementation example.
   - `heatmap.weightByAttribute:` *(function(d), default: null)* Which attribute we would weight the gradient. it takes a anonymous function that exposes `d` as one row, and expect a float as returned value.

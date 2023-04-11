@@ -101,8 +101,10 @@ export default class GeoMap {
 
     this.layerGlobal = this.svg.append('g').attr('class', 'mt-map-global');
     this.layerCountries = this.layerGlobal.append('g').attr('class', 'mt-map-countries');
-    this.layerNight = this.layerGlobal.append('g').attr('class', 'mt-map-night');
-    this.layerHeatmap = this.layerGlobal.append('g').attr('class', 'mt-map-heatmap');
+
+    if (this.options.night) this.layerNight = this.layerGlobal.append('g').attr('class', 'mt-map-night');
+    if (this.options.timezones) this.layerTimezones = this.layerGlobal.append('g').attr('class', 'mt-map-timezones');
+    if (this.options.heatmap) this.layerHeatmap = this.layerGlobal.append('g').attr('class', 'mt-map-heatmap');
     this.layerMarkers = this.layerGlobal.append('g').attr('class', 'mt-map-markers');
 
     // Add Watermark
@@ -172,6 +174,10 @@ export default class GeoMap {
     if (this.options.heatmap) this.buildHeatmap();
 
     if (this.options.night) this.buildNight();
+    if (
+      this.options.timezones
+      && (this.options.timezones.path || this.options.timezones.pathData)
+    ) this.buildTimezone();
   }
 
   /**
@@ -253,6 +259,39 @@ export default class GeoMap {
         .attr('cy', sunCoords[1])
         .attr('r', this.options.night.sunRadius || 10);
     }
+  }
+
+  /**
+   * Logic to build the timezone strips
+   */
+  buildTimezone() {
+    if (this.options.timezones.pathData) {
+      this.loadTimezone(null, JSON.parse(this.options.timezones.pathData));
+    } else if (this.options.timezones.path) {
+      d3.json(this.options.timezones.path, (errGeoMap, jsonTimezones) => {
+        this.loadTimezone(errGeoMap, jsonTimezones);
+      });
+    }
+  }
+
+  loadTimezone(err, jsonTimezones) {
+    this.dataTimezones = topojson.feature(
+      jsonTimezones,
+      jsonTimezones.objects.timezones,
+    ).features;
+
+    console.log(this.dataTimezones);
+
+    // Build timezone paths
+    this.layerTimezones
+      .selectAll('.mt-map-timezone')
+      .data(this.dataTimezones.filter((d) => d.properties.places !== 'Antarctica'))
+      .enter()
+      .insert('path')
+      .attr('class', 'mt-map-timezone')
+      .attr('d', this.path)
+      .attr('fill', (d) => (d.properties.zone % 2 === 0 ? 'rgba(0,0,0,0.05)' : 'transparent'))
+      .attr('title', (d) => JSON.stringify(d.properties));
   }
 
   /**
