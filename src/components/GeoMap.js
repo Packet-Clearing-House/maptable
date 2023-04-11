@@ -100,10 +100,19 @@ export default class GeoMap {
     }
 
     this.layerGlobal = this.svg.append('g').attr('class', 'mt-map-global');
-    this.layerCountries = this.layerGlobal.append('g').attr('class', 'mt-map-countries');
-
-    if (this.options.night) this.layerNight = this.layerGlobal.append('g').attr('class', 'mt-map-night');
+    this.layerDefs = this.svg.append('defs');
+    this.layerDefs.html(`
+      <filter id="blur"><feGaussianBlur stdDeviation="12" /></filter>
+      <radialGradient id="sunGradient">
+        <stop offset="0" stop-color="#FFC000" stop-opacity="0.5" />
+        <stop offset="0.45" stop-color="#FFC000" stop-opacity="0.15" />
+        <stop offset="1" stop-color="#FFC000" stop-opacity="0" />
+      </radialGradient>
+    `);
     if (this.options.timezones) this.layerTimezones = this.layerGlobal.append('g').attr('class', 'mt-map-timezones');
+    this.layerCountries = this.layerGlobal.append('g').attr('class', 'mt-map-countries');
+    if (this.options.night) this.layerNight = this.layerGlobal.append('g').attr('class', 'mt-map-night');
+
     if (this.options.heatmap) this.layerHeatmap = this.layerGlobal.append('g').attr('class', 'mt-map-heatmap');
     this.layerMarkers = this.layerGlobal.append('g').attr('class', 'mt-map-markers');
 
@@ -243,7 +252,8 @@ export default class GeoMap {
 
     // Build vectors
     this.nightPath = this.layerNight.append('path')
-      .attr('class', 'night')
+      .attr('class', 'mt-map-night-layer')
+      .attr('filter', 'url(#blur)')
       .attr('d', this.path);
 
     const solarPositionDated = solarPosition(this.options.night.date || new Date());
@@ -254,10 +264,11 @@ export default class GeoMap {
       const sunCoords = this.projection(solarPositionDated);
 
       this.sunCircle = this.layerNight.append('svg:circle')
-        .attr('class', 'sun')
+        .attr('class', 'mt-map-sun')
         .attr('cx', sunCoords[0])
         .attr('cy', sunCoords[1])
-        .attr('r', this.options.night.sunRadius || 10);
+        .attr('fill', 'url(#sunGradient)')
+        .attr('r', this.getHeight() * 0.35);
     }
   }
 
@@ -280,7 +291,16 @@ export default class GeoMap {
       jsonTimezones.objects.timezones,
     ).features;
 
-    console.log(this.dataTimezones);
+    // Mask timezone
+    this.maskTimezone = this.layerTimezones.append('defs')
+      .append('clipPath')
+      .attr('id', 'mt-map-timezone-mask');
+
+    this.maskTimezone.append('rect')
+      .attr('x', 0)
+      .attr('y', 0)
+      .attr('width', this.getWidth())
+      .attr('height', this.getHeight() * 0.8);
 
     // Build timezone paths
     this.layerTimezones
@@ -290,8 +310,32 @@ export default class GeoMap {
       .insert('path')
       .attr('class', 'mt-map-timezone')
       .attr('d', this.path)
-      .attr('fill', (d) => (d.properties.zone % 2 === 0 ? 'rgba(0,0,0,0.05)' : 'transparent'))
-      .attr('title', (d) => JSON.stringify(d.properties));
+      .attr('fill', (d) => (d.properties.zone % 2 === 0 ? '#F4F5F5' : 'transparent'))
+      .attr('title', (d) => JSON.stringify(d.properties))
+      .attr('clip-path', 'url(#mt-map-timezone-mask)');
+
+    // Add times
+    const timezoneTexts = this.dataTimezones.filter((d) => d.properties.places !== 'Antarctica' && d.properties.zone % 1 === 0);
+    const timezoneTextsUnique = [...new Map(timezoneTexts.map((item) => (
+      [item.properties.zone, item]
+    ))).values()];
+    const formatDate = (d, zone) => {
+      const newDate = new Date(d.getTime() + zone * 3600 * 1000);
+      return newDate.toISOString().split('T')[1].substr(0, 5);
+    };
+
+    this.layerTimezonesText = this.layerTimezones.append('g').attr('class', 'mt-map-timezones-texts');
+    this.layerTimezonesText.selectAll('.mt-map-timezone-text')
+      .data(timezoneTextsUnique)
+      .enter()
+      .insert('text')
+      .attr('y', this.getHeight() * 0.8 + 10)
+      .attr('x', (d) => (d.properties.zone + 10) * (this.getWidth() / 24.5))
+      .attr('dx', (this.getWidth() / 24.5) / 2)
+      .attr('font-size', 9)
+      .attr('fill', '#999')
+      .attr('text-anchor', 'middle')
+      .html((d) => formatDate((this.options.timezones.date || new Date()), d.properties.zone));
   }
 
   /**
@@ -775,6 +819,14 @@ export default class GeoMap {
           d3.select(this).attr('r', d.attr.r / self.scaleAttributes());
         }
       });
+    }
+
+    // Rescale Sun
+    if (this.options.night && !this.options.disableSun) {
+      d3.selectAll(`${this.containerSelector} .mt-map-sun`).style(
+        'r',
+        (this.getHeight() * 0.35) / this.scale,
+      );
     }
 
     // Rescale Country stroke-width

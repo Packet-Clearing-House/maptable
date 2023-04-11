@@ -33,6 +33,16 @@ this.d3.maptable = (function () {
       };
     }();
 
+    babelHelpers.toConsumableArray = function (arr) {
+      if (Array.isArray(arr)) {
+        for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) arr2[i] = arr[i];
+
+        return arr2;
+      } else {
+        return Array.from(arr);
+      }
+    };
+
     babelHelpers;
 
     function appendOptions(select, options, defaultValue) {
@@ -1048,10 +1058,12 @@ this.d3.maptable = (function () {
         }
 
         this.layerGlobal = this.svg.append('g').attr('class', 'mt-map-global');
-        this.layerCountries = this.layerGlobal.append('g').attr('class', 'mt-map-countries');
-
-        if (this.options.night) this.layerNight = this.layerGlobal.append('g').attr('class', 'mt-map-night');
+        this.layerDefs = this.svg.append('defs');
+        this.layerDefs.html('\n      <filter id="blur"><feGaussianBlur stdDeviation="12" /></filter>\n      <radialGradient id="sunGradient">\n        <stop offset="0" stop-color="#FFC000" stop-opacity="0.5" />\n        <stop offset="0.45" stop-color="#FFC000" stop-opacity="0.15" />\n        <stop offset="1" stop-color="#FFC000" stop-opacity="0" />\n      </radialGradient>\n    ');
         if (this.options.timezones) this.layerTimezones = this.layerGlobal.append('g').attr('class', 'mt-map-timezones');
+        this.layerCountries = this.layerGlobal.append('g').attr('class', 'mt-map-countries');
+        if (this.options.night) this.layerNight = this.layerGlobal.append('g').attr('class', 'mt-map-night');
+
         if (this.options.heatmap) this.layerHeatmap = this.layerGlobal.append('g').attr('class', 'mt-map-heatmap');
         this.layerMarkers = this.layerGlobal.append('g').attr('class', 'mt-map-markers');
 
@@ -1173,7 +1185,7 @@ this.d3.maptable = (function () {
           var circle = d3.geo.circle().angle(90);
 
           // Build vectors
-          this.nightPath = this.layerNight.append('path').attr('class', 'night').attr('d', this.path);
+          this.nightPath = this.layerNight.append('path').attr('class', 'mt-map-night-layer').attr('filter', 'url(#blur)').attr('d', this.path);
 
           var solarPositionDated = solarPosition(this.options.night.date || new Date());
 
@@ -1182,7 +1194,7 @@ this.d3.maptable = (function () {
           if (!this.options.night.disableSun) {
             var sunCoords = this.projection(solarPositionDated);
 
-            this.sunCircle = this.layerNight.append('svg:circle').attr('class', 'sun').attr('cx', sunCoords[0]).attr('cy', sunCoords[1]).attr('r', this.options.night.sunRadius || 10);
+            this.sunCircle = this.layerNight.append('svg:circle').attr('class', 'mt-map-sun').attr('cx', sunCoords[0]).attr('cy', sunCoords[1]).attr('fill', 'url(#sunGradient)').attr('r', this.getHeight() * 0.35);
           }
         }
 
@@ -1206,17 +1218,41 @@ this.d3.maptable = (function () {
       }, {
         key: 'loadTimezone',
         value: function loadTimezone(err, jsonTimezones) {
+          var _this3 = this;
+
           this.dataTimezones = topojson.feature(jsonTimezones, jsonTimezones.objects.timezones).features;
 
-          console.log(this.dataTimezones);
+          // Mask timezone
+          this.maskTimezone = this.layerTimezones.append('defs').append('clipPath').attr('id', 'mt-map-timezone-mask');
+
+          this.maskTimezone.append('rect').attr('x', 0).attr('y', 0).attr('width', this.getWidth()).attr('height', this.getHeight() * 0.8);
 
           // Build timezone paths
           this.layerTimezones.selectAll('.mt-map-timezone').data(this.dataTimezones.filter(function (d) {
             return d.properties.places !== 'Antarctica';
           })).enter().insert('path').attr('class', 'mt-map-timezone').attr('d', this.path).attr('fill', function (d) {
-            return d.properties.zone % 2 === 0 ? 'rgba(0,0,0,0.05)' : 'transparent';
+            return d.properties.zone % 2 === 0 ? '#F4F5F5' : 'transparent';
           }).attr('title', function (d) {
             return JSON.stringify(d.properties);
+          }).attr('clip-path', 'url(#mt-map-timezone-mask)');
+
+          // Add times
+          var timezoneTexts = this.dataTimezones.filter(function (d) {
+            return d.properties.places !== 'Antarctica' && d.properties.zone % 1 === 0;
+          });
+          var timezoneTextsUnique = [].concat(babelHelpers.toConsumableArray(new Map(timezoneTexts.map(function (item) {
+            return [item.properties.zone, item];
+          })).values()));
+          var formatDate = function formatDate(d, zone) {
+            var newDate = new Date(d.getTime() + zone * 3600 * 1000);
+            return newDate.toISOString().split('T')[1].substr(0, 5);
+          };
+
+          this.layerTimezonesText = this.layerTimezones.append('g').attr('class', 'mt-map-timezones-texts');
+          this.layerTimezonesText.selectAll('.mt-map-timezone-text').data(timezoneTextsUnique).enter().insert('text').attr('y', this.getHeight() * 0.8 + 10).attr('x', function (d) {
+            return (d.properties.zone + 10) * (_this3.getWidth() / 24.5);
+          }).attr('dx', this.getWidth() / 24.5 / 2).attr('font-size', 9).attr('fill', '#999').attr('text-anchor', 'middle').html(function (d) {
+            return formatDate(_this3.options.timezones.date || new Date(), d.properties.zone);
           });
         }
 
@@ -1252,7 +1288,7 @@ this.d3.maptable = (function () {
       }, {
         key: 'getDatumScale',
         value: function getDatumScale() {
-          var _this3 = this;
+          var _this4 = this;
 
           if (!this.options.heatmap.weightByAttribute) return function () {
             return 1;
@@ -1261,7 +1297,7 @@ this.d3.maptable = (function () {
           var userScale = this.options.heatmap.weightByAttributeScale === 'log' ? d3.scale.log : d3.scale.linear;
           var scale = userScale().domain(dataExtents).range([0.5, 1]);
           return function (d) {
-            var val = _this3.options.heatmap.weightByAttribute(d);
+            var val = _this4.options.heatmap.weightByAttribute(d);
             if (!val) return 0;
             return scale(val);
           };
@@ -1275,7 +1311,7 @@ this.d3.maptable = (function () {
       }, {
         key: 'getHeatmapData',
         value: function getHeatmapData() {
-          var _this4 = this;
+          var _this5 = this;
 
           var canvasHeatmap = d3.select(this.node).append('canvas').attr('id', 'mt-map-heatmap-canvas').attr('width', this.getWidth()).attr('height', this.getHeight()).attr('style', 'display: none;');
 
@@ -1299,7 +1335,7 @@ this.d3.maptable = (function () {
 
           // color strenght factor
           var colorMultiplier = function colorMultiplier(x) {
-            var a = _this4.options.heatmap.circles.colorStrength;
+            var a = _this5.options.heatmap.circles.colorStrength;
             var aa = 1 + (a - 1) / 100;
             if (a > 1) return (2 - aa) * x + aa - 1;
             return a * x;
@@ -1385,16 +1421,16 @@ this.d3.maptable = (function () {
       }, {
         key: 'updateCountries',
         value: function updateCountries() {
-          var _this5 = this;
+          var _this6 = this;
 
           // Data from user input
           var dataByCountry = d3.nest().key(function (d) {
-            return d[_this5.options.countryIdentifierKey];
+            return d[_this6.options.countryIdentifierKey];
           }).entries(this.maptable.data);
 
           // We merge both data
           this.dataCountries.forEach(function (geoDatum) {
-            geoDatum.key = geoDatum.properties[_this5.options.countryIdentifierType];
+            geoDatum.key = geoDatum.properties[_this6.options.countryIdentifierType];
             var matchedCountry = dataByCountry.filter(function (uDatum) {
               return uDatum.key === geoDatum.key;
             });
@@ -1405,7 +1441,7 @@ this.d3.maptable = (function () {
 
           // We calculate attributes values
           Object.keys(this.options.countries.attr).forEach(function (k) {
-            _this5.setAttrValues(k, _this5.options.countries.attr[k], _this5.dataCountries);
+            _this6.setAttrValues(k, _this6.options.countries.attr[k], _this6.dataCountries);
           });
 
           // Update SVG
@@ -1418,18 +1454,18 @@ this.d3.maptable = (function () {
 
           // Update Legend
           Object.keys(this.options.countries.attr).forEach(function (attrKey) {
-            var attrValue = _this5.options.countries.attr[attrKey];
-            if ((typeof attrValue === 'undefined' ? 'undefined' : babelHelpers.typeof(attrValue)) === 'object' && attrValue.legend && _this5.legendCountry[attrKey] !== undefined) {
-              var scaleDomain = d3.extent(_this5.dataCountries, function (d) {
+            var attrValue = _this6.options.countries.attr[attrKey];
+            if ((typeof attrValue === 'undefined' ? 'undefined' : babelHelpers.typeof(attrValue)) === 'object' && attrValue.legend && _this6.legendCountry[attrKey] !== undefined) {
+              var scaleDomain = d3.extent(_this6.dataCountries, function (d) {
                 return Number(d.attrProperties[attrKey].value);
               });
-              _this5.legendCountry[attrKey].updateExtents(scaleDomain);
+              _this6.legendCountry[attrKey].updateExtents(scaleDomain);
 
               // When we mouseover the legend, it should highlight the indice selected
               countryItem.on('mouseover', function (d) {
-                _this5.legendCountry[attrKey].indiceChange(d.attrProperties[attrKey].value);
+                _this6.legendCountry[attrKey].indiceChange(d.attrProperties[attrKey].value);
               }).on('mouseout', function () {
-                _this5.legendCountry[attrKey].indiceChange(NaN);
+                _this6.legendCountry[attrKey].indiceChange(NaN);
               });
             }
           });
@@ -1442,7 +1478,7 @@ this.d3.maptable = (function () {
       }, {
         key: 'updateMarkers',
         value: function updateMarkers() {
-          var _this6 = this;
+          var _this7 = this;
 
           var defaultGroupBy = function defaultGroupBy(a) {
             return a.longitude + ',' + a.latitude;
@@ -1460,7 +1496,7 @@ this.d3.maptable = (function () {
 
           // We calculate attributes values
           Object.keys(this.options.markers.attr).forEach(function (k) {
-            _this6.setAttrValues(k, _this6.options.markers.attr[k], _this6.dataMarkers);
+            _this7.setAttrValues(k, _this7.options.markers.attr[k], _this7.dataMarkers);
           });
 
           // Enter
@@ -1682,6 +1718,11 @@ this.d3.maptable = (function () {
             });
           }
 
+          // Rescale Sun
+          if (this.options.night && !this.options.disableSun) {
+            d3.selectAll(this.containerSelector + ' .mt-map-sun').style('r', this.getHeight() * 0.35 / this.scale);
+          }
+
           // Rescale Country stroke-width
           if (this.options.countries) {
             d3.selectAll(this.containerSelector + ' .mt-map-country').style('stroke-width', this.options.countries.attr['stroke-width'] / this.scale);
@@ -1698,7 +1739,7 @@ this.d3.maptable = (function () {
       }, {
         key: 'setAttrValues',
         value: function setAttrValues(attrKey, attrValue, dataset) {
-          var _this7 = this;
+          var _this8 = this;
 
           if (typeof attrValue === 'number' || typeof attrValue === 'string') {
             // Static value
@@ -1820,11 +1861,11 @@ this.d3.maptable = (function () {
                 d.attrProperties[attrKey].key = key;
                 d.attrProperties[attrKey].mode = mode;
                 d.attrProperties[attrKey].scale = scale;
-                var c = _this7.maptable.columnDetails[key];
+                var c = _this8.maptable.columnDetails[key];
                 d.attrProperties[attrKey].columnDetails = c;
                 var datum = {};
                 datum[key] = aggregatedValue;
-                d.attrProperties[attrKey].formatted = c && c.cellContent ? c.cellContent.bind(_this7.maptable)(datum) : aggregatedValue;
+                d.attrProperties[attrKey].formatted = c && c.cellContent ? c.cellContent.bind(_this8.maptable)(datum) : aggregatedValue;
               }
             });
             if (scale === 'rank') {
@@ -1899,7 +1940,7 @@ this.d3.maptable = (function () {
                 scaledValue = attrValue.empty;
               } else {
                 var originalValueRaw = d.attrProperties[attrKey].value;
-                var originalValue = attrValue.transform ? attrValue.transform.bind(_this7.maptable)(originalValueRaw, _this7.maptable.data) : originalValueRaw;
+                var originalValue = attrValue.transform ? attrValue.transform.bind(_this8.maptable)(originalValueRaw, _this8.maptable.data) : originalValueRaw;
 
                 if (useNegative && originalValue < 0) {
                   scaledValue = scaleNegativeFunction(originalValue);
@@ -1932,14 +1973,14 @@ this.d3.maptable = (function () {
       }, {
         key: 'updateTitle',
         value: function updateTitle() {
-          var _this8 = this;
+          var _this9 = this;
 
           if (this.options.title.content) {
             var showing = this.maptable.data.filter(function (d) {
-              return d[_this8.options.latitudeKey] !== 0;
+              return d[_this9.options.latitudeKey] !== 0;
             }).length;
             var total = this.maptable.rawData.filter(function (d) {
-              return d[_this8.options.latitudeKey] !== 0;
+              return d[_this9.options.latitudeKey] !== 0;
             }).length;
 
             var inlineFilters = '';
