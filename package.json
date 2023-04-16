@@ -36,7 +36,7 @@
     "eslint": "8.33.0",
     "eslint-config-airbnb-base": "15.0.0",
     "eslint-plugin-import": "2.27.5",
-    "gulp": "3.9.1",
+    "gulp": "4.0.2",
     "gulp-cssnano": "2.1.1",
     "gulp-header-comment": "^0.4.0",
     "gulp-rename": "1.2.2",
