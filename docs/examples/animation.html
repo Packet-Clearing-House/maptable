@@ -142,11 +142,13 @@
         viz.render();
       }
 
+      const fps = 15;
+
       let currentIndex = -1;
       setInterval(() => {
         currentIndex = (currentIndex >= timeline.length - 1) ? 0 : currentIndex + 1
         drawMapForTime(timeline[currentIndex])
-      }, 100)
+      }, 1000 / fps)
 
   });
   
