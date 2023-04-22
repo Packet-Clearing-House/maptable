@@ -38,7 +38,7 @@
   const csvAllData = d3.csv('./animation-data.csv', (err, csvAllData) => {
     const csvData = csvAllData
     const timeline = [];
-    Object.keys(csvAllData).forEach((k) => {
+    Object.keys(csvAllData[0]).filter((k) => k !== 'country').forEach((k) => {
       const index = Number(k);
       timeline.push({
         index,
@@ -46,7 +46,6 @@
         data: csvAllData.map((d) => ({ country: d.country, value: Number(d[k]) }))
       })
     });
-
 
       var ranks = null;
       var negativeRanks = null;
