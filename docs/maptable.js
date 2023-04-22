@@ -141,6 +141,11 @@ this.d3.maptable = (function () {
       return a;
     }
 
+    var formatDate = function formatDate(d, zone) {
+      var newDate = new Date(d.getTime() + zone * 3600 * 1000);
+      return newDate.toISOString().split('T')[1].substr(0, 5);
+    };
+
     var utils = {
       rangeToBool: rangeToBool,
       appendOptions: appendOptions,
@@ -149,7 +154,8 @@ this.d3.maptable = (function () {
       toNumber: toNumber,
       keyToTile: keyToTile,
       quantile: quantile,
-      uniqueValues: uniqueValues
+      uniqueValues: uniqueValues,
+      formatDate: formatDate
     };
 
     var defaultOptions = {
@@ -995,7 +1001,6 @@ this.d3.maptable = (function () {
 
         babelHelpers.classCallCheck(this, GeoMap);
 
-        var self = this;
         this.maptable = maptable;
         this.scale = 1;
         this.transX = 0;
@@ -1029,17 +1034,7 @@ this.d3.maptable = (function () {
 
         this.path = d3.geo.path().projection(this.projection);
 
-        // Add coordinates to rawData
-        this.maptable.rawData.forEach(function (d) {
-          d.longitude = parseFloat(d[self.options.longitudeKey]);
-          d.latitude = parseFloat(d[self.options.latitudeKey]);
-          var coord = [0, 0];
-          if (!Number.isNaN(d.longitude) && !Number.isNaN(d.latitude)) {
-            coord = self.projection([d.longitude, d.latitude]);
-          }
-          d.x = coord[0];
-          d.y = coord[1];
-        });
+        this.enrichData();
 
         this.zoomListener = d3.behavior.zoom().scaleExtent(this.options.scaleZoom).on('zoom', this.rescale.bind(this));
 
@@ -1059,7 +1054,7 @@ this.d3.maptable = (function () {
 
         this.layerGlobal = this.svg.append('g').attr('class', 'mt-map-global');
         this.layerDefs = this.svg.append('defs');
-        this.layerDefs.html('\n      <filter id="blur"><feGaussianBlur stdDeviation="12" /></filter>\n      <radialGradient id="sunGradient">\n        <stop offset="0" stop-color="#FFC000" stop-opacity="0.5" />\n        <stop offset="0.45" stop-color="#FFC000" stop-opacity="0.15" />\n        <stop offset="1" stop-color="#FFC000" stop-opacity="0" />\n      </radialGradient>\n    ');
+        this.layerDefs.html('\n    <filter id="blur"><feGaussianBlur stdDeviation="18" /></filter>\n    <filter id="blur-tz"><feGaussianBlur stdDeviation="2" /></filter>\n    <radialGradient id="sunGradient">\n        <stop offset="0" stop-color="#FFC000" stop-opacity="0.5" />\n        <stop offset="0.45" stop-color="#FFC000" stop-opacity="0.15" />\n        <stop offset="1" stop-color="#FFC000" stop-opacity="0" />\n      </radialGradient>\n    ');
         if (this.options.timezones) this.layerTimezones = this.layerGlobal.append('g').attr('class', 'mt-map-timezones');
         this.layerCountries = this.layerGlobal.append('g').attr('class', 'mt-map-countries');
         if (this.options.night) this.layerNight = this.layerGlobal.append('g').attr('class', 'mt-map-night');
@@ -1099,6 +1094,23 @@ this.d3.maptable = (function () {
       }
 
       babelHelpers.createClass(GeoMap, [{
+        key: 'enrichData',
+        value: function enrichData() {
+          var _this2 = this;
+
+          // Add coordinates to rawData
+          this.maptable.rawData.forEach(function (d) {
+            d.longitude = parseFloat(d[_this2.options.longitudeKey]);
+            d.latitude = parseFloat(d[_this2.options.latitudeKey]);
+            var coord = [0, 0];
+            if (!Number.isNaN(d.longitude) && !Number.isNaN(d.latitude)) {
+              coord = _this2.projection([d.longitude, d.latitude]);
+            }
+            d.x = coord[0];
+            d.y = coord[1];
+          });
+        }
+      }, {
         key: 'scaleAttributes',
         value: function scaleAttributes() {
           return Math.pow(this.scale, 2 / 3); // eslint-disable-line
@@ -1187,10 +1199,10 @@ this.d3.maptable = (function () {
           // Mask night
           this.maskNight = this.layerNight.append('defs').append('clipPath').attr('id', 'mt-map-night-mask');
 
-          this.maskNight.append('rect').attr('x', 0).attr('y', 0).attr('width', this.getWidth()).attr('height', this.getHeight() * 0.82);
+          this.maskNight.append('rect').attr('x', 0).attr('y', 30).attr('width', this.getWidth()).attr('height', this.getHeight() * 0.82 - 30);
 
           // Build vectors
-          this.nightPath = this.layerNight.append('path').attr('class', 'mt-map-night-layer').attr('filter', 'url(#blur)').attr('clip-path', 'url(#mt-map-night-mask)').attr('d', this.path);
+          this.nightPath = this.layerNight.append('path').attr('class', 'mt-map-night-layer').attr('filter', 'url(#blur)').attr('clip-path', 'url(#mt-map-night-mask)').attr('d', this.path).style('opacity', 0.1);
 
           var solarPositionDated = solarPosition(this.options.night.date || new Date());
 
@@ -1210,27 +1222,27 @@ this.d3.maptable = (function () {
       }, {
         key: 'buildTimezone',
         value: function buildTimezone() {
-          var _this2 = this;
+          var _this3 = this;
 
           if (this.options.timezones.pathData) {
             this.loadTimezone(null, JSON.parse(this.options.timezones.pathData));
           } else if (this.options.timezones.path) {
             d3.json(this.options.timezones.path, function (errGeoMap, jsonTimezones) {
-              _this2.loadTimezone(errGeoMap, jsonTimezones);
+              _this3.loadTimezone(errGeoMap, jsonTimezones);
             });
           }
         }
       }, {
         key: 'loadTimezone',
         value: function loadTimezone(err, jsonTimezones) {
-          var _this3 = this;
+          var _this4 = this;
 
           this.dataTimezones = topojson.feature(jsonTimezones, jsonTimezones.objects.timezones).features;
 
           // Mask timezone
           this.maskTimezone = this.layerTimezones.append('defs').append('clipPath').attr('id', 'mt-map-timezone-mask');
 
-          this.maskTimezone.append('rect').attr('x', 0).attr('y', 0).attr('width', this.getWidth()).attr('height', this.getHeight() * 0.82);
+          this.maskTimezone.append('rect').attr('x', 0).attr('y', 30).attr('width', this.getWidth()).attr('height', this.getHeight() * 0.82 - 30);
 
           // Build timezone paths
           this.layerTimezones.selectAll('.mt-map-timezone').data(this.dataTimezones.filter(function (d) {
@@ -1239,7 +1251,7 @@ this.d3.maptable = (function () {
             return d.properties.zone % 2 === 0 ? '#F4F5F5' : 'transparent';
           }).attr('title', function (d) {
             return JSON.stringify(d.properties);
-          }).attr('clip-path', 'url(#mt-map-timezone-mask)');
+          }).attr('clip-path', 'url(#mt-map-timezone-mask)').attr('filter', 'url(#blur-tz)').style('opacity', 0.6);
 
           // Add times
           var timezoneTexts = this.dataTimezones.filter(function (d) {
@@ -1248,16 +1260,12 @@ this.d3.maptable = (function () {
           var timezoneTextsUnique = [].concat(babelHelpers.toConsumableArray(new Map(timezoneTexts.map(function (item) {
             return [item.properties.zone, item];
           })).values()));
-          var formatDate = function formatDate(d, zone) {
-            var newDate = new Date(d.getTime() + zone * 3600 * 1000);
-            return newDate.toISOString().split('T')[1].substr(0, 5);
-          };
 
           this.layerTimezonesText = this.layerTimezones.append('g').attr('class', 'mt-map-timezones-texts');
-          this.layerTimezonesText.selectAll('.mt-map-timezone-text').data(timezoneTextsUnique).enter().insert('text').attr('y', this.getHeight() * 0.82 - 5).attr('x', function (d) {
-            return (d.properties.zone + 10) * (_this3.getWidth() / 24.5) - 1;
+          this.layerTimezonesText.selectAll('.mt-map-timezone-text').data(timezoneTextsUnique).enter().insert('text').attr('class', 'mt-map-timezone-text').attr('y', this.getHeight() * 0.82 - 5).attr('x', function (d) {
+            return (d.properties.zone + 10) * (_this4.getWidth() / 24.5) - 1;
           }).attr('dx', this.getWidth() / 24.5 / 2).attr('font-size', 9).attr('font-family', 'Helevetica, Arial, Sans-Serif').attr('fill', '#999').attr('text-anchor', 'middle').html(function (d) {
-            return formatDate(_this3.options.timezones.date || new Date(), d.properties.zone);
+            return utils.formatDate(_this4.options.timezones.date || new Date(), d.properties.zone);
           });
         }
 
@@ -1293,7 +1301,7 @@ this.d3.maptable = (function () {
       }, {
         key: 'getDatumScale',
         value: function getDatumScale() {
-          var _this4 = this;
+          var _this5 = this;
 
           if (!this.options.heatmap.weightByAttribute) return function () {
             return 1;
@@ -1302,7 +1310,7 @@ this.d3.maptable = (function () {
           var userScale = this.options.heatmap.weightByAttributeScale === 'log' ? d3.scale.log : d3.scale.linear;
           var scale = userScale().domain(dataExtents).range([0.5, 1]);
           return function (d) {
-            var val = _this4.options.heatmap.weightByAttribute(d);
+            var val = _this5.options.heatmap.weightByAttribute(d);
             if (!val) return 0;
             return scale(val);
           };
@@ -1316,7 +1324,7 @@ this.d3.maptable = (function () {
       }, {
         key: 'getHeatmapData',
         value: function getHeatmapData() {
-          var _this5 = this;
+          var _this6 = this;
 
           var canvasHeatmap = d3.select(this.node).append('canvas').attr('id', 'mt-map-heatmap-canvas').attr('width', this.getWidth()).attr('height', this.getHeight()).attr('style', 'display: none;');
 
@@ -1340,7 +1348,7 @@ this.d3.maptable = (function () {
 
           // color strenght factor
           var colorMultiplier = function colorMultiplier(x) {
-            var a = _this5.options.heatmap.circles.colorStrength;
+            var a = _this6.options.heatmap.circles.colorStrength;
             var aa = 1 + (a - 1) / 100;
             if (a > 1) return (2 - aa) * x + aa - 1;
             return a * x;
@@ -1426,16 +1434,16 @@ this.d3.maptable = (function () {
       }, {
         key: 'updateCountries',
         value: function updateCountries() {
-          var _this6 = this;
+          var _this7 = this;
 
           // Data from user input
           var dataByCountry = d3.nest().key(function (d) {
-            return d[_this6.options.countryIdentifierKey];
+            return d[_this7.options.countryIdentifierKey];
           }).entries(this.maptable.data);
 
           // We merge both data
           this.dataCountries.forEach(function (geoDatum) {
-            geoDatum.key = geoDatum.properties[_this6.options.countryIdentifierType];
+            geoDatum.key = geoDatum.properties[_this7.options.countryIdentifierType];
             var matchedCountry = dataByCountry.filter(function (uDatum) {
               return uDatum.key === geoDatum.key;
             });
@@ -1446,7 +1454,7 @@ this.d3.maptable = (function () {
 
           // We calculate attributes values
           Object.keys(this.options.countries.attr).forEach(function (k) {
-            _this6.setAttrValues(k, _this6.options.countries.attr[k], _this6.dataCountries);
+            _this7.setAttrValues(k, _this7.options.countries.attr[k], _this7.dataCountries);
           });
 
           // Update SVG
@@ -1459,18 +1467,18 @@ this.d3.maptable = (function () {
 
           // Update Legend
           Object.keys(this.options.countries.attr).forEach(function (attrKey) {
-            var attrValue = _this6.options.countries.attr[attrKey];
-            if ((typeof attrValue === 'undefined' ? 'undefined' : babelHelpers.typeof(attrValue)) === 'object' && attrValue.legend && _this6.legendCountry[attrKey] !== undefined) {
-              var scaleDomain = d3.extent(_this6.dataCountries, function (d) {
+            var attrValue = _this7.options.countries.attr[attrKey];
+            if ((typeof attrValue === 'undefined' ? 'undefined' : babelHelpers.typeof(attrValue)) === 'object' && attrValue.legend && _this7.legendCountry[attrKey] !== undefined) {
+              var scaleDomain = d3.extent(_this7.dataCountries, function (d) {
                 return Number(d.attrProperties[attrKey].value);
               });
-              _this6.legendCountry[attrKey].updateExtents(scaleDomain);
+              _this7.legendCountry[attrKey].updateExtents(scaleDomain);
 
               // When we mouseover the legend, it should highlight the indice selected
               countryItem.on('mouseover', function (d) {
-                _this6.legendCountry[attrKey].indiceChange(d.attrProperties[attrKey].value);
+                _this7.legendCountry[attrKey].indiceChange(d.attrProperties[attrKey].value);
               }).on('mouseout', function () {
-                _this6.legendCountry[attrKey].indiceChange(NaN);
+                _this7.legendCountry[attrKey].indiceChange(NaN);
               });
             }
           });
@@ -1480,10 +1488,38 @@ this.d3.maptable = (function () {
             this.activateTooltip(countryItem, this.tooltipCountriesNode, this.options.countries.tooltip, true);
           }
         }
+
+        /**
+         * Update night drawings
+         */
+
+      }, {
+        key: 'updateNight',
+        value: function updateNight() {
+          this.layerNight.remove();
+          this.layerNight = this.layerGlobal.append('g').attr('class', 'mt-map-night');
+          this.buildNight();
+        }
+
+        /**
+         * Update night drawings
+         */
+
+      }, {
+        key: 'updateTimezones',
+        value: function updateTimezones() {
+          var self = this;
+          d3.selectAll('.mt-map-timezone-text').each(function () {
+            var targetPath = this;
+            d3.select(targetPath).html(function (d) {
+              return utils.formatDate(self.options.timezones.date || new Date(), d.properties.zone);
+            });
+          });
+        }
       }, {
         key: 'updateMarkers',
         value: function updateMarkers() {
-          var _this7 = this;
+          var _this8 = this;
 
           var defaultGroupBy = function defaultGroupBy(a) {
             return a.longitude + ',' + a.latitude;
@@ -1501,7 +1537,7 @@ this.d3.maptable = (function () {
 
           // We calculate attributes values
           Object.keys(this.options.markers.attr).forEach(function (k) {
-            _this7.setAttrValues(k, _this7.options.markers.attr[k], _this7.dataMarkers);
+            _this8.setAttrValues(k, _this8.options.markers.attr[k], _this8.dataMarkers);
           });
 
           // Enter
@@ -1744,7 +1780,7 @@ this.d3.maptable = (function () {
       }, {
         key: 'setAttrValues',
         value: function setAttrValues(attrKey, attrValue, dataset) {
-          var _this8 = this;
+          var _this9 = this;
 
           if (typeof attrValue === 'number' || typeof attrValue === 'string') {
             // Static value
@@ -1866,11 +1902,11 @@ this.d3.maptable = (function () {
                 d.attrProperties[attrKey].key = key;
                 d.attrProperties[attrKey].mode = mode;
                 d.attrProperties[attrKey].scale = scale;
-                var c = _this8.maptable.columnDetails[key];
+                var c = _this9.maptable.columnDetails[key];
                 d.attrProperties[attrKey].columnDetails = c;
                 var datum = {};
                 datum[key] = aggregatedValue;
-                d.attrProperties[attrKey].formatted = c && c.cellContent ? c.cellContent.bind(_this8.maptable)(datum) : aggregatedValue;
+                d.attrProperties[attrKey].formatted = c && c.cellContent ? c.cellContent.bind(_this9.maptable)(datum) : aggregatedValue;
               }
             });
             if (scale === 'rank') {
@@ -1945,7 +1981,7 @@ this.d3.maptable = (function () {
                 scaledValue = attrValue.empty;
               } else {
                 var originalValueRaw = d.attrProperties[attrKey].value;
-                var originalValue = attrValue.transform ? attrValue.transform.bind(_this8.maptable)(originalValueRaw, _this8.maptable.data) : originalValueRaw;
+                var originalValue = attrValue.transform ? attrValue.transform.bind(_this9.maptable)(originalValueRaw, _this9.maptable.data) : originalValueRaw;
 
                 if (useNegative && originalValue < 0) {
                   scaledValue = scaleNegativeFunction(originalValue);
@@ -1964,6 +2000,8 @@ this.d3.maptable = (function () {
         value: function render() {
           if (this.options.markers) this.updateMarkers();
           if (this.options.countries) this.updateCountries();
+          if (this.options.night) this.updateNight();
+          if (this.options.timezones) this.updateTimezones();
           if (this.options.title) this.updateTitle();
           if (this.options.heatmap) this.updateHeatmap();
           if (this.options.autoFitContent) {
@@ -1978,14 +2016,14 @@ this.d3.maptable = (function () {
       }, {
         key: 'updateTitle',
         value: function updateTitle() {
-          var _this9 = this;
+          var _this10 = this;
 
           if (this.options.title.content) {
             var showing = this.maptable.data.filter(function (d) {
-              return d[_this9.options.latitudeKey] !== 0;
+              return d[_this10.options.latitudeKey] !== 0;
             }).length;
             var total = this.maptable.rawData.filter(function (d) {
-              return d[_this9.options.latitudeKey] !== 0;
+              return d[_this10.options.latitudeKey] !== 0;
             }).length;
 
             var inlineFilters = '';
@@ -2879,6 +2917,8 @@ this.d3.maptable = (function () {
           this.loadData(null, d3.csv.parse(this.options.data.value));
         } else if (this.options.data.type === 'tsvData') {
           this.loadData(null, d3.tsv.parse(this.options.data.value));
+        } else if (this.options.data.type === 'data') {
+          this.loadData(null, this.options.data.value);
         }
 
         if (this.options.map && this.options.map.heatmap) {
@@ -3185,6 +3225,12 @@ this.d3.maptable = (function () {
         return maptable;
       };
 
+      maptable.data = function (data) {
+        options.data.type = 'data';
+        options.data.value = data;
+        return maptable;
+      };
+
       maptable.json = function (jsonPath, preFilter) {
         options.data.type = 'json';
         options.data.path = jsonPath;
@@ -3251,7 +3297,7 @@ this.d3.maptable = (function () {
         }
 
         if (!options.data || !options.data.type) {
-          throw new Error('MapTable: Please provide the path for your dataset json|jsonData|csv|csvData|tsv|tsvData');
+          throw new Error('MapTable: Please provide the path for your dataset data|json|jsonData|csv|csvData|tsv|tsvData');
         }
 
         if (options.map && !options.map.heatmap) options.map.heatmap = null;
@@ -3279,6 +3325,25 @@ this.d3.maptable = (function () {
           },
           saveState: function saveState(stateName, stateData) {
             return maptableObject.saveState(stateName, stateData);
+          },
+          setTitleContent: function setTitleContent(title) {
+            maptableObject.options.map.title.content = function () {
+              return title;
+            };
+          },
+          setData: function setData(data) {
+            maptableObject.options.data.type = 'data';
+            maptableObject.options.data.value = data;
+            maptableObject.options.rawData = data;
+            maptableObject.rawData = data;
+            maptableObject.data = data;
+            maptableObject.map.enrichData();
+          },
+          setNightDate: function setNightDate(date) {
+            maptableObject.options.map.night.date = date;
+          },
+          setTimezonesDate: function setTimezonesDate(date) {
+            maptableObject.options.map.timezones.date = date;
           }
         };
       };

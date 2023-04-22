@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <link rel="stylesheet" href="../vendor/bootstrap.min.css">
+  <link rel="stylesheet" href="../maptable.css">
+  <title>MapTable example</title>
+</head>
+
+<body>
+
+  <script src="../vendor/d3.min.js" charset="utf-8"></script>
+  <script src="../vendor/topojson.min.js"></script>
+  <script src="../vendor/jquery.js"></script>
+  <script src="../vendor/maptable.percentile.helper.js"></script>
+  <script src="../maptable.js"></script>
+
+  <div class="container">
+    <div class="panel panel-default">
+      <div class="panel-heading">[Example] Animation</div>
+      <div class="panel-body">
+        288 frames animation<br />
+        <br>
+        <div class="btn-group">
+          <a href="./minimal.html" target="_blank" class="btn btn-default">Open in a new window</a>
+          <a href="https://github.com/Packet-Clearing-House/maptable/tree/master/docs/examples/animation.html"
+            target="_blank" class="btn btn-default">View source code</a>
+        </div>
+      </div>
+    </div>
+
+    <div id="vizContainer"></div>
+  </div>
+  <script>
+
+  const startDate = new Date(Date.parse('2023-04-22T00:00:00Z'));
+
+  const csvAllData = d3.csv('./animation-data.csv', (err, csvAllData) => {
+    const csvData = csvAllData
+    const timeline = [];
+    Object.keys(csvAllData).forEach((k) => {
+      const index = Number(k);
+      timeline.push({
+        index,
+        date: new Date(startDate.getTime() + 5 * 60 * 1000 * index),
+        data: csvAllData.map((d) => ({ country: d.country, value: Number(d[k]) }))
+      })
+    });
+
+
+      var ranks = null;
+      var negativeRanks = null;
+      var countKey = 'value';
+      var logoUrl = null
+      var showLegend = true;
+      var countryFormat = 'iso_a2';
+      var usePercentile = true;
+
+      var viz = d3.maptable('#vizContainer')
+        .data(timeline[0].data)
+        .map({
+            countryIdentifierKey: 'country',
+            countryIdentifierType: countryFormat,
+            path: 'countries.json',
+            timezones: {
+              path: 'timezones.json',
+              date: timeline[0].date
+            },
+            night: {
+              date: timeline[0].date
+            },
+            countries: {
+                attr: {
+                    fill: {
+                        legend: showLegend,
+                        min: "#B4C3D1",
+                        max: "#043864",
+                        minNegative: "#FFB3B3",
+                        maxNegative: "#c32e34",
+                        empty: "#f9f9f9",
+                        transform: function(val, rawValues) {
+                            if (usePercentile) {
+                              var val = parseInt(val);
+                              var ranks = null;
+
+                              if (!ranks && rawValues) {
+                                  negativeOnly = false;
+                                  ranks = generateRanksFromSingleValue(rawValues, countKey, negativeOnly);
+                              }
+                              if (!negativeRanks && rawValues) {
+                                  negativeOnly = true;
+                                  negativeRanks = generateRanksFromSingleValue(rawValues, countKey, negativeOnly);
+                              }
+                              if (val < 0) {
+                                  useNegatives = true;
+                                  toReturn = getPercentile(val, negativeRanks, useNegatives);
+                              } else {
+                                  useNegatives = false;
+                                  toReturn = getPercentile(val, ranks, useNegatives);
+                              }
+
+                                return toReturn;
+                            } else {
+                                return val;
+                            }
+                        },
+                        rollup: function(groupedData) {
+                            if (groupedData[0] != undefined && groupedData[0].chge != 999999) {
+                                return groupedData[0][countKey];
+                            }
+                        },
+                    },
+                    stroke: "#d9d9d9",
+                    "stroke-width": 0.5
+                },
+            },
+            title: {
+                bgColor: "white",
+                fontSize: "14",
+                content: function (countShown, countTotal, filtersDescription) {
+                    return 'Title';
+                },
+                source: function () {
+                    return 'Made by ' +
+                        '<a xlink:href=' +
+                        '"https://github.com/Packet-Clearing-House/MapTableMaker"' +
+                        ' target="_blank">' +
+                        '<tspan font-weight="bold">MapTableMaker</tspan></a> ' +
+                        'Copyright <a xlink:href=' +
+                        '"https://pch.net"' +
+                        ' target="_blank">' +
+                        'PCH</a>';
+                }
+            },
+        })
+        .render();
+
+      function drawMapForTime(d) {
+        viz.setData(d.data);
+        viz.setTitleContent(d.date.toISOString().split('T')[1].substr(0, 5));
+        viz.setNightDate(d.date);
+        viz.setTimezonesDate(d.date);
+        viz.render();
+      }
+
+      let currentIndex = -1;
+      setInterval(() => {
+        currentIndex = (currentIndex >= timeline.length - 1) ? 0 : currentIndex + 1
+        drawMapForTime(timeline[currentIndex])
+      }, 100)
+
+  });
+  
+  </script>
+</body>
+
+</html>

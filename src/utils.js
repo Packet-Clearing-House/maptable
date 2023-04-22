@@ -95,6 +95,11 @@ function uniqueValues(arr) {
   return a;
 }
 
+const formatDate = (d, zone) => {
+  const newDate = new Date(d.getTime() + zone * 3600 * 1000);
+  return newDate.toISOString().split('T')[1].substr(0, 5);
+};
+
 export default {
   rangeToBool,
   appendOptions,
@@ -104,4 +109,5 @@ export default {
   keyToTile,
   quantile,
   uniqueValues,
+  formatDate,
 };

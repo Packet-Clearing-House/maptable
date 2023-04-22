@@ -27,6 +27,8 @@ export default class MapTable {
       this.loadData(null, d3.csv.parse(this.options.data.value));
     } else if (this.options.data.type === 'tsvData') {
       this.loadData(null, d3.tsv.parse(this.options.data.value));
+    } else if (this.options.data.type === 'data') {
+      this.loadData(null, this.options.data.value);
     }
 
     if (this.options.map && this.options.map.heatmap) {

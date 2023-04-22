@@ -26,6 +26,12 @@ d3.maptable = function (target) {
     return maptable;
   };
 
+  maptable.data = function (data) {
+    options.data.type = 'data';
+    options.data.value = data;
+    return maptable;
+  };
+
   maptable.json = function (jsonPath, preFilter) {
     options.data.type = 'json';
     options.data.path = jsonPath;
@@ -86,7 +92,7 @@ d3.maptable = function (target) {
     }
 
     if (!options.data || !options.data.type) {
-      throw new Error('MapTable: Please provide the path for your dataset json|jsonData|csv|csvData|tsv|tsvData');
+      throw new Error('MapTable: Please provide the path for your dataset data|json|jsonData|csv|csvData|tsv|tsvData');
     }
 
     if (options.map && !options.map.heatmap) options.map.heatmap = null;
@@ -107,6 +113,23 @@ d3.maptable = function (target) {
       loadState: (stateName, isJson) => maptableObject.loadState(stateName, isJson),
       removeState: (stateName) => maptableObject.removeState(stateName),
       saveState: (stateName, stateData) => maptableObject.saveState(stateName, stateData),
+      setTitleContent: (title) => {
+        maptableObject.options.map.title.content = () => title;
+      },
+      setData: (data) => {
+        maptableObject.options.data.type = 'data';
+        maptableObject.options.data.value = data;
+        maptableObject.options.rawData = data;
+        maptableObject.rawData = data;
+        maptableObject.data = data;
+        maptableObject.map.enrichData();
+      },
+      setNightDate: (date) => {
+        maptableObject.options.map.night.date = date;
+      },
+      setTimezonesDate: (date) => {
+        maptableObject.options.map.timezones.date = date;
+      },
     };
   };
   return maptable;
