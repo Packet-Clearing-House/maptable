@@ -563,19 +563,14 @@ Run these commands as your unprivileged user you're doing your development as:
 1. To have production ready files, run: `gulp dist`. All built files are located in the folder `./dist`
 1. Enjoy 🍻
 
-### Todo
-
-- [x] Publish v1
-- [ ] Write unit tests 🙏
-- [ ] Improve documentation (spell, formulation, emoji...)
-- [x] Secondary sorting
-- [ ] Append SVG filters to the map and use them as styling
-- [ ] Legend gradient transformation (if we used the log scale)
-- [ ] Have multiple legends depending on the attribute
-- [ ] Legend marker radius
-
 ## Release History
 
+- Version 2.2.1 April 22 2023
+  - night: Croping the night layer to remove Antartica
+  - timezones: Time values are now inside the timezone stripes
+  - timezone: set default sans serif font for the times
+- Version 2.2.0 April 10 2023
+  - Added `map.timezones` to display the timezone stripes
 - Version 2.1.0 April 10 2023
   - Added `map.night` to display the night layer and the sun
 - Version 2.0.0 April 10 2023

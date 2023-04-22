@@ -1184,8 +1184,13 @@ this.d3.maptable = (function () {
         value: function buildNight() {
           var circle = d3.geo.circle().angle(90);
 
+          // Mask night
+          this.maskNight = this.layerNight.append('defs').append('clipPath').attr('id', 'mt-map-night-mask');
+
+          this.maskNight.append('rect').attr('x', 0).attr('y', 0).attr('width', this.getWidth()).attr('height', this.getHeight() * 0.82);
+
           // Build vectors
-          this.nightPath = this.layerNight.append('path').attr('class', 'mt-map-night-layer').attr('filter', 'url(#blur)').attr('d', this.path);
+          this.nightPath = this.layerNight.append('path').attr('class', 'mt-map-night-layer').attr('filter', 'url(#blur)').attr('clip-path', 'url(#mt-map-night-mask)').attr('d', this.path);
 
           var solarPositionDated = solarPosition(this.options.night.date || new Date());
 
@@ -1225,7 +1230,7 @@ this.d3.maptable = (function () {
           // Mask timezone
           this.maskTimezone = this.layerTimezones.append('defs').append('clipPath').attr('id', 'mt-map-timezone-mask');
 
-          this.maskTimezone.append('rect').attr('x', 0).attr('y', 0).attr('width', this.getWidth()).attr('height', this.getHeight() * 0.8);
+          this.maskTimezone.append('rect').attr('x', 0).attr('y', 0).attr('width', this.getWidth()).attr('height', this.getHeight() * 0.82);
 
           // Build timezone paths
           this.layerTimezones.selectAll('.mt-map-timezone').data(this.dataTimezones.filter(function (d) {
@@ -1249,9 +1254,9 @@ this.d3.maptable = (function () {
           };
 
           this.layerTimezonesText = this.layerTimezones.append('g').attr('class', 'mt-map-timezones-texts');
-          this.layerTimezonesText.selectAll('.mt-map-timezone-text').data(timezoneTextsUnique).enter().insert('text').attr('y', this.getHeight() * 0.8 + 10).attr('x', function (d) {
-            return (d.properties.zone + 10) * (_this3.getWidth() / 24.5);
-          }).attr('dx', this.getWidth() / 24.5 / 2).attr('font-size', 9).attr('fill', '#999').attr('text-anchor', 'middle').html(function (d) {
+          this.layerTimezonesText.selectAll('.mt-map-timezone-text').data(timezoneTextsUnique).enter().insert('text').attr('y', this.getHeight() * 0.82 - 5).attr('x', function (d) {
+            return (d.properties.zone + 10) * (_this3.getWidth() / 24.5) - 1;
+          }).attr('dx', this.getWidth() / 24.5 / 2).attr('font-size', 9).attr('font-family', 'Helevetica, Arial, Sans-Serif').attr('fill', '#999').attr('text-anchor', 'middle').html(function (d) {
             return formatDate(_this3.options.timezones.date || new Date(), d.properties.zone);
           });
         }

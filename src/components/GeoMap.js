@@ -250,10 +250,22 @@ export default class GeoMap {
     const circle = d3.geo.circle()
       .angle(90);
 
+    // Mask night
+    this.maskNight = this.layerNight.append('defs')
+      .append('clipPath')
+      .attr('id', 'mt-map-night-mask');
+
+    this.maskNight.append('rect')
+      .attr('x', 0)
+      .attr('y', 0)
+      .attr('width', this.getWidth())
+      .attr('height', this.getHeight() * 0.82);
+
     // Build vectors
     this.nightPath = this.layerNight.append('path')
       .attr('class', 'mt-map-night-layer')
       .attr('filter', 'url(#blur)')
+      .attr('clip-path', 'url(#mt-map-night-mask)')
       .attr('d', this.path);
 
     const solarPositionDated = solarPosition(this.options.night.date || new Date());
@@ -300,7 +312,7 @@ export default class GeoMap {
       .attr('x', 0)
       .attr('y', 0)
       .attr('width', this.getWidth())
-      .attr('height', this.getHeight() * 0.8);
+      .attr('height', this.getHeight() * 0.82);
 
     // Build timezone paths
     this.layerTimezones
@@ -329,10 +341,11 @@ export default class GeoMap {
       .data(timezoneTextsUnique)
       .enter()
       .insert('text')
-      .attr('y', this.getHeight() * 0.8 + 10)
-      .attr('x', (d) => (d.properties.zone + 10) * (this.getWidth() / 24.5))
+      .attr('y', this.getHeight() * 0.82 - 5)
+      .attr('x', (d) => (d.properties.zone + 10) * (this.getWidth() / 24.5) - 1)
       .attr('dx', (this.getWidth() / 24.5) / 2)
       .attr('font-size', 9)
+      .attr('font-family', 'Helevetica, Arial, Sans-Serif')
       .attr('fill', '#999')
       .attr('text-anchor', 'middle')
       .html((d) => formatDate((this.options.timezones.date || new Date()), d.properties.zone));
