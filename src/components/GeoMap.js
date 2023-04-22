@@ -327,7 +327,7 @@ export default class GeoMap {
       .attr('clip-path', 'url(#mt-map-timezone-mask)');
 
     // Add times
-    const timezoneTexts = this.dataTimezones.filter((d) => d.properties.places !== 'Antarctica' && d.properties.zone % 1 === 0);
+    const timezoneTexts = this.dataTimezones.filter((d) => d.properties.places !== 'Antarctica' && d.properties.zone % 1 === 0 && d.properties.zone !== 14);
     const timezoneTextsUnique = [...new Map(timezoneTexts.map((item) => (
       [item.properties.zone, item]
     ))).values()];

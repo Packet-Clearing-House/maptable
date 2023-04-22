@@ -1243,7 +1243,7 @@ this.d3.maptable = (function () {
 
           // Add times
           var timezoneTexts = this.dataTimezones.filter(function (d) {
-            return d.properties.places !== 'Antarctica' && d.properties.zone % 1 === 0;
+            return d.properties.places !== 'Antarctica' && d.properties.zone % 1 === 0 && d.properties.zone !== 14;
           });
           var timezoneTextsUnique = [].concat(babelHelpers.toConsumableArray(new Map(timezoneTexts.map(function (item) {
             return [item.properties.zone, item];

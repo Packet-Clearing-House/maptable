@@ -565,10 +565,12 @@ Run these commands as your unprivileged user you're doing your development as:
 
 ## Release History
 
+- Version 2.2.2 April 22 2023
+  - timezones: Removed text for UTC+14
 - Version 2.2.1 April 22 2023
   - night: Croping the night layer to remove Antartica
   - timezones: Time values are now inside the timezone stripes
-  - timezone: set default sans serif font for the times
+  - timezones: set default sans serif font for the times
 - Version 2.2.0 April 10 2023
   - Added `map.timezones` to display the timezone stripes
 - Version 2.1.0 April 10 2023
