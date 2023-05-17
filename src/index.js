@@ -122,7 +122,9 @@ d3.maptable = function (target) {
         maptableObject.options.rawData = data;
         maptableObject.rawData = data;
         maptableObject.data = data;
-        maptableObject.map.enrichData();
+        if (maptableObject.map) {
+          maptableObject.map.enrichData();
+        }
       },
       setNightDate: (date) => {
         maptableObject.options.map.night.date = date;

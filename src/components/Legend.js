@@ -51,7 +51,7 @@ export default class Legend {
       .attr('style', `stop-color:${this.map.options.countries.attr.fill.max};stop-opacity:1`);
 
     this.node.append('rect')
-      .attr('x', 40)
+      .attr('x', 30)
       .attr('y', 0)
       .attr('width', this.legendWidth)
       .attr('height', 15)
@@ -83,7 +83,7 @@ export default class Legend {
 
     this.node.append('text')
       .attr('id', 'mt-map-legend-min')
-      .attr('x', 35)
+      .attr('x', 25)
       .attr('y', 13)
       .attr('width', 35)
       .attr('height', 15)
@@ -98,8 +98,8 @@ export default class Legend {
     this.node.append('text')
       .attr('id', 'mt-map-legend-max')
       .attr('y', 13)
-      .attr('x', 265)
-      .attr('width', 40)
+      .attr('x', 255)
+      .attr('width', 50)
       .attr('height', 15)
       .attr('text-anchor', 'start')
       .attr('font-family', 'Arial')
@@ -113,8 +113,8 @@ export default class Legend {
   updateExtents(domain) {
     this.node.select('#mt-map-legend').style('opacity', (domain[0] === domain[1]) ? 0 : 1);
     if (this.node.selectAll('mt-map-legend-min').length) {
-      this.node.select('#mt-map-legend-min').text(Math.round(domain[0]));
-      this.node.select('#mt-map-legend-max').text(Math.round(domain[1]));
+      this.node.select('#mt-map-legend-min').text(Math.round(domain[0]).toLocaleString());
+      this.node.select('#mt-map-legend-max').text(Math.round(domain[1]).toLocaleString());
 
       // pass in the min and max (domain) to the legend
       this.buildScale(domain);
@@ -130,7 +130,7 @@ export default class Legend {
       const minValue = parseInt(this.node.select('#mt-map-legend-min').text(), 10);
       const positionDelta = Math.round((0 - (minValue - val) / (maxValue - minValue))
         * this.legendWidth);
-      this.node.select('#mt-map-legend-indice text').text(Math.round(val));
+      this.node.select('#mt-map-legend-indice text').text(Math.round(val).toLocaleString());
       this.node.select('#mt-map-legend-indice')
         .attr('style', 'display:block')
         .attr('transform', `translate(${(36 + positionDelta)},15)`);

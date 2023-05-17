@@ -67,7 +67,9 @@ function sanitizeKey(k) {
 
 function toNumber(str) {
   if (!str || str === '') return null;
-  return Number(str.toString().replace(/[^0-9.]+|\s+/gmi, ''));
+  const resStr = str.toString().replace(/[^0-9.]+|\s+/gmi, '');
+  if (resStr !== '') return Number(resStr);
+  return null;
 }
 
 function quantile(array, percentile) {

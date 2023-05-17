@@ -22,7 +22,7 @@
         288 frames animation<br />
         <br>
         <div class="btn-group">
-          <a href="./minimal.html" target="_blank" class="btn btn-default">Open in a new window</a>
+          <a href="./animation.html" target="_blank" class="btn btn-default">Open in a new window</a>
           <a href="https://github.com/Packet-Clearing-House/maptable/tree/master/docs/examples/animation.html"
             target="_blank" class="btn btn-default">View source code</a>
         </div>
@@ -34,6 +34,10 @@
   <script>
 
   const startDate = new Date(Date.parse('2023-04-22T00:00:00Z'));
+  const minPercentageFirstItem = 0.5;
+  const logoUrl = null
+  const showLegend = true;
+  const countryFormat = 'iso_a2';
 
   const csvAllData = d3.csv('./animation-data.csv', (err, csvAllData) => {
     const csvData = csvAllData
@@ -47,13 +51,38 @@
       })
     });
 
-      var ranks = null;
-      var negativeRanks = null;
-      var countKey = 'value';
-      var logoUrl = null
-      var showLegend = true;
-      var countryFormat = 'iso_a2';
-      var usePercentile = true;
+
+    // Transform data
+    const transformedTimeline = [];
+    timeline.forEach((d) => {
+      d.data.sort((a, b) => b.value - a.value)
+      const totalValue = d.data.reduce((total, item) => total + Number(item.value), 0);
+      const maximumValue = d.data.find((item) => Number(item.value) >= totalValue * minPercentageFirstItem);
+      let data = [];
+      if (maximumValue) {
+        data = [
+          { country: maximumValue.country, value: maximumValue.value }
+        ];
+        const secondHighestValue = d.data.filter((item) => item.country !== maximumValue.country).reduce((acc, item) => {
+          return acc && Number(acc.value) > Number(item.value) ? acc : item;
+        }, { value: -1 });
+        const multiplicator = (totalValue - maximumValue.value) / secondHighestValue.value;
+        d.data.filter((item) => item.country !== maximumValue.country).forEach((item) => {
+          data.push({
+            country: item.country,
+            value: Math.round(Number(item.value) * multiplicator)
+          })
+        })
+      } else {
+        data = d.data
+      }
+      transformedTimeline.push({
+        index: d.index,
+        date: d.date,
+        data
+      })
+    });
+
 
       var viz = d3.maptable('#vizContainer')
         .data(timeline[0].data)
@@ -71,42 +100,13 @@
             countries: {
                 attr: {
                     fill: {
-                        legend: showLegend,
                         min: "#B4C3D1",
                         max: "#043864",
-                        minNegative: "#FFB3B3",
-                        maxNegative: "#c32e34",
                         empty: "#f9f9f9",
-                        transform: function(val, rawValues) {
-                            if (usePercentile) {
-                              var val = parseInt(val);
-                              var ranks = null;
-
-                              if (!ranks && rawValues) {
-                                  negativeOnly = false;
-                                  ranks = generateRanksFromSingleValue(rawValues, countKey, negativeOnly);
-                              }
-                              if (!negativeRanks && rawValues) {
-                                  negativeOnly = true;
-                                  negativeRanks = generateRanksFromSingleValue(rawValues, countKey, negativeOnly);
-                              }
-                              if (val < 0) {
-                                  useNegatives = true;
-                                  toReturn = getPercentile(val, negativeRanks, useNegatives);
-                              } else {
-                                  useNegatives = false;
-                                  toReturn = getPercentile(val, ranks, useNegatives);
-                              }
-
-                                return toReturn;
-                            } else {
-                                return val;
-                            }
-                        },
-                        rollup: function(groupedData) {
-                            if (groupedData[0] != undefined && groupedData[0].chge != 999999) {
-                                return groupedData[0][countKey];
-                            }
+                        aggregate: {
+                          key: 'value',
+                          mode: 'sum',
+                          scale: 'rank'
                         },
                     },
                     stroke: "#d9d9d9",

@@ -963,7 +963,7 @@ export default class GeoMap {
         // Custom scale
         if (scale) {
           if (scale.indexOf('log') !== -1) {
-            scaleToUse = d3.scale.log().base(utils.toNumber(scale) || 10);
+            scaleToUse = d3.scale.log();
           } else if (scale.indexOf('pow') !== -1) {
             scaleToUse = d3.scale.pow().exponent(utils.toNumber(scale) || 1);
           } else if (scale === 'sqrt') {
@@ -1023,7 +1023,13 @@ export default class GeoMap {
         });
       }
 
-      const scaleDomain = d3.extent(dataset, (d) => Number(d.attrProperties[attrKey].value));
+      let scaleDomain = d3.extent(dataset, (d) => Number(d.attrProperties[attrKey].value));
+      if (scaleDomain[0] === 0 && scale && scale.indexOf('log') !== '-1') {
+        scaleDomain = d3.extent(
+          dataset.filter((v) => Number(v.attrProperties[attrKey].value) !== 0),
+          (d) => Number(d.attrProperties[attrKey].value),
+        );
+      }
       if (attrValue.transform) {
         scaleDomain[0] = attrValue.transform
           .bind(this.maptable)(scaleDomain[0], this.maptable.data);

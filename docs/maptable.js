@@ -111,7 +111,9 @@ this.d3.maptable = (function () {
 
     function toNumber(str) {
       if (!str || str === '') return null;
-      return Number(str.toString().replace(/[^0-9.]+|\s+/gmi, ''));
+      var resStr = str.toString().replace(/[^0-9.]+|\s+/gmi, '');
+      if (resStr !== '') return Number(resStr);
+      return null;
     }
 
     function quantile(array, percentile) {
@@ -256,7 +258,7 @@ this.d3.maptable = (function () {
 
           legendGradient.append('stop').attr('offset', '100%').attr('style', 'stop-color:' + this.map.options.countries.attr.fill.max + ';stop-opacity:1');
 
-          this.node.append('rect').attr('x', 40).attr('y', 0).attr('width', this.legendWidth).attr('height', 15).attr('fill', 'url(#mt-map-legend-gradient)');
+          this.node.append('rect').attr('x', 30).attr('y', 0).attr('width', this.legendWidth).attr('height', 15).attr('fill', 'url(#mt-map-legend-gradient)');
         }
       }, {
         key: 'buildIndice',
@@ -267,17 +269,17 @@ this.d3.maptable = (function () {
 
           indice.append('text').attr('x', 4).attr('y', 13).attr('width', 10).attr('height', 10).attr('text-anchor', 'middle').attr('font-family', 'Arial').attr('font-size', '9').attr('stroke', '#FFFFF').attr('stroke-width', '1').attr('fill', '#222222').text('0');
 
-          this.node.append('text').attr('id', 'mt-map-legend-min').attr('x', 35).attr('y', 13).attr('width', 35).attr('height', 15).attr('text-anchor', 'end').attr('font-family', 'Arial').attr('font-size', '14').attr('stroke', '#FFFFF').attr('stroke-width', '3').attr('fill', '#222222').text('0');
+          this.node.append('text').attr('id', 'mt-map-legend-min').attr('x', 25).attr('y', 13).attr('width', 35).attr('height', 15).attr('text-anchor', 'end').attr('font-family', 'Arial').attr('font-size', '14').attr('stroke', '#FFFFF').attr('stroke-width', '3').attr('fill', '#222222').text('0');
 
-          this.node.append('text').attr('id', 'mt-map-legend-max').attr('y', 13).attr('x', 265).attr('width', 40).attr('height', 15).attr('text-anchor', 'start').attr('font-family', 'Arial').attr('font-size', '14').attr('stroke', '#FFFFF').attr('stroke-width', '3').attr('fill', '#222222').text('1');
+          this.node.append('text').attr('id', 'mt-map-legend-max').attr('y', 13).attr('x', 255).attr('width', 50).attr('height', 15).attr('text-anchor', 'start').attr('font-family', 'Arial').attr('font-size', '14').attr('stroke', '#FFFFF').attr('stroke-width', '3').attr('fill', '#222222').text('1');
         }
       }, {
         key: 'updateExtents',
         value: function updateExtents(domain) {
           this.node.select('#mt-map-legend').style('opacity', domain[0] === domain[1] ? 0 : 1);
           if (this.node.selectAll('mt-map-legend-min').length) {
-            this.node.select('#mt-map-legend-min').text(Math.round(domain[0]));
-            this.node.select('#mt-map-legend-max').text(Math.round(domain[1]));
+            this.node.select('#mt-map-legend-min').text(Math.round(domain[0]).toLocaleString());
+            this.node.select('#mt-map-legend-max').text(Math.round(domain[1]).toLocaleString());
 
             // pass in the min and max (domain) to the legend
             this.buildScale(domain);
@@ -292,7 +294,7 @@ this.d3.maptable = (function () {
             var maxValue = parseInt(this.node.select('#mt-map-legend-max').text(), 10);
             var minValue = parseInt(this.node.select('#mt-map-legend-min').text(), 10);
             var positionDelta = Math.round((0 - (minValue - val) / (maxValue - minValue)) * this.legendWidth);
-            this.node.select('#mt-map-legend-indice text').text(Math.round(val));
+            this.node.select('#mt-map-legend-indice text').text(Math.round(val).toLocaleString());
             this.node.select('#mt-map-legend-indice').attr('style', 'display:block').attr('transform', 'translate(' + (36 + positionDelta) + ',15)');
           }
         }
@@ -1873,7 +1875,7 @@ this.d3.maptable = (function () {
               // Custom scale
               if (scale) {
                 if (scale.indexOf('log') !== -1) {
-                  scaleToUse = d3.scale.log().base(utils.toNumber(scale) || 10);
+                  scaleToUse = d3.scale.log();
                 } else if (scale.indexOf('pow') !== -1) {
                   scaleToUse = d3.scale.pow().exponent(utils.toNumber(scale) || 1);
                 } else if (scale === 'sqrt') {
@@ -1942,6 +1944,13 @@ this.d3.maptable = (function () {
             var scaleDomain = d3.extent(dataset, function (d) {
               return Number(d.attrProperties[attrKey].value);
             });
+            if (scaleDomain[0] === 0 && scale && scale.indexOf('log') !== '-1') {
+              scaleDomain = d3.extent(dataset.filter(function (v) {
+                return Number(v.attrProperties[attrKey].value) !== 0;
+              }), function (d) {
+                return Number(d.attrProperties[attrKey].value);
+              });
+            }
             if (attrValue.transform) {
               scaleDomain[0] = attrValue.transform.bind(this.maptable)(scaleDomain[0], this.maptable.data);
               scaleDomain[1] = attrValue.transform.bind(this.maptable)(scaleDomain[1], this.maptable.data);
@@ -3337,7 +3346,9 @@ this.d3.maptable = (function () {
             maptableObject.options.rawData = data;
             maptableObject.rawData = data;
             maptableObject.data = data;
-            maptableObject.map.enrichData();
+            if (maptableObject.map) {
+              maptableObject.map.enrichData();
+            }
           },
           setNightDate: function setNightDate(date) {
             maptableObject.options.map.night.date = date;
