@@ -32,76 +32,78 @@
     <div id="vizContainer"></div>
   </div>
   <script>
-
-  const startDate = new Date(Date.parse('2023-04-22T00:00:00Z'));
-  const minPercentageFirstItem = 0.5;
-  const logoUrl = null
-  const showLegend = true;
-  const countryFormat = 'iso_a2';
-
-  const csvAllData = d3.csv('./animation-data.csv', (err, csvAllData) => {
-    const csvData = csvAllData
-    const timeline = [];
-    Object.keys(csvAllData[0]).filter((k) => k !== 'country').forEach((k) => {
-      const index = Number(k);
-      timeline.push({
-        index,
-        date: new Date(startDate.getTime() + 5 * 60 * 1000 * index),
-        data: csvAllData.map((d) => ({ country: d.country, value: Number(d[k]) }))
-      })
-    });
-
-
-    // Transform data
-    const transformedTimeline = [];
-    timeline.forEach((d) => {
-      d.data.sort((a, b) => b.value - a.value)
-      const totalValue = d.data.reduce((total, item) => total + Number(item.value), 0);
-      const maximumValue = d.data.find((item) => Number(item.value) >= totalValue * minPercentageFirstItem);
-      let data = [];
-      if (maximumValue) {
-        data = [
-          { country: maximumValue.country, value: maximumValue.value }
-        ];
-        const secondHighestValue = d.data.filter((item) => item.country !== maximumValue.country).reduce((acc, item) => {
-          return acc && Number(acc.value) > Number(item.value) ? acc : item;
-        }, { value: -1 });
-        const multiplicator = (totalValue - maximumValue.value) / secondHighestValue.value;
-        d.data.filter((item) => item.country !== maximumValue.country).forEach((item) => {
-          data.push({
-            country: item.country,
-            value: Math.round(Number(item.value) * multiplicator)
-          })
+    // TO EDIT: Datetime for night and timezone
+    const startDate = new Date(Date.parse('2023-04-22T00:00:00Z'));
+    const csvUrl = './animation-data.csv'; // if you want to use json, you can chain it like d3.json('file.json')
+  
+    const countryFormat = 'iso_a2';
+  
+    const csvAllData = d3.csv(csvUrl, (err, csvAllData) => {
+      const csvData = csvAllData
+      const timeline = [];
+      Object.keys(csvAllData[0]).filter((k) => k !== 'country').forEach((k) => {
+        const index = Number(k);
+        timeline.push({
+          index,
+          date: new Date(startDate.getTime() + 5 * 60 * 1000 * index),
+          data: csvAllData.map((d) => ({ country: d.country, value: Number(d[k]) }))
         })
-      } else {
-        data = d.data
-      }
-      transformedTimeline.push({
-        index: d.index,
-        date: d.date,
-        data
-      })
-    });
-
-
+      });
+  
+  
+      // transformedTimeline will use a data transformation to multiply all the values that are not the maximum value by the division of the maximum value and the second highest value. 
+      const minPercentageFirstItem = 0.5;
+      const transformedTimeline = [];
+      timeline.forEach((d) => {
+        d.data.sort((a, b) => b.value - a.value)
+        const totalValue = d.data.reduce((total, item) => total + Number(item.value), 0);
+        const maximumValue = d.data.find((item) => Number(item.value) >= totalValue * minPercentageFirstItem);
+        let data = [];
+        if (maximumValue) {
+          data = [
+            { country: maximumValue.country, value: maximumValue.value }
+          ];
+          const secondHighestValue = d.data.filter((item) => item.country !== maximumValue.country).reduce((acc, item) => {
+            return acc && Number(acc.value) > Number(item.value) ? acc : item;
+          }, { value: -1 });
+          const multiplicator = (totalValue - maximumValue.value) / secondHighestValue.value;
+          d.data.filter((item) => item.country !== maximumValue.country).forEach((item) => {
+            data.push({
+              country: item.country,
+              value: Math.round(Number(item.value) * multiplicator)
+            })
+          })
+        } else {
+          data = d.data
+        }
+        transformedTimeline.push({
+          index: d.index,
+          date: d.date,
+          data
+        })
+      });
+  
+      const dataUsed = timeline; // TO EDIT: change to transformedTimeline if you want to use the scaled model
+  
+  
       var viz = d3.maptable('#vizContainer')
-        .data(timeline[0].data)
+        .data(dataUsed[0].data)
         .map({
             countryIdentifierKey: 'country',
             countryIdentifierType: countryFormat,
             path: 'countries.json',
             timezones: {
               path: 'timezones.json',
-              date: timeline[0].date
+              date: dataUsed[0].date
             },
             night: {
-              date: timeline[0].date
+              date: dataUsed[0].date
             },
             countries: {
                 attr: {
                     fill: {
-                        min: "#B4C3D1",
-                        max: "#043864",
+                        min: "#f0f9ff",
+                        max: "#0d3e63",
                         empty: "#f9f9f9",
                         aggregate: {
                           key: 'value',
@@ -115,7 +117,7 @@
             },
             title: {
                 bgColor: "white",
-                fontSize: "14",
+                fontSize: "18",
                 content: function (countShown, countTotal, filtersDescription) {
                     return 'Title';
                 },
@@ -133,7 +135,7 @@
             },
         })
         .render();
-
+  
       function drawMapForTime(d) {
         viz.setData(d.data);
         viz.setTitleContent(d.date.toISOString().split('T')[1].substr(0, 5));
@@ -141,17 +143,15 @@
         viz.setTimezonesDate(d.date);
         viz.render();
       }
-
+  
       const fps = 15;
-
+  
       let currentIndex = -1;
       setInterval(() => {
-        currentIndex = (currentIndex >= timeline.length - 1) ? 0 : currentIndex + 1
-        drawMapForTime(timeline[currentIndex])
+        currentIndex = (currentIndex >= dataUsed.length - 1) ? 0 : currentIndex + 1
+        drawMapForTime(dataUsed[currentIndex])
       }, 1000 / fps)
-
-  });
-  
+    });  
   </script>
 </body>
 
