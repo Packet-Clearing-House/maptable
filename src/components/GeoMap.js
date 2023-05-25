@@ -286,6 +286,20 @@ export default class GeoMap {
         .attr('cy', sunCoords[1])
         .attr('fill', 'url(#sunGradient)')
         .attr('r', this.getHeight() * 0.35);
+
+      this.sunCircleLeft = this.layerNight.append('svg:circle')
+        .attr('class', 'mt-map-sun-left')
+        .attr('cx', sunCoords[0] - this.getWidth())
+        .attr('cy', sunCoords[1])
+        .attr('fill', 'url(#sunGradient)')
+        .attr('r', this.getHeight() * 0.35);
+
+      this.sunCircleRight = this.layerNight.append('svg:circle')
+        .attr('class', 'mt-map-sun-right')
+        .attr('cx', sunCoords[0] + this.getWidth())
+        .attr('cy', sunCoords[1])
+        .attr('fill', 'url(#sunGradient)')
+        .attr('r', this.getHeight() * 0.35);
     }
   }
 

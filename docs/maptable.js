@@ -1214,6 +1214,10 @@ this.d3.maptable = (function () {
             var sunCoords = this.projection(solarPositionDated);
 
             this.sunCircle = this.layerNight.append('svg:circle').attr('class', 'mt-map-sun').attr('cx', sunCoords[0]).attr('cy', sunCoords[1]).attr('fill', 'url(#sunGradient)').attr('r', this.getHeight() * 0.35);
+
+            this.sunCircleLeft = this.layerNight.append('svg:circle').attr('class', 'mt-map-sun-left').attr('cx', sunCoords[0] - this.getWidth()).attr('cy', sunCoords[1]).attr('fill', 'url(#sunGradient)').attr('r', this.getHeight() * 0.35);
+
+            this.sunCircleRight = this.layerNight.append('svg:circle').attr('class', 'mt-map-sun-right').attr('cx', sunCoords[0] + this.getWidth()).attr('cy', sunCoords[1]).attr('fill', 'url(#sunGradient)').attr('r', this.getHeight() * 0.35);
           }
         }
 
