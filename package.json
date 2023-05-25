@@ -1,6 +1,6 @@
 {
   "name": "maptable",
-  "version": "2.2.2",
+  "version": "2.3.0",
   "description": "Visualization tool that transforms data to Map or/and Table (with filters)",
   "main": "dist/maptable.min.js",
   "homepage": "https://github.com/Packet-Clearing-House/maptable",
@@ -12,8 +12,8 @@
     "url": "https://github.com/Packet-Clearing-House/maptable.git"
   },
   "author": {
-    "name": "Mohammed Elalj",
-    "email": "mohammed@pch.net",
+    "name": "Simo Elalj",
+    "email": "simo@tonoid.com",
     "url": "https://www.pch.net"
   },
   "readmeFilename": "README.md",
