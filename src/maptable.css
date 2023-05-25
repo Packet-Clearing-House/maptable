@@ -116,3 +116,5 @@
   margin-top: -18px;
   display: none;
 }
+
+#mt-map path { transition: fill .1s ease; }
