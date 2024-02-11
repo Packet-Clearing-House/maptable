@@ -1056,7 +1056,7 @@ this.d3.maptable = (function () {
 
         this.layerGlobal = this.svg.append('g').attr('class', 'mt-map-global');
         this.layerDefs = this.svg.append('defs');
-        this.layerDefs.html('\n    <filter id="blur"><feGaussianBlur stdDeviation="18" /></filter>\n    <filter id="blur-tz"><feGaussianBlur stdDeviation="2" /></filter>\n    <radialGradient id="sunGradient">\n        <stop offset="0" stop-color="#FFC000" stop-opacity="0.5" />\n        <stop offset="0.45" stop-color="#FFC000" stop-opacity="0.15" />\n        <stop offset="1" stop-color="#FFC000" stop-opacity="0" />\n      </radialGradient>\n    ');
+        this.layerDefs.html('\n    <filter id="blur"><feGaussianBlur stdDeviation="18" /></filter>\n    <radialGradient id="sunGradient">\n        <stop offset="0" stop-color="#FFC000" stop-opacity="0.5" />\n        <stop offset="0.45" stop-color="#FFC000" stop-opacity="0.15" />\n        <stop offset="1" stop-color="#FFC000" stop-opacity="0" />\n      </radialGradient>\n    ');
         if (this.options.timezones) this.layerTimezones = this.layerGlobal.append('g').attr('class', 'mt-map-timezones');
         this.layerCountries = this.layerGlobal.append('g').attr('class', 'mt-map-countries');
         if (this.options.night) this.layerNight = this.layerGlobal.append('g').attr('class', 'mt-map-night');
