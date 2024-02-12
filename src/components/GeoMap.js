@@ -92,7 +92,6 @@ export default class GeoMap {
     this.layerDefs = this.svg.append('defs');
     this.layerDefs.html(`
     <filter id="blur"><feGaussianBlur stdDeviation="18" /></filter>
-    <filter id="blur-tz"><feGaussianBlur stdDeviation="2" /></filter>
     <radialGradient id="sunGradient">
         <stop offset="0" stop-color="#FFC000" stop-opacity="0.5" />
         <stop offset="0.45" stop-color="#FFC000" stop-opacity="0.15" />
@@ -344,7 +343,6 @@ export default class GeoMap {
       .attr('fill', (d) => (d.properties.zone % 2 === 0 ? '#F4F5F5' : 'transparent'))
       .attr('title', (d) => JSON.stringify(d.properties))
       .attr('clip-path', 'url(#mt-map-timezone-mask)')
-      .attr('filter', 'url(#blur-tz)')
       .style('opacity', 0.6);
 
     // Add times
