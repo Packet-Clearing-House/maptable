@@ -343,7 +343,6 @@ export default class GeoMap {
       .attr('fill', (d) => (d.properties.zone % 2 === 0 ? '#F4F5F5' : 'transparent'))
       .attr('title', (d) => JSON.stringify(d.properties))
       .attr('clip-path', 'url(#mt-map-timezone-mask)')
-      .attr('filter', 'url(#blur-tz)')
       .style('opacity', 0.6);
 
     // Add times

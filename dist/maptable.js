@@ -1257,7 +1257,7 @@ this.d3.maptable = (function () {
             return d.properties.zone % 2 === 0 ? '#F4F5F5' : 'transparent';
           }).attr('title', function (d) {
             return JSON.stringify(d.properties);
-          }).attr('clip-path', 'url(#mt-map-timezone-mask)').attr('filter', 'url(#blur-tz)').style('opacity', 0.6);
+          }).attr('clip-path', 'url(#mt-map-timezone-mask)').style('opacity', 0.6);
 
           // Add times
           var timezoneTexts = this.dataTimezones.filter(function (d) {
