@@ -164,7 +164,7 @@
       })
       .table()
       .filters({
-        show: ['country', 'city']
+        show: ['country', 'city', 'traf']
       })
       .columns({
         country: {
@@ -172,6 +172,7 @@
         },
         traf: {
           cellContent: function (d) {
+          if (!d.traf) return '';
             return getHumanSize(d.traf);
           }
         }

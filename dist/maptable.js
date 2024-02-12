@@ -2578,7 +2578,7 @@ this.d3.maptable = (function () {
                   var filterValueMin = rowNode.querySelector('.mt-filter-value-min').value;
                   var filterValueMax = rowNode.querySelector('.mt-filter-value-max').value;
                   if (filterValueMin === '' || filterValueMax === '') continue;
-                  if (fmt && (fmt(d[filterName]) < fmt(filterValueMin) || fmt(d[filterName]) > fmt(filterValueMax))) {
+                  if (fmt && d[filterName] !== '' && fmt(d[filterName]) !== '' && (fmt(d[filterName]) < fmt(filterValueMin) || fmt(d[filterName]) > fmt(filterValueMax))) {
                     matched = false;
                   } else if (parseInt(d[filterName], 10) < parseInt(filterValueMin, 10) || parseInt(d[filterName], 10) > parseInt(filterValueMax, 10)) {
                     matched = false;

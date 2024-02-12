@@ -385,6 +385,7 @@ export default class Filters {
         rowNode.querySelector('.mt-filter-value-max').style.display = 'none';
       }
     }
+    this.maptable.render.bind(this.maptable)();
   }
 
   getPossibleFilters(except) {
@@ -444,6 +445,11 @@ export default class Filters {
               matched = false;
             }
           }
+        }
+
+        if ((fmt && utils.isBlank(fmt(d[filterName]))) || utils.isBlank(d[filterName])) {
+          matched = false;
+          continue;
         }
       }
       return matched;
