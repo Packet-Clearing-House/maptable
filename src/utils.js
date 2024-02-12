@@ -102,6 +102,8 @@ const formatDate = (d, zone) => {
   return newDate.toISOString().split('T')[1].substr(0, 5);
 };
 
+const isBlank = (str) => (str === null || str === '' || str === undefined);
+
 export default {
   rangeToBool,
   appendOptions,
@@ -112,4 +114,5 @@ export default {
   quantile,
   uniqueValues,
   formatDate,
+  isBlank,
 };
