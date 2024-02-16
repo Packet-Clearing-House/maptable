@@ -534,6 +534,24 @@ export default class GeoMap {
   }
 
   /**
+   * Get all mt-map-country elements
+   */
+  getAllMtMapCountry() {
+    if (this.allMtMapCountry) return this.allMtMapCountry;
+    this.allMtMapCountry = d3.selectAll(`${this.containerSelector} .mt-map-country`);
+    return this.allMtMapCountry;
+  }
+
+  /**
+   * Get all mt-map-marjker elements
+   */
+  getAllMtMapMarker() {
+    if (this.allMtMapMarker) return this.allMtMapMarker;
+    this.allMtMapMarker = d3.selectAll(`${this.containerSelector} .mt-map-marker`);
+    return this.allMtMapMarker;
+  }
+
+  /**
    * Set the right color for every country
    */
   updateCountries() {
@@ -562,10 +580,10 @@ export default class GeoMap {
     });
 
     // Update SVG
-    const countryItem = d3.selectAll('.mt-map-country').each(function (d) {
-      const targetPath = this;
+    const countryItem = this.getAllMtMapCountry().each(function (d) {
+      const selection = d3.select(this);
       Object.keys(d.attr).forEach((key) => {
-        d3.select(targetPath).attr(key, d.attr[key]);
+        selection.attr(key, d.attr[key]);
       });
     });
 
@@ -676,10 +694,9 @@ export default class GeoMap {
       .attr(attrX, (d) => d.values[0].x + attrXDelta)
       .attr(attrY, (d) => d.values[0].y + attrYDelta);
 
-    d3.selectAll(`${this.containerSelector} .mt-map-marker`).each(function (d) {
-      const targetPath = this;
+    this.getAllMtMapMarker().each(function (d) {
       Object.keys(d.attr).forEach((key) => {
-        d3.select(targetPath).attr(key, d.attr[key]);
+        d3.select(this).attr(key, d.attr[key]);
       });
     });
 
@@ -869,7 +886,7 @@ export default class GeoMap {
     // Rescale markers size
     if (this.options.markers) {
       // markers
-      d3.selectAll(`${this.containerSelector} .mt-map-marker`).each(function (d) {
+      this.getAllMtMapMarker().each(function (d) {
         // stroke
         if (d.attr['stroke-width']) {
           d3.select(this).attr('stroke-width', d.attr['stroke-width'] / self.scaleAttributes());
@@ -891,7 +908,7 @@ export default class GeoMap {
 
     // Rescale Country stroke-width
     if (this.options.countries) {
-      d3.selectAll(`${this.containerSelector} .mt-map-country`).style(
+      this.getAllMtMapCountry().style(
         'stroke-width',
         this.options.countries.attr['stroke-width'] / this.scale,
       );

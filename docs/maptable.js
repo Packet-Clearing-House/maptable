@@ -1440,6 +1440,30 @@ this.d3.maptable = (function () {
         }
 
         /**
+         * Get all mt-map-country elements
+         */
+
+      }, {
+        key: 'getAllMtMapCountry',
+        value: function getAllMtMapCountry() {
+          if (this.allMtMapCountry) return this.allMtMapCountry;
+          this.allMtMapCountry = d3.selectAll(this.containerSelector + ' .mt-map-country');
+          return this.allMtMapCountry;
+        }
+
+        /**
+         * Get all mt-map-marjker elements
+         */
+
+      }, {
+        key: 'getAllMtMapMarker',
+        value: function getAllMtMapMarker() {
+          if (this.allMtMapMarker) return this.allMtMapMarker;
+          this.allMtMapMarker = d3.selectAll(this.containerSelector + ' .mt-map-marker');
+          return this.allMtMapMarker;
+        }
+
+        /**
          * Set the right color for every country
          */
 
@@ -1473,10 +1497,10 @@ this.d3.maptable = (function () {
           });
 
           // Update SVG
-          var countryItem = d3.selectAll('.mt-map-country').each(function (d) {
-            var targetPath = this;
+          var countryItem = this.getAllMtMapCountry().each(function (d) {
+            var selection = d3.select(this);
             Object.keys(d.attr).forEach(function (key) {
-              d3.select(targetPath).attr(key, d.attr[key]);
+              selection.attr(key, d.attr[key]);
             });
           });
 
@@ -1582,10 +1606,11 @@ this.d3.maptable = (function () {
             return d.values[0].y + attrYDelta;
           });
 
-          d3.selectAll(this.containerSelector + ' .mt-map-marker').each(function (d) {
-            var targetPath = this;
+          this.getAllMtMapMarker().each(function (d) {
+            var _this9 = this;
+
             Object.keys(d.attr).forEach(function (key) {
-              d3.select(targetPath).attr(key, d.attr[key]);
+              d3.select(_this9).attr(key, d.attr[key]);
             });
           });
 
@@ -1761,7 +1786,7 @@ this.d3.maptable = (function () {
           // Rescale markers size
           if (this.options.markers) {
             // markers
-            d3.selectAll(this.containerSelector + ' .mt-map-marker').each(function (d) {
+            this.getAllMtMapMarker().each(function (d) {
               // stroke
               if (d.attr['stroke-width']) {
                 d3.select(this).attr('stroke-width', d.attr['stroke-width'] / self.scaleAttributes());
@@ -1780,7 +1805,7 @@ this.d3.maptable = (function () {
 
           // Rescale Country stroke-width
           if (this.options.countries) {
-            d3.selectAll(this.containerSelector + ' .mt-map-country').style('stroke-width', this.options.countries.attr['stroke-width'] / this.scale);
+            this.getAllMtMapCountry().style('stroke-width', this.options.countries.attr['stroke-width'] / this.scale);
           }
 
           // Rescale heatmap borders
@@ -1794,7 +1819,7 @@ this.d3.maptable = (function () {
       }, {
         key: 'setAttrValues',
         value: function setAttrValues(attrKey, attrValue, dataset) {
-          var _this9 = this;
+          var _this10 = this;
 
           if (typeof attrValue === 'number' || typeof attrValue === 'string') {
             // Static value
@@ -1916,11 +1941,11 @@ this.d3.maptable = (function () {
                 d.attrProperties[attrKey].key = key;
                 d.attrProperties[attrKey].mode = mode;
                 d.attrProperties[attrKey].scale = scale;
-                var c = _this9.maptable.columnDetails[key];
+                var c = _this10.maptable.columnDetails[key];
                 d.attrProperties[attrKey].columnDetails = c;
                 var datum = {};
                 datum[key] = aggregatedValue;
-                d.attrProperties[attrKey].formatted = c && c.cellContent ? c.cellContent.bind(_this9.maptable)(datum) : aggregatedValue;
+                d.attrProperties[attrKey].formatted = c && c.cellContent ? c.cellContent.bind(_this10.maptable)(datum) : aggregatedValue;
               }
             });
             if (scale === 'rank') {
@@ -2002,7 +2027,7 @@ this.d3.maptable = (function () {
                 scaledValue = attrValue.empty;
               } else {
                 var originalValueRaw = d.attrProperties[attrKey].value;
-                var originalValue = attrValue.transform ? attrValue.transform.bind(_this9.maptable)(originalValueRaw, _this9.maptable.data) : originalValueRaw;
+                var originalValue = attrValue.transform ? attrValue.transform.bind(_this10.maptable)(originalValueRaw, _this10.maptable.data) : originalValueRaw;
 
                 if (useNegative && originalValue < 0) {
                   scaledValue = scaleNegativeFunction(originalValue);
@@ -2037,14 +2062,14 @@ this.d3.maptable = (function () {
       }, {
         key: 'updateTitle',
         value: function updateTitle() {
-          var _this10 = this;
+          var _this11 = this;
 
           if (this.options.title.content) {
             var showing = this.maptable.data.filter(function (d) {
-              return d[_this10.options.latitudeKey] !== 0;
+              return d[_this11.options.latitudeKey] !== 0;
             }).length;
             var total = this.maptable.rawData.filter(function (d) {
-              return d[_this10.options.latitudeKey] !== 0;
+              return d[_this11.options.latitudeKey] !== 0;
             }).length;
 
             var inlineFilters = '';
