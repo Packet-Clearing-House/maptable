@@ -289,23 +289,21 @@ export default class GeoMap {
     const solarPositionDated = solarPosition(new Date(startOfDay));
     this.nightPath.datum(circle.origin(antipode(solarPositionDated))).attr('d', this.path);
 
-    if (this.options.night.allowLeftRightNights) {
-      this.nightPathRight = this.layerNight.append('path')
-        .attr('class', 'mt-map-night-layer-right')
-        .attr('filter', 'url(#blur)')
-        .attr('clip-path', 'url(#mt-map-night-mask)')
-        .attr('d', this.nightPath.attr('d'))
-        .style('opacity', 0.1)
-        .attr('transform', `translate(${this.getWidth()},0)`);
+    this.nightPathRight = this.layerNight.append('path')
+      .attr('class', 'mt-map-night-layer-right')
+      .attr('filter', 'url(#blur)')
+      .attr('clip-path', 'url(#mt-map-night-mask)')
+      .attr('d', this.nightPath.attr('d'))
+      .style('opacity', 0.1)
+      .attr('transform', `translate(${this.getWidth()},0)`);
 
-      this.nightPathLeft = this.layerNight.append('path')
-        .attr('class', 'mt-map-night-layer-left')
-        .attr('filter', 'url(#blur)')
-        .attr('clip-path', 'url(#mt-map-night-mask)')
-        .attr('d', this.nightPath.attr('d'))
-        .style('opacity', 0.1)
-        .attr('transform', `translate(${-this.getWidth()},0)`);
-    }
+    this.nightPathLeft = this.layerNight.append('path')
+      .attr('class', 'mt-map-night-layer-left')
+      .attr('filter', 'url(#blur)')
+      .attr('clip-path', 'url(#mt-map-night-mask)')
+      .attr('d', this.nightPath.attr('d'))
+      .style('opacity', 0.1)
+      .attr('transform', `translate(${-this.getWidth()},0)`);
 
     if (!this.options.night.disableSun) {
       const sunCoords = this.projection(solarPositionDated);
