@@ -1449,17 +1449,20 @@ this.d3.maptable = (function () {
           var _this7 = this;
 
           // Data from user input
-          var dataByCountry = d3.nest().key(function (d) {
-            return d[_this7.options.countryIdentifierKey];
-          }).entries(this.maptable.data);
+          var dataByCountry = new Map();
+          this.maptable.data.forEach(function (d) {
+            var key = d[_this7.options.countryIdentifierKey];
+            if (!dataByCountry.has(key)) {
+              dataByCountry.set(key, []);
+            }
+            dataByCountry.get(key).push(d);
+          });
 
           // We merge both data
           this.dataCountries.forEach(function (geoDatum) {
             geoDatum.key = geoDatum.properties[_this7.options.countryIdentifierType];
-            var matchedCountry = dataByCountry.filter(function (uDatum) {
-              return uDatum.key === geoDatum.key;
-            });
-            geoDatum.values = matchedCountry.length === 0 ? [] : matchedCountry[0].values;
+            var matchedCountry = dataByCountry.get(geoDatum.key);
+            geoDatum.values = matchedCountry || [];
             geoDatum.attr = {};
             geoDatum.rollupValue = {};
           });

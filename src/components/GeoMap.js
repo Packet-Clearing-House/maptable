@@ -538,15 +538,20 @@ export default class GeoMap {
    */
   updateCountries() {
     // Data from user input
-    const dataByCountry = d3.nest()
-      .key((d) => d[this.options.countryIdentifierKey])
-      .entries(this.maptable.data);
+    const dataByCountry = new Map();
+    this.maptable.data.forEach((d) => {
+      const key = d[this.options.countryIdentifierKey];
+      if (!dataByCountry.has(key)) {
+        dataByCountry.set(key, []);
+      }
+      dataByCountry.get(key).push(d);
+    });
 
     // We merge both data
     this.dataCountries.forEach((geoDatum) => {
       geoDatum.key = geoDatum.properties[this.options.countryIdentifierType];
-      const matchedCountry = dataByCountry.filter((uDatum) => uDatum.key === geoDatum.key);
-      geoDatum.values = (matchedCountry.length === 0) ? [] : matchedCountry[0].values;
+      const matchedCountry = dataByCountry.get(geoDatum.key);
+      geoDatum.values = matchedCountry || [];
       geoDatum.attr = {};
       geoDatum.rollupValue = {};
     });
