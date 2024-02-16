@@ -608,12 +608,14 @@ export default class GeoMap {
    * Update night drawings
    */
   updateTimezones() {
-    const self = this;
-    d3.selectAll('.mt-map-timezone-text').each(function () {
-      const targetPath = this;
-      d3.select(targetPath).html((d) => (
-        utils.formatDate((self.options.timezones.date || new Date()), d.properties.zone)
-      ));
+    const timezoneTexts = document.querySelectorAll('.mt-map-timezone-text');
+    const currentDate = this.options.timezones.date || new Date();
+
+    Array.from(timezoneTexts).forEach((timezoneText) => {
+      timezoneText.textContent = utils.formatDate(
+        currentDate,
+        timezoneText.__data__.properties.zone,
+      );
     });
   }
 

@@ -479,6 +479,7 @@ this.d3.maptable = (function () {
                 imageData = context.getImageData(top_x, top_y, width, height);
             } catch (e) {
                 throw new Error("unable to access local image data: " + e);
+                return;
             }
         } catch (e) {
             throw new Error("unable to access image data: " + e);
@@ -1519,12 +1520,11 @@ this.d3.maptable = (function () {
       }, {
         key: 'updateTimezones',
         value: function updateTimezones() {
-          var self = this;
-          d3.selectAll('.mt-map-timezone-text').each(function () {
-            var targetPath = this;
-            d3.select(targetPath).html(function (d) {
-              return utils.formatDate(self.options.timezones.date || new Date(), d.properties.zone);
-            });
+          var timezoneTexts = document.querySelectorAll('.mt-map-timezone-text');
+          var currentDate = this.options.timezones.date || new Date();
+
+          Array.from(timezoneTexts).forEach(function (timezoneText) {
+            timezoneText.textContent = utils.formatDate(currentDate, timezoneText.__data__.properties.zone);
           });
         }
       }, {
