@@ -117,4 +117,6 @@
   display: none;
 }
 
-#mt-map path { transition: fill .1s ease; }
+#mt-map path { transition: fill .06s linear; }
+
+.mt-map-night {transition: transform .06s linear }
