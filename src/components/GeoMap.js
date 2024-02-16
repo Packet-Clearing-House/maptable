@@ -158,6 +158,7 @@ export default class GeoMap {
     if (this.options.width) {
       return this.options.width;
     }
+    this.options.width = this.node.offsetWidth;
     return this.node.offsetWidth;
   }
 

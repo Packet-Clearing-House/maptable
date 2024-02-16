@@ -479,7 +479,6 @@ this.d3.maptable = (function () {
                 imageData = context.getImageData(top_x, top_y, width, height);
             } catch (e) {
                 throw new Error("unable to access local image data: " + e);
-                return;
             }
         } catch (e) {
             throw new Error("unable to access image data: " + e);
@@ -1128,6 +1127,7 @@ this.d3.maptable = (function () {
           if (this.options.width) {
             return this.options.width;
           }
+          this.options.width = this.node.offsetWidth;
           return this.node.offsetWidth;
         }
       }, {
