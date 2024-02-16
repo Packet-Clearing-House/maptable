@@ -1558,7 +1558,6 @@ this.d3.maptable = (function () {
           var totalMilliseconds = endOfDay - startOfDay;
           var currentTime = userDate - startOfDay;
           var relativeTranslateX = currentTime / totalMilliseconds;
-          console.log(relativeTranslateX);
 
           this.layerNight.attr('transform', 'translate(' + -this.getWidth() * relativeTranslateX + ',0)');
         }

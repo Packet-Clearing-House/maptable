@@ -684,7 +684,6 @@ export default class GeoMap {
     const totalMilliseconds = endOfDay - startOfDay;
     const currentTime = userDate - startOfDay;
     const relativeTranslateX = (currentTime / totalMilliseconds);
-    console.log(relativeTranslateX);
 
     this.layerNight.attr('transform', `translate(${-this.getWidth() * relativeTranslateX},0)`);
   }
