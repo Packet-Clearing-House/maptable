@@ -130,12 +130,18 @@
     }
 
     const fps = 15;
-
     let currentIndex = -1;
-    setInterval(() => {
-      currentIndex = (currentIndex >= dataUsed.length - 1) ? 0 : currentIndex + 1
-      drawMapForTime(dataUsed[currentIndex])
-    }, 1000 / fps)
+    let lastTimestamp = 0;
+    function animationStep() {
+      if (lastTimestamp + (1000 / fps) < Date.now()) {
+        currentIndex = (currentIndex >= dataUsed.length - 1) ? 0 : currentIndex + 1
+        drawMapForTime(dataUsed[currentIndex])
+        lastTimestamp = Date.now();
+      }
+      window.requestAnimationFrame(animationStep);
+    }
+    
+    window.requestAnimationFrame(animationStep);
   });
   
   </script>

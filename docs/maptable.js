@@ -148,6 +148,10 @@ this.d3.maptable = (function () {
       return newDate.toISOString().split('T')[1].substr(0, 5);
     };
 
+    var isBlank = function isBlank(str) {
+      return str === null || str === '' || str === undefined;
+    };
+
     var utils = {
       rangeToBool: rangeToBool,
       appendOptions: appendOptions,
@@ -157,7 +161,8 @@ this.d3.maptable = (function () {
       keyToTile: keyToTile,
       quantile: quantile,
       uniqueValues: uniqueValues,
-      formatDate: formatDate
+      formatDate: formatDate,
+      isBlank: isBlank
     };
 
     var defaultOptions = {
@@ -2535,6 +2540,7 @@ this.d3.maptable = (function () {
               rowNode.querySelector('.mt-filter-value-max').style.display = 'none';
             }
           }
+          this.maptable.render.bind(this.maptable)();
         }
       }, {
         key: 'getPossibleFilters',
@@ -2578,7 +2584,7 @@ this.d3.maptable = (function () {
                   var filterValueMin = rowNode.querySelector('.mt-filter-value-min').value;
                   var filterValueMax = rowNode.querySelector('.mt-filter-value-max').value;
                   if (filterValueMin === '' || filterValueMax === '') continue;
-                  if (fmt && d[filterName] !== '' && fmt(d[filterName]) !== '' && (fmt(d[filterName]) < fmt(filterValueMin) || fmt(d[filterName]) > fmt(filterValueMax))) {
+                  if (fmt && (fmt(d[filterName]) < fmt(filterValueMin) || fmt(d[filterName]) > fmt(filterValueMax))) {
                     matched = false;
                   } else if (parseInt(d[filterName], 10) < parseInt(filterValueMin, 10) || parseInt(d[filterName], 10) > parseInt(filterValueMax, 10)) {
                     matched = false;
@@ -2592,6 +2598,11 @@ this.d3.maptable = (function () {
                     matched = false;
                   }
                 }
+              }
+
+              if (fmt && utils.isBlank(fmt(d[filterName])) || utils.isBlank(d[filterName])) {
+                matched = false;
+                continue;
               }
             }
             return matched;
