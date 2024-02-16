@@ -148,6 +148,10 @@ this.d3.maptable = (function () {
       return newDate.toISOString().split('T')[1].substr(0, 5);
     };
 
+    var isBlank = function isBlank(str) {
+      return str === null || str === '' || str === undefined;
+    };
+
     var utils = {
       rangeToBool: rangeToBool,
       appendOptions: appendOptions,
@@ -157,7 +161,8 @@ this.d3.maptable = (function () {
       keyToTile: keyToTile,
       quantile: quantile,
       uniqueValues: uniqueValues,
-      formatDate: formatDate
+      formatDate: formatDate,
+      isBlank: isBlank
     };
 
     var defaultOptions = {
@@ -1123,6 +1128,7 @@ this.d3.maptable = (function () {
           if (this.options.width) {
             return this.options.width;
           }
+          this.options.width = this.node.offsetWidth;
           return this.node.offsetWidth;
         }
       }, {
@@ -1196,6 +1202,8 @@ this.d3.maptable = (function () {
       }, {
         key: 'buildNight',
         value: function buildNight() {
+          this.layerNight = this.layerGlobal.append('g').attr('class', 'mt-map-night').attr('transform', 'translate(0,0)');
+
           var circle = d3.geo.circle().angle(90);
 
           // Mask night
@@ -1206,18 +1214,25 @@ this.d3.maptable = (function () {
           // Build vectors
           this.nightPath = this.layerNight.append('path').attr('class', 'mt-map-night-layer').attr('filter', 'url(#blur)').attr('clip-path', 'url(#mt-map-night-mask)').attr('d', this.path).style('opacity', 0.1);
 
-          var solarPositionDated = solarPosition(this.options.night.date || new Date());
-
+          var userDate = this.options.night.date || Date.UTC();
+          var startOfDay = Date.UTC(userDate.getUTCFullYear(), userDate.getUTCMonth(), userDate.getUTCDate(), 0, 0, 0);
+          var solarPositionDated = solarPosition(new Date(startOfDay));
           this.nightPath.datum(circle.origin(antipode(solarPositionDated))).attr('d', this.path);
+
+          this.nightPathRight = this.layerNight.append('path').attr('class', 'mt-map-night-layer-right').attr('filter', 'url(#blur)').attr('clip-path', 'url(#mt-map-night-mask)').attr('d', this.nightPath.attr('d')).style('opacity', 0.1).attr('transform', 'translate(' + this.getWidth() + ',0)');
+
+          this.nightPathLeft = this.layerNight.append('path').attr('class', 'mt-map-night-layer-left').attr('filter', 'url(#blur)').attr('clip-path', 'url(#mt-map-night-mask)').attr('d', this.nightPath.attr('d')).style('opacity', 0.1).attr('transform', 'translate(' + -this.getWidth() + ',0)');
 
           if (!this.options.night.disableSun) {
             var sunCoords = this.projection(solarPositionDated);
 
-            this.sunCircle = this.layerNight.append('svg:circle').attr('class', 'mt-map-sun').attr('cx', sunCoords[0]).attr('cy', sunCoords[1]).attr('fill', 'url(#sunGradient)').attr('r', this.getHeight() * 0.35);
+            this.sunCircleRight = this.layerNight.append('svg:circle').attr('class', 'mt-map-sun-right').attr('cx', sunCoords[0]).attr('cy', sunCoords[1]).attr('fill', 'url(#sunGradient)').attr('r', this.getHeight() * 0.35);
 
-            this.sunCircleLeft = this.layerNight.append('svg:circle').attr('class', 'mt-map-sun-left').attr('cx', sunCoords[0] - this.getWidth()).attr('cy', sunCoords[1]).attr('fill', 'url(#sunGradient)').attr('r', this.getHeight() * 0.35);
+            this.sunCircleXRight = this.layerNight.append('svg:circle').attr('class', 'mt-map-sun-xright').attr('cx', sunCoords[0] + this.getWidth()).attr('cy', sunCoords[1]).attr('fill', 'url(#sunGradient)').attr('r', this.getHeight() * 0.35);
 
-            this.sunCircleRight = this.layerNight.append('svg:circle').attr('class', 'mt-map-sun-right').attr('cx', sunCoords[0] + this.getWidth()).attr('cy', sunCoords[1]).attr('fill', 'url(#sunGradient)').attr('r', this.getHeight() * 0.35);
+            this.sunCircleLeft = this.layerNight.append('svg:circle').attr('class', 'mt-map-sun-right').attr('cx', sunCoords[0] - this.getWidth()).attr('cy', sunCoords[1]).attr('fill', 'url(#sunGradient)').attr('r', this.getHeight() * 0.35);
+
+            this.sunCircleXLeft = this.layerNight.append('svg:circle').attr('class', 'mt-map-sun-xright').attr('cx', sunCoords[0] - 2 * this.getWidth()).attr('cy', sunCoords[1]).attr('fill', 'url(#sunGradient)').attr('r', this.getHeight() * 0.35);
           }
         }
 
@@ -1237,6 +1252,11 @@ this.d3.maptable = (function () {
               _this3.loadTimezone(errGeoMap, jsonTimezones);
             });
           }
+        }
+      }, {
+        key: 'scaleFontSize',
+        value: function scaleFontSize(fontSize) {
+          return this.getWidth() < 700 ? fontSize * (this.getWidth() / 700) : fontSize;
         }
       }, {
         key: 'loadTimezone',
@@ -1270,7 +1290,7 @@ this.d3.maptable = (function () {
           this.layerTimezonesText = this.layerTimezones.append('g').attr('class', 'mt-map-timezones-texts');
           this.layerTimezonesText.selectAll('.mt-map-timezone-text').data(timezoneTextsUnique).enter().insert('text').attr('class', 'mt-map-timezone-text').attr('y', this.getHeight() * 0.82 - 5).attr('x', function (d) {
             return (d.properties.zone + 10) * (_this4.getWidth() / 24.5) - 1;
-          }).attr('dx', this.getWidth() / 24.5 / 2).attr('font-size', 9).attr('font-family', 'Helevetica, Arial, Sans-Serif').attr('fill', '#999').attr('text-anchor', 'middle').html(function (d) {
+          }).attr('dx', this.getWidth() / 24.5 / 2).attr('font-size', this.scaleFontSize(9)).attr('font-family', 'Helevetica, Arial, Sans-Serif').attr('fill', '#999').attr('text-anchor', 'middle').html(function (d) {
             return utils.formatDate(_this4.options.timezones.date || new Date(), d.properties.zone);
           });
         }
@@ -1434,6 +1454,30 @@ this.d3.maptable = (function () {
         }
 
         /**
+         * Get all mt-map-country elements
+         */
+
+      }, {
+        key: 'getAllMtMapCountry',
+        value: function getAllMtMapCountry() {
+          if (this.allMtMapCountry) return this.allMtMapCountry;
+          this.allMtMapCountry = d3.selectAll(this.containerSelector + ' .mt-map-country');
+          return this.allMtMapCountry;
+        }
+
+        /**
+         * Get all mt-map-marjker elements
+         */
+
+      }, {
+        key: 'getAllMtMapMarker',
+        value: function getAllMtMapMarker() {
+          if (this.allMtMapMarker) return this.allMtMapMarker;
+          this.allMtMapMarker = d3.selectAll(this.containerSelector + ' .mt-map-marker');
+          return this.allMtMapMarker;
+        }
+
+        /**
          * Set the right color for every country
          */
 
@@ -1443,17 +1487,20 @@ this.d3.maptable = (function () {
           var _this7 = this;
 
           // Data from user input
-          var dataByCountry = d3.nest().key(function (d) {
-            return d[_this7.options.countryIdentifierKey];
-          }).entries(this.maptable.data);
+          var dataByCountry = new Map();
+          this.maptable.data.forEach(function (d) {
+            var key = d[_this7.options.countryIdentifierKey];
+            if (!dataByCountry.has(key)) {
+              dataByCountry.set(key, []);
+            }
+            dataByCountry.get(key).push(d);
+          });
 
           // We merge both data
           this.dataCountries.forEach(function (geoDatum) {
             geoDatum.key = geoDatum.properties[_this7.options.countryIdentifierType];
-            var matchedCountry = dataByCountry.filter(function (uDatum) {
-              return uDatum.key === geoDatum.key;
-            });
-            geoDatum.values = matchedCountry.length === 0 ? [] : matchedCountry[0].values;
+            var matchedCountry = dataByCountry.get(geoDatum.key);
+            geoDatum.values = matchedCountry || [];
             geoDatum.attr = {};
             geoDatum.rollupValue = {};
           });
@@ -1464,10 +1511,10 @@ this.d3.maptable = (function () {
           });
 
           // Update SVG
-          var countryItem = d3.selectAll('.mt-map-country').each(function (d) {
-            var targetPath = this;
+          var countryItem = this.getAllMtMapCountry().each(function (d) {
+            var selection = d3.select(this);
             Object.keys(d.attr).forEach(function (key) {
-              d3.select(targetPath).attr(key, d.attr[key]);
+              selection.attr(key, d.attr[key]);
             });
           });
 
@@ -1502,9 +1549,15 @@ this.d3.maptable = (function () {
       }, {
         key: 'updateNight',
         value: function updateNight() {
-          this.layerNight.remove();
-          this.layerNight = this.layerGlobal.append('g').attr('class', 'mt-map-night');
-          this.buildNight();
+          var userDate = this.options.night.date || Date.UTC();
+          var startOfDay = Date.UTC(userDate.getUTCFullYear(), userDate.getUTCMonth(), userDate.getUTCDate(), 0, 0, 0);
+          var endOfDay = Date.UTC(userDate.getUTCFullYear(), userDate.getUTCMonth(), userDate.getUTCDate(), 23, 59, 59);
+
+          var totalMilliseconds = endOfDay - startOfDay;
+          var currentTime = userDate - startOfDay;
+          var relativeTranslateX = currentTime / totalMilliseconds;
+
+          this.layerNight.attr('transform', 'translate(' + -this.getWidth() * relativeTranslateX + ',0)');
         }
 
         /**
@@ -1514,12 +1567,11 @@ this.d3.maptable = (function () {
       }, {
         key: 'updateTimezones',
         value: function updateTimezones() {
-          var self = this;
-          d3.selectAll('.mt-map-timezone-text').each(function () {
-            var targetPath = this;
-            d3.select(targetPath).html(function (d) {
-              return utils.formatDate(self.options.timezones.date || new Date(), d.properties.zone);
-            });
+          var timezoneTexts = document.querySelectorAll('.mt-map-timezone-text');
+          var currentDate = this.options.timezones.date || new Date();
+
+          Array.from(timezoneTexts).forEach(function (timezoneText) {
+            timezoneText.textContent = utils.formatDate(currentDate, timezoneText.__data__.properties.zone);
           });
         }
       }, {
@@ -1574,10 +1626,11 @@ this.d3.maptable = (function () {
             return d.values[0].y + attrYDelta;
           });
 
-          d3.selectAll(this.containerSelector + ' .mt-map-marker').each(function (d) {
-            var targetPath = this;
+          this.getAllMtMapMarker().each(function (d) {
+            var _this9 = this;
+
             Object.keys(d.attr).forEach(function (key) {
-              d3.select(targetPath).attr(key, d.attr[key]);
+              d3.select(_this9).attr(key, d.attr[key]);
             });
           });
 
@@ -1643,10 +1696,10 @@ this.d3.maptable = (function () {
             titleContainer.append('rect').attr('x', 0).attr('y', 0).attr('width', this.getWidth()).attr('height', 30).attr('fill', this.options.title.bgColor);
           }
 
-          titleContainer.append('text').attr('id', 'mt-map-title').attr('x', 20).attr('font-size', this.options.title.fontSize).attr('font-family', this.options.title.fontFamily).attr('y', 20);
+          titleContainer.append('text').attr('id', 'mt-map-title').attr('x', 20).attr('font-size', this.scaleFontSize(this.options.title.fontSize)).attr('font-family', this.options.title.fontFamily).attr('y', 20);
 
           if (this.options.title.source) {
-            titleContainer.append('text').attr('y', 20).attr('x', this.getWidth() - 20).attr('text-anchor', 'end').attr('font-size', this.options.title.fontSize).attr('font-family', this.options.title.fontFamily).html(this.options.title.source());
+            titleContainer.append('text').attr('y', 20).attr('x', this.getWidth() - 20).attr('text-anchor', 'end').attr('font-size', this.scaleFontSize(this.options.title.fontSize)).attr('font-family', this.options.title.fontFamily).html(this.options.title.source());
           }
         }
 
@@ -1753,7 +1806,7 @@ this.d3.maptable = (function () {
           // Rescale markers size
           if (this.options.markers) {
             // markers
-            d3.selectAll(this.containerSelector + ' .mt-map-marker').each(function (d) {
+            this.getAllMtMapMarker().each(function (d) {
               // stroke
               if (d.attr['stroke-width']) {
                 d3.select(this).attr('stroke-width', d.attr['stroke-width'] / self.scaleAttributes());
@@ -1772,7 +1825,7 @@ this.d3.maptable = (function () {
 
           // Rescale Country stroke-width
           if (this.options.countries) {
-            d3.selectAll(this.containerSelector + ' .mt-map-country').style('stroke-width', this.options.countries.attr['stroke-width'] / this.scale);
+            this.getAllMtMapCountry().style('stroke-width', this.options.countries.attr['stroke-width'] / this.scale);
           }
 
           // Rescale heatmap borders
@@ -1786,7 +1839,7 @@ this.d3.maptable = (function () {
       }, {
         key: 'setAttrValues',
         value: function setAttrValues(attrKey, attrValue, dataset) {
-          var _this9 = this;
+          var _this10 = this;
 
           if (typeof attrValue === 'number' || typeof attrValue === 'string') {
             // Static value
@@ -1908,11 +1961,11 @@ this.d3.maptable = (function () {
                 d.attrProperties[attrKey].key = key;
                 d.attrProperties[attrKey].mode = mode;
                 d.attrProperties[attrKey].scale = scale;
-                var c = _this9.maptable.columnDetails[key];
+                var c = _this10.maptable.columnDetails[key];
                 d.attrProperties[attrKey].columnDetails = c;
                 var datum = {};
                 datum[key] = aggregatedValue;
-                d.attrProperties[attrKey].formatted = c && c.cellContent ? c.cellContent.bind(_this9.maptable)(datum) : aggregatedValue;
+                d.attrProperties[attrKey].formatted = c && c.cellContent ? c.cellContent.bind(_this10.maptable)(datum) : aggregatedValue;
               }
             });
             if (scale === 'rank') {
@@ -1994,7 +2047,7 @@ this.d3.maptable = (function () {
                 scaledValue = attrValue.empty;
               } else {
                 var originalValueRaw = d.attrProperties[attrKey].value;
-                var originalValue = attrValue.transform ? attrValue.transform.bind(_this9.maptable)(originalValueRaw, _this9.maptable.data) : originalValueRaw;
+                var originalValue = attrValue.transform ? attrValue.transform.bind(_this10.maptable)(originalValueRaw, _this10.maptable.data) : originalValueRaw;
 
                 if (useNegative && originalValue < 0) {
                   scaledValue = scaleNegativeFunction(originalValue);
@@ -2029,14 +2082,14 @@ this.d3.maptable = (function () {
       }, {
         key: 'updateTitle',
         value: function updateTitle() {
-          var _this10 = this;
+          var _this11 = this;
 
           if (this.options.title.content) {
             var showing = this.maptable.data.filter(function (d) {
-              return d[_this10.options.latitudeKey] !== 0;
+              return d[_this11.options.latitudeKey] !== 0;
             }).length;
             var total = this.maptable.rawData.filter(function (d) {
-              return d[_this10.options.latitudeKey] !== 0;
+              return d[_this11.options.latitudeKey] !== 0;
             }).length;
 
             var inlineFilters = '';
@@ -2535,6 +2588,7 @@ this.d3.maptable = (function () {
               rowNode.querySelector('.mt-filter-value-max').style.display = 'none';
             }
           }
+          this.maptable.render.bind(this.maptable)();
         }
       }, {
         key: 'getPossibleFilters',
@@ -2578,7 +2632,7 @@ this.d3.maptable = (function () {
                   var filterValueMin = rowNode.querySelector('.mt-filter-value-min').value;
                   var filterValueMax = rowNode.querySelector('.mt-filter-value-max').value;
                   if (filterValueMin === '' || filterValueMax === '') continue;
-                  if (fmt && d[filterName] !== '' && fmt(d[filterName]) !== '' && (fmt(d[filterName]) < fmt(filterValueMin) || fmt(d[filterName]) > fmt(filterValueMax))) {
+                  if (fmt && (fmt(d[filterName]) < fmt(filterValueMin) || fmt(d[filterName]) > fmt(filterValueMax))) {
                     matched = false;
                   } else if (parseInt(d[filterName], 10) < parseInt(filterValueMin, 10) || parseInt(d[filterName], 10) > parseInt(filterValueMax, 10)) {
                     matched = false;
@@ -2592,6 +2646,11 @@ this.d3.maptable = (function () {
                     matched = false;
                   }
                 }
+              }
+
+              if (fmt && utils.isBlank(fmt(d[filterName])) || utils.isBlank(d[filterName])) {
+                matched = false;
+                continue;
               }
             }
             return matched;
@@ -3359,6 +3418,12 @@ this.d3.maptable = (function () {
           },
           setTimezonesDate: function setTimezonesDate(date) {
             maptableObject.options.map.timezones.date = date;
+          },
+          getMapWidth: function getMapWidth() {
+            return maptableObject.map.getWidth();
+          },
+          getMapHeight: function getMapHeight() {
+            return maptableObject.map.getHeight();
           }
         };
       };
