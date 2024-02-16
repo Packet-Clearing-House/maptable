@@ -1202,6 +1202,8 @@ this.d3.maptable = (function () {
       }, {
         key: 'buildNight',
         value: function buildNight() {
+          this.layerNight = this.layerGlobal.append('g').attr('class', 'mt-map-night').attr('transform', 'translate(0,0)');
+
           var circle = d3.geo.circle().angle(90);
 
           // Mask night
@@ -1212,18 +1214,27 @@ this.d3.maptable = (function () {
           // Build vectors
           this.nightPath = this.layerNight.append('path').attr('class', 'mt-map-night-layer').attr('filter', 'url(#blur)').attr('clip-path', 'url(#mt-map-night-mask)').attr('d', this.path).style('opacity', 0.1);
 
-          var solarPositionDated = solarPosition(this.options.night.date || new Date());
-
+          var userDate = this.options.night.date || Date.UTC();
+          var startOfDay = Date.UTC(userDate.getUTCFullYear(), userDate.getUTCMonth(), userDate.getUTCDate(), 0, 0, 0);
+          var solarPositionDated = solarPosition(new Date(startOfDay));
           this.nightPath.datum(circle.origin(antipode(solarPositionDated))).attr('d', this.path);
+
+          if (this.options.night.allowLeftRightNights) {
+            this.nightPathRight = this.layerNight.append('path').attr('class', 'mt-map-night-layer-right').attr('filter', 'url(#blur)').attr('clip-path', 'url(#mt-map-night-mask)').attr('d', this.nightPath.attr('d')).style('opacity', 0.1).attr('transform', 'translate(' + this.getWidth() + ',0)');
+
+            this.nightPathLeft = this.layerNight.append('path').attr('class', 'mt-map-night-layer-left').attr('filter', 'url(#blur)').attr('clip-path', 'url(#mt-map-night-mask)').attr('d', this.nightPath.attr('d')).style('opacity', 0.1).attr('transform', 'translate(' + -this.getWidth() + ',0)');
+          }
 
           if (!this.options.night.disableSun) {
             var sunCoords = this.projection(solarPositionDated);
 
-            this.sunCircle = this.layerNight.append('svg:circle').attr('class', 'mt-map-sun').attr('cx', sunCoords[0]).attr('cy', sunCoords[1]).attr('fill', 'url(#sunGradient)').attr('r', this.getHeight() * 0.35);
+            this.sunCircleRight = this.layerNight.append('svg:circle').attr('class', 'mt-map-sun-right').attr('cx', sunCoords[0]).attr('cy', sunCoords[1]).attr('fill', 'url(#sunGradient)').attr('r', this.getHeight() * 0.35);
 
-            this.sunCircleLeft = this.layerNight.append('svg:circle').attr('class', 'mt-map-sun-left').attr('cx', sunCoords[0] - this.getWidth()).attr('cy', sunCoords[1]).attr('fill', 'url(#sunGradient)').attr('r', this.getHeight() * 0.35);
+            this.sunCircleXRight = this.layerNight.append('svg:circle').attr('class', 'mt-map-sun-xright').attr('cx', sunCoords[0] + this.getWidth()).attr('cy', sunCoords[1]).attr('fill', 'url(#sunGradient)').attr('r', this.getHeight() * 0.35);
 
-            this.sunCircleRight = this.layerNight.append('svg:circle').attr('class', 'mt-map-sun-right').attr('cx', sunCoords[0] + this.getWidth()).attr('cy', sunCoords[1]).attr('fill', 'url(#sunGradient)').attr('r', this.getHeight() * 0.35);
+            this.sunCircleLeft = this.layerNight.append('svg:circle').attr('class', 'mt-map-sun-right').attr('cx', sunCoords[0] - this.getWidth()).attr('cy', sunCoords[1]).attr('fill', 'url(#sunGradient)').attr('r', this.getHeight() * 0.35);
+
+            this.sunCircleXLeft = this.layerNight.append('svg:circle').attr('class', 'mt-map-sun-xright').attr('cx', sunCoords[0] - 2 * this.getWidth()).attr('cy', sunCoords[1]).attr('fill', 'url(#sunGradient)').attr('r', this.getHeight() * 0.35);
           }
         }
 
@@ -1535,9 +1546,16 @@ this.d3.maptable = (function () {
       }, {
         key: 'updateNight',
         value: function updateNight() {
-          this.layerNight.remove();
-          this.layerNight = this.layerGlobal.append('g').attr('class', 'mt-map-night');
-          this.buildNight();
+          var userDate = this.options.night.date || Date.UTC();
+          var startOfDay = Date.UTC(userDate.getUTCFullYear(), userDate.getUTCMonth(), userDate.getUTCDate(), 0, 0, 0);
+          var endOfDay = Date.UTC(userDate.getUTCFullYear(), userDate.getUTCMonth(), userDate.getUTCDate(), 23, 59, 59);
+
+          var totalMilliseconds = endOfDay - startOfDay;
+          var currentTime = userDate - startOfDay;
+          var relativeTranslateX = currentTime / totalMilliseconds;
+          console.log(relativeTranslateX);
+
+          this.layerNight.attr('transform', 'translate(' + this.getWidth() * relativeTranslateX + ',0)');
         }
 
         /**
@@ -3398,6 +3416,12 @@ this.d3.maptable = (function () {
           },
           setTimezonesDate: function setTimezonesDate(date) {
             maptableObject.options.map.timezones.date = date;
+          },
+          getMapWidth: function getMapWidth() {
+            return maptableObject.map.getWidth();
+          },
+          getMapHeight: function getMapHeight() {
+            return maptableObject.map.getHeight();
           }
         };
       };

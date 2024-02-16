@@ -251,6 +251,10 @@ export default class GeoMap {
    * Logic to build the night position
    */
   buildNight() {
+    this.layerNight = this.layerGlobal.append('g')
+      .attr('class', 'mt-map-night')
+      .attr('transform', 'translate(0,0)');
+
     const circle = d3.geo.circle()
       .angle(90);
 
@@ -273,30 +277,63 @@ export default class GeoMap {
       .attr('d', this.path)
       .style('opacity', 0.1);
 
-    const solarPositionDated = solarPosition(this.options.night.date || new Date());
-
+    const userDate = this.options.night.date || Date.UTC();
+    const startOfDay = Date.UTC(
+      userDate.getUTCFullYear(),
+      userDate.getUTCMonth(),
+      userDate.getUTCDate(),
+      0,
+      0,
+      0,
+    );
+    const solarPositionDated = solarPosition(new Date(startOfDay));
     this.nightPath.datum(circle.origin(antipode(solarPositionDated))).attr('d', this.path);
+
+    if (this.options.night.allowLeftRightNights) {
+      this.nightPathRight = this.layerNight.append('path')
+        .attr('class', 'mt-map-night-layer-right')
+        .attr('filter', 'url(#blur)')
+        .attr('clip-path', 'url(#mt-map-night-mask)')
+        .attr('d', this.nightPath.attr('d'))
+        .style('opacity', 0.1)
+        .attr('transform', `translate(${this.getWidth()},0)`);
+
+      this.nightPathLeft = this.layerNight.append('path')
+        .attr('class', 'mt-map-night-layer-left')
+        .attr('filter', 'url(#blur)')
+        .attr('clip-path', 'url(#mt-map-night-mask)')
+        .attr('d', this.nightPath.attr('d'))
+        .style('opacity', 0.1)
+        .attr('transform', `translate(${-this.getWidth()},0)`);
+    }
 
     if (!this.options.night.disableSun) {
       const sunCoords = this.projection(solarPositionDated);
 
-      this.sunCircle = this.layerNight.append('svg:circle')
-        .attr('class', 'mt-map-sun')
+      this.sunCircleRight = this.layerNight.append('svg:circle')
+        .attr('class', 'mt-map-sun-right')
         .attr('cx', sunCoords[0])
         .attr('cy', sunCoords[1])
         .attr('fill', 'url(#sunGradient)')
         .attr('r', this.getHeight() * 0.35);
 
+      this.sunCircleXRight = this.layerNight.append('svg:circle')
+        .attr('class', 'mt-map-sun-xright')
+        .attr('cx', sunCoords[0] + this.getWidth())
+        .attr('cy', sunCoords[1])
+        .attr('fill', 'url(#sunGradient)')
+        .attr('r', this.getHeight() * 0.35);
+
       this.sunCircleLeft = this.layerNight.append('svg:circle')
-        .attr('class', 'mt-map-sun-left')
+        .attr('class', 'mt-map-sun-right')
         .attr('cx', sunCoords[0] - this.getWidth())
         .attr('cy', sunCoords[1])
         .attr('fill', 'url(#sunGradient)')
         .attr('r', this.getHeight() * 0.35);
 
-      this.sunCircleRight = this.layerNight.append('svg:circle')
-        .attr('class', 'mt-map-sun-right')
-        .attr('cx', sunCoords[0] + this.getWidth())
+      this.sunCircleXLeft = this.layerNight.append('svg:circle')
+        .attr('class', 'mt-map-sun-xright')
+        .attr('cx', sunCoords[0] - 2 * this.getWidth())
         .attr('cy', sunCoords[1])
         .attr('fill', 'url(#sunGradient)')
         .attr('r', this.getHeight() * 0.35);
@@ -622,9 +659,30 @@ export default class GeoMap {
    * Update night drawings
    */
   updateNight() {
-    this.layerNight.remove();
-    this.layerNight = this.layerGlobal.append('g').attr('class', 'mt-map-night');
-    this.buildNight();
+    const userDate = this.options.night.date || Date.UTC();
+    const startOfDay = Date.UTC(
+      userDate.getUTCFullYear(),
+      userDate.getUTCMonth(),
+      userDate.getUTCDate(),
+      0,
+      0,
+      0,
+    );
+    const endOfDay = Date.UTC(
+      userDate.getUTCFullYear(),
+      userDate.getUTCMonth(),
+      userDate.getUTCDate(),
+      23,
+      59,
+      59,
+    );
+
+    const totalMilliseconds = endOfDay - startOfDay;
+    const currentTime = userDate - startOfDay;
+    const relativeTranslateX = (currentTime / totalMilliseconds);
+    console.log(relativeTranslateX);
+
+    this.layerNight.attr('transform', `translate(${this.getWidth() * relativeTranslateX},0)`);
   }
 
   /**

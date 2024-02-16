@@ -132,6 +132,8 @@ d3.maptable = function (target) {
       setTimezonesDate: (date) => {
         maptableObject.options.map.timezones.date = date;
       },
+      getMapWidth: () => maptableObject.map.getWidth(),
+      getMapHeight: () => maptableObject.map.getHeight(),
     };
   };
   return maptable;
