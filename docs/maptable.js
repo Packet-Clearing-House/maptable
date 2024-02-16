@@ -1256,6 +1256,11 @@ this.d3.maptable = (function () {
           }
         }
       }, {
+        key: 'scaleFontSize',
+        value: function scaleFontSize(fontSize) {
+          return this.getWidth() < 700 ? fontSize * (this.getWidth() / 700) : fontSize;
+        }
+      }, {
         key: 'loadTimezone',
         value: function loadTimezone(err, jsonTimezones) {
           var _this4 = this;
@@ -1287,7 +1292,7 @@ this.d3.maptable = (function () {
           this.layerTimezonesText = this.layerTimezones.append('g').attr('class', 'mt-map-timezones-texts');
           this.layerTimezonesText.selectAll('.mt-map-timezone-text').data(timezoneTextsUnique).enter().insert('text').attr('class', 'mt-map-timezone-text').attr('y', this.getHeight() * 0.82 - 5).attr('x', function (d) {
             return (d.properties.zone + 10) * (_this4.getWidth() / 24.5) - 1;
-          }).attr('dx', this.getWidth() / 24.5 / 2).attr('font-size', 9).attr('font-family', 'Helevetica, Arial, Sans-Serif').attr('fill', '#999').attr('text-anchor', 'middle').html(function (d) {
+          }).attr('dx', this.getWidth() / 24.5 / 2).attr('font-size', this.scaleFontSize(9)).attr('font-family', 'Helevetica, Arial, Sans-Serif').attr('fill', '#999').attr('text-anchor', 'middle').html(function (d) {
             return utils.formatDate(_this4.options.timezones.date || new Date(), d.properties.zone);
           });
         }
@@ -1555,7 +1560,7 @@ this.d3.maptable = (function () {
           var relativeTranslateX = currentTime / totalMilliseconds;
           console.log(relativeTranslateX);
 
-          this.layerNight.attr('transform', 'translate(' + this.getWidth() * relativeTranslateX + ',0)');
+          this.layerNight.attr('transform', 'translate(' + -this.getWidth() * relativeTranslateX + ',0)');
         }
 
         /**
@@ -1694,10 +1699,10 @@ this.d3.maptable = (function () {
             titleContainer.append('rect').attr('x', 0).attr('y', 0).attr('width', this.getWidth()).attr('height', 30).attr('fill', this.options.title.bgColor);
           }
 
-          titleContainer.append('text').attr('id', 'mt-map-title').attr('x', 20).attr('font-size', this.options.title.fontSize).attr('font-family', this.options.title.fontFamily).attr('y', 20);
+          titleContainer.append('text').attr('id', 'mt-map-title').attr('x', 20).attr('font-size', this.scaleFontSize(this.options.title.fontSize)).attr('font-family', this.options.title.fontFamily).attr('y', 20);
 
           if (this.options.title.source) {
-            titleContainer.append('text').attr('y', 20).attr('x', this.getWidth() - 20).attr('text-anchor', 'end').attr('font-size', this.options.title.fontSize).attr('font-family', this.options.title.fontFamily).html(this.options.title.source());
+            titleContainer.append('text').attr('y', 20).attr('x', this.getWidth() - 20).attr('text-anchor', 'end').attr('font-size', this.scaleFontSize(this.options.title.fontSize)).attr('font-family', this.options.title.fontFamily).html(this.options.title.source());
           }
         }
 

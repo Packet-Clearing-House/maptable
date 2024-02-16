@@ -353,6 +353,10 @@ export default class GeoMap {
     }
   }
 
+  scaleFontSize(fontSize) {
+    return this.getWidth() < 700 ? fontSize * (this.getWidth() / 700) : fontSize;
+  }
+
   loadTimezone(err, jsonTimezones) {
     this.dataTimezones = topojson.feature(
       jsonTimezones,
@@ -398,7 +402,7 @@ export default class GeoMap {
       .attr('y', this.getHeight() * 0.82 - 5)
       .attr('x', (d) => (d.properties.zone + 10) * (this.getWidth() / 24.5) - 1)
       .attr('dx', (this.getWidth() / 24.5) / 2)
-      .attr('font-size', 9)
+      .attr('font-size', this.scaleFontSize(9))
       .attr('font-family', 'Helevetica, Arial, Sans-Serif')
       .attr('fill', '#999')
       .attr('text-anchor', 'middle')
@@ -682,7 +686,7 @@ export default class GeoMap {
     const relativeTranslateX = (currentTime / totalMilliseconds);
     console.log(relativeTranslateX);
 
-    this.layerNight.attr('transform', `translate(${this.getWidth() * relativeTranslateX},0)`);
+    this.layerNight.attr('transform', `translate(${-this.getWidth() * relativeTranslateX},0)`);
   }
 
   /**
@@ -833,7 +837,7 @@ export default class GeoMap {
     titleContainer.append('text')
       .attr('id', 'mt-map-title')
       .attr('x', 20)
-      .attr('font-size', this.options.title.fontSize)
+      .attr('font-size', this.scaleFontSize(this.options.title.fontSize))
       .attr('font-family', this.options.title.fontFamily)
       .attr('y', 20);
 
@@ -842,7 +846,7 @@ export default class GeoMap {
         .attr('y', 20)
         .attr('x', (this.getWidth() - 20))
         .attr('text-anchor', 'end')
-        .attr('font-size', this.options.title.fontSize)
+        .attr('font-size', this.scaleFontSize(this.options.title.fontSize))
         .attr('font-family', this.options.title.fontFamily)
         .html(this.options.title.source());
     }
