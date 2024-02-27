@@ -1212,16 +1212,16 @@ this.d3.maptable = (function () {
           this.maskNight.append('rect').attr('x', 0).attr('y', 30).attr('width', this.getWidth()).attr('height', this.getHeight() * 0.82 - 30);
 
           // Build vectors
-          this.nightPath = this.layerNight.append('path').attr('class', 'mt-map-night-layer').attr('filter', 'url(#blur)').attr('clip-path', 'url(#mt-map-night-mask)').attr('d', this.path).style('opacity', 0.1);
+          this.nightPath = this.layerNight.append('path').attr('class', 'mt-map-night-layer' + (this.options.night.cssBlur ? ' mt-blur' : '')).attr('filter', this.options.night.cssBlur ? undefined : 'url(#blur)').attr('clip-path', 'url(#mt-map-night-mask)').attr('d', this.path).style('opacity', 0.1);
 
           var userDate = this.options.night.date || Date.UTC();
           var startOfDay = Date.UTC(userDate.getUTCFullYear(), userDate.getUTCMonth(), userDate.getUTCDate(), 0, 0, 0);
           var solarPositionDated = solarPosition(new Date(startOfDay));
           this.nightPath.datum(circle.origin(antipode(solarPositionDated))).attr('d', this.path);
 
-          this.nightPathRight = this.layerNight.append('path').attr('class', 'mt-map-night-layer-right').attr('filter', 'url(#blur)').attr('clip-path', 'url(#mt-map-night-mask)').attr('d', this.nightPath.attr('d')).style('opacity', 0.1).attr('transform', 'translate(' + this.getWidth() + ',0)');
+          this.nightPathRight = this.layerNight.append('path').attr('class', 'mt-map-night-layer' + (this.options.night.cssBlur ? ' mt-blur' : '')).attr('filter', this.options.night.cssBlur ? undefined : 'url(#blur)').attr('clip-path', 'url(#mt-map-night-mask)').attr('d', this.nightPath.attr('d')).style('opacity', 0.1).style('transform', 'translate3d(' + this.getWidth() + 'px,0,0)');
 
-          this.nightPathLeft = this.layerNight.append('path').attr('class', 'mt-map-night-layer-left').attr('filter', 'url(#blur)').attr('clip-path', 'url(#mt-map-night-mask)').attr('d', this.nightPath.attr('d')).style('opacity', 0.1).attr('transform', 'translate(' + -this.getWidth() + ',0)');
+          this.nightPathLeft = this.layerNight.append('path').attr('class', 'mt-map-night-layer' + (this.options.night.cssBlur ? ' mt-blur' : '')).attr('filter', this.options.night.cssBlur ? undefined : 'url(#blur)').attr('clip-path', 'url(#mt-map-night-mask)').attr('d', this.nightPath.attr('d')).style('opacity', 0.1).style('transform', 'translate3d(' + -this.getWidth() + 'px,0,0)');
 
           if (!this.options.night.disableSun) {
             var sunCoords = this.projection(solarPositionDated);
