@@ -252,8 +252,7 @@ export default class GeoMap {
    */
   buildNight() {
     this.layerNight = this.layerGlobal.append('g')
-      .attr('class', 'mt-map-night')
-      .attr('transform', 'translate(0,0)');
+      .attr('class', 'mt-map-night');
 
     const circle = d3.geo.circle()
       .angle(90);
@@ -683,7 +682,7 @@ export default class GeoMap {
     const currentTime = userDate - startOfDay;
     const relativeTranslateX = (currentTime / totalMilliseconds);
 
-    this.layerNight.attr('transform', `translate(${-this.getWidth() * relativeTranslateX},0)`);
+    this.layerNight.node().style.transform = `translateX(${-this.getWidth() * relativeTranslateX}px)`;
   }
 
   /**
@@ -933,9 +932,9 @@ export default class GeoMap {
       d3.event.translate[1] = this.transY;
     }
 
-    this.layerGlobal.attr(
+    this.layerGlobal.style(
       'transform',
-      `translate(${this.transX}, ${this.transY})scale(${this.scale})`,
+      `translate(${this.transX}px,${this.transY}px)scale(${this.scale})`,
     );
 
     // Hide tooltip

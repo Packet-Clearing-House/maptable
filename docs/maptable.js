@@ -1202,7 +1202,7 @@ this.d3.maptable = (function () {
       }, {
         key: 'buildNight',
         value: function buildNight() {
-          this.layerNight = this.layerGlobal.append('g').attr('class', 'mt-map-night').attr('transform', 'translate(0,0)');
+          this.layerNight = this.layerGlobal.append('g').attr('class', 'mt-map-night');
 
           var circle = d3.geo.circle().angle(90);
 
@@ -1557,7 +1557,7 @@ this.d3.maptable = (function () {
           var currentTime = userDate - startOfDay;
           var relativeTranslateX = currentTime / totalMilliseconds;
 
-          this.layerNight.attr('transform', 'translate(' + -this.getWidth() * relativeTranslateX + ',0)');
+          this.layerNight.node().style.transform = 'translateX(' + -this.getWidth() * relativeTranslateX + 'px)';
         }
 
         /**
@@ -1797,7 +1797,7 @@ this.d3.maptable = (function () {
             d3.event.translate[1] = this.transY;
           }
 
-          this.layerGlobal.attr('transform', 'translate(' + this.transX + ', ' + this.transY + ')scale(' + this.scale + ')');
+          this.layerGlobal.style('transform', 'translate(' + this.transX + 'px,' + this.transY + 'px)scale(' + this.scale + ')');
 
           // Hide tooltip
           if (self.tooltipCountriesNode) self.tooltipCountriesNode.attr('style', 'display:none;');
@@ -3382,6 +3382,15 @@ this.d3.maptable = (function () {
         options.onComplete = onComplete;
 
         var customOptions = utils.extendRecursive(defaultOptions, options);
+
+        if (!options.map.markers) delete customOptions.map.markers;
+        if (!options.map.heatmap) delete customOptions.map.heatmap;
+        if (!options.map.title) delete customOptions.map.title;
+        if (!options.map.timezones) delete customOptions.map.timezones;
+        if (!options.map.night) delete customOptions.map.night;
+        if (!options.filters) delete customOptions.filters;
+        if (!options.table) delete customOptions.table;
+
         maptableObject = new MapTable(target, customOptions);
 
         // public functions
