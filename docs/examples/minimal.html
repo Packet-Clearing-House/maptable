@@ -33,7 +33,8 @@
     var viz = d3.maptable('#vizContainer')
       .csv('basic.csv')
       .map({
-        path: 'countries.json'
+        path: 'countries.json',
+        markers: {},
       })
       .filters()
       .table()
