@@ -10,7 +10,6 @@ export default class Table {
   constructor(maptable, options) {
     this.maptable = maptable;
     this.options = options;
-    console.log("[LOG]options:", maptable, options);
     if (this.options.defaultSorting) {
       if (Array.isArray(this.options.defaultSorting) && this.options.defaultSorting.length === 2) {
         this.sorting = this.options.defaultSorting;
