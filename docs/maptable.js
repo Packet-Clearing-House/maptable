@@ -148,6 +148,10 @@ this.d3.maptable = (function () {
       return newDate.toISOString().split('T')[1].substr(0, 5);
     };
 
+    var isBlank = function isBlank(str) {
+      return str === null || str === '' || str === undefined;
+    };
+
     var utils = {
       rangeToBool: rangeToBool,
       appendOptions: appendOptions,
@@ -157,7 +161,8 @@ this.d3.maptable = (function () {
       keyToTile: keyToTile,
       quantile: quantile,
       uniqueValues: uniqueValues,
-      formatDate: formatDate
+      formatDate: formatDate,
+      isBlank: isBlank
     };
 
     var defaultOptions = {
@@ -2535,6 +2540,7 @@ this.d3.maptable = (function () {
               rowNode.querySelector('.mt-filter-value-max').style.display = 'none';
             }
           }
+          this.maptable.render.bind(this.maptable)();
         }
       }, {
         key: 'getPossibleFilters',
@@ -2578,7 +2584,7 @@ this.d3.maptable = (function () {
                   var filterValueMin = rowNode.querySelector('.mt-filter-value-min').value;
                   var filterValueMax = rowNode.querySelector('.mt-filter-value-max').value;
                   if (filterValueMin === '' || filterValueMax === '') continue;
-                  if (fmt && d[filterName] !== '' && fmt(d[filterName]) !== '' && (fmt(d[filterName]) < fmt(filterValueMin) || fmt(d[filterName]) > fmt(filterValueMax))) {
+                  if (fmt && (fmt(d[filterName]) < fmt(filterValueMin) || fmt(d[filterName]) > fmt(filterValueMax))) {
                     matched = false;
                   } else if (parseInt(d[filterName], 10) < parseInt(filterValueMin, 10) || parseInt(d[filterName], 10) > parseInt(filterValueMax, 10)) {
                     matched = false;
@@ -2592,6 +2598,11 @@ this.d3.maptable = (function () {
                     matched = false;
                   }
                 }
+              }
+
+              if (fmt && utils.isBlank(fmt(d[filterName])) || utils.isBlank(d[filterName])) {
+                matched = false;
+                continue;
               }
             }
             return matched;
@@ -2654,7 +2665,7 @@ this.d3.maptable = (function () {
 
         this.maptable = maptable;
         this.options = options;
-
+        console.log("[LOG]options:", maptable, options);
         if (this.options.defaultSorting) {
           if (Array.isArray(this.options.defaultSorting) && this.options.defaultSorting.length === 2) {
             this.sorting = this.options.defaultSorting;
@@ -2662,60 +2673,74 @@ this.d3.maptable = (function () {
             this.sorting = [this.options.defaultSorting];
           }
           this.sorting.forEach(function (s) {
-            if (!s.mode) s.mode = 'asc';
+            if (!s.mode) s.mode = "asc";
           });
         } else {
           this.sorting = [{
             key: Object.keys(this.maptable.data[0])[0],
-            mode: 'asc'
+            mode: "asc"
           }];
         }
 
         this.initialSorting = this.sorting.map(function (s) {
-          return s.key + ',' + s.mode;
-        }).join(';');
+          return s.key + "," + s.mode;
+        }).join(";");
         this.isSorting = false;
 
         this.containerSelector = maptable.options.target;
         this.container = document.querySelector(maptable.options.target);
 
-        this.node = this.container.querySelector('#mt-table');
+        this.node = this.container.querySelector("#mt-table");
 
         if (!this.node) {
-          this.node = document.createElement('div');
-          this.node.setAttribute('id', 'mt-table');
+          this.node = document.createElement("div");
+          this.node.setAttribute("id", "mt-table");
           this.maptable.node.appendChild(this.node);
         }
 
-        this.node = d3.select(this.node).append('table').attr('class', this.options.className);
+        this.node = d3.select(this.node).append("table").attr("class", this.options.className);
 
-        this.header = this.node.append('thead');
+        this.header = this.node.append("thead");
 
-        this.body = this.node.append('tbody');
+        this.body = this.node.append("tbody");
 
         if (this.options.show) {
           var arrayDiff = this.options.show.filter(function (i) {
             return Object.keys(_this.maptable.columnDetails).indexOf(i) < 0;
           });
           if (arrayDiff.length > 0) {
-            throw new Error('MapTable: invalid columns "' + arrayDiff.join(', ') + '"');
+            throw new Error("MapTable: invalid columns \"" + arrayDiff.join(", ") + "\"");
           }
           this.activeColumns = this.options.show;
         } else {
           this.activeColumns = Object.keys(this.maptable.columnDetails);
         }
 
-        this.header.selectAll('tr').data([1]).enter().append('tr').selectAll('th').data(this.activeColumns.map(function (k) {
+        // make table header fixed
+        if (this.options.header) {
+          if (this.options.header.type && this.options.header.type === "fixed") {
+            this.header.attr("class", "mt-header-fixed");
+
+            // set custom top header space
+            if (this.options.header.top) {
+              this.header.attr("style", "top:" + (this.options.header.top || "0") + "px;");
+            } else {
+              this.header.attr("style", "top:0px;");
+            }
+          }
+        }
+
+        this.header.selectAll("tr").data([1]).enter().append("tr").selectAll("th").data(this.activeColumns.map(function (k) {
           return utils.extendRecursive({ key: k }, _this.maptable.columnDetails[k]);
-        })).enter().append('th').attr('class', function (d) {
-          var output = d.sorting ? 'mt-table-sortable' : '';
-          output += d.nowrap ? ' nowrap' : '';
+        })).enter().append("th").attr("class", function (d) {
+          var output = d.sorting ? "mt-table-sortable" : "";
+          output += d.nowrap ? " nowrap" : "";
           return output;
-        }).attr('data-key', function (d) {
+        }).attr("data-key", function (d) {
           return utils.sanitizeKey(d.key);
-        }).attr('onselectstart', 'return false;').attr('unselectable', 'on').attr('style', function (d) {
-          return d.nowrap ? 'white-space:nowrap;' : '';
-        }).on('click', function (d) {
+        }).attr("onselectstart", "return false;").attr("unselectable", "on").attr("style", function (d) {
+          return d.nowrap ? "white-space:nowrap;" : "";
+        }).on("click", function (d) {
           if (_this.isSorting) return;
           _this.isSorting = true;
           if (d.sorting) {
@@ -2724,8 +2749,8 @@ this.d3.maptable = (function () {
           _this.isSorting = false;
         }).text(function (d) {
           return d.title;
-        }).attr('id', function (d) {
-          return 'column_header_' + utils.sanitizeKey(d.key);
+        }).attr("id", function (d) {
+          return "column_header_" + utils.sanitizeKey(d.key);
         });
 
         // render is triggered by MapTable
@@ -2738,16 +2763,16 @@ this.d3.maptable = (function () {
 
 
       babelHelpers.createClass(Table, [{
-        key: 'restoreState',
+        key: "restoreState",
         value: function restoreState(sortingRaw) {
           if (!sortingRaw) return;
-          var sortingList = sortingRaw.split(';');
+          var sortingList = sortingRaw.split(";");
           var defaultSorting = [];
           sortingList.forEach(function (s) {
-            var sortingData = s.split(',');
+            var sortingData = s.split(",");
             defaultSorting.push({
               key: sortingData[0],
-              mode: sortingData[1] || 'asc'
+              mode: sortingData[1] || "asc"
             });
           });
           this.sorting = defaultSorting;
@@ -2758,17 +2783,17 @@ this.d3.maptable = (function () {
          */
 
       }, {
-        key: 'saveState',
+        key: "saveState",
         value: function saveState() {
           var encodedSorting = this.sorting.map(function (s) {
-            return s.key + ',' + s.mode;
-          }).join(';');
+            return s.key + "," + s.mode;
+          }).join(";");
           if (encodedSorting !== this.initialSorting) {
-            this.maptable.saveState('sort', encodedSorting);
+            this.maptable.saveState("sort", encodedSorting);
           }
         }
       }, {
-        key: 'render',
+        key: "render",
         value: function render() {
           var _this2 = this;
 
@@ -2785,39 +2810,39 @@ this.d3.maptable = (function () {
           }
 
           // Enter
-          this.body.selectAll('tr').data(tableData).enter().append('tr');
+          this.body.selectAll("tr").data(tableData).enter().append("tr");
 
           // Exit
-          this.body.selectAll('tr').data(tableData).exit().remove();
+          this.body.selectAll("tr").data(tableData).exit().remove();
 
           // Update
           var uniqueCollapsedRows = [];
-          this.body.selectAll('tr').data(tableData).attr('class', function (row) {
+          this.body.selectAll("tr").data(tableData).attr("class", function (row) {
             if (_this2.options.rowClassName) {
-              return 'line ' + _this2.options.rowClassName(row);
+              return "line " + _this2.options.rowClassName(row);
             }
-            return 'line';
+            return "line";
           }).html(function (row) {
-            var tds = '';
+            var tds = "";
             _this2.activeColumns.forEach(function (columnKey) {
               var column = _this2.maptable.columnDetails[columnKey];
-              tds += '<td';
+              tds += "<td";
               if (column.nowrap) {
                 tds += ' style="white-space:nowrap;"';
               }
-              tds += '>';
+              tds += ">";
 
               if (!(_this2.options.collapseRowsBy.indexOf(columnKey) !== -1 && uniqueCollapsedRows[columnKey] && uniqueCollapsedRows[columnKey] === row[columnKey])) {
                 if (column.cellContent) {
                   tds += column.cellContent(row);
                 } else if (column.virtual) {
                   tds += column.virtual(row);
-                } else if (row[columnKey] && row[columnKey] !== 'null') tds += row[columnKey];
+                } else if (row[columnKey] && row[columnKey] !== "null") tds += row[columnKey];
                 if (_this2.options.collapseRowsBy.indexOf(columnKey) !== -1) {
                   uniqueCollapsedRows[columnKey] = row[columnKey];
                 }
               }
-              tds += '</td>';
+              tds += "</td>";
             });
             return tds;
           });
@@ -2828,21 +2853,21 @@ this.d3.maptable = (function () {
           }
         }
       }, {
-        key: 'applySort',
+        key: "applySort",
         value: function applySort() {
           var _this3 = this;
 
-          var sortableColums = this.container.querySelectorAll('.mt-table-sortable');
+          var sortableColums = this.container.querySelectorAll(".mt-table-sortable");
           for (var i = 0; i < sortableColums.length; i += 1) {
-            sortableColums[i].setAttribute('class', 'mt-table-sortable');
+            sortableColums[i].setAttribute("class", "mt-table-sortable");
           }
           this.sorting.forEach(function (column) {
-            _this3.container.querySelector('#column_header_' + utils.sanitizeKey(column.key)).setAttribute('class', 'mt-table-sortable sort_' + column.mode);
+            _this3.container.querySelector("#column_header_" + utils.sanitizeKey(column.key)).setAttribute("class", "mt-table-sortable sort_" + column.mode);
           });
           this.maptable.data = this.maptable.data.sort(function (a, b) {
             var compareBool = false;
             _this3.sorting.forEach(function (column) {
-              var d3SortMode = column.mode === 'asc' ? d3.ascending : d3.descending;
+              var d3SortMode = column.mode === "asc" ? d3.ascending : d3.descending;
               var columnDetails = _this3.maptable.columnDetails[column.key];
               var el1 = a[column.key];
               var el2 = b[column.key];
@@ -2852,12 +2877,12 @@ this.d3.maptable = (function () {
               } else if (columnDetails.virtual) {
                 el2 = columnDetails.virtual.bind(_this3.maptable)(a);
                 el2 = columnDetails.virtual.bind(_this3.maptable)(b);
-              } else if (columnDetails.filterType === 'compare') {
+              } else if (columnDetails.filterType === "compare") {
                 el1 = Number(el1);
                 el2 = Number(el2);
               }
 
-              if (typeof el1 === 'string' && typeof el2 === 'string') {
+              if (typeof el1 === "string" && typeof el2 === "string") {
                 el1 = el1.toLowerCase();
                 el2 = el2.toLowerCase();
               }
@@ -2873,24 +2898,24 @@ this.d3.maptable = (function () {
          */
 
       }, {
-        key: 'sortColumn',
+        key: "sortColumn",
         value: function sortColumn(key) {
           var sortIndex = this.sorting.map(function (d) {
             return d.key;
           }).indexOf(key);
           var sortValue = { key: key };
           if (sortIndex === -1) {
-            sortValue.mode = 'desc';
+            sortValue.mode = "desc";
             if (d3.event && d3.event.shiftKey) {
               this.sorting[1] = sortValue;
             } else {
               this.sorting = [sortValue];
             }
           } else {
-            if (this.sorting[sortIndex].mode === 'asc') {
-              this.sorting[sortIndex].mode = 'desc';
+            if (this.sorting[sortIndex].mode === "asc") {
+              this.sorting[sortIndex].mode = "desc";
             } else {
-              this.sorting[sortIndex].mode = 'asc';
+              this.sorting[sortIndex].mode = "asc";
               // this.sorting.splice(sortIndex, 1); // to disable sorting
             }
             if (!d3.event.shiftKey) {

@@ -118,3 +118,7 @@
 }
 
 #mt-map path { transition: fill .1s ease; }
+
+.mt-header-fixed {
+  position: sticky;
+}
