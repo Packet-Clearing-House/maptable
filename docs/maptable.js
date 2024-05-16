@@ -2717,8 +2717,8 @@ this.d3.maptable = (function () {
 
         // make table header fixed
         if (this.options.header) {
-          if (this.options.header.type && this.options.header.type === 'fixed') {
-            this.header.attr('class', 'mt-header-fixed');
+          if (this.options.header.className) {
+            this.header.attr('class', '' + this.options.header.className);
 
             // set custom top header space
             if (this.options.header.top) {
