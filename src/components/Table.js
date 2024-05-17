@@ -49,7 +49,8 @@ export default class Table {
     this.body = this.node.append('tbody');
 
     if (this.options.show) {
-      const arrayDiff = this.options.show.filter((i) => Object.keys(this.maptable.columnDetails).indexOf(i) < 0);
+      const arrayDiff = this.options.show
+        .filter((i) => Object.keys(this.maptable.columnDetails).indexOf(i) < 0);
       if (arrayDiff.length > 0) {
         throw new Error(`MapTable: invalid columns "${arrayDiff.join(', ')}"`);
       }
@@ -78,7 +79,8 @@ export default class Table {
       .enter()
       .append('tr')
       .selectAll('th')
-      .data(this.activeColumns.map((k) => utils.extendRecursive({ key: k }, this.maptable.columnDetails[k])))
+      .data(this.activeColumns.map((k) => (
+        utils.extendRecursive({ key: k }, this.maptable.columnDetails[k]))))
       .enter()
       .append('th')
       .attr('class', (d) => {
@@ -172,7 +174,11 @@ export default class Table {
           }
           tds += '>';
 
-          if (!(this.options.collapseRowsBy.indexOf(columnKey) !== -1 && uniqueCollapsedRows[columnKey] && uniqueCollapsedRows[columnKey] === row[columnKey])) {
+          if (!(
+            this.options.collapseRowsBy.indexOf(columnKey) !== -1
+            && uniqueCollapsedRows[columnKey]
+            && uniqueCollapsedRows[columnKey] === row[columnKey])
+          ) {
             if (column.cellContent) {
               tds += column.cellContent(row);
             } else if (column.virtual) {
