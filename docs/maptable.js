@@ -2713,7 +2713,6 @@ this.d3.maptable = (function () {
 
         this.maptable = maptable;
         this.options = options;
-
         if (this.options.defaultSorting) {
           if (Array.isArray(this.options.defaultSorting) && this.options.defaultSorting.length === 2) {
             this.sorting = this.options.defaultSorting;
@@ -2762,6 +2761,20 @@ this.d3.maptable = (function () {
           this.activeColumns = this.options.show;
         } else {
           this.activeColumns = Object.keys(this.maptable.columnDetails);
+        }
+
+        // make table header fixed
+        if (this.options.header) {
+          if (this.options.header.className) {
+            this.header.attr('class', '' + this.options.header.className);
+          }
+
+          // set custom top header space
+          if (this.options.header.top) {
+            this.header.attr('style', 'top:' + (this.options.header.top || '0') + 'px;');
+          } else {
+            this.header.attr('style', 'top:0px;');
+          }
         }
 
         this.header.selectAll('tr').data([1]).enter().append('tr').selectAll('th').data(this.activeColumns.map(function (k) {
@@ -3383,11 +3396,11 @@ this.d3.maptable = (function () {
 
         var customOptions = utils.extendRecursive(defaultOptions, options);
 
-        if (!options.map.markers) delete customOptions.map.markers;
-        if (!options.map.heatmap) delete customOptions.map.heatmap;
-        if (!options.map.title) delete customOptions.map.title;
-        if (!options.map.timezones) delete customOptions.map.timezones;
-        if (!options.map.night) delete customOptions.map.night;
+        if (options.map && !options.map.markers) delete customOptions.map.markers;
+        if (options.map && !options.map.heatmap) delete customOptions.map.heatmap;
+        if (options.map && !options.map.title) delete customOptions.map.title;
+        if (options.map && !options.map.timezones) delete customOptions.map.timezones;
+        if (options.map && !options.map.night) delete customOptions.map.night;
         if (!options.filters) delete customOptions.filters;
         if (!options.table) delete customOptions.table;
 

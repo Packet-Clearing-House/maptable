@@ -10,7 +10,6 @@ export default class Table {
   constructor(maptable, options) {
     this.maptable = maptable;
     this.options = options;
-
     if (this.options.defaultSorting) {
       if (Array.isArray(this.options.defaultSorting) && this.options.defaultSorting.length === 2) {
         this.sorting = this.options.defaultSorting;
@@ -43,17 +42,14 @@ export default class Table {
       this.maptable.node.appendChild(this.node);
     }
 
-    this.node = d3.select(this.node)
-      .append('table')
-      .attr('class', this.options.className);
+    this.node = d3.select(this.node).append('table').attr('class', this.options.className);
 
     this.header = this.node.append('thead');
 
     this.body = this.node.append('tbody');
 
     if (this.options.show) {
-      const arrayDiff = this.options.show
-        .filter((i) => Object.keys(this.maptable.columnDetails).indexOf(i) < 0);
+      const arrayDiff = this.options.show.filter((i) => Object.keys(this.maptable.columnDetails).indexOf(i) < 0);
       if (arrayDiff.length > 0) {
         throw new Error(`MapTable: invalid columns "${arrayDiff.join(', ')}"`);
       }
@@ -62,24 +58,38 @@ export default class Table {
       this.activeColumns = Object.keys(this.maptable.columnDetails);
     }
 
-    this.header.selectAll('tr')
+    // make table header fixed
+    if (this.options.header) {
+      if (this.options.header.className) {
+        this.header.attr('class', `${this.options.header.className}`);
+      }
+
+      // set custom top header space
+      if (this.options.header.top) {
+        this.header.attr('style', `top:${this.options.header.top || '0'}px;`);
+      } else {
+        this.header.attr('style', 'top:0px;');
+      }
+    }
+
+    this.header
+      .selectAll('tr')
       .data([1])
       .enter()
       .append('tr')
       .selectAll('th')
-      .data(this.activeColumns
-        .map((k) => utils.extendRecursive({ key: k }, this.maptable.columnDetails[k])))
+      .data(this.activeColumns.map((k) => utils.extendRecursive({ key: k }, this.maptable.columnDetails[k])))
       .enter()
       .append('th')
       .attr('class', (d) => {
-        let output = (d.sorting) ? 'mt-table-sortable' : '';
-        output += (d.nowrap) ? ' nowrap' : '';
+        let output = d.sorting ? 'mt-table-sortable' : '';
+        output += d.nowrap ? ' nowrap' : '';
         return output;
       })
       .attr('data-key', (d) => utils.sanitizeKey(d.key))
       .attr('onselectstart', 'return false;')
       .attr('unselectable', 'on')
-      .attr('style', (d) => ((d.nowrap) ? 'white-space:nowrap;' : ''))
+      .attr('style', (d) => (d.nowrap ? 'white-space:nowrap;' : ''))
       .on('click', (d) => {
         if (this.isSorting) return;
         this.isSorting = true;
@@ -128,27 +138,23 @@ export default class Table {
 
     let tableData = this.maptable.data;
     if (this.options.distinctBy) {
-      tableData = d3.nest()
+      tableData = d3
+        .nest()
         .key((d) => d[this.options.distinctBy])
         .entries(this.maptable.data)
         .map((g) => g.values[0]);
     }
 
     // Enter
-    this.body.selectAll('tr')
-      .data(tableData)
-      .enter()
-      .append('tr');
+    this.body.selectAll('tr').data(tableData).enter().append('tr');
 
     // Exit
-    this.body.selectAll('tr')
-      .data(tableData)
-      .exit()
-      .remove();
+    this.body.selectAll('tr').data(tableData).exit().remove();
 
     // Update
     const uniqueCollapsedRows = [];
-    this.body.selectAll('tr')
+    this.body
+      .selectAll('tr')
       .data(tableData)
       .attr('class', (row) => {
         if (this.options.rowClassName) {
@@ -166,11 +172,7 @@ export default class Table {
           }
           tds += '>';
 
-          if (!(
-            this.options.collapseRowsBy.indexOf(columnKey) !== -1
-              && uniqueCollapsedRows[columnKey]
-              && uniqueCollapsedRows[columnKey] === row[columnKey]
-          )) {
+          if (!(this.options.collapseRowsBy.indexOf(columnKey) !== -1 && uniqueCollapsedRows[columnKey] && uniqueCollapsedRows[columnKey] === row[columnKey])) {
             if (column.cellContent) {
               tds += column.cellContent(row);
             } else if (column.virtual) {
@@ -197,13 +199,12 @@ export default class Table {
       sortableColums[i].setAttribute('class', 'mt-table-sortable');
     }
     this.sorting.forEach((column) => {
-      this.container.querySelector(`#column_header_${utils.sanitizeKey(column.key)}`)
-        .setAttribute('class', `mt-table-sortable sort_${column.mode}`);
+      this.container.querySelector(`#column_header_${utils.sanitizeKey(column.key)}`).setAttribute('class', `mt-table-sortable sort_${column.mode}`);
     });
     this.maptable.data = this.maptable.data.sort((a, b) => {
       let compareBool = false;
       this.sorting.forEach((column) => {
-        const d3SortMode = (column.mode === 'asc') ? d3.ascending : d3.descending;
+        const d3SortMode = column.mode === 'asc' ? d3.ascending : d3.descending;
         const columnDetails = this.maptable.columnDetails[column.key];
         let el1 = a[column.key];
         let el2 = b[column.key];
