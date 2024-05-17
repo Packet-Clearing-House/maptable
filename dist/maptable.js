@@ -2719,13 +2719,13 @@ this.d3.maptable = (function () {
         if (this.options.header) {
           if (this.options.header.className) {
             this.header.attr('class', '' + this.options.header.className);
+          }
 
-            // set custom top header space
-            if (this.options.header.top) {
-              this.header.attr('style', 'top:' + (this.options.header.top || '0') + 'px;');
-            } else {
-              this.header.attr('style', 'top:0px;');
-            }
+          // set custom top header space
+          if (this.options.header.top) {
+            this.header.attr('style', 'top:' + (this.options.header.top || '0') + 'px;');
+          } else {
+            this.header.attr('style', 'top:0px;');
           }
         }
 
