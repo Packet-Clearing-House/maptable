@@ -117,7 +117,17 @@
   display: none;
 }
 
-#mt-map path { transition: fill .1s ease; }
+#mt-map path { will-change: fill; }
+
+
+.mt-blur {
+  filter: blur(18px);
+  transform: translate3d(0, 0, 0);
+}
+
+.mt-sun-gradient {
+  background-image: radial-gradient(circle, rgba(255, 192, 0, 0.5) 0%, rgba(255, 192, 0, 0.15) 45%, rgba(255, 192, 0, 0) 100%);
+}
 
 .mt-header-fixed {
   position: sticky;

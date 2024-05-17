@@ -19,7 +19,7 @@ d3.maptable = function (target) {
     if (!topojson) {
       throw new Error('Maptable requires topojson.js');
     }
-    if (typeof (mapOptions.path) !== 'string' && typeof (mapOptions.pathData) !== 'string') {
+    if (typeof mapOptions.path !== 'string' && typeof mapOptions.pathData !== 'string') {
       throw new Error('MapTable: map not provided');
     }
     options.map = mapOptions;
@@ -87,7 +87,7 @@ d3.maptable = function (target) {
   };
 
   maptable.render = function (onComplete) {
-    if (typeof (target) !== 'string' || !document.querySelector(target)) {
+    if (typeof target !== 'string' || !document.querySelector(target)) {
       throw new Error('MapTable: target not found');
     }
 
@@ -105,6 +105,15 @@ d3.maptable = function (target) {
     options.onComplete = onComplete;
 
     const customOptions = utils.extendRecursive(defaultOptions, options);
+
+    if (!options.map.markers) delete customOptions.map.markers;
+    if (!options.map.heatmap) delete customOptions.map.heatmap;
+    if (!options.map.title) delete customOptions.map.title;
+    if (!options.map.timezones) delete customOptions.map.timezones;
+    if (!options.map.night) delete customOptions.map.night;
+    if (!options.filters) delete customOptions.filters;
+    if (!options.table) delete customOptions.table;
+
     maptableObject = new MapTable(target, customOptions);
 
     // public functions
@@ -132,6 +141,8 @@ d3.maptable = function (target) {
       setTimezonesDate: (date) => {
         maptableObject.options.map.timezones.date = date;
       },
+      getMapWidth: () => maptableObject.map.getWidth(),
+      getMapHeight: () => maptableObject.map.getHeight(),
     };
   };
   return maptable;

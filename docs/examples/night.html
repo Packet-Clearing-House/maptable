@@ -20,7 +20,7 @@
         Demonstating: rendering a map, filters and table from csv. With the night layer and sun (with the exact datetime 2023-06-01T00:00:00Z)<br />
         <br>
         <div class="btn-group">
-          <a href="./minimal.html" target="_blank" class="btn btn-default">Open in a new window</a>
+          <a href="./night.html" target="_blank" class="btn btn-default">Open in a new window</a>
           <a href="https://github.com/Packet-Clearing-House/maptable/tree/master/docs/examples/night.html"
             target="_blank" class="btn btn-default">View source code</a>
         </div>
@@ -34,8 +34,9 @@
       .csv('basic.csv')
       .map({
         path: 'countries.json',
+        markers: {},
         night: {
-          date: new Date(Date.parse('2023-06-01T00:00:00Z')),
+          date: new Date(Date.parse('2023-06-02T01:00:00Z')),
         }
       })
       .filters()
