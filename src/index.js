@@ -106,11 +106,11 @@ d3.maptable = function (target) {
 
     const customOptions = utils.extendRecursive(defaultOptions, options);
 
-    if (!options.map.markers) delete customOptions.map.markers;
-    if (!options.map.heatmap) delete customOptions.map.heatmap;
-    if (!options.map.title) delete customOptions.map.title;
-    if (!options.map.timezones) delete customOptions.map.timezones;
-    if (!options.map.night) delete customOptions.map.night;
+    if (options.map && !options.map.markers) delete customOptions.map.markers;
+    if (options.map && !options.map.heatmap) delete customOptions.map.heatmap;
+    if (options.map && !options.map.title) delete customOptions.map.title;
+    if (options.map && !options.map.timezones) delete customOptions.map.timezones;
+    if (options.map && !options.map.night) delete customOptions.map.night;
     if (!options.filters) delete customOptions.filters;
     if (!options.table) delete customOptions.table;
 
