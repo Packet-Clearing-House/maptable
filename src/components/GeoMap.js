@@ -158,6 +158,7 @@ export default class GeoMap {
     if (this.options.width) {
       return this.options.width;
     }
+    this.options.width = this.node.offsetWidth;
     return this.node.offsetWidth;
   }
 
@@ -250,6 +251,9 @@ export default class GeoMap {
    * Logic to build the night position
    */
   buildNight() {
+    this.layerNight = this.layerGlobal.append('g')
+      .attr('class', 'mt-map-night');
+
     const circle = d3.geo.circle()
       .angle(90);
 
@@ -266,36 +270,67 @@ export default class GeoMap {
 
     // Build vectors
     this.nightPath = this.layerNight.append('path')
-      .attr('class', 'mt-map-night-layer')
-      .attr('filter', 'url(#blur)')
+      .attr('class', `mt-map-night-layer${this.options.night.cssBlur ? ' mt-blur' : ''}`)
+      .attr('filter', this.options.night.cssBlur ? undefined : 'url(#blur)')
       .attr('clip-path', 'url(#mt-map-night-mask)')
       .attr('d', this.path)
       .style('opacity', 0.1);
 
-    const solarPositionDated = solarPosition(this.options.night.date || new Date());
-
+    const userDate = this.options.night.date || Date.UTC();
+    const startOfDay = Date.UTC(
+      userDate.getUTCFullYear(),
+      userDate.getUTCMonth(),
+      userDate.getUTCDate(),
+      0,
+      0,
+      0,
+    );
+    const solarPositionDated = solarPosition(new Date(startOfDay));
     this.nightPath.datum(circle.origin(antipode(solarPositionDated))).attr('d', this.path);
+
+    this.nightPathRight = this.layerNight.append('path')
+      .attr('class', `mt-map-night-layer${this.options.night.cssBlur ? ' mt-blur' : ''}`)
+      .attr('filter', this.options.night.cssBlur ? undefined : 'url(#blur)')
+      .attr('clip-path', 'url(#mt-map-night-mask)')
+      .attr('d', this.nightPath.attr('d'))
+      .style('opacity', 0.1)
+      .style('transform', `translate3d(${this.getWidth()}px,0,0)`);
+
+    this.nightPathLeft = this.layerNight.append('path')
+      .attr('class', `mt-map-night-layer${this.options.night.cssBlur ? ' mt-blur' : ''}`)
+      .attr('filter', this.options.night.cssBlur ? undefined : 'url(#blur)')
+      .attr('clip-path', 'url(#mt-map-night-mask)')
+      .attr('d', this.nightPath.attr('d'))
+      .style('opacity', 0.1)
+      .style('transform', `translate3d(${-this.getWidth()}px,0,0)`);
 
     if (!this.options.night.disableSun) {
       const sunCoords = this.projection(solarPositionDated);
 
-      this.sunCircle = this.layerNight.append('svg:circle')
-        .attr('class', 'mt-map-sun')
+      this.sunCircleRight = this.layerNight.append('svg:circle')
+        .attr('class', 'mt-map-sun-right')
         .attr('cx', sunCoords[0])
         .attr('cy', sunCoords[1])
         .attr('fill', 'url(#sunGradient)')
         .attr('r', this.getHeight() * 0.35);
 
+      this.sunCircleXRight = this.layerNight.append('svg:circle')
+        .attr('class', 'mt-map-sun-xright')
+        .attr('cx', sunCoords[0] + this.getWidth())
+        .attr('cy', sunCoords[1])
+        .attr('fill', 'url(#sunGradient)')
+        .attr('r', this.getHeight() * 0.35);
+
       this.sunCircleLeft = this.layerNight.append('svg:circle')
-        .attr('class', 'mt-map-sun-left')
+        .attr('class', 'mt-map-sun-right')
         .attr('cx', sunCoords[0] - this.getWidth())
         .attr('cy', sunCoords[1])
         .attr('fill', 'url(#sunGradient)')
         .attr('r', this.getHeight() * 0.35);
 
-      this.sunCircleRight = this.layerNight.append('svg:circle')
-        .attr('class', 'mt-map-sun-right')
-        .attr('cx', sunCoords[0] + this.getWidth())
+      this.sunCircleXLeft = this.layerNight.append('svg:circle')
+        .attr('class', 'mt-map-sun-xright')
+        .attr('cx', sunCoords[0] - 2 * this.getWidth())
         .attr('cy', sunCoords[1])
         .attr('fill', 'url(#sunGradient)')
         .attr('r', this.getHeight() * 0.35);
@@ -313,6 +348,10 @@ export default class GeoMap {
         this.loadTimezone(errGeoMap, jsonTimezones);
       });
     }
+  }
+
+  scaleFontSize(fontSize) {
+    return this.getWidth() < 700 ? fontSize * (this.getWidth() / 700) : fontSize;
   }
 
   loadTimezone(err, jsonTimezones) {
@@ -360,7 +399,7 @@ export default class GeoMap {
       .attr('y', this.getHeight() * 0.82 - 5)
       .attr('x', (d) => (d.properties.zone + 10) * (this.getWidth() / 24.5) - 1)
       .attr('dx', (this.getWidth() / 24.5) / 2)
-      .attr('font-size', 9)
+      .attr('font-size', this.scaleFontSize(9))
       .attr('font-family', 'Helevetica, Arial, Sans-Serif')
       .attr('fill', '#999')
       .attr('text-anchor', 'middle')
@@ -533,19 +572,42 @@ export default class GeoMap {
   }
 
   /**
+   * Get all mt-map-country elements
+   */
+  getAllMtMapCountry() {
+    if (this.allMtMapCountry) return this.allMtMapCountry;
+    this.allMtMapCountry = d3.selectAll(`${this.containerSelector} .mt-map-country`);
+    return this.allMtMapCountry;
+  }
+
+  /**
+   * Get all mt-map-marjker elements
+   */
+  getAllMtMapMarker() {
+    if (this.allMtMapMarker) return this.allMtMapMarker;
+    this.allMtMapMarker = d3.selectAll(`${this.containerSelector} .mt-map-marker`);
+    return this.allMtMapMarker;
+  }
+
+  /**
    * Set the right color for every country
    */
   updateCountries() {
     // Data from user input
-    const dataByCountry = d3.nest()
-      .key((d) => d[this.options.countryIdentifierKey])
-      .entries(this.maptable.data);
+    const dataByCountry = new Map();
+    this.maptable.data.forEach((d) => {
+      const key = d[this.options.countryIdentifierKey];
+      if (!dataByCountry.has(key)) {
+        dataByCountry.set(key, []);
+      }
+      dataByCountry.get(key).push(d);
+    });
 
     // We merge both data
     this.dataCountries.forEach((geoDatum) => {
       geoDatum.key = geoDatum.properties[this.options.countryIdentifierType];
-      const matchedCountry = dataByCountry.filter((uDatum) => uDatum.key === geoDatum.key);
-      geoDatum.values = (matchedCountry.length === 0) ? [] : matchedCountry[0].values;
+      const matchedCountry = dataByCountry.get(geoDatum.key);
+      geoDatum.values = matchedCountry || [];
       geoDatum.attr = {};
       geoDatum.rollupValue = {};
     });
@@ -556,10 +618,10 @@ export default class GeoMap {
     });
 
     // Update SVG
-    const countryItem = d3.selectAll('.mt-map-country').each(function (d) {
-      const targetPath = this;
+    const countryItem = this.getAllMtMapCountry().each(function (d) {
+      const selection = d3.select(this);
       Object.keys(d.attr).forEach((key) => {
-        d3.select(targetPath).attr(key, d.attr[key]);
+        selection.attr(key, d.attr[key]);
       });
     });
 
@@ -598,21 +660,43 @@ export default class GeoMap {
    * Update night drawings
    */
   updateNight() {
-    this.layerNight.remove();
-    this.layerNight = this.layerGlobal.append('g').attr('class', 'mt-map-night');
-    this.buildNight();
+    const userDate = this.options.night.date || Date.UTC();
+    const startOfDay = Date.UTC(
+      userDate.getUTCFullYear(),
+      userDate.getUTCMonth(),
+      userDate.getUTCDate(),
+      0,
+      0,
+      0,
+    );
+    const endOfDay = Date.UTC(
+      userDate.getUTCFullYear(),
+      userDate.getUTCMonth(),
+      userDate.getUTCDate(),
+      23,
+      59,
+      59,
+    );
+
+    const totalMilliseconds = endOfDay - startOfDay;
+    const currentTime = userDate - startOfDay;
+    const relativeTranslateX = (currentTime / totalMilliseconds);
+
+    this.layerNight.node().style.transform = `translateX(${-this.getWidth() * relativeTranslateX}px)`;
   }
 
   /**
    * Update night drawings
    */
   updateTimezones() {
-    const self = this;
-    d3.selectAll('.mt-map-timezone-text').each(function () {
-      const targetPath = this;
-      d3.select(targetPath).html((d) => (
-        utils.formatDate((self.options.timezones.date || new Date()), d.properties.zone)
-      ));
+    const timezoneTexts = document.querySelectorAll('.mt-map-timezone-text');
+    const currentDate = this.options.timezones.date || new Date();
+
+    Array.from(timezoneTexts).forEach((timezoneText) => {
+      timezoneText.textContent = utils.formatDate(
+        currentDate,
+        timezoneText.__data__.properties.zone,
+      );
     });
   }
 
@@ -668,10 +752,9 @@ export default class GeoMap {
       .attr(attrX, (d) => d.values[0].x + attrXDelta)
       .attr(attrY, (d) => d.values[0].y + attrYDelta);
 
-    d3.selectAll(`${this.containerSelector} .mt-map-marker`).each(function (d) {
-      const targetPath = this;
+    this.getAllMtMapMarker().each(function (d) {
       Object.keys(d.attr).forEach((key) => {
-        d3.select(targetPath).attr(key, d.attr[key]);
+        d3.select(this).attr(key, d.attr[key]);
       });
     });
 
@@ -750,7 +833,7 @@ export default class GeoMap {
     titleContainer.append('text')
       .attr('id', 'mt-map-title')
       .attr('x', 20)
-      .attr('font-size', this.options.title.fontSize)
+      .attr('font-size', this.scaleFontSize(this.options.title.fontSize))
       .attr('font-family', this.options.title.fontFamily)
       .attr('y', 20);
 
@@ -759,7 +842,7 @@ export default class GeoMap {
         .attr('y', 20)
         .attr('x', (this.getWidth() - 20))
         .attr('text-anchor', 'end')
-        .attr('font-size', this.options.title.fontSize)
+        .attr('font-size', this.scaleFontSize(this.options.title.fontSize))
         .attr('font-family', this.options.title.fontFamily)
         .html(this.options.title.source());
     }
@@ -849,9 +932,9 @@ export default class GeoMap {
       d3.event.translate[1] = this.transY;
     }
 
-    this.layerGlobal.attr(
+    this.layerGlobal.style(
       'transform',
-      `translate(${this.transX}, ${this.transY})scale(${this.scale})`,
+      `translate(${this.transX}px,${this.transY}px)scale(${this.scale})`,
     );
 
     // Hide tooltip
@@ -861,7 +944,7 @@ export default class GeoMap {
     // Rescale markers size
     if (this.options.markers) {
       // markers
-      d3.selectAll(`${this.containerSelector} .mt-map-marker`).each(function (d) {
+      this.getAllMtMapMarker().each(function (d) {
         // stroke
         if (d.attr['stroke-width']) {
           d3.select(this).attr('stroke-width', d.attr['stroke-width'] / self.scaleAttributes());
@@ -883,7 +966,7 @@ export default class GeoMap {
 
     // Rescale Country stroke-width
     if (this.options.countries) {
-      d3.selectAll(`${this.containerSelector} .mt-map-country`).style(
+      this.getAllMtMapCountry().style(
         'stroke-width',
         this.options.countries.attr['stroke-width'] / this.scale,
       );
