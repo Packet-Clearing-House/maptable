@@ -132,3 +132,25 @@
 .mt-header-fixed {
   position: sticky;
 }
+
+.bold {
+  border-bottom: 1.5px solid rgb(153, 152, 152);
+}
+
+.table-sort-sn {
+  position: absolute;
+  left: 0;
+  width:38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 7px;
+  margin-left: -38px;
+  opacity: 0.2;
+  color: #000;
+}
+
+.display-none {
+  display: none;
+}
