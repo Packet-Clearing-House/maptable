@@ -65,8 +65,9 @@
       .table({
         show: ['name', 'position', 'office', 'month', 'day', 'links'],
         dataGroupSeparator: { enabled: true },
-        dataSN: { enabled: true },
-        defaultSorting: [{key:'month',mode:'desc'},{key:'name',mode:'asc'},{key:'position',mode:'asc'}],
+        dataCountIndicator: { enabled: true },
+        defaultSorting: [{key:'month',mode:'desc'},{key:'day',mode:'asc'}],
+        customSortOrder: [{key:'day',order:['monday', 'tuesday', 'wednesday', 'thursday', 'friday','saturday','sunday',]},{key:'month',order:['february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december','january']}]
       })
       .render();
 

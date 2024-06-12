@@ -106,17 +106,17 @@ const customSortOrders = {
   months: ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december'],
 };
 
-const customSortAsc = (type, d1, d2) => {
+const customSortAsc = (type, d1, d2, sortOrder) => {
   const elem1 = d1.toLowerCase();
   const elem2 = d2.toLowerCase();
-  const customSortOrder = customSortOrders[type] || [];
+  const customSortOrder = sortOrder.length === 0 ? customSortOrders[type] || [] : sortOrder;
   return customSortOrder.indexOf(elem1) - customSortOrder.indexOf(elem2);
 };
 
-const customSortDesc = (type, d1, d2) => {
+const customSortDesc = (type, d1, d2, sortOrder) => {
   const elem1 = d1.toLowerCase();
   const elem2 = d2.toLowerCase();
-  const customSortOrder = customSortOrders[type] || [];
+  const customSortOrder = sortOrder.length === 0 ? customSortOrders[type] || [] : sortOrder;
   return customSortOrder.indexOf(elem2) - customSortOrder.indexOf(elem1);
 };
 

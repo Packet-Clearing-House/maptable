@@ -157,17 +157,17 @@ this.d3.maptable = (function () {
       months: ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december']
     };
 
-    var customSortAsc = function customSortAsc(type, d1, d2) {
+    var customSortAsc = function customSortAsc(type, d1, d2, sortOrder) {
       var elem1 = d1.toLowerCase();
       var elem2 = d2.toLowerCase();
-      var customSortOrder = customSortOrders[type] || [];
+      var customSortOrder = sortOrder.length === 0 ? customSortOrders[type] || [] : sortOrder;
       return customSortOrder.indexOf(elem1) - customSortOrder.indexOf(elem2);
     };
 
-    var customSortDesc = function customSortDesc(type, d1, d2) {
+    var customSortDesc = function customSortDesc(type, d1, d2, sortOrder) {
       var elem1 = d1.toLowerCase();
       var elem2 = d2.toLowerCase();
-      var customSortOrder = customSortOrders[type] || [];
+      var customSortOrder = sortOrder.length === 0 ? customSortOrders[type] || [] : sortOrder;
       return customSortOrder.indexOf(elem2) - customSortOrder.indexOf(elem1);
     };
 
@@ -2921,7 +2921,7 @@ this.d3.maptable = (function () {
               tds += '</td>';
             });
             return tds;
-          }).append('span').attr('class', 'table-sort-sn ' + (!this.options.dataSN || this.options.dataSN && !this.options.dataSN.enabled || this.sorting && this.sorting.length <= 1 ? 'display-none' : '') + ' ').html(function (row, index) {
+          }).append('span').attr('class', 'table-sort-sn ' + (!this.options.dataCountIndicator || this.options.dataCountIndicator && !this.options.dataCountIndicator.enabled || this.sorting && this.sorting.length <= 1 ? 'display-none' : '') + ' ').html(function (row, index) {
             var isSortGroupEnd = _this2.isEndOfPrimarySort(tableData, index - 1);
             if (isSortGroupEnd) {
               _this2.sortIndex = 1;
@@ -2973,7 +2973,11 @@ this.d3.maptable = (function () {
               }
 
               if (columnDetails.filterInputType === 'months' || columnDetails.filterInputType === 'days') {
-                compareBool = compareBool || d3CustomSortMode(columnDetails.filterInputType, el1, el2);
+                var currentCustomSortValues = _this3.options.customSortOrder && _this3.options.customSortOrder.filter(function (cs) {
+                  return cs.key === column.key;
+                });
+                var currentCustomSortOrder = currentCustomSortValues && currentCustomSortValues.length !== 0 ? currentCustomSortValues[0].order || [] : [];
+                compareBool = compareBool || d3CustomSortMode(columnDetails.filterInputType, el1, el2, currentCustomSortOrder);
               } else {
                 compareBool = compareBool || d3SortMode(el1, el2);
               }

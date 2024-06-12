@@ -195,7 +195,7 @@ export default class Table {
         return tds;
       })
       .append('span')
-      .attr('class', `table-sort-sn ${!this.options.dataSN || (this.options.dataSN && !this.options.dataSN.enabled) || (this.sorting && this.sorting.length <= 1) ? 'display-none' : ''} `)
+      .attr('class', `table-sort-sn ${!this.options.dataCountIndicator || (this.options.dataCountIndicator && !this.options.dataCountIndicator.enabled) || (this.sorting && this.sorting.length <= 1) ? 'display-none' : ''} `)
       .html((row, index) => {
         const isSortGroupEnd = this.isEndOfPrimarySort(tableData, index - 1);
         if (isSortGroupEnd) {
@@ -245,7 +245,9 @@ export default class Table {
         }
 
         if (columnDetails.filterInputType === 'months' || columnDetails.filterInputType === 'days') {
-          compareBool = compareBool || d3CustomSortMode(columnDetails.filterInputType, el1, el2);
+          const currentCustomSortValues = this.options.customSortOrder && this.options.customSortOrder.filter((cs) => cs.key === column.key);
+          const currentCustomSortOrder = currentCustomSortValues && currentCustomSortValues.length !== 0 ? currentCustomSortValues[0].order || [] : [];
+          compareBool = compareBool || d3CustomSortMode(columnDetails.filterInputType, el1, el2, currentCustomSortOrder);
         } else {
           compareBool = compareBool || d3SortMode(el1, el2);
         }
