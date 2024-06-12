@@ -7,8 +7,7 @@ export default class Filters {
     this.criteria = [];
 
     if (this.options.show) {
-      const arrayDiff = this.options.show
-        .filter((i) => Object.keys(this.maptable.columnDetails).indexOf(i) < 0);
+      const arrayDiff = this.options.show.filter((i) => Object.keys(this.maptable.columnDetails).indexOf(i) < 0);
       if (arrayDiff.length > 0) {
         throw new Error(`MapTable: invalid columns "${arrayDiff.join(', ')}"`);
       }
@@ -135,22 +134,24 @@ export default class Filters {
       const filterOutput = [columnDetails.filterMethod];
       if (columnDetails.filterMethod === 'compare') {
         const filterRangeSelect = element.querySelector('.mt-filter-range');
-        filterOutput[1] = filterRangeSelect.value;
-        if (filterRangeSelect.value !== 'any') {
-          if (filterRangeSelect.value === 'BETWEEN') {
-            const filterValueMin = element.querySelector('.mt-filter-value-min').value;
-            const filterValueMax = element.querySelector('.mt-filter-value-max').value;
-            if (filterValueMin !== '' && filterValueMax === '') {
-              filterOutput[2] = filterValueMin;
-              filterOutput[3] = filterValueMax;
+        if (filterRangeSelect) {
+          filterOutput[1] = filterRangeSelect.value;
+
+          if (filterRangeSelect.value !== 'any') {
+            if (filterRangeSelect.value === 'BETWEEN') {
+              const filterValueMin = element.querySelector('.mt-filter-value-min').value;
+              const filterValueMax = element.querySelector('.mt-filter-value-max').value;
+              if (filterValueMin !== '' && filterValueMax === '') {
+                filterOutput[2] = filterValueMin;
+                filterOutput[3] = filterValueMax;
+              }
+            } else {
+              const filterValue = element.querySelector('.mt-filter-value-min').value;
+              filterOutput[2] = filterValue;
             }
-          } else {
-            const filterValue = element.querySelector('.mt-filter-value-min').value;
-            filterOutput[2] = filterValue;
           }
         }
-      } else if (columnDetails.filterMethod === 'field'
-        || columnDetails.filterMethod === 'dropdown') {
+      } else if (columnDetails.filterMethod === 'field' || columnDetails.filterMethod === 'dropdown') {
         filterOutput[1] = '';
         const filterValue = element.querySelector('.mt-filter-value').value;
         filterOutput[2] = filterValue;
@@ -171,8 +172,7 @@ export default class Filters {
     Object.keys(criteria).forEach((filterName) => {
       this.create(filterName);
       const criterion = criteria[filterName];
-      const row = document
-        .querySelector(`#mt-filters-elements [data-mt-filter-name="${filterName}"]`);
+      const row = document.querySelector(`#mt-filters-elements [data-mt-filter-name="${filterName}"]`);
       if (row) {
         if (criterion[0] === 'compare') {
           row.querySelector('.mt-filter-range').value = criterion[1];
@@ -235,11 +235,10 @@ export default class Filters {
             line += `<tspan font-weight="bold">${filterValue}</tspan>`;
           }
         }
-      } else if (columnDetails.filterMethod === 'field'
-        || columnDetails.filterMethod === 'dropdown') {
+      } else if (columnDetails.filterMethod === 'field' || columnDetails.filterMethod === 'dropdown') {
         const filterValue = element.querySelector('.mt-filter-value').value;
         if (filterValue === '') continue;
-        const separatorWord = (columnDetails.filterMethod === 'field') ? 'contains' : 'is';
+        const separatorWord = columnDetails.filterMethod === 'field' ? 'contains' : 'is';
         line += `${columnDetails.title} ${separatorWord}
           <tspan font-weight="bold">${filterValue}</tspan>`;
       }
@@ -281,7 +280,7 @@ export default class Filters {
     filterNameSelect.setAttribute('class', 'mt-filter-name form-control form-control-inline');
     utils.appendOptions(
       filterNameSelect,
-      possibleFilters.map((f) => ({ text: f.title, value: f.key })),
+      possibleFilters.map((f) => ({ text: f.title, value: f.key }))
     );
     filterNameSelect.value = filterName;
 
@@ -296,7 +295,7 @@ export default class Filters {
 
     // Filter verb
     const filterVerb = document.createElement('span');
-    filterVerb.innerText = (columnDetails.filterMethod === 'field') ? ' contains ' : ' is ';
+    filterVerb.innerText = columnDetails.filterMethod === 'field' ? ' contains ' : ' is ';
     rowNode.appendChild(filterVerb);
 
     // Filter range
@@ -304,7 +303,10 @@ export default class Filters {
     if (columnDetails.filterMethod !== 'field' && columnDetails.filterMethod !== 'dropdown') {
       filterRange = document.createElement('select');
       filterRange.setAttribute('class', 'mt-filter-range form-control form-control-inline');
-      utils.appendOptions(filterRange, ['any', '=', '≠', '<', '>', '≤', '≥', 'BETWEEN'].map((v) => ({ text: v, value: v })));
+      utils.appendOptions(
+        filterRange,
+        ['any', '=', '≠', '<', '>', '≤', '≥', 'BETWEEN'].map((v) => ({ text: v, value: v }))
+      );
       filterRange.addEventListener('change', function () {
         that.handleRangeChange(this);
       });
@@ -322,10 +324,7 @@ export default class Filters {
     if (columnDetails.filterMethod === 'compare') {
       ['min', 'max'].forEach((val, i) => {
         const filterInput = document.createElement('input');
-        filterInput.setAttribute(
-          'class',
-          `form-control form-control-inline mt-filter-value-${val}`,
-        );
+        filterInput.setAttribute('class', `form-control form-control-inline mt-filter-value-${val}`);
         filterInput.setAttribute('type', columnDetails.filterInputType);
         filterInput.addEventListener('keyup', this.maptable.render.bind(this.maptable));
         filterInput.addEventListener('change', this.maptable.render.bind(this.maptable));
@@ -349,7 +348,9 @@ export default class Filters {
       const filterSelect = document.createElement('select');
       filterSelect.setAttribute('class', 'form-control form-control-inline mt-filter-value');
 
-      const uniqueValues = d3.nest().key((d) => d[filterName])
+      const uniqueValues = d3
+        .nest()
+        .key((d) => d[filterName])
         .sortKeys(d3.ascending)
         .entries(this.maptable.rawData);
 
@@ -391,11 +392,7 @@ export default class Filters {
   getPossibleFilters(except) {
     return Object.keys(this.maptable.columnDetails)
       .map((k) => utils.extendRecursive({ key: k }, this.maptable.columnDetails[k]))
-      .filter((v) => (this.activeColumns.indexOf(v.key) !== -1)
-        && (
-          (except && except === v.key)
-          || (this.criteria.indexOf(v.key) === -1 && v.filterMethod && !v.isVirtual)
-        ));
+      .filter((v) => this.activeColumns.indexOf(v.key) !== -1 && ((except && except === v.key) || (this.criteria.indexOf(v.key) === -1 && v.filterMethod && !v.isVirtual)));
   }
 
   filterData() {
@@ -425,15 +422,9 @@ export default class Filters {
             const filterValueMin = rowNode.querySelector('.mt-filter-value-min').value;
             const filterValueMax = rowNode.querySelector('.mt-filter-value-max').value;
             if (filterValueMin === '' || filterValueMax === '') continue;
-            if (fmt
-                && (fmt(d[filterName]) < fmt(filterValueMin)
-                || fmt(d[filterName]) > fmt(filterValueMax))
-            ) {
+            if (fmt && (fmt(d[filterName]) < fmt(filterValueMin) || fmt(d[filterName]) > fmt(filterValueMax))) {
               matched = false;
-            } else if (
-              parseInt(d[filterName], 10) < parseInt(filterValueMin, 10)
-                || parseInt(d[filterName], 10) > parseInt(filterValueMax, 10)
-            ) {
+            } else if (parseInt(d[filterName], 10) < parseInt(filterValueMin, 10) || parseInt(d[filterName], 10) > parseInt(filterValueMax, 10)) {
               matched = false;
             }
           } else {
@@ -468,7 +459,7 @@ export default class Filters {
       filterNameSelect.innerHTML = '';
       utils.appendOptions(
         filterNameSelect,
-        possibleFilters.map((f) => ({ text: f.title, value: f.key })),
+        possibleFilters.map((f) => ({ text: f.title, value: f.key }))
       );
       filterNameSelect.value = filterName;
     }
@@ -479,9 +470,8 @@ export default class Filters {
     }
 
     // Check if we reached the maximum of allowed filters
-    const disableNewFilter = (!this.getPossibleFilters().length);
-    this.node.querySelector('#mt-filters-new').style.visibility = disableNewFilter
-      ? 'hidden' : 'visible';
+    const disableNewFilter = !this.getPossibleFilters().length;
+    this.node.querySelector('#mt-filters-new').style.visibility = disableNewFilter ? 'hidden' : 'visible';
   }
 
   toggle() {

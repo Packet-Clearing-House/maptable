@@ -2349,18 +2349,21 @@ this.d3.maptable = (function () {
             var filterOutput = [columnDetails.filterMethod];
             if (columnDetails.filterMethod === 'compare') {
               var filterRangeSelect = element.querySelector('.mt-filter-range');
-              filterOutput[1] = filterRangeSelect.value;
-              if (filterRangeSelect.value !== 'any') {
-                if (filterRangeSelect.value === 'BETWEEN') {
-                  var filterValueMin = element.querySelector('.mt-filter-value-min').value;
-                  var filterValueMax = element.querySelector('.mt-filter-value-max').value;
-                  if (filterValueMin !== '' && filterValueMax === '') {
-                    filterOutput[2] = filterValueMin;
-                    filterOutput[3] = filterValueMax;
+              if (filterRangeSelect) {
+                filterOutput[1] = filterRangeSelect.value;
+
+                if (filterRangeSelect.value !== 'any') {
+                  if (filterRangeSelect.value === 'BETWEEN') {
+                    var filterValueMin = element.querySelector('.mt-filter-value-min').value;
+                    var filterValueMax = element.querySelector('.mt-filter-value-max').value;
+                    if (filterValueMin !== '' && filterValueMax === '') {
+                      filterOutput[2] = filterValueMin;
+                      filterOutput[3] = filterValueMax;
+                    }
+                  } else {
+                    var filterValue = element.querySelector('.mt-filter-value-min').value;
+                    filterOutput[2] = filterValue;
                   }
-                } else {
-                  var filterValue = element.querySelector('.mt-filter-value-min').value;
-                  filterOutput[2] = filterValue;
                 }
               }
             } else if (columnDetails.filterMethod === 'field' || columnDetails.filterMethod === 'dropdown') {
