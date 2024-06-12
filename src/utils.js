@@ -36,7 +36,7 @@ function extendRecursive() {
   const dst = {};
   let src;
   const args = [].splice.call(arguments, 0);
-  const toString = ({}).toString;
+  const toString = {}.toString;
 
   while (args.length > 0) {
     src = args.splice(0, 1)[0];
@@ -59,15 +59,12 @@ function keyToTile(k) {
 }
 
 function sanitizeKey(k) {
-  return k.toLowerCase()
-    .replace(/ /g, '_')
-    .replace(/"/g, '')
-    .replace(/'/g, '');
+  return k.toLowerCase().replace(/ /g, '_').replace(/"/g, '').replace(/'/g, '');
 }
 
 function toNumber(str) {
   if (!str || str === '') return null;
-  const resStr = str.toString().replace(/[^0-9.]+|\s+/gmi, '');
+  const resStr = str.toString().replace(/[^0-9.]+|\s+/gim, '');
   if (resStr !== '') return Number(resStr);
   return null;
 }
@@ -102,7 +99,26 @@ const formatDate = (d, zone) => {
   return newDate.toISOString().split('T')[1].substr(0, 5);
 };
 
-const isBlank = (str) => (str === null || str === '' || str === undefined);
+const isBlank = (str) => str === null || str === '' || str === undefined;
+
+const customSortOrders = {
+  days: ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'],
+  months: ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december'],
+};
+
+const customSortAsc = (type, d1, d2, sortOrder) => {
+  const elem1 = d1.toLowerCase();
+  const elem2 = d2.toLowerCase();
+  const customSortOrder = sortOrder.length === 0 ? customSortOrders[type] || [] : sortOrder;
+  return customSortOrder.indexOf(elem1) - customSortOrder.indexOf(elem2);
+};
+
+const customSortDesc = (type, d1, d2, sortOrder) => {
+  const elem1 = d1.toLowerCase();
+  const elem2 = d2.toLowerCase();
+  const customSortOrder = sortOrder.length === 0 ? customSortOrders[type] || [] : sortOrder;
+  return customSortOrder.indexOf(elem2) - customSortOrder.indexOf(elem1);
+};
 
 export default {
   rangeToBool,
@@ -115,4 +131,6 @@ export default {
   uniqueValues,
   formatDate,
   isBlank,
+  customSortAsc,
+  customSortDesc,
 };

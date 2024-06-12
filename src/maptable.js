@@ -58,7 +58,7 @@ export default class MapTable {
       // Map wrapper
       const mapWrapper = document.createElement('div');
       mapWrapper.setAttribute('class', 'mt-map-container');
-      const isIE = (navigator.userAgent.indexOf('MSIE') !== -1 || navigator.appVersion.indexOf('Trident/') > 0);
+      const isIE = navigator.userAgent.indexOf('MSIE') !== -1 || navigator.appVersion.indexOf('Trident/') > 0;
       if (this.options.map.heatmap && isIE) {
         mapWrapper.innerHTML = '<div class="mt-loading">The heatmap feature is not supported with Internet Explorer.<br>Please use another modern browser to see this map.</div>';
         this.node.insertBefore(mapWrapper, this.node.firstChild);
@@ -167,7 +167,7 @@ export default class MapTable {
    */
   parseState(stateName) {
     const params = document.location.href.replace(/%21mt/g, '!mt').split(`!mt-${stateName}=`);
-    return (params[1]) ? decodeURIComponent(params[1].split('!mt')[0]) : null;
+    return params[1] ? decodeURIComponent(params[1].split('!mt')[0]) : null;
   }
 
   /**
@@ -202,7 +202,7 @@ export default class MapTable {
     Object.keys(this.state).forEach((k) => {
       if (!this.state[k]) return;
       let stateValue = this.state[k];
-      if (typeof (this.state[k]) === 'object') {
+      if (typeof this.state[k] === 'object') {
         if (!Object.keys(this.state[k]).length) return;
         stateValue = JSON.stringify(this.state[k]);
       }
@@ -223,10 +223,7 @@ export default class MapTable {
     if (this.map) {
       this.map.render();
       // On complete
-      if (!this.firstExecution
-        && this.options.map.onComplete
-        && this.options.map.onComplete.constructor === Function
-      ) {
+      if (!this.firstExecution && this.options.map.onComplete && this.options.map.onComplete.constructor === Function) {
         this.options.map.onComplete.bind(this)();
       }
     }
@@ -234,19 +231,13 @@ export default class MapTable {
     if (this.table) {
       this.table.render();
       // On complete
-      if (!this.firstExecution
-        && this.options.table.onComplete
-        && this.options.table.onComplete.constructor === Function
-      ) {
+      if (!this.firstExecution && this.options.table.onComplete && this.options.table.onComplete.constructor === Function) {
         this.options.table.onComplete.bind(this)();
       }
     }
 
     // On complete
-    if (!this.firstExecution
-      && this.options.onComplete
-      && this.options.onComplete.constructor === Function
-    ) {
+    if (!this.firstExecution && this.options.onComplete && this.options.onComplete.constructor === Function) {
       this.options.onComplete.bind(this)();
     }
     this.firstExecution = true;
@@ -261,22 +252,22 @@ export default class MapTable {
 
     Object.keys(that.rawData[0]).forEach((k) => {
       const patternNumber = /^[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?$/;
-      const isNumber = (patternNumber.test(that.rawData[0][k]));
+      const isNumber = patternNumber.test(that.rawData[0][k]);
       defaultColumns[k] = {
         title: utils.keyToTile(k),
-        filterMethod: (isNumber) ? 'compare' : 'field',
-        filterInputType: (isNumber) ? 'number' : 'text',
+        filterMethod: isNumber ? 'compare' : 'field',
+        filterInputType: isNumber ? 'number' : this.options.columns[k] && this.options.columns[k].filterInputType ? this.options.columns[k].filterInputType : 'text',
         sorting: true,
       };
+
       if (isNumber) {
         defaultColumns[k].dataParse = (val) => parseFloat(val);
       }
     });
     that.columnDetails = utils.extendRecursive(defaultColumns, this.options.columns);
-
     // add isVirtual to columns details
     Object.keys(that.columnDetails).forEach((k) => {
-      that.columnDetails[k].isVirtual = (typeof (that.columnDetails[k].virtual) === 'function');
+      that.columnDetails[k].isVirtual = typeof that.columnDetails[k].virtual === 'function';
     });
   }
 }

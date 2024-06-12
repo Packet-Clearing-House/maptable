@@ -111,7 +111,7 @@ this.d3.maptable = (function () {
 
     function toNumber(str) {
       if (!str || str === '') return null;
-      var resStr = str.toString().replace(/[^0-9.]+|\s+/gmi, '');
+      var resStr = str.toString().replace(/[^0-9.]+|\s+/gim, '');
       if (resStr !== '') return Number(resStr);
       return null;
     }
@@ -152,6 +152,25 @@ this.d3.maptable = (function () {
       return str === null || str === '' || str === undefined;
     };
 
+    var customSortOrders = {
+      days: ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'],
+      months: ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december']
+    };
+
+    var customSortAsc = function customSortAsc(type, d1, d2, sortOrder) {
+      var elem1 = d1.toLowerCase();
+      var elem2 = d2.toLowerCase();
+      var customSortOrder = sortOrder.length === 0 ? customSortOrders[type] || [] : sortOrder;
+      return customSortOrder.indexOf(elem1) - customSortOrder.indexOf(elem2);
+    };
+
+    var customSortDesc = function customSortDesc(type, d1, d2, sortOrder) {
+      var elem1 = d1.toLowerCase();
+      var elem2 = d2.toLowerCase();
+      var customSortOrder = sortOrder.length === 0 ? customSortOrders[type] || [] : sortOrder;
+      return customSortOrder.indexOf(elem2) - customSortOrder.indexOf(elem1);
+    };
+
     var utils = {
       rangeToBool: rangeToBool,
       appendOptions: appendOptions,
@@ -162,7 +181,9 @@ this.d3.maptable = (function () {
       quantile: quantile,
       uniqueValues: uniqueValues,
       formatDate: formatDate,
-      isBlank: isBlank
+      isBlank: isBlank,
+      customSortAsc: customSortAsc,
+      customSortDesc: customSortDesc
     };
 
     var defaultOptions = {
@@ -2328,18 +2349,21 @@ this.d3.maptable = (function () {
             var filterOutput = [columnDetails.filterMethod];
             if (columnDetails.filterMethod === 'compare') {
               var filterRangeSelect = element.querySelector('.mt-filter-range');
-              filterOutput[1] = filterRangeSelect.value;
-              if (filterRangeSelect.value !== 'any') {
-                if (filterRangeSelect.value === 'BETWEEN') {
-                  var filterValueMin = element.querySelector('.mt-filter-value-min').value;
-                  var filterValueMax = element.querySelector('.mt-filter-value-max').value;
-                  if (filterValueMin !== '' && filterValueMax === '') {
-                    filterOutput[2] = filterValueMin;
-                    filterOutput[3] = filterValueMax;
+              if (filterRangeSelect) {
+                filterOutput[1] = filterRangeSelect.value;
+
+                if (filterRangeSelect.value !== 'any') {
+                  if (filterRangeSelect.value === 'BETWEEN') {
+                    var filterValueMin = element.querySelector('.mt-filter-value-min').value;
+                    var filterValueMax = element.querySelector('.mt-filter-value-max').value;
+                    if (filterValueMin !== '' && filterValueMax === '') {
+                      filterOutput[2] = filterValueMin;
+                      filterOutput[3] = filterValueMax;
+                    }
+                  } else {
+                    var filterValue = element.querySelector('.mt-filter-value-min').value;
+                    filterOutput[2] = filterValue;
                   }
-                } else {
-                  var filterValue = element.querySelector('.mt-filter-value-min').value;
-                  filterOutput[2] = filterValue;
                 }
               }
             } else if (columnDetails.filterMethod === 'field' || columnDetails.filterMethod === 'dropdown') {
@@ -2713,10 +2737,17 @@ this.d3.maptable = (function () {
 
         this.maptable = maptable;
         this.options = options;
+        this.sorting = []; // initialize sort array
+
         if (this.options.defaultSorting) {
-          if (Array.isArray(this.options.defaultSorting) && this.options.defaultSorting.length === 2) {
+          if (Array.isArray(this.options.defaultSorting) && (this.options.defaultSorting.length === 2 || this.options.defaultSorting.length === 3)) {
+            // handle case for second-order and third-order sort options
             this.sorting = this.options.defaultSorting;
+          } else if (Array.isArray(this.options.defaultSorting) && this.options.defaultSorting.length >= 4) {
+            // handle case for more than three default sort options
+            this.sorting = this.options.defaultSorting.slice(0, 3);
           } else {
+            // handle case for single default sort option
             this.sorting = [this.options.defaultSorting];
           }
           this.sorting.forEach(function (s) {
@@ -2846,7 +2877,6 @@ this.d3.maptable = (function () {
 
           // Apply Sort
           this.applySort();
-
           var tableData = this.maptable.data;
           if (this.options.distinctBy) {
             tableData = d3.nest().key(function (d) {
@@ -2864,11 +2894,13 @@ this.d3.maptable = (function () {
 
           // Update
           var uniqueCollapsedRows = [];
-          this.body.selectAll('tr').data(tableData).attr('class', function (row) {
+          this.sortIndex = 0;
+          this.body.selectAll('tr').data(tableData).attr('class', function (row, index) {
+            var enableSeparator = _this2.isEndOfPrimarySort(tableData, index);
             if (_this2.options.rowClassName) {
-              return 'line ' + _this2.options.rowClassName(row);
+              return 'line ' + _this2.options.rowClassName(row) + ' ' + (enableSeparator ? 'bold' : '');
             }
-            return 'line';
+            return 'line ' + (enableSeparator ? 'bold' : '');
           }).html(function (row) {
             var tds = '';
             _this2.activeColumns.forEach(function (columnKey) {
@@ -2892,6 +2924,14 @@ this.d3.maptable = (function () {
               tds += '</td>';
             });
             return tds;
+          }).append('span').attr('class', 'table-sort-sn ' + (!this.options.dataCountIndicator || this.options.dataCountIndicator && !this.options.dataCountIndicator.enabled || this.sorting && this.sorting.length <= 1 ? 'display-none' : '') + ' ').html(function (row, index) {
+            var isSortGroupEnd = _this2.isEndOfPrimarySort(tableData, index - 1);
+            if (isSortGroupEnd) {
+              _this2.sortIndex = 1;
+            } else {
+              _this2.sortIndex += 1;
+            }
+            return '' + _this2.sortIndex;
           });
 
           // On render
@@ -2908,13 +2948,14 @@ this.d3.maptable = (function () {
           for (var i = 0; i < sortableColums.length; i += 1) {
             sortableColums[i].setAttribute('class', 'mt-table-sortable');
           }
-          this.sorting.forEach(function (column) {
-            _this3.container.querySelector('#column_header_' + utils.sanitizeKey(column.key)).setAttribute('class', 'mt-table-sortable sort_' + column.mode);
+          this.sorting.forEach(function (column, index) {
+            _this3.container.querySelector('#column_header_' + utils.sanitizeKey(column.key)).setAttribute('class', 'mt-table-sortable sort_' + column.mode + ' sort_order_' + (index + 1));
           });
           this.maptable.data = this.maptable.data.sort(function (a, b) {
             var compareBool = false;
             _this3.sorting.forEach(function (column) {
               var d3SortMode = column.mode === 'asc' ? d3.ascending : d3.descending;
+              var d3CustomSortMode = column.mode === 'asc' ? utils.customSortAsc : utils.customSortDesc;
               var columnDetails = _this3.maptable.columnDetails[column.key];
               var el1 = a[column.key];
               var el2 = b[column.key];
@@ -2933,7 +2974,16 @@ this.d3.maptable = (function () {
                 el1 = el1.toLowerCase();
                 el2 = el2.toLowerCase();
               }
-              compareBool = compareBool || d3SortMode(el1, el2);
+
+              if (columnDetails.filterInputType === 'months' || columnDetails.filterInputType === 'days') {
+                var currentCustomSortValues = _this3.options.customSortOrder && _this3.options.customSortOrder.filter(function (cs) {
+                  return cs.key === column.key;
+                });
+                var currentCustomSortOrder = currentCustomSortValues && currentCustomSortValues.length !== 0 ? currentCustomSortValues[0].order || [] : [];
+                compareBool = compareBool || d3CustomSortMode(columnDetails.filterInputType, el1, el2, currentCustomSortOrder);
+              } else {
+                compareBool = compareBool || d3SortMode(el1, el2);
+              }
             });
             return compareBool;
           });
@@ -2954,7 +3004,12 @@ this.d3.maptable = (function () {
           if (sortIndex === -1) {
             sortValue.mode = 'desc';
             if (d3.event && d3.event.shiftKey) {
-              this.sorting[1] = sortValue;
+              // FIFO - pop last sort element from array after third-order-sorting
+              if (this.sorting.length === 3) {
+                this.sorting.pop();
+              }
+              // FIFO - push new sort element to array
+              this.sorting.unshift(sortValue);
             } else {
               this.sorting = [sortValue];
             }
@@ -2967,11 +3022,56 @@ this.d3.maptable = (function () {
             }
             if (!d3.event.shiftKey) {
               this.sorting = [this.sorting[sortIndex]];
+            } else {
+              // FIFO - set latest clicked column key as first-order-sorting
+              this.reOrderSorting(sortIndex, 0);
             }
           }
-
           this.saveState();
           this.render();
+        }
+
+        /**
+         * Util for changing position of sorting array elements
+         * @param from: from position index
+         * @param to: to position index
+         */
+
+      }, {
+        key: 'reOrderSorting',
+        value: function reOrderSorting(from, to) {
+          if (to === from) return;
+
+          var target = this.sorting[from];
+          var increment = to < from ? -1 : 1;
+
+          for (var k = from; k != to; k += increment) {
+            this.sorting[k] = this.sorting[k + increment];
+          }
+          this.sorting[to] = target;
+        }
+
+        /**
+         * Util for finding end of primary sort data
+         * @param data: table data
+         * @param index: current row index
+         */
+
+      }, {
+        key: 'isEndOfPrimarySort',
+        value: function isEndOfPrimarySort(data, index) {
+          // check if data group separator is enabled from passed options
+          if (!this.options.dataGroupSeparator || this.options.dataGroupSeparator && !this.options.dataGroupSeparator.enabled) return false;
+          // check if multi-order-sort
+          if (this.sorting && this.sorting.length <= 1) return false;
+
+          var primarySort = this.sorting[0].key || '';
+          if (data[index] && data[index + 1]) {
+            if (data[index][primarySort] && data[index + 1][primarySort]) {
+              return data[index][primarySort].toLowerCase() !== data[index + 1][primarySort].toLowerCase();
+            }
+          }
+          return false;
         }
       }]);
       return Table;
@@ -3253,6 +3353,8 @@ this.d3.maptable = (function () {
       }, {
         key: 'setColumnDetails',
         value: function setColumnDetails() {
+          var _this5 = this;
+
           var that = this;
           if (that.rawData.length === 0) {
             return;
@@ -3265,9 +3367,10 @@ this.d3.maptable = (function () {
             defaultColumns[k] = {
               title: utils.keyToTile(k),
               filterMethod: isNumber ? 'compare' : 'field',
-              filterInputType: isNumber ? 'number' : 'text',
+              filterInputType: isNumber ? 'number' : _this5.options.columns[k] && _this5.options.columns[k].filterInputType ? _this5.options.columns[k].filterInputType : 'text',
               sorting: true
             };
+
             if (isNumber) {
               defaultColumns[k].dataParse = function (val) {
                 return parseFloat(val);
@@ -3275,7 +3378,6 @@ this.d3.maptable = (function () {
             }
           });
           that.columnDetails = utils.extendRecursive(defaultColumns, this.options.columns);
-
           // add isVirtual to columns details
           Object.keys(that.columnDetails).forEach(function (k) {
             that.columnDetails[k].isVirtual = typeof that.columnDetails[k].virtual === 'function';

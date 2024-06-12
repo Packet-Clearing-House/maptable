@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <link rel="stylesheet" href="../vendor/bootstrap.min.css">
+  <link rel="stylesheet" href="../maptable.css">
+  <title>MapTable example</title>
+  <style>
+    .sort_order_1 {
+      /* stylize primary sort column */
+    }
+  </style>
+</head>
+
+<body>
+
+  <script src="../vendor/d3.min.js" charset="utf-8"></script>
+  <script src="../vendor/topojson.min.js"></script>
+  <script src="../maptable.js"></script>
+
+  <div class="container">
+    <div class="panel panel-default">
+      <div class="panel-heading">[Example] Table with multi-column sort</div>
+      <div class="panel-body">
+        Demonstating: rendering a table and filters with multi-column sort<br />
+        <br>
+        <div class="btn-group">
+          <a href="./table-with-multi-column-sort.html" target="_blank" class="btn btn-default">Open in a new window</a>
+          <a href="https://github.com/Packet-Clearing-House/maptable/tree/master/docs/examples/table-with-multi-column-sort.html" target="_blank"
+            class="btn btn-default">View source code</a>
+        </div>
+      </div>
+    </div>
+    <div id="vizContainer"></div>
+  </div>
+  <script>
+    var viz = d3.maptable('#vizContainer')
+      .json('table-sort.json')
+      .columns({
+        position: {
+          filterMethod: 'dropdown',
+        },
+        office: {
+          filterMethod: 'dropdown',
+        },
+        month: {
+          title:"Joining Month",
+          filterMethod: 'dropdown',
+          filterInputType: 'months'
+        },
+        day: {
+          title:"Joining Day",
+          filterMethod: 'dropdown',
+          filterInputType: 'days'
+        },
+        links: {
+          virtual: function (d) {
+            return '<a href="#' + d.extn + '">Link</a>';
+          }
+        }
+      })
+      .filters({
+        show: ['name', 'position', 'office', 'month', 'day']
+      })
+      .table({
+        show: ['name', 'position', 'office', 'month', 'day', 'links'],
+        dataGroupSeparator: { enabled: true },
+        dataCountIndicator: { enabled: true },
+        defaultSorting: [{key:'month',mode:'desc'},{key:'day',mode:'asc'}],
+        customSortOrder: [{key:'day',order:['monday', 'tuesday', 'wednesday', 'thursday', 'friday','saturday','sunday',]},{key:'month',order:['february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december','january']}]
+      })
+      .render();
+
+  </script>
+
+
+</body>
+
+</html>
