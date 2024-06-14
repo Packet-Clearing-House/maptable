@@ -324,7 +324,8 @@ export default class Table {
     const primarySort = this.sorting[0].key || '';
     if (data[index] && data[index + 1]) {
       if (data[index][primarySort] && data[index + 1][primarySort]) {
-        return data[index][primarySort].toLowerCase() !== data[index + 1][primarySort].toLowerCase();
+        // stringify everything before .toLowerCase()
+        return `${data[index][primarySort]}`.toLowerCase() !== `${data[index + 1][primarySort]}`.toLowerCase();
       }
     }
     return false;
