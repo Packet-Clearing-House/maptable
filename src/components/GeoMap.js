@@ -42,16 +42,10 @@ export default class GeoMap {
     this.node.setAttribute('id', 'mt-map');
     mapWrapper.appendChild(this.node);
 
-    this.svg = d3.select(this.node)
-      .append('svg')
-      .attr('id', 'mt-map-svg')
-      .attr('xmlns', 'http://www.w3.org/2000/svg')
-      .attr('xmlns:xlink', 'http://www.w3.org/1999/xlink')
-      .attr('viewBox', `0 0 ${this.getWidth()} ${this.getHeight()}`)
-      .attr('width', this.getWidth())
-      .attr('height', this.getHeight());
+    this.svg = d3.select(this.node).append('svg').attr('id', 'mt-map-svg').attr('xmlns', 'http://www.w3.org/2000/svg').attr('xmlns:xlink', 'http://www.w3.org/1999/xlink').attr('viewBox', `0 0 ${this.getWidth()} ${this.getHeight()}`).attr('width', this.getWidth()).attr('height', this.getHeight());
 
-    this.projection = d3.geo.equirectangular()
+    this.projection = d3.geo
+      .equirectangular()
       .translate([this.getWidth() / 2, this.getHeight() / (2 * this.options.scaleHeight)])
       .scale((this.getWidth() / 640) * 100)
       .rotate([-12, 0])
@@ -61,10 +55,7 @@ export default class GeoMap {
 
     this.enrichData();
 
-    this.zoomListener = d3.behavior
-      .zoom()
-      .scaleExtent(this.options.scaleZoom)
-      .on('zoom', this.rescale.bind(this));
+    this.zoomListener = d3.behavior.zoom().scaleExtent(this.options.scaleZoom).on('zoom', this.rescale.bind(this));
 
     // Attach Zoom event to map
     if (this.options.zoom) {
@@ -73,19 +64,11 @@ export default class GeoMap {
 
     // Add tooltip
     if (this.options.markers) {
-      this.tooltipMarkersNode = d3.select(this.node)
-        .append('div')
-        .attr('id', 'mt-map-markers-tooltip')
-        .attr('class', `mt-map-tooltip ${this.options.markers.tooltipClassName}`)
-        .style('display', 'none');
+      this.tooltipMarkersNode = d3.select(this.node).append('div').attr('id', 'mt-map-markers-tooltip').attr('class', `mt-map-tooltip ${this.options.markers.tooltipClassName}`).style('display', 'none');
     }
 
     if (this.options.countries) {
-      this.tooltipCountriesNode = d3.select(this.node)
-        .append('div')
-        .attr('id', 'mt-map-countries-tooltip')
-        .attr('class', `mt-map-tooltip ${this.options.countries.tooltipClassName}`)
-        .style('display', 'none');
+      this.tooltipCountriesNode = d3.select(this.node).append('div').attr('id', 'mt-map-countries-tooltip').attr('class', `mt-map-tooltip ${this.options.countries.tooltipClassName}`).style('display', 'none');
     }
 
     this.layerGlobal = this.svg.append('g').attr('class', 'mt-map-global');
@@ -163,7 +146,7 @@ export default class GeoMap {
   }
 
   getHeight() {
-    const deltaHeight = (this.options.title) ? 30 : 0;
+    const deltaHeight = this.options.title ? 30 : 0;
     if (!this.options.height && this.options.ratioFromWidth) {
       return this.getWidth() * this.options.ratioFromWidth * this.options.scaleHeight + deltaHeight;
     }
@@ -176,8 +159,7 @@ export default class GeoMap {
   loadGeometries() {
     // We filter world data
     if (this.options.filterCountries) {
-      this.jsonWorld.objects.countries.geometries = this.jsonWorld.objects.countries
-        .geometries.filter(this.options.filterCountries);
+      this.jsonWorld.objects.countries.geometries = this.jsonWorld.objects.countries.geometries.filter(this.options.filterCountries);
     }
 
     // Build countries
@@ -187,10 +169,7 @@ export default class GeoMap {
     if (this.options.heatmap) this.buildHeatmap();
 
     if (this.options.night) this.buildNight();
-    if (
-      this.options.timezones
-      && (this.options.timezones.path || this.options.timezones.pathData)
-    ) this.buildTimezone();
+    if (this.options.timezones && (this.options.timezones.path || this.options.timezones.pathData)) this.buildTimezone();
   }
 
   /**
@@ -200,41 +179,24 @@ export default class GeoMap {
     // Build vectors
     const lands = topojson.merge(this.jsonWorld, this.jsonWorld.objects.countries.geometries);
     if (!this.options.heatmap.disableMask) {
-      this.maskHeatmap = this.layerHeatmap.append('defs')
-        .append('clipPath')
-        .attr('id', 'mt-map-heatmap-mask');
+      this.maskHeatmap = this.layerHeatmap.append('defs').append('clipPath').attr('id', 'mt-map-heatmap-mask');
 
-      this.maskHeatmap
-        .datum(lands)
-        .append('path')
-        .attr('class', 'mt-map-heatmap-mask-paths')
-        .attr('d', this.path);
+      this.maskHeatmap.datum(lands).append('path').attr('class', 'mt-map-heatmap-mask-paths').attr('d', this.path);
     }
 
-    this.imgHeatmap = this.layerHeatmap
-      .append('image')
-      .attr('width', this.getWidth())
-      .attr('height', this.getHeight())
-      .attr('x', 0)
-      .attr('y', 0)
-      .attr('class', 'mt-map-heatmap-img');
+    this.imgHeatmap = this.layerHeatmap.append('image').attr('width', this.getWidth()).attr('height', this.getHeight()).attr('x', 0).attr('y', 0).attr('class', 'mt-map-heatmap-img');
 
     if (this.options.heatmap.mask) {
       this.imgHeatmap = this.imgHeatmap.attr('clip-path', 'url(#mt-map-heatmap-mask)');
     }
 
     if (this.options.heatmap.borders) {
-      const borders = topojson.mesh(
-        this.jsonWorld,
-        this.jsonWorld.objects.countries,
-        (a, b) => a !== b,
-      );
+      const borders = topojson.mesh(this.jsonWorld, this.jsonWorld.objects.countries, (a, b) => a !== b);
 
-      this.bordersHeatmap = this.layerHeatmap
-        .append('g')
-        .attr('class', 'mt-map-heatmap-borders');
+      this.bordersHeatmap = this.layerHeatmap.append('g').attr('class', 'mt-map-heatmap-borders');
 
-      this.bordersHeatmap.selectAll('path.mt-map-heatmap-borders-paths')
+      this.bordersHeatmap
+        .selectAll('path.mt-map-heatmap-borders-paths')
         .data([lands, borders])
         .enter()
         .append('path')
@@ -251,25 +213,23 @@ export default class GeoMap {
    * Logic to build the night position
    */
   buildNight() {
-    this.layerNight = this.layerGlobal.append('g')
-      .attr('class', 'mt-map-night');
+    this.layerNight = this.layerGlobal.append('g').attr('class', 'mt-map-night');
 
-    const circle = d3.geo.circle()
-      .angle(90);
+    const circle = d3.geo.circle().angle(90);
 
     // Mask night
-    this.maskNight = this.layerNight.append('defs')
-      .append('clipPath')
-      .attr('id', 'mt-map-night-mask');
+    this.maskNight = this.layerNight.append('defs').append('clipPath').attr('id', 'mt-map-night-mask');
 
-    this.maskNight.append('rect')
+    this.maskNight
+      .append('rect')
       .attr('x', 0)
       .attr('y', 30)
       .attr('width', this.getWidth())
       .attr('height', this.getHeight() * 0.82 - 30);
 
     // Build vectors
-    this.nightPath = this.layerNight.append('path')
+    this.nightPath = this.layerNight
+      .append('path')
       .attr('class', `mt-map-night-layer${this.options.night.cssBlur ? ' mt-blur' : ''}`)
       .attr('filter', this.options.night.cssBlur ? undefined : 'url(#blur)')
       .attr('clip-path', 'url(#mt-map-night-mask)')
@@ -277,18 +237,12 @@ export default class GeoMap {
       .style('opacity', 0.1);
 
     const userDate = this.options.night.date || Date.UTC();
-    const startOfDay = Date.UTC(
-      userDate.getUTCFullYear(),
-      userDate.getUTCMonth(),
-      userDate.getUTCDate(),
-      0,
-      0,
-      0,
-    );
+    const startOfDay = Date.UTC(userDate.getUTCFullYear(), userDate.getUTCMonth(), userDate.getUTCDate(), 0, 0, 0);
     const solarPositionDated = solarPosition(new Date(startOfDay));
     this.nightPath.datum(circle.origin(antipode(solarPositionDated))).attr('d', this.path);
 
-    this.nightPathRight = this.layerNight.append('path')
+    this.nightPathRight = this.layerNight
+      .append('path')
       .attr('class', `mt-map-night-layer${this.options.night.cssBlur ? ' mt-blur' : ''}`)
       .attr('filter', this.options.night.cssBlur ? undefined : 'url(#blur)')
       .attr('clip-path', 'url(#mt-map-night-mask)')
@@ -296,7 +250,8 @@ export default class GeoMap {
       .style('opacity', 0.1)
       .style('transform', `translate3d(${this.getWidth()}px,0,0)`);
 
-    this.nightPathLeft = this.layerNight.append('path')
+    this.nightPathLeft = this.layerNight
+      .append('path')
       .attr('class', `mt-map-night-layer${this.options.night.cssBlur ? ' mt-blur' : ''}`)
       .attr('filter', this.options.night.cssBlur ? undefined : 'url(#blur)')
       .attr('clip-path', 'url(#mt-map-night-mask)')
@@ -307,28 +262,32 @@ export default class GeoMap {
     if (!this.options.night.disableSun) {
       const sunCoords = this.projection(solarPositionDated);
 
-      this.sunCircleRight = this.layerNight.append('svg:circle')
+      this.sunCircleRight = this.layerNight
+        .append('svg:circle')
         .attr('class', 'mt-map-sun-right')
         .attr('cx', sunCoords[0])
         .attr('cy', sunCoords[1])
         .attr('fill', 'url(#sunGradient)')
         .attr('r', this.getHeight() * 0.35);
 
-      this.sunCircleXRight = this.layerNight.append('svg:circle')
+      this.sunCircleXRight = this.layerNight
+        .append('svg:circle')
         .attr('class', 'mt-map-sun-xright')
         .attr('cx', sunCoords[0] + this.getWidth())
         .attr('cy', sunCoords[1])
         .attr('fill', 'url(#sunGradient)')
         .attr('r', this.getHeight() * 0.35);
 
-      this.sunCircleLeft = this.layerNight.append('svg:circle')
+      this.sunCircleLeft = this.layerNight
+        .append('svg:circle')
         .attr('class', 'mt-map-sun-right')
         .attr('cx', sunCoords[0] - this.getWidth())
         .attr('cy', sunCoords[1])
         .attr('fill', 'url(#sunGradient)')
         .attr('r', this.getHeight() * 0.35);
 
-      this.sunCircleXLeft = this.layerNight.append('svg:circle')
+      this.sunCircleXLeft = this.layerNight
+        .append('svg:circle')
         .attr('class', 'mt-map-sun-xright')
         .attr('cx', sunCoords[0] - 2 * this.getWidth())
         .attr('cy', sunCoords[1])
@@ -355,17 +314,13 @@ export default class GeoMap {
   }
 
   loadTimezone(err, jsonTimezones) {
-    this.dataTimezones = topojson.feature(
-      jsonTimezones,
-      jsonTimezones.objects.timezones,
-    ).features;
+    this.dataTimezones = topojson.feature(jsonTimezones, jsonTimezones.objects.timezones).features;
 
     // Mask timezone
-    this.maskTimezone = this.layerTimezones.append('defs')
-      .append('clipPath')
-      .attr('id', 'mt-map-timezone-mask');
+    this.maskTimezone = this.layerTimezones.append('defs').append('clipPath').attr('id', 'mt-map-timezone-mask');
 
-    this.maskTimezone.append('rect')
+    this.maskTimezone
+      .append('rect')
       .attr('x', 0)
       .attr('y', 30)
       .attr('width', this.getWidth())
@@ -386,25 +341,23 @@ export default class GeoMap {
 
     // Add times
     const timezoneTexts = this.dataTimezones.filter((d) => d.properties.places !== 'Antarctica' && d.properties.zone % 1 === 0 && d.properties.zone !== 14);
-    const timezoneTextsUnique = [...new Map(timezoneTexts.map((item) => (
-      [item.properties.zone, item]
-    ))).values()];
+    const timezoneTextsUnique = [...new Map(timezoneTexts.map((item) => [item.properties.zone, item])).values()];
 
     this.layerTimezonesText = this.layerTimezones.append('g').attr('class', 'mt-map-timezones-texts');
-    this.layerTimezonesText.selectAll('.mt-map-timezone-text')
+    this.layerTimezonesText
+      .selectAll('.mt-map-timezone-text')
       .data(timezoneTextsUnique)
       .enter()
       .insert('text')
       .attr('class', 'mt-map-timezone-text')
       .attr('y', this.getHeight() * 0.82 - 5)
       .attr('x', (d) => (d.properties.zone + 10) * (this.getWidth() / 24.5) - 1)
-      .attr('dx', (this.getWidth() / 24.5) / 2)
+      .attr('dx', this.getWidth() / 24.5 / 2)
       .attr('font-size', this.scaleFontSize(9))
       .attr('font-family', 'Helevetica, Arial, Sans-Serif')
       .attr('fill', '#999')
       .attr('text-anchor', 'middle')
-      .html((d) => (
-        utils.formatDate((this.options.timezones.date || new Date()), d.properties.zone)));
+      .html((d) => utils.formatDate(this.options.timezones.date || new Date(), d.properties.zone));
   }
 
   /**
@@ -417,14 +370,10 @@ export default class GeoMap {
     const lengthDataset = heatmapDataset.length;
     if (!lengthDataset) return () => 0;
     // const layersPerLocation = (opts.circles.max - opts.circles.min) / opts.circles.step;
-    const maxOpacityScale = d3.scale.linear()
-      .domain([1, lengthDataset])
-      .range([1, 0.25]);
+    const maxOpacityScale = d3.scale.linear().domain([1, lengthDataset]).range([1, 0.25]);
     const centralCircleOpacity = maxOpacityScale(lengthDataset);
 
-    const scale = d3.scale.linear()
-      .domain([opts.circles.min, 20])
-      .range([centralCircleOpacity, 0]);
+    const scale = d3.scale.linear().domain([opts.circles.min, 20]).range([centralCircleOpacity, 0]);
     return (m) => scale(m);
   }
 
@@ -435,8 +384,7 @@ export default class GeoMap {
   getDatumScale() {
     if (!this.options.heatmap.weightByAttribute) return () => 1;
     const dataExtents = d3.extent(this.maptable.data, this.options.heatmap.weightByAttribute);
-    const userScale = (this.options.heatmap.weightByAttributeScale === 'log')
-      ? d3.scale.log : d3.scale.linear;
+    const userScale = this.options.heatmap.weightByAttributeScale === 'log' ? d3.scale.log : d3.scale.linear;
     const scale = userScale().domain(dataExtents).range([0.5, 1]);
     return (d) => {
       const val = this.options.heatmap.weightByAttribute(d);
@@ -450,27 +398,16 @@ export default class GeoMap {
    * @returns {string} base64 image
    */
   getHeatmapData() {
-    const canvasHeatmap = d3.select(this.node)
-      .append('canvas')
-      .attr('id', 'mt-map-heatmap-canvas')
-      .attr('width', this.getWidth())
-      .attr('height', this.getHeight())
-      .attr('style', 'display: none;');
+    const canvasHeatmap = d3.select(this.node).append('canvas').attr('id', 'mt-map-heatmap-canvas').attr('width', this.getWidth()).attr('height', this.getHeight()).attr('style', 'display: none;');
 
     const ctx = canvasHeatmap.node().getContext('2d');
     ctx.globalCompositeOperation = 'multiply';
-    const circles = d3.range(
-      this.options.heatmap.circles.min,
-      this.options.heatmap.circles.max,
-      this.options.heatmap.circles.step,
-    );
+    const circles = d3.range(this.options.heatmap.circles.min, this.options.heatmap.circles.max, this.options.heatmap.circles.step);
     const datumScale = this.getDatumScale();
     const heatmapDataset = this.maptable.data.filter((d) => datumScale(d) > 0.1);
     const path = this.path.context(ctx);
     const magnitudeScale = this.getMagnitudeScale(heatmapDataset);
-    const colorScale = d3.scale.linear()
-      .domain([1, 0])
-      .range(['#000000', '#FFFFFF']);
+    const colorScale = d3.scale.linear().domain([1, 0]).range(['#000000', '#FFFFFF']);
 
     // Make a flat white background first
     ctx.beginPath();
@@ -482,7 +419,7 @@ export default class GeoMap {
     // color strenght factor
     const colorMultiplier = (x) => {
       const a = this.options.heatmap.circles.colorStrength;
-      const aa = 1 + ((a - 1) / 100);
+      const aa = 1 + (a - 1) / 100;
       if (a > 1) return (2 - aa) * x + aa - 1;
       return a * x;
     };
@@ -494,7 +431,12 @@ export default class GeoMap {
         const opacity = colorMultiplier(magnitudeScale(m) * scaleOpacityDatum);
         if (opacity > 0) {
           ctx.beginPath();
-          path(d3.geo.circle().origin([point.longitude, point.latitude]).angle(m - 0.0001)());
+          path(
+            d3.geo
+              .circle()
+              .origin([point.longitude, point.latitude])
+              .angle(m - 0.0001)()
+          );
           ctx.fillStyle = colorScale(opacity);
           ctx.fill();
           ctx.closePath();
@@ -502,14 +444,7 @@ export default class GeoMap {
       });
     });
 
-    StackBlur.canvasRGBA(
-      canvasHeatmap.node(),
-      0,
-      0,
-      this.getWidth(),
-      this.getHeight(),
-      this.options.heatmap.circles.blur,
-    );
+    StackBlur.canvasRGBA(canvasHeatmap.node(), 0, 0, this.getWidth(), this.getHeight(), this.options.heatmap.circles.blur);
 
     // Add color layer
     ctx.beginPath();
@@ -536,11 +471,7 @@ export default class GeoMap {
    * build the paths for the countries
    */
   buildCountries() {
-    this.dataCountries = topojson.feature(
-      this.jsonWorld,
-      this.jsonWorld.objects.countries,
-    ).features;
-
+    this.dataCountries = topojson.feature(this.jsonWorld, this.jsonWorld.objects.countries).features;
     // Build country paths
     this.layerCountries
       .selectAll('.mt-map-country')
@@ -548,7 +479,8 @@ export default class GeoMap {
       .enter()
       .insert('path')
       .attr('class', 'mt-map-country')
-      .attr('d', this.path);
+      .attr('d', this.path)
+      .attr('id', (d) => `${d.properties.iso_a3}`);
 
     // Build Country Legend
     this.legendCountry = {};
@@ -563,9 +495,7 @@ export default class GeoMap {
     if (!f) return false;
     if (!f.legend || !f.min || !f.max) return false;
     if (f.aggregate && f.aggregate.scale) {
-      const scale = (typeof (f.aggregate.scale) === 'function')
-        ? f.aggregate.scale.bind(this.maptable)()
-        : f.aggregate.scale;
+      const scale = typeof f.aggregate.scale === 'function' ? f.aggregate.scale.bind(this.maptable)() : f.aggregate.scale;
       if (scale !== 'linear') return false;
     }
     return true;
@@ -628,17 +558,15 @@ export default class GeoMap {
     // Update Legend
     Object.keys(this.options.countries.attr).forEach((attrKey) => {
       const attrValue = this.options.countries.attr[attrKey];
-      if (typeof (attrValue) === 'object' && attrValue.legend && this.legendCountry[attrKey] !== undefined) {
-        const scaleDomain = d3.extent(
-          this.dataCountries,
-          (d) => Number(d.attrProperties[attrKey].value),
-        );
+      if (typeof attrValue === 'object' && attrValue.legend && this.legendCountry[attrKey] !== undefined) {
+        const scaleDomain = d3.extent(this.dataCountries, (d) => Number(d.attrProperties[attrKey].value));
         this.legendCountry[attrKey].updateExtents(scaleDomain);
 
         // When we mouseover the legend, it should highlight the indice selected
-        countryItem.on('mouseover', (d) => {
-          this.legendCountry[attrKey].indiceChange(d.attrProperties[attrKey].value);
-        })
+        countryItem
+          .on('mouseover', (d) => {
+            this.legendCountry[attrKey].indiceChange(d.attrProperties[attrKey].value);
+          })
           .on('mouseout', () => {
             this.legendCountry[attrKey].indiceChange(NaN);
           });
@@ -647,12 +575,7 @@ export default class GeoMap {
 
     // Update Tooltip
     if (this.options.countries && this.options.countries.tooltip) {
-      this.activateTooltip(
-        countryItem,
-        this.tooltipCountriesNode,
-        this.options.countries.tooltip,
-        true,
-      );
+      this.activateTooltip(countryItem, this.tooltipCountriesNode, this.options.countries.tooltip, true);
     }
   }
 
@@ -661,26 +584,12 @@ export default class GeoMap {
    */
   updateNight() {
     const userDate = this.options.night.date || Date.UTC();
-    const startOfDay = Date.UTC(
-      userDate.getUTCFullYear(),
-      userDate.getUTCMonth(),
-      userDate.getUTCDate(),
-      0,
-      0,
-      0,
-    );
-    const endOfDay = Date.UTC(
-      userDate.getUTCFullYear(),
-      userDate.getUTCMonth(),
-      userDate.getUTCDate(),
-      23,
-      59,
-      59,
-    );
+    const startOfDay = Date.UTC(userDate.getUTCFullYear(), userDate.getUTCMonth(), userDate.getUTCDate(), 0, 0, 0);
+    const endOfDay = Date.UTC(userDate.getUTCFullYear(), userDate.getUTCMonth(), userDate.getUTCDate(), 23, 59, 59);
 
     const totalMilliseconds = endOfDay - startOfDay;
     const currentTime = userDate - startOfDay;
-    const relativeTranslateX = (currentTime / totalMilliseconds);
+    const relativeTranslateX = currentTime / totalMilliseconds;
 
     this.layerNight.node().style.transform = `translateX(${-this.getWidth() * relativeTranslateX}px)`;
   }
@@ -693,17 +602,15 @@ export default class GeoMap {
     const currentDate = this.options.timezones.date || new Date();
 
     Array.from(timezoneTexts).forEach((timezoneText) => {
-      timezoneText.textContent = utils.formatDate(
-        currentDate,
-        timezoneText.__data__.properties.zone,
-      );
+      timezoneText.textContent = utils.formatDate(currentDate, timezoneText.__data__.properties.zone);
     });
   }
 
   updateMarkers() {
     const defaultGroupBy = (a) => `${a.longitude},${a.latitude}`;
 
-    this.dataMarkers = d3.nest()
+    this.dataMarkers = d3
+      .nest()
       .key(defaultGroupBy)
       .entries(this.maptable.data)
       .filter((d) => d.values[0].x !== 0);
@@ -720,37 +627,28 @@ export default class GeoMap {
     });
 
     // Enter
-    const markerItem = this.layerMarkers
-      .selectAll('.mt-map-marker')
-      .data(this.dataMarkers);
+    const markerItem = this.layerMarkers.selectAll('.mt-map-marker').data(this.dataMarkers);
     let markerObject = markerItem.enter();
     if (this.options.markers.customTag) {
       markerObject = this.options.markers.customTag(markerObject);
     } else {
       markerObject = markerObject.append('svg:circle');
     }
-    const markerClassName = (this.options.markers.className)
-      ? this.options.markers.className : '';
+    const markerClassName = this.options.markers.className ? this.options.markers.className : '';
 
     markerObject.attr('class', `mt-map-marker ${markerClassName}`);
 
     // Exit
-    markerItem.exit().transition()
-      .attr('r', 0)
-      .attr('fill', '#eee')
-      .style('opacity', 0)
-      .remove();
+    markerItem.exit().transition().attr('r', 0).attr('fill', '#eee').style('opacity', 0).remove();
 
     // Update
-    const attrX = (this.options.markers.attrX) ? this.options.markers.attrX : 'cx';
-    const attrY = (this.options.markers.attrY) ? this.options.markers.attrY : 'cy';
+    const attrX = this.options.markers.attrX ? this.options.markers.attrX : 'cx';
+    const attrY = this.options.markers.attrY ? this.options.markers.attrY : 'cy';
 
-    const attrXDelta = (this.options.markers.attrXDelta) ? this.options.markers.attrXDelta : 0;
-    const attrYDelta = (this.options.markers.attrYDelta) ? this.options.markers.attrYDelta : 0;
+    const attrXDelta = this.options.markers.attrXDelta ? this.options.markers.attrXDelta : 0;
+    const attrYDelta = this.options.markers.attrYDelta ? this.options.markers.attrYDelta : 0;
 
-    const markerUpdate = markerItem
-      .attr(attrX, (d) => d.values[0].x + attrXDelta)
-      .attr(attrY, (d) => d.values[0].y + attrYDelta);
+    const markerUpdate = markerItem.attr(attrX, (d) => d.values[0].x + attrXDelta).attr(attrY, (d) => d.values[0].y + attrYDelta);
 
     this.getAllMtMapMarker().each(function (d) {
       Object.keys(d.attr).forEach((key) => {
@@ -759,12 +657,7 @@ export default class GeoMap {
     });
 
     if (this.options.markers.tooltip) {
-      this.activateTooltip(
-        markerUpdate,
-        this.tooltipMarkersNode,
-        this.options.markers.tooltip,
-        false,
-      );
+      this.activateTooltip(markerUpdate, this.tooltipMarkersNode, this.options.markers.tooltip, false);
     }
 
     this.rescale();
@@ -775,8 +668,7 @@ export default class GeoMap {
       this.transX = 0;
       this.transY = 0;
       this.scale = 1;
-      this.zoomListener.translate([this.transX, this.transY])
-        .scale(this.scale);
+      this.zoomListener.translate([this.transX, this.transY]).scale(this.scale);
       return;
     }
     const hor = d3.extent(this.maptable.data, (d) => d.x);
@@ -784,10 +676,10 @@ export default class GeoMap {
 
     // center dots with the good ratio
     const ratio = this.getWidth() / this.getHeight();
-    const deltaMarker = 20 + ((this.options.title) ? 30 : 0);
+    const deltaMarker = 20 + (this.options.title ? 30 : 0);
 
-    const currentWidth = (hor[1] - hor[0]) + deltaMarker;
-    const currentHeight = (ver[1] - ver[0]) + deltaMarker;
+    const currentWidth = hor[1] - hor[0] + deltaMarker;
+    const currentHeight = ver[1] - ver[0] + deltaMarker;
 
     const realHeight = currentWidth / ratio;
     const realWidth = currentHeight * ratio;
@@ -801,10 +693,10 @@ export default class GeoMap {
     }
 
     // add layout margin
-    hor[0] -= (this.options.fitContentMargin + diffMarginWidth);
-    hor[1] += (this.options.fitContentMargin + diffMarginWidth);
-    ver[0] -= (this.options.fitContentMargin + diffMarginHeight);
-    ver[1] += (this.options.fitContentMargin + diffMarginHeight);
+    hor[0] -= this.options.fitContentMargin + diffMarginWidth;
+    hor[1] += this.options.fitContentMargin + diffMarginWidth;
+    ver[0] -= this.options.fitContentMargin + diffMarginHeight;
+    ver[1] += this.options.fitContentMargin + diffMarginHeight;
 
     this.scale = this.getWidth() / (hor[1] - hor[0]);
     this.transX = -1 * hor[0] * this.scale;
@@ -818,29 +710,20 @@ export default class GeoMap {
       .append('svg')
       .attr('width', this.getWidth())
       .attr('x', 0)
-      .attr('y', (this.getHeight() - 30))
+      .attr('y', this.getHeight() - 30)
       .attr('height', 30);
 
     if (this.options.title.bgColor) {
-      titleContainer.append('rect')
-        .attr('x', 0)
-        .attr('y', 0)
-        .attr('width', this.getWidth())
-        .attr('height', 30)
-        .attr('fill', this.options.title.bgColor);
+      titleContainer.append('rect').attr('x', 0).attr('y', 0).attr('width', this.getWidth()).attr('height', 30).attr('fill', this.options.title.bgColor);
     }
 
-    titleContainer.append('text')
-      .attr('id', 'mt-map-title')
-      .attr('x', 20)
-      .attr('font-size', this.scaleFontSize(this.options.title.fontSize))
-      .attr('font-family', this.options.title.fontFamily)
-      .attr('y', 20);
+    titleContainer.append('text').attr('id', 'mt-map-title').attr('x', 20).attr('font-size', this.scaleFontSize(this.options.title.fontSize)).attr('font-family', this.options.title.fontFamily).attr('y', 20);
 
     if (this.options.title.source) {
-      titleContainer.append('text')
+      titleContainer
+        .append('text')
         .attr('y', 20)
-        .attr('x', (this.getWidth() - 20))
+        .attr('x', this.getWidth() - 20)
         .attr('text-anchor', 'end')
         .attr('font-size', this.scaleFontSize(this.options.title.fontSize))
         .attr('font-family', this.options.title.fontFamily)
@@ -883,9 +766,7 @@ export default class GeoMap {
     const originalTranslation = this.decodeTranslation([defaultZoom[1], defaultZoom[2]]);
     this.transX = originalTranslation[0];
     this.transY = originalTranslation[1];
-    this.zoomListener.scale(defaultZoom[0])
-      .translate(originalTranslation)
-      .event(this.svg);
+    this.zoomListener.scale(defaultZoom[0]).translate(originalTranslation).event(this.svg);
   }
 
   /**
@@ -893,8 +774,7 @@ export default class GeoMap {
    */
   saveState() {
     const encodedTranslation = this.encodeTranslation([this.transX, this.transY]);
-    const exportedData = [this.scale, encodedTranslation[0],
-      encodedTranslation[1]];
+    const exportedData = [this.scale, encodedTranslation[0], encodedTranslation[1]];
     if (exportedData[0] !== 1 && exportedData[1] !== 0 && exportedData[2] !== 0) {
       this.maptable.saveState('zoom', exportedData);
     } else {
@@ -904,10 +784,38 @@ export default class GeoMap {
 
   rescale() {
     const self = this;
-    if (d3.event && d3.event.translate) {
-      this.scale = d3.event.scale;
-      this.transX = (this.scale === 1) ? 0 : d3.event.translate[0];
-      this.transY = (this.scale === 1) ? 0 : d3.event.translate[1];
+    let defaultScaleTo = typeof this.options.defaultScaleTo === 'function' ? this.options.defaultScaleTo.bind(this.maptable)() : this.options.defaultScaleTo;
+
+    if (defaultScaleTo) {
+      // if default zoom state is set by latitude/longitude
+      if (defaultScaleTo.scaleType === 'lat/lng') {
+        this.scale = defaultScaleTo.values.scale || 1;
+        const transXY = this.getTransXYForLatLng(defaultScaleTo.values.latitude || 0, defaultScaleTo.values.longitude || 0, defaultScaleTo.values.scale || 1);
+        this.transX = transXY.tx || 0;
+        this.transY = transXY.ty || 0;
+
+        if (d3.event && d3.event.translate) {
+          this.transX = this.scale === 1 ? 0 : d3.event.translate[0] + transXY.tx;
+          this.transY = this.scale === 1 ? 0 : d3.event.translate[1] + transXY.ty;
+        }
+      } else if (defaultScaleTo.scaleType === 'country') {
+        // if default zoom state is set by ISO alpha-3 country code
+        const countryTransXY = this.getTransXYForCountry(defaultScaleTo.values.iso_a3);
+        this.scale = countryTransXY.tscale || 1;
+        this.transX = countryTransXY.tx || 0;
+        this.transY = countryTransXY.ty || 0;
+
+        if (d3.event && d3.event.translate) {
+          this.transX = this.scale === 1 ? 0 : d3.event.translate[0] + countryTransXY.tx;
+          this.transY = this.scale === 1 ? 0 : d3.event.translate[1] + countryTransXY.ty;
+        }
+      }
+    } else {
+      if (d3.event && d3.event.translate) {
+        this.scale = d3.event.scale;
+        this.transX = this.scale === 1 ? 0 : d3.event.translate[0];
+        this.transY = this.scale === 1 ? 0 : d3.event.translate[1];
+      }
     }
 
     const maxTransX = 0;
@@ -932,10 +840,7 @@ export default class GeoMap {
       d3.event.translate[1] = this.transY;
     }
 
-    this.layerGlobal.style(
-      'transform',
-      `translate(${this.transX}px,${this.transY}px)scale(${this.scale})`,
-    );
+    this.layerGlobal.style('transform', `translate(${this.transX}px,${this.transY}px)scale(${this.scale})`);
 
     // Hide tooltip
     if (self.tooltipCountriesNode) self.tooltipCountriesNode.attr('style', 'display:none;');
@@ -958,56 +863,84 @@ export default class GeoMap {
 
     // Rescale Sun
     if (this.options.night && !this.options.disableSun) {
-      d3.selectAll(`${this.containerSelector} .mt-map-sun`).style(
-        'r',
-        (this.getHeight() * 0.35) / this.scale,
-      );
+      d3.selectAll(`${this.containerSelector} .mt-map-sun`).style('r', (this.getHeight() * 0.35) / this.scale);
     }
 
     // Rescale Country stroke-width
     if (this.options.countries) {
-      this.getAllMtMapCountry().style(
-        'stroke-width',
-        this.options.countries.attr['stroke-width'] / this.scale,
-      );
+      this.getAllMtMapCountry().style('stroke-width', this.options.countries.attr['stroke-width'] / this.scale);
     }
 
     // Rescale heatmap borders
     if (this.options.heatmap && this.options.heatmap.borders) {
-      d3.selectAll(`${this.containerSelector} .mt-map-heatmap-borders-paths`)
-        .style('stroke-width', this.options.heatmap.borders.stroke / this.scale);
+      d3.selectAll(`${this.containerSelector} .mt-map-heatmap-borders-paths`).style('stroke-width', this.options.heatmap.borders.stroke / this.scale);
     }
 
     // save state
     if (this.maptable.firstExecution && this.options.saveState) this.saveState();
   }
 
+  // calculate translateX, translateY and scale values based on input latitude, longitude and scale value
+  getTransXYForLatLng(latitude, longitude, scale) {
+    const lng = parseFloat(longitude);
+    const lat = parseFloat(latitude);
+
+    const coo = this.projection([lng, lat]);
+    const sc = scale || 1;
+
+    const tx = this.getWidth() / 2 - sc * coo[0];
+    const ty = this.getHeight() / 2 - sc * coo[1];
+
+    return { tx, ty };
+  }
+
+  // calculate translateX, translateY and scale values based on input ISO alpha-3 country code
+  getTransXYForCountry(country_code) {
+    const currentCountryCode = country_code;
+    const currentCountryData = this.dataCountries.filter((d) => {
+      return d.properties.iso_a3 === currentCountryCode;
+    });
+    let tx = 0;
+    let ty = 0;
+    let tscale = 1;
+    if (currentCountryData[0]) {
+      const bounds = this.path.bounds(currentCountryData[0]);
+      const dx = bounds[1][0] - bounds[0][0];
+      const dy = bounds[1][1] - bounds[0][1];
+      const x = (bounds[0][0] + bounds[1][0]) / 2;
+      const y = (bounds[0][1] + bounds[1][1]) / 2;
+      const sc = 0.95 / Math.max(dx / this.getWidth(), dy / this.getHeight());
+      const tr = [this.getWidth() / 2 - sc * x, this.getHeight() / 2 - sc * y];
+      tscale = sc;
+      tx = tr[0];
+      ty = tr[1];
+    }
+
+    return { tx, ty, tscale };
+  }
+
   setAttrValues(attrKey, attrValue, dataset) {
-    if (typeof (attrValue) === 'number' || typeof (attrValue) === 'string') {
+    if (typeof attrValue === 'number' || typeof attrValue === 'string') {
       // Static value
       dataset.forEach((d) => {
         d.attr[attrKey] = attrValue;
       });
-    } else if (typeof (attrValue) === 'function') {
+    } else if (typeof attrValue === 'function') {
       // Dynamic value based on the dataset
       dataset.forEach((d) => {
         d.attr[attrKey] = attrValue(d);
       });
-    } else if (typeof (attrValue) === 'object') {
+    } else if (typeof attrValue === 'object') {
       let scale = 'linear';
       let key = null;
       let mode = 'count';
       let scaleToUse = d3.scale.linear();
       if (attrValue.aggregate) {
-        key = (typeof (attrValue.aggregate.key) === 'function')
-          ? attrValue.aggregate.key.bind(this.maptable)()
-          : attrValue.aggregate.key;
+        key = typeof attrValue.aggregate.key === 'function' ? attrValue.aggregate.key.bind(this.maptable)() : attrValue.aggregate.key;
 
-        mode = (typeof (attrValue.aggregate.mode) === 'function')
-          ? attrValue.aggregate.mode.bind(this.maptable)()
-          : attrValue.aggregate.mode;
+        mode = typeof attrValue.aggregate.mode === 'function' ? attrValue.aggregate.mode.bind(this.maptable)() : attrValue.aggregate.mode;
 
-        if (typeof (attrValue.aggregate.scale) === 'function') {
+        if (typeof attrValue.aggregate.scale === 'function') {
           scale = attrValue.aggregate.scale.bind(this.maptable)();
         } else if (attrValue.aggregate.scale) {
           scale = attrValue.aggregate.scale;
@@ -1019,16 +952,12 @@ export default class GeoMap {
 
         // Custom aggregate mode
         if (mode === 'sum') {
-          attrValue.rollup = (groupedData) => (
-            groupedData.map((d) => Number(d[key])).reduce((a, c) => a + c, 0)
-          );
+          attrValue.rollup = (groupedData) => groupedData.map((d) => Number(d[key])).reduce((a, c) => a + c, 0);
         } else if (mode === 'avg') {
           attrValue.rollup = (groupedData) => {
             if (!groupedData.length) return 0;
             const validData = groupedData.filter((d) => !Number.isNaN(Number(d[key])));
-            return validData
-              .map((d) => Number(d[key]))
-              .reduce((a, c) => a + c, 0) / validData.length;
+            return validData.map((d) => Number(d[key])).reduce((a, c) => a + c, 0) / validData.length;
           };
         } else if (mode === 'count') {
           attrValue.rollup = (groupedData) => groupedData.length;
@@ -1051,7 +980,7 @@ export default class GeoMap {
             const groupedValues = groupedData.map((d) => Number(d[key]));
             return utils.quantile(groupedValues, percentile);
           };
-        } else if (typeof (attrValue.rollup) === 'function') {
+        } else if (typeof attrValue.rollup === 'function') {
           attrValue.rollup = attrValue.rollup.bind(this.maptable);
         }
 
@@ -1089,18 +1018,12 @@ export default class GeoMap {
           d.attrProperties[attrKey].columnDetails = c;
           const datum = {};
           datum[key] = aggregatedValue;
-          d.attrProperties[attrKey].formatted = (c && c.cellContent)
-            ? c.cellContent.bind(this.maptable)(datum)
-            : aggregatedValue;
+          d.attrProperties[attrKey].formatted = c && c.cellContent ? c.cellContent.bind(this.maptable)(datum) : aggregatedValue;
         }
       });
       if (scale === 'rank') {
-        const positiveRanks = utils.uniqueValues([0].concat(dataset
-          .map((d) => Math.floor(d.attrProperties[attrKey].value * 100) / 100)
-          .filter((v) => v > 0)));
-        const negativeRanks = utils.uniqueValues(dataset
-          .map((d) => Math.floor(d.attrProperties[attrKey].value * 100) / 100)
-          .filter((v) => v < 0));
+        const positiveRanks = utils.uniqueValues([0].concat(dataset.map((d) => Math.floor(d.attrProperties[attrKey].value * 100) / 100).filter((v) => v > 0)));
+        const negativeRanks = utils.uniqueValues(dataset.map((d) => Math.floor(d.attrProperties[attrKey].value * 100) / 100).filter((v) => v < 0));
 
         positiveRanks.sort((a, b) => a - b);
         negativeRanks.sort((a, b) => b - a);
@@ -1110,9 +1033,7 @@ export default class GeoMap {
             const ranks = d.attrProperties[attrKey].value >= 0 ? positiveRanks : negativeRanks;
             const pos = ranks.indexOf(Math.floor(d.attrProperties[attrKey].value * 100) / 100);
             const percentile = Math.round((pos / ranks.length) * 100);
-            const newValue = d.attrProperties[attrKey].value < 0
-              ? percentile - (percentile * 2)
-              : percentile;
+            const newValue = d.attrProperties[attrKey].value < 0 ? percentile - percentile * 2 : percentile;
             d.attrProperties[attrKey].value = newValue;
           }
         });
@@ -1122,14 +1043,12 @@ export default class GeoMap {
       if (scaleDomain[0] === 0 && scale && scale.indexOf('log') !== '-1') {
         scaleDomain = d3.extent(
           dataset.filter((v) => Number(v.attrProperties[attrKey].value) !== 0),
-          (d) => Number(d.attrProperties[attrKey].value),
+          (d) => Number(d.attrProperties[attrKey].value)
         );
       }
       if (attrValue.transform) {
-        scaleDomain[0] = attrValue.transform
-          .bind(this.maptable)(scaleDomain[0], this.maptable.data);
-        scaleDomain[1] = attrValue.transform
-          .bind(this.maptable)(scaleDomain[1], this.maptable.data);
+        scaleDomain[0] = attrValue.transform.bind(this.maptable)(scaleDomain[0], this.maptable.data);
+        scaleDomain[1] = attrValue.transform.bind(this.maptable)(scaleDomain[1], this.maptable.data);
       }
 
       let minValue = attrValue.min;
@@ -1143,39 +1062,30 @@ export default class GeoMap {
       }
 
       // check for negative color declarations
-      if ((attrValue.maxNegative && !attrValue.minNegative)
-          || (!attrValue.maxNegative && attrValue.minNegative)) {
+      if ((attrValue.maxNegative && !attrValue.minNegative) || (!attrValue.maxNegative && attrValue.minNegative)) {
         throw new Error('MapTable: maxNegative or minNegative undefined. Please declare both.');
       }
-      const useNegative = (attrValue.maxNegative && attrValue.minNegative);
+      const useNegative = attrValue.maxNegative && attrValue.minNegative;
       let scaleFunction;
       let scaleNegativeFunction;
 
       if (useNegative) {
-        scaleFunction = scaleToUse.copy()
-          .domain([0, scaleDomain[1]])
-          .range([minValue, maxValue]);
-        scaleNegativeFunction = scaleToUse.copy()
-          .domain([scaleDomain[0], 0])
-          .range([attrValue.maxNegative, attrValue.minNegative]);
+        scaleFunction = scaleToUse.copy().domain([0, scaleDomain[1]]).range([minValue, maxValue]);
+        scaleNegativeFunction = scaleToUse.copy().domain([scaleDomain[0], 0]).range([attrValue.maxNegative, attrValue.minNegative]);
       } else {
-        scaleFunction = scaleToUse
-          .domain(scaleDomain)
-          .range([minValue, maxValue]);
+        scaleFunction = scaleToUse.domain(scaleDomain).range([minValue, maxValue]);
       }
 
       dataset.forEach((d) => {
         let scaledValue;
         if (!d.values.length || Number.isNaN(d.attrProperties[attrKey].value)) {
-          if (typeof (attrValue.empty) === 'undefined') {
+          if (typeof attrValue.empty === 'undefined') {
             throw new Error(`MapTable: no empty property found for attr.${attrKey}`);
           }
           scaledValue = attrValue.empty;
         } else {
           const originalValueRaw = d.attrProperties[attrKey].value;
-          const originalValue = (attrValue.transform)
-            ? attrValue.transform.bind(this.maptable)(originalValueRaw, this.maptable.data)
-            : originalValueRaw;
+          const originalValue = attrValue.transform ? attrValue.transform.bind(this.maptable)(originalValueRaw, this.maptable.data) : originalValueRaw;
 
           if (useNegative && originalValue < 0) {
             scaledValue = scaleNegativeFunction(originalValue);
@@ -1217,48 +1127,37 @@ export default class GeoMap {
         inlineFilters = this.maptable.filters.getDescription();
       }
 
-      this.container.querySelector('#mt-map-title').innerHTML = this.options.title
-        .content.bind(this.maptable)(
-          showing,
-          total,
-          inlineFilters,
-          this.maptable.data,
-          this.maptable.rawData,
-          this.dataCountries,
-        );
+      this.container.querySelector('#mt-map-title').innerHTML = this.options.title.content.bind(this.maptable)(showing, total, inlineFilters, this.maptable.data, this.maptable.rawData, this.dataCountries);
     }
   }
 
   activateTooltip(target, tooltipNode, tooltipContent, isCountry) {
     const self = this;
-    target.on(isCountry ? 'mousemove' : 'mouseover', function (d) {
-      const content = tooltipContent.bind(this.maptable)(d);
-      if (!content) return;
-      tooltipNode.html(content).attr('style', 'display:block;position:fixed;');
+    target
+      .on(isCountry ? 'mousemove' : 'mouseover', function (d) {
+        const content = tooltipContent.bind(this.maptable)(d);
+        if (!content) return;
+        tooltipNode.html(content).attr('style', 'display:block;position:fixed;');
 
-      let mouseLeft;
-      let mouseTop;
-      const tooltipDelta = tooltipNode.node().offsetWidth / 2;
-      if (isCountry) {
-        const mapRect = self.node.getBoundingClientRect();
-        const mousePosition = d3.mouse(self.svg.node()).map((v) => parseInt(v, 10));
+        let mouseLeft;
+        let mouseTop;
+        const tooltipDelta = tooltipNode.node().offsetWidth / 2;
+        if (isCountry) {
+          const mapRect = self.node.getBoundingClientRect();
+          const mousePosition = d3.mouse(self.svg.node()).map((v) => parseInt(v, 10));
 
-        mouseLeft = mapRect.left + mousePosition[0] - tooltipDelta;
-        mouseTop = mapRect.top + mousePosition[1] + 10;
-      } else {
-        const targetRect = this.getBoundingClientRect();
-        mouseLeft = (targetRect.left + (targetRect.width / 2) - tooltipDelta);
-        mouseTop = (targetRect.top + targetRect.height + 2); // +2 is for the border
-      }
+          mouseLeft = mapRect.left + mousePosition[0] - tooltipDelta;
+          mouseTop = mapRect.top + mousePosition[1] + 10;
+        } else {
+          const targetRect = this.getBoundingClientRect();
+          mouseLeft = targetRect.left + targetRect.width / 2 - tooltipDelta;
+          mouseTop = targetRect.top + targetRect.height + 2; // +2 is for the border
+        }
 
-      tooltipNode.attr(
-        'style',
-        `top:${mouseTop}px;left:${mouseLeft}px;display:block;position:fixed;`,
-      )
-        .on('mouseout', () => {
+        tooltipNode.attr('style', `top:${mouseTop}px;left:${mouseLeft}px;display:block;position:fixed;`).on('mouseout', () => {
           tooltipNode.style('display', 'none');
         });
-    })
+      })
       .on('mouseout', () => {
         tooltipNode.style('display', 'none');
       });
@@ -1269,7 +1168,7 @@ export default class GeoMap {
     const svg = this.container.querySelector('#mt-map-svg');
     // Extract the data as SVG text string
     const svgXml = `<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-${(new XMLSerializer()).serializeToString(svg)}`;
+${new XMLSerializer().serializeToString(svg)}`;
 
     if (this.options.exportSvgClient) {
       if (!window.saveAs) {
