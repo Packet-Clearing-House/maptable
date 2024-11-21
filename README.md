@@ -306,6 +306,24 @@ Functions that have `groupedData` as parameter, means that `groupedData` is a JS
   - `continent`: Continent name that came from the GeoJSON map file.
 - `longitudeKey:` _(string, default: 'longitude')_ Column name of the longitude (from the dataset).
 - `latitudeKey:` _(string, default: 'latitude')_ Column name of the latitude (from the dataset).
+- `defaultScaleTo:` _(object, default:null)_ Default zoom state for the map based on either Country code or Latitude/Longitude point.
+
+  - `defaultScaleTo.scaleType:` _(string, default:null)_ Type of a zoom/scale on the map. This only accepts two types: 'lat/lng' for a zoom based on latitude and longitude points or 'country' for a zoom based on specific country code(iso_a3 code).
+  - `defaultScaleTo.values` _(object, default:null)_ Option values for the zoom state on the map based on 'scaleType' property. If 'scaleType' is set to 'lat/lng' then its 'values' object should contain: 'latitude','longitude' and 'scale' properties. If 'scaleType' is set to 'country' then its 'values' object should contain: 'iso_a3' property.
+
+    _Example:_
+
+    ```js
+    defaultScaleTo: {
+      scaleType: 'lat/lng',
+      values: {
+        latitude: '0',
+        longitude: '0',
+        scale: '1'
+      }
+    },
+    ```
+
 - `exportSvg:` _(string, default: null)_ URL endpoint to download the current visualization as SVG. Read more on the section export SVG. (more details on a the section "Export as SVG")
 - `exportSvgClient:` _(bool, default: false)_ Show button to download the current visualization as SVG using only the client browser instead of querying the backend (in the opposite of `exportSvg`). You'll need to download [FileSaver.js](https://github.com/eligrey/FileSaver.js) and add a `<script src="filesaver.min.js">` to make it work. You may also use the [CDN version](https://cdnjs.com/libraries/FileSaver.js) in your `<script>` source.
 - `watermark:` _(object, default: null)_ Add a watermark within the map.
