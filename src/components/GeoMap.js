@@ -788,26 +788,34 @@ export default class GeoMap {
 
     if (defaultScaleTo) {
       // if default zoom state is set by latitude/longitude
-      if (defaultScaleTo.scaleType === 'lat/lng') {
+      if (defaultScaleTo.scaleType === 'coordinates') {
         this.scale = defaultScaleTo.values.scale || 1;
         const transXY = this.getTransXYForLatLng(defaultScaleTo.values.latitude || 0, defaultScaleTo.values.longitude || 0, defaultScaleTo.values.scale || 1);
         this.transX = transXY.tx || 0;
         this.transY = transXY.ty || 0;
-
-        if (d3.event && d3.event.translate) {
-          this.transX = this.scale === 1 ? 0 : d3.event.translate[0] + transXY.tx;
-          this.transY = this.scale === 1 ? 0 : d3.event.translate[1] + transXY.ty;
-        }
       } else if (defaultScaleTo.scaleType === 'country') {
         // if default zoom state is set by ISO alpha-3 country code
-        const countryTransXY = this.getTransXYForCountry(defaultScaleTo.values.iso_a3);
-        this.scale = countryTransXY.tscale || 1;
+        let scale_value = 1;
+        if(d3.event && d3.event.scale>1){
+          scale_value = d3.event.scale;
+        }
+        
+        const countryTransXY = this.getTransXYForCountry(defaultScaleTo.values.iso_a3,scale_value);
+        this.scale = countryTransXY.tscale;
         this.transX = countryTransXY.tx || 0;
         this.transY = countryTransXY.ty || 0;
 
-        if (d3.event && d3.event.translate) {
-          this.transX = this.scale === 1 ? 0 : d3.event.translate[0] + countryTransXY.tx;
-          this.transY = this.scale === 1 ? 0 : d3.event.translate[1] + countryTransXY.ty;
+        if(d3.event && d3.event.scale === 1){
+          this.scale = countryTransXY.tscale;
+          this.transX += d3.event.translate[0];
+          this.transY += d3.event.translate[1];
+        }
+
+        if(d3.event && d3.event.scale>1){
+          // update scale value
+          this.scale = (countryTransXY.tscale + d3.event.scale) - 1 || 1;
+          this.transX = (countryTransXY.tx + d3.event.translate[0]);
+          this.transY = (countryTransXY.ty + d3.event.translate[1]);
         }
       }
     } else {
@@ -895,7 +903,7 @@ export default class GeoMap {
   }
 
   // calculate translateX, translateY and scale values based on input ISO alpha-3 country code
-  getTransXYForCountry(country_code) {
+  getTransXYForCountry(country_code,scale_value) {
     const currentCountryCode = country_code;
     const currentCountryData = this.dataCountries.filter((d) => {
       return d.properties.iso_a3 === currentCountryCode;
@@ -909,7 +917,7 @@ export default class GeoMap {
       const dy = bounds[1][1] - bounds[0][1];
       const x = (bounds[0][0] + bounds[1][0]) / 2;
       const y = (bounds[0][1] + bounds[1][1]) / 2;
-      const sc = 0.95 / Math.max(dx / this.getWidth(), dy / this.getHeight());
+      const sc = scale_value / Math.max(dx / this.getWidth(), dy / this.getHeight());
       const tr = [this.getWidth() / 2 - sc * x, this.getHeight() / 2 - sc * y];
       tscale = sc;
       tx = tr[0];

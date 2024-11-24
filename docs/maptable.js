@@ -1795,26 +1795,34 @@ this.d3.maptable = (function () {
 
           if (defaultScaleTo) {
             // if default zoom state is set by latitude/longitude
-            if (defaultScaleTo.scaleType === 'lat/lng') {
+            if (defaultScaleTo.scaleType === 'coordinates') {
               this.scale = defaultScaleTo.values.scale || 1;
               var transXY = this.getTransXYForLatLng(defaultScaleTo.values.latitude || 0, defaultScaleTo.values.longitude || 0, defaultScaleTo.values.scale || 1);
               this.transX = transXY.tx || 0;
               this.transY = transXY.ty || 0;
-
-              if (d3.event && d3.event.translate) {
-                this.transX = this.scale === 1 ? 0 : d3.event.translate[0] + transXY.tx;
-                this.transY = this.scale === 1 ? 0 : d3.event.translate[1] + transXY.ty;
-              }
             } else if (defaultScaleTo.scaleType === 'country') {
               // if default zoom state is set by ISO alpha-3 country code
-              var countryTransXY = this.getTransXYForCountry(defaultScaleTo.values.iso_a3);
-              this.scale = countryTransXY.tscale || 1;
+              var scale_value = 1;
+              if (d3.event && d3.event.scale > 1) {
+                scale_value = d3.event.scale;
+              }
+
+              var countryTransXY = this.getTransXYForCountry(defaultScaleTo.values.iso_a3, scale_value);
+              this.scale = countryTransXY.tscale;
               this.transX = countryTransXY.tx || 0;
               this.transY = countryTransXY.ty || 0;
 
-              if (d3.event && d3.event.translate) {
-                this.transX = this.scale === 1 ? 0 : d3.event.translate[0] + countryTransXY.tx;
-                this.transY = this.scale === 1 ? 0 : d3.event.translate[1] + countryTransXY.ty;
+              if (d3.event && d3.event.scale === 1) {
+                this.scale = countryTransXY.tscale;
+                this.transX += d3.event.translate[0];
+                this.transY += d3.event.translate[1];
+              }
+
+              if (d3.event && d3.event.scale > 1) {
+                // update scale value
+                this.scale = countryTransXY.tscale + d3.event.scale - 1 || 1;
+                this.transX = countryTransXY.tx + d3.event.translate[0];
+                this.transY = countryTransXY.ty + d3.event.translate[1];
               }
             }
           } else {
@@ -1908,7 +1916,7 @@ this.d3.maptable = (function () {
 
       }, {
         key: 'getTransXYForCountry',
-        value: function getTransXYForCountry(country_code) {
+        value: function getTransXYForCountry(country_code, scale_value) {
           var currentCountryCode = country_code;
           var currentCountryData = this.dataCountries.filter(function (d) {
             return d.properties.iso_a3 === currentCountryCode;
@@ -1922,7 +1930,7 @@ this.d3.maptable = (function () {
             var dy = bounds[1][1] - bounds[0][1];
             var x = (bounds[0][0] + bounds[1][0]) / 2;
             var y = (bounds[0][1] + bounds[1][1]) / 2;
-            var sc = 0.95 / Math.max(dx / this.getWidth(), dy / this.getHeight());
+            var sc = scale_value / Math.max(dx / this.getWidth(), dy / this.getHeight());
             var tr = [this.getWidth() / 2 - sc * x, this.getHeight() / 2 - sc * y];
             tscale = sc;
             tx = tr[0];

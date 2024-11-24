@@ -306,20 +306,20 @@ Functions that have `groupedData` as parameter, means that `groupedData` is a JS
   - `continent`: Continent name that came from the GeoJSON map file.
 - `longitudeKey:` _(string, default: 'longitude')_ Column name of the longitude (from the dataset).
 - `latitudeKey:` _(string, default: 'latitude')_ Column name of the latitude (from the dataset).
-- `defaultScaleTo:` _(object, default:null)_ Default zoom state for the map based on either Country code or Latitude/Longitude point.
+- `defaultScaleTo:` _(object or function(), default:null)_ Default zoom state for the map based on either Country code or Latitude/Longitude point.
 
-  - `defaultScaleTo.scaleType:` _(string, default:null)_ Type of a zoom/scale on the map. This only accepts two types: 'lat/lng' for a zoom based on latitude and longitude points or 'country' for a zoom based on specific country code(iso_a3 code).
-  - `defaultScaleTo.values` _(object, default:null)_ Option values for the zoom state on the map based on 'scaleType' property. If 'scaleType' is set to 'lat/lng' then its 'values' object should contain: 'latitude','longitude' and 'scale' properties. If 'scaleType' is set to 'country' then its 'values' object should contain: 'iso_a3' property.
+  - `defaultScaleTo.scaleType:` _(string, default:null)_ Type of a zoom/scale on the map. This only accepts two types: 'coordinates' for a zoom based on latitude and longitude points or 'country' for a zoom based on specific country code(iso_a3 code).
+  - `defaultScaleTo.values` _(object, default:null)_ Option values for the zoom state on the map based on 'scaleType' property. If 'scaleType' is set to 'coordinates' then its 'values' object should contain: 'latitude','longitude' and 'scale' properties. If 'scaleType' is set to 'country' then its 'values' object should contain: 'iso_a3' property.
 
     _Example:_
 
     ```js
     defaultScaleTo: {
-      scaleType: 'lat/lng',
+      scaleType: 'coordinates',
       values: {
-        latitude: '0',
-        longitude: '0',
-        scale: '1'
+        latitude: 27.7,
+        longitude: 85.37,
+        scale: 32
       }
     },
     ```
