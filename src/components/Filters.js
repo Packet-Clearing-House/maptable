@@ -280,7 +280,7 @@ export default class Filters {
     filterNameSelect.setAttribute('class', 'mt-filter-name form-control form-control-inline');
     utils.appendOptions(
       filterNameSelect,
-      possibleFilters.map((f) => ({ text: f.title, value: f.key }))
+      possibleFilters.map((f) => ({ text: f.title, value: f.key })),
     );
     filterNameSelect.value = filterName;
 
@@ -305,7 +305,7 @@ export default class Filters {
       filterRange.setAttribute('class', 'mt-filter-range form-control form-control-inline');
       utils.appendOptions(
         filterRange,
-        ['any', '=', '≠', '<', '>', '≤', '≥', 'BETWEEN'].map((v) => ({ text: v, value: v }))
+        ['any', '=', '≠', '<', '>', '≤', '≥', 'BETWEEN'].map((v) => ({ text: v, value: v })),
       );
       filterRange.addEventListener('change', function () {
         that.handleRangeChange(this);
@@ -459,7 +459,7 @@ export default class Filters {
       filterNameSelect.innerHTML = '';
       utils.appendOptions(
         filterNameSelect,
-        possibleFilters.map((f) => ({ text: f.title, value: f.key }))
+        possibleFilters.map((f) => ({ text: f.title, value: f.key })),
       );
       filterNameSelect.value = filterName;
     }

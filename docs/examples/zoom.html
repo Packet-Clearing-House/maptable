@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <link rel="stylesheet" href="../vendor/bootstrap.min.css">
+  <link rel="stylesheet" href="../maptable.css">
+  <title>MapTable Zoom example</title>
+</head>
+<script src="country-codes.js"></script>
+
+<body>
+
+  <script src="../vendor/d3.min.js" charset="utf-8"></script>
+  <script src="../vendor/topojson.min.js"></script>
+  <script src="../maptable.js"></script>
+
+  <div class="container">
+    <div class="panel panel-default">
+      <div class="panel-heading">[Example] Maptable Location Zoom</div>
+      <div class="panel-body">
+        Demonstating: rendering a map and table from CSV. <br />
+        Map locations can be zoomed based on either Country or Latitude/Longitude.<br /><br />
+        If the map is zoomed based on latitude/longitude points, it will show the selected location with some default
+        scale value on the map.<br /> Scale/Zoom value can also be adjusted based on requirement.<br /><br />
+        If the map is zoomed based on country using ISO alpha-3 code(iso_a3), selected country will be centered on the
+        map using the centroid value of that country, with a fixed scale/zoom value based on country size.
+        <br />
+        <br />
+        <div class="btn-group">
+          <a href="./zoom.html" target="_blank" class="btn btn-default">Open in a new window</a>
+          <a href="https://github.com/Packet-Clearing-House/maptable/tree/master/docs/examples/zoom.html"
+            target="_blank" class="btn btn-default">View source code</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel panel-default">
+      <div class="panel-body">
+        <div>
+          <label>Type :</label> <select style="width: 200px;" id="zoom_type">
+            <option value="coordinates">coordinates</option>
+            <option value="country" selected>country</option>
+          </select>
+        </div>
+        <div id="country" style="margin-top:5px;">
+          <label>Country :</label> <select style="width: 200px;" id="country_type">
+            <option value="IND" selected>India</option>
+          </select>
+        </div>
+        <div id="coordinates" style="margin-top:5px;display: none;">
+          <div>
+            <label for="lng">Longitude : </label>
+            <input id="lng" value="85.37" type="number" placeholder="Longitude" />
+          </div>
+          <div>
+            <label for="lat">Latitude : </label>
+            <input id="lat" value="27.7" type="number" placeholder="Latitude" />
+          </div>
+          <div>
+            <label for="scale">Scale : </label>
+            <input id="scale" value="26" type="number" placeholder="Scale" />
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="vizContainer"></div>
+  </div>
+  <script>
+    let zoomType = document.getElementById('zoom_type').value;
+    let countryType = document.getElementById('country_type').value;
+    let lat = document.getElementById('lat').value;
+    let lng = document.getElementById('lng').value;
+    let scale = document.getElementById('scale').value;
+
+    function getScaleValues() {
+      if (document.getElementById('zoom_type').value === 'country') {
+        // return scale options for country 
+        let options = { scaleType: 'country', values: { iso_a3: document.getElementById('country_type').value } };
+        return options;
+      } else {
+        // return scale options for lat/lng coordinates 
+        let options = { scaleType: 'coordinates', values: { latitude: document.getElementById('lat').value, longitude: document.getElementById('lng').value, scale: document.getElementById('scale').value } };
+        return options;
+      }
+    }
+
+    var viz = d3.maptable('#vizContainer')
+      .csv('basic.csv')
+      .map({
+        path: 'countries.json',
+        markers: {},
+        saveState: true,
+        zoom: true,
+        countries: {
+          attr: {
+            "stroke-width": 1
+          },
+        },
+        // scale options template for latitude/longitude based zoom
+        // defaultScaleTo: {scaleType:"coordinates",values:{latitude:'27.7',longitude:'85.37',scale:32}}
+        // scale options template for country based zoom
+        // defaultScaleTo: {scaleType:'country',values:{iso_a3:'CHN',fillColor:"#EEEEEE"}}
+        // getScaleValues() function returns scale options for this example page, you can directly pass an options object insted of function
+        defaultScaleTo: getScaleValues
+      })
+      .table()
+      .render();
+
+    document.getElementById('zoom_type').addEventListener('change', (e) => {
+      if (e.target.value === "country") {
+        document.getElementById('country').style.display = 'block';
+        document.getElementById('coordinates').style.display = 'none';
+      } else {
+        document.getElementById('country').style.display = 'none';
+        document.getElementById('coordinates').style.display = 'block';
+      }
+      viz.render();
+    });
+
+    document.getElementById('country_type').addEventListener('change', (e) => {
+      countryType = e.target.value;
+      viz.render();
+    })
+
+    document.getElementById('lat').addEventListener('change', (e) => {
+      viz.render();
+    })
+
+    document.getElementById('lng').addEventListener('change', (e) => {
+      viz.render();
+    })
+
+    document.getElementById('scale').addEventListener('change', (e) => {
+      if (e.target.value < 1) {
+        e.target.value = 1;
+        return;
+      }
+      if (e.target.value > 100) {
+        e.target.value = 100;
+        return;
+      }
+      viz.render();
+    })
+  </script>
+  <script>
+    countries.forEach(element => {
+      let option = document.createElement('option');
+      option.setAttribute('value', element['alpha-3']);
+      option.textContent = element['name'];
+      document.getElementById('country_type').appendChild(option);
+    });
+  </script>
+</body>
+
+</html>

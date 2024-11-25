@@ -301,10 +301,10 @@ export default class Table {
   reOrderSorting(from, to) {
     if (to === from) return;
 
-    var target = this.sorting[from];
-    var increment = to < from ? -1 : 1;
+    const target = this.sorting[from];
+    const increment = to < from ? -1 : 1;
 
-    for (var k = from; k != to; k += increment) {
+    for (let k = from; k != to; k += increment) {
       this.sorting[k] = this.sorting[k + increment];
     }
     this.sorting[to] = target;
