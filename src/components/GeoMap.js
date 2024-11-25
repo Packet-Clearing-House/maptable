@@ -42,7 +42,11 @@ export default class GeoMap {
     this.node.setAttribute('id', 'mt-map');
     mapWrapper.appendChild(this.node);
 
-    this.svg = d3.select(this.node).append('svg').attr('id', 'mt-map-svg').attr('xmlns', 'http://www.w3.org/2000/svg').attr('xmlns:xlink', 'http://www.w3.org/1999/xlink').attr('viewBox', `0 0 ${this.getWidth()} ${this.getHeight()}`).attr('width', this.getWidth()).attr('height', this.getHeight());
+    this.svg = d3.select(this.node).append('svg').attr('id', 'mt-map-svg').attr('xmlns', 'http://www.w3.org/2000/svg')
+      .attr('xmlns:xlink', 'http://www.w3.org/1999/xlink')
+      .attr('viewBox', `0 0 ${this.getWidth()} ${this.getHeight()}`)
+      .attr('width', this.getWidth())
+      .attr('height', this.getHeight());
 
     this.projection = d3.geo
       .equirectangular()
@@ -64,11 +68,13 @@ export default class GeoMap {
 
     // Add tooltip
     if (this.options.markers) {
-      this.tooltipMarkersNode = d3.select(this.node).append('div').attr('id', 'mt-map-markers-tooltip').attr('class', `mt-map-tooltip ${this.options.markers.tooltipClassName}`).style('display', 'none');
+      this.tooltipMarkersNode = d3.select(this.node).append('div').attr('id', 'mt-map-markers-tooltip').attr('class', `mt-map-tooltip ${this.options.markers.tooltipClassName}`)
+        .style('display', 'none');
     }
 
     if (this.options.countries) {
-      this.tooltipCountriesNode = d3.select(this.node).append('div').attr('id', 'mt-map-countries-tooltip').attr('class', `mt-map-tooltip ${this.options.countries.tooltipClassName}`).style('display', 'none');
+      this.tooltipCountriesNode = d3.select(this.node).append('div').attr('id', 'mt-map-countries-tooltip').attr('class', `mt-map-tooltip ${this.options.countries.tooltipClassName}`)
+        .style('display', 'none');
     }
 
     this.layerGlobal = this.svg.append('g').attr('class', 'mt-map-global');
@@ -184,7 +190,9 @@ export default class GeoMap {
       this.maskHeatmap.datum(lands).append('path').attr('class', 'mt-map-heatmap-mask-paths').attr('d', this.path);
     }
 
-    this.imgHeatmap = this.layerHeatmap.append('image').attr('width', this.getWidth()).attr('height', this.getHeight()).attr('x', 0).attr('y', 0).attr('class', 'mt-map-heatmap-img');
+    this.imgHeatmap = this.layerHeatmap.append('image').attr('width', this.getWidth()).attr('height', this.getHeight()).attr('x', 0)
+      .attr('y', 0)
+      .attr('class', 'mt-map-heatmap-img');
 
     if (this.options.heatmap.mask) {
       this.imgHeatmap = this.imgHeatmap.attr('clip-path', 'url(#mt-map-heatmap-mask)');
@@ -398,7 +406,9 @@ export default class GeoMap {
    * @returns {string} base64 image
    */
   getHeatmapData() {
-    const canvasHeatmap = d3.select(this.node).append('canvas').attr('id', 'mt-map-heatmap-canvas').attr('width', this.getWidth()).attr('height', this.getHeight()).attr('style', 'display: none;');
+    const canvasHeatmap = d3.select(this.node).append('canvas').attr('id', 'mt-map-heatmap-canvas').attr('width', this.getWidth())
+      .attr('height', this.getHeight())
+      .attr('style', 'display: none;');
 
     const ctx = canvasHeatmap.node().getContext('2d');
     ctx.globalCompositeOperation = 'multiply';
@@ -435,7 +445,7 @@ export default class GeoMap {
             d3.geo
               .circle()
               .origin([point.longitude, point.latitude])
-              .angle(m - 0.0001)()
+              .angle(m - 0.0001)(),
           );
           ctx.fillStyle = colorScale(opacity);
           ctx.fill();
@@ -639,7 +649,9 @@ export default class GeoMap {
     markerObject.attr('class', `mt-map-marker ${markerClassName}`);
 
     // Exit
-    markerItem.exit().transition().attr('r', 0).attr('fill', '#eee').style('opacity', 0).remove();
+    markerItem.exit().transition().attr('r', 0).attr('fill', '#eee')
+      .style('opacity', 0)
+      .remove();
 
     // Update
     const attrX = this.options.markers.attrX ? this.options.markers.attrX : 'cx';
@@ -714,10 +726,14 @@ export default class GeoMap {
       .attr('height', 30);
 
     if (this.options.title.bgColor) {
-      titleContainer.append('rect').attr('x', 0).attr('y', 0).attr('width', this.getWidth()).attr('height', 30).attr('fill', this.options.title.bgColor);
+      titleContainer.append('rect').attr('x', 0).attr('y', 0).attr('width', this.getWidth())
+        .attr('height', 30)
+        .attr('fill', this.options.title.bgColor);
     }
 
-    titleContainer.append('text').attr('id', 'mt-map-title').attr('x', 20).attr('font-size', this.scaleFontSize(this.options.title.fontSize)).attr('font-family', this.options.title.fontFamily).attr('y', 20);
+    titleContainer.append('text').attr('id', 'mt-map-title').attr('x', 20).attr('font-size', this.scaleFontSize(this.options.title.fontSize))
+      .attr('font-family', this.options.title.fontFamily)
+      .attr('y', 20);
 
     if (this.options.title.source) {
       titleContainer
@@ -784,7 +800,7 @@ export default class GeoMap {
 
   rescale() {
     const self = this;
-    let defaultScaleTo = typeof this.options.defaultScaleTo === 'function' ? this.options.defaultScaleTo.bind(this.maptable)() : this.options.defaultScaleTo;
+    const defaultScaleTo = typeof this.options.defaultScaleTo === 'function' ? this.options.defaultScaleTo.bind(this.maptable)() : this.options.defaultScaleTo;
 
     if (defaultScaleTo) {
       // if default zoom state is set by latitude/longitude
@@ -796,34 +812,32 @@ export default class GeoMap {
       } else if (defaultScaleTo.scaleType === 'country') {
         // if default zoom state is set by ISO alpha-3 country code
         let scale_value = 1;
-        if(d3.event && d3.event.scale>1){
+        if (d3.event && d3.event.scale > 1) {
           scale_value = d3.event.scale;
         }
-        
-        const countryTransXY = this.getTransXYForCountry(defaultScaleTo.values.iso_a3,scale_value);
+
+        const countryTransXY = this.getTransXYForCountry(defaultScaleTo.values.iso_a3, scale_value);
         this.scale = countryTransXY.tscale;
         this.transX = countryTransXY.tx || 0;
         this.transY = countryTransXY.ty || 0;
 
-        if(d3.event && d3.event.scale === 1){
+        if (d3.event && d3.event.scale === 1) {
           this.scale = countryTransXY.tscale;
           this.transX += d3.event.translate[0];
           this.transY += d3.event.translate[1];
         }
 
-        if(d3.event && d3.event.scale>1){
+        if (d3.event && d3.event.scale > 1) {
           // update scale value
           this.scale = (countryTransXY.tscale + d3.event.scale) - 1 || 1;
           this.transX = (countryTransXY.tx + d3.event.translate[0]);
           this.transY = (countryTransXY.ty + d3.event.translate[1]);
         }
       }
-    } else {
-      if (d3.event && d3.event.translate) {
-        this.scale = d3.event.scale;
-        this.transX = this.scale === 1 ? 0 : d3.event.translate[0];
-        this.transY = this.scale === 1 ? 0 : d3.event.translate[1];
-      }
+    } else if (d3.event && d3.event.translate) {
+      this.scale = d3.event.scale;
+      this.transX = this.scale === 1 ? 0 : d3.event.translate[0];
+      this.transY = this.scale === 1 ? 0 : d3.event.translate[1];
     }
 
     const maxTransX = 0;
@@ -903,11 +917,9 @@ export default class GeoMap {
   }
 
   // calculate translateX, translateY and scale values based on input ISO alpha-3 country code
-  getTransXYForCountry(country_code,scale_value) {
+  getTransXYForCountry(country_code, scale_value) {
     const currentCountryCode = country_code;
-    const currentCountryData = this.dataCountries.filter((d) => {
-      return d.properties.iso_a3 === currentCountryCode;
-    });
+    const currentCountryData = this.dataCountries.filter((d) => d.properties.iso_a3 === currentCountryCode);
     let tx = 0;
     let ty = 0;
     let tscale = 1;
@@ -1051,7 +1063,7 @@ export default class GeoMap {
       if (scaleDomain[0] === 0 && scale && scale.indexOf('log') !== '-1') {
         scaleDomain = d3.extent(
           dataset.filter((v) => Number(v.attrProperties[attrKey].value) !== 0),
-          (d) => Number(d.attrProperties[attrKey].value)
+          (d) => Number(d.attrProperties[attrKey].value),
         );
       }
       if (attrValue.transform) {
