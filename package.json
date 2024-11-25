@@ -44,7 +44,7 @@
     "gulp-rimraf": "0.2.0",
     "gulp-sequence": "^1.0.0",
     "gulp-uglify": "1.5.2",
-    "rollup": "0.26.3",
+    "rollup": "2.79.2",
     "rollup-plugin-babel": "2.4.0",
     "underscore": "1.9.1"
   }
