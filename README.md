@@ -326,6 +326,7 @@ Functions that have `groupedData` as parameter, means that `groupedData` is a JS
 
 - `exportSvg:` _(string, default: null)_ URL endpoint to download the current visualization as SVG. Read more on the section export SVG. (more details on a the section "Export as SVG")
 - `exportSvgClient:` _(bool, default: false)_ Show button to download the current visualization as SVG using only the client browser instead of querying the backend (in the opposite of `exportSvg`). You'll need to download [FileSaver.js](https://github.com/eligrey/FileSaver.js) and add a `<script src="filesaver.min.js">` to make it work. You may also use the [CDN version](https://cdnjs.com/libraries/FileSaver.js) in your `<script>` source.
+- `exportSvgWidth:` _(integer, default: 940)_ Sets custom export dimensions (i.e. width & height) for SVG based on passed width value. 
 - `watermark:` _(object, default: null)_ Add a watermark within the map.
 
   - `watermark.src:` _(string)_ URL of the image (svg, png, jpg).

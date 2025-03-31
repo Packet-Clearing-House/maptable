@@ -159,6 +159,11 @@ export default class GeoMap {
     return this.options.height * this.options.scaleHeight + deltaHeight;
   }
 
+  getCustomHeight(cWidth) {
+    const deltaHeight = this.options.title ? 30 : 0;
+    return cWidth * this.options.ratioFromWidth * this.options.scaleHeight + deltaHeight;
+  }
+
   /**
    * Load geometries and built the map components
    */
@@ -1186,10 +1191,19 @@ export default class GeoMap {
   exportSvg() {
     // Get the d3js SVG element
     const svg = this.container.querySelector('#mt-map-svg');
+    
+    // clone current SVG and update its attributes for export only purpose
+    let exportSVG = svg.cloneNode(true);
+    if(this.options.exportSvgWidth){
+      const exportWidth = this.options.exportSvgWidth;
+      const exportHeight = this.getCustomHeight(exportWidth);
+      exportSVG.setAttribute('width',exportWidth);
+      exportSVG.setAttribute('height',exportHeight)
+    }
+  
     // Extract the data as SVG text string
     const svgXml = `<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-${new XMLSerializer().serializeToString(svg)}`;
-
+${new XMLSerializer().serializeToString(exportSVG)}`;
     if (this.options.exportSvgClient) {
       if (!window.saveAs) {
         throw new Error('MapTable: Missing FileSaver.js library');
