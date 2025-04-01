@@ -1809,12 +1809,12 @@ this.d3.maptable = (function () {
               this.transY = transXY.ty || 0;
             } else if (defaultScaleTo.scaleType === 'country') {
               // if default zoom state is set by ISO alpha-3 country code
-              var scale_value = 1;
+              var scaleValue = 1;
               if (d3.event && d3.event.scale > 1) {
-                scale_value = d3.event.scale;
+                scaleValue = d3.event.scale;
               }
 
-              var countryTransXY = this.getTransXYForCountry(defaultScaleTo.values.iso_a3, scale_value);
+              var countryTransXY = this.getTransXYForCountry(defaultScaleTo.values.iso_a3, scaleValue);
               this.scale = countryTransXY.tscale;
               this.transX = countryTransXY.tx || 0;
               this.transY = countryTransXY.ty || 0;
@@ -1921,8 +1921,8 @@ this.d3.maptable = (function () {
 
       }, {
         key: 'getTransXYForCountry',
-        value: function getTransXYForCountry(country_code, scale_value) {
-          var currentCountryCode = country_code;
+        value: function getTransXYForCountry(countryCode, scaleValue) {
+          var currentCountryCode = countryCode;
           var currentCountryData = this.dataCountries.filter(function (d) {
             return d.properties.iso_a3 === currentCountryCode;
           });
@@ -1935,7 +1935,7 @@ this.d3.maptable = (function () {
             var dy = bounds[1][1] - bounds[0][1];
             var x = (bounds[0][0] + bounds[1][0]) / 2;
             var y = (bounds[0][1] + bounds[1][1]) / 2;
-            var sc = scale_value / Math.max(dx / this.getWidth(), dy / this.getHeight());
+            var sc = scaleValue / Math.max(dx / this.getWidth(), dy / this.getHeight());
             var tr = [this.getWidth() / 2 - sc * x, this.getHeight() / 2 - sc * y];
             tscale = sc;
             tx = tr[0];
@@ -2249,18 +2249,10 @@ this.d3.maptable = (function () {
 
           // clone current SVG and update its attributes for export only purpose
           var exportSVG = svg.cloneNode(true);
-          if (this.options.exportSvgWidth) {
-            var exportWidth = this.options.exportSvgWidth;
-            var exportHeight = this.getCustomHeight(exportWidth);
-            exportSVG.setAttribute('width', exportWidth);
-            exportSVG.setAttribute('height', exportHeight);
-          } else {
-            // set default export size to 940
-            var defautlExportSvgWidth = 940;
-            var defaultExportHeight = this.getCustomHeight(defautlExportSvgWidth);
-            exportSVG.setAttribute('width', defautlExportSvgWidth);
-            exportSVG.setAttribute('height', defaultExportHeight);
-          }
+          var exportWidth = this.options.exportSvgWidth || 940;
+          var exportHeight = this.getCustomHeight(exportWidth);
+          exportSVG.setAttribute('width', exportWidth);
+          exportSVG.setAttribute('height', exportHeight);
 
           // Extract the data as SVG text string
           var svgXml = '<?xml version="1.0" encoding="UTF-8" standalone="no"?>\n' + new XMLSerializer().serializeToString(exportSVG);
@@ -3147,7 +3139,7 @@ this.d3.maptable = (function () {
           var target = this.sorting[from];
           var increment = to < from ? -1 : 1;
 
-          for (var k = from; k != to; k += increment) {
+          for (var k = from; k !== to; k += increment) {
             this.sorting[k] = this.sorting[k + increment];
           }
           this.sorting[to] = target;
@@ -3470,7 +3462,11 @@ this.d3.maptable = (function () {
             defaultColumns[k] = {
               title: utils.keyToTile(k),
               filterMethod: isNumber ? 'compare' : 'field',
-              filterInputType: isNumber ? 'number' : _this5.options.columns[k] && _this5.options.columns[k].filterInputType ? _this5.options.columns[k].filterInputType : 'text',
+              filterInputType: function () {
+                if (isNumber) return 'number';
+                if (_this5.options.columns[k] && _this5.options.columns[k].filterInputType) return _this5.options.columns[k].filterInputType;
+                return 'text';
+              }(),
               sorting: true
             };
 
