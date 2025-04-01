@@ -27,7 +27,7 @@ VERSION=$(ruby update_version.rb $1)
 echo "Upgrading to version $VERSION"
 
 # Call gulp dist to create the distribution of the code, which also calls bower to create the bower file
-gulp dist
+./node_modules/.bin/gulp dist
 
 # Publish github pages
 cp -R dist/maptable.min.js docs/maptable.min.js
