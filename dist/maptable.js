@@ -196,6 +196,7 @@ this.d3.maptable = (function () {
         saveState: true,
         exportSvg: null,
         exportSvgClient: false,
+        exportSvgWidth: 940,
         ratioFromWidth: 0.5,
         scaleHeight: 1.0,
         scaleZoom: [1, 10],
@@ -2253,6 +2254,12 @@ this.d3.maptable = (function () {
             var exportHeight = this.getCustomHeight(exportWidth);
             exportSVG.setAttribute('width', exportWidth);
             exportSVG.setAttribute('height', exportHeight);
+          } else {
+            // set default export size to 940
+            var defautlExportSvgWidth = 940;
+            var defaultExportHeight = this.getCustomHeight(defautlExportSvgWidth);
+            exportSVG.setAttribute('width', defautlExportSvgWidth);
+            exportSVG.setAttribute('height', defaultExportHeight);
           }
 
           // Extract the data as SVG text string

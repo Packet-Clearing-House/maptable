@@ -1199,6 +1199,12 @@ export default class GeoMap {
       const exportHeight = this.getCustomHeight(exportWidth);
       exportSVG.setAttribute('width',exportWidth);
       exportSVG.setAttribute('height',exportHeight)
+    } else {
+      // set default export size to 940
+      const defautlExportSvgWidth = 940;
+      const defaultExportHeight = this.getCustomHeight(defautlExportSvgWidth);
+      exportSVG.setAttribute('width',defautlExportSvgWidth);
+      exportSVG.setAttribute('height',defaultExportHeight);
     }
   
     // Extract the data as SVG text string

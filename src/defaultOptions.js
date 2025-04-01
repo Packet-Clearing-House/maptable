@@ -8,6 +8,7 @@ export default {
     saveState: true,
     exportSvg: null,
     exportSvgClient: false,
+    exportSvgWidth: 940,
     ratioFromWidth: 0.5,
     scaleHeight: 1.0,
     scaleZoom: [1, 10],
