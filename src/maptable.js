@@ -256,7 +256,11 @@ export default class MapTable {
       defaultColumns[k] = {
         title: utils.keyToTile(k),
         filterMethod: isNumber ? 'compare' : 'field',
-        filterInputType: isNumber ? 'number' : this.options.columns[k] && this.options.columns[k].filterInputType ? this.options.columns[k].filterInputType : 'text',
+        filterInputType: (() => {
+          if (isNumber) return 'number';
+          if (this.options.columns[k] && this.options.columns[k].filterInputType) return this.options.columns[k].filterInputType;
+          return 'text';
+        })(),
         sorting: true,
       };
 

@@ -304,7 +304,7 @@ export default class Table {
     const target = this.sorting[from];
     const increment = to < from ? -1 : 1;
 
-    for (let k = from; k != to; k += increment) {
+    for (let k = from; k !== to; k += increment) {
       this.sorting[k] = this.sorting[k + increment];
     }
     this.sorting[to] = target;

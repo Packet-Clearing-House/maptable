@@ -196,6 +196,7 @@ this.d3.maptable = (function () {
         saveState: true,
         exportSvg: null,
         exportSvgClient: false,
+        exportSvgWidth: 940,
         ratioFromWidth: 0.5,
         scaleHeight: 1.0,
         scaleZoom: [1, 10],
@@ -1161,6 +1162,12 @@ this.d3.maptable = (function () {
           }
           return this.options.height * this.options.scaleHeight + deltaHeight;
         }
+      }, {
+        key: 'getCustomHeight',
+        value: function getCustomHeight(cWidth) {
+          var deltaHeight = this.options.title ? 30 : 0;
+          return cWidth * this.options.ratioFromWidth * this.options.scaleHeight + deltaHeight;
+        }
 
         /**
          * Load geometries and built the map components
@@ -1825,12 +1832,10 @@ this.d3.maptable = (function () {
                 this.transY = countryTransXY.ty + d3.event.translate[1];
               }
             }
-          } else {
-            if (d3.event && d3.event.translate) {
-              this.scale = d3.event.scale;
-              this.transX = this.scale === 1 ? 0 : d3.event.translate[0];
-              this.transY = this.scale === 1 ? 0 : d3.event.translate[1];
-            }
+          } else if (d3.event && d3.event.translate) {
+            this.scale = d3.event.scale;
+            this.transX = this.scale === 1 ? 0 : d3.event.translate[0];
+            this.transY = this.scale === 1 ? 0 : d3.event.translate[1];
           }
 
           var maxTransX = 0;
@@ -2241,9 +2246,24 @@ this.d3.maptable = (function () {
         value: function exportSvg() {
           // Get the d3js SVG element
           var svg = this.container.querySelector('#mt-map-svg');
-          // Extract the data as SVG text string
-          var svgXml = '<?xml version="1.0" encoding="UTF-8" standalone="no"?>\n' + new XMLSerializer().serializeToString(svg);
 
+          // clone current SVG and update its attributes for export only purpose
+          var exportSVG = svg.cloneNode(true);
+          if (this.options.exportSvgWidth) {
+            var exportWidth = this.options.exportSvgWidth;
+            var exportHeight = this.getCustomHeight(exportWidth);
+            exportSVG.setAttribute('width', exportWidth);
+            exportSVG.setAttribute('height', exportHeight);
+          } else {
+            // set default export size to 940
+            var defautlExportSvgWidth = 940;
+            var defaultExportHeight = this.getCustomHeight(defautlExportSvgWidth);
+            exportSVG.setAttribute('width', defautlExportSvgWidth);
+            exportSVG.setAttribute('height', defaultExportHeight);
+          }
+
+          // Extract the data as SVG text string
+          var svgXml = '<?xml version="1.0" encoding="UTF-8" standalone="no"?>\n' + new XMLSerializer().serializeToString(exportSVG);
           if (this.options.exportSvgClient) {
             if (!window.saveAs) {
               throw new Error('MapTable: Missing FileSaver.js library');

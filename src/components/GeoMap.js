@@ -159,6 +159,11 @@ export default class GeoMap {
     return this.options.height * this.options.scaleHeight + deltaHeight;
   }
 
+  getCustomHeight(cWidth) {
+    const deltaHeight = this.options.title ? 30 : 0;
+    return cWidth * this.options.ratioFromWidth * this.options.scaleHeight + deltaHeight;
+  }
+
   /**
    * Load geometries and built the map components
    */
@@ -811,12 +816,12 @@ export default class GeoMap {
         this.transY = transXY.ty || 0;
       } else if (defaultScaleTo.scaleType === 'country') {
         // if default zoom state is set by ISO alpha-3 country code
-        let scale_value = 1;
+        let scaleValue = 1;
         if (d3.event && d3.event.scale > 1) {
-          scale_value = d3.event.scale;
+          scaleValue = d3.event.scale;
         }
 
-        const countryTransXY = this.getTransXYForCountry(defaultScaleTo.values.iso_a3, scale_value);
+        const countryTransXY = this.getTransXYForCountry(defaultScaleTo.values.iso_a3, scaleValue);
         this.scale = countryTransXY.tscale;
         this.transX = countryTransXY.tx || 0;
         this.transY = countryTransXY.ty || 0;
@@ -917,8 +922,8 @@ export default class GeoMap {
   }
 
   // calculate translateX, translateY and scale values based on input ISO alpha-3 country code
-  getTransXYForCountry(country_code, scale_value) {
-    const currentCountryCode = country_code;
+  getTransXYForCountry(countryCode, scaleValue) {
+    const currentCountryCode = countryCode;
     const currentCountryData = this.dataCountries.filter((d) => d.properties.iso_a3 === currentCountryCode);
     let tx = 0;
     let ty = 0;
@@ -929,7 +934,7 @@ export default class GeoMap {
       const dy = bounds[1][1] - bounds[0][1];
       const x = (bounds[0][0] + bounds[1][0]) / 2;
       const y = (bounds[0][1] + bounds[1][1]) / 2;
-      const sc = scale_value / Math.max(dx / this.getWidth(), dy / this.getHeight());
+      const sc = scaleValue / Math.max(dx / this.getWidth(), dy / this.getHeight());
       const tr = [this.getWidth() / 2 - sc * x, this.getHeight() / 2 - sc * y];
       tscale = sc;
       tx = tr[0];
@@ -1186,10 +1191,17 @@ export default class GeoMap {
   exportSvg() {
     // Get the d3js SVG element
     const svg = this.container.querySelector('#mt-map-svg');
+
+    // clone current SVG and update its attributes for export only purpose
+    const exportSVG = svg.cloneNode(true);
+    const exportWidth = this.options.exportSvgWidth || 940;
+    const exportHeight = this.getCustomHeight(exportWidth);
+    exportSVG.setAttribute('width', exportWidth);
+    exportSVG.setAttribute('height', exportHeight);
+
     // Extract the data as SVG text string
     const svgXml = `<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-${new XMLSerializer().serializeToString(svg)}`;
-
+${new XMLSerializer().serializeToString(exportSVG)}`;
     if (this.options.exportSvgClient) {
       if (!window.saveAs) {
         throw new Error('MapTable: Missing FileSaver.js library');

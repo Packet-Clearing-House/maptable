@@ -18,7 +18,7 @@
     <div class="panel panel-default">
       <div class="panel-heading">[Example] Export SVG (Client side)</div>
       <div class="panel-body">
-        Demonstating: rendering a map with the ability to export the map as SVG without using a backend.<br />
+        Demonstrating: rendering a map with the ability to export the map (with a watermark) as SVG without using a backend.<br />
         <br>
         <div class="btn-group">
           <a href="./export-svg-client.html" target="_blank" class="btn btn-default">Open in a new window</a>
@@ -38,6 +38,13 @@
         path: 'countries.json',
         exportSvgClient: true,
         markers: {},
+        watermark: {
+          src: '/examples/watermark.svg',
+          width: 130,
+          height: 60,
+          position: "bottom left",
+          style: "opacity: 0"
+        },
       })
       .render();
   </script>
