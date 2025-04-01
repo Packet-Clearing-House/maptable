@@ -14,7 +14,8 @@
     "no-alert": 0,
     "no-console": 0,
     "no-continue": 0,
-    "class-methods-use-this": 0
+    "class-methods-use-this": 0,
+    "max-len": 0
   },
   "globals": {
     "topojson": true,
