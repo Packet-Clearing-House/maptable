@@ -16,6 +16,13 @@ export default class Filters {
       this.activeColumns = Object.keys(this.maptable.columnDetails);
     }
 
+    if (this.options.defaultFilters) {
+      const defaultFiltersDiff = Object.keys(this.options.defaultFilters).filter((i)=>Object.keys(this.maptable.columnDetails).indexOf(i) < 0);
+      if (defaultFiltersDiff.length > 0) {
+        throw new Error(`MapTable: invalid defaultFilter columns "${defaultFiltersDiff.join(', ')}"`);
+      }
+    }
+
     this.container = document.createElement('div');
     this.maptable.node.appendChild(this.container);
 
@@ -196,8 +203,9 @@ export default class Filters {
    * Restore state from the URL hash
    */
   restoreState(defaultCriteria) {
-    if (!defaultCriteria) return;
-    this.setFilters(defaultCriteria);
+    const criteria = defaultCriteria || this.options.defaultFilters;
+    if (!criteria) return;
+    this.setFilters(criteria);
   }
 
   /**
