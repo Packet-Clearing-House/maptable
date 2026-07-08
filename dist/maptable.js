@@ -2318,6 +2318,15 @@ this.d3.maptable = (function () {
           this.activeColumns = Object.keys(this.maptable.columnDetails);
         }
 
+        if (this.options.defaultFilters) {
+          var defaultFiltersDiff = Object.keys(this.options.defaultFilters).filter(function (i) {
+            return Object.keys(_this.maptable.columnDetails).indexOf(i) < 0;
+          });
+          if (defaultFiltersDiff.length > 0) {
+            throw new Error('MapTable: invalid defaultFilter columns "' + defaultFiltersDiff.join(', ') + '"');
+          }
+        }
+
         this.container = document.createElement('div');
         this.maptable.node.appendChild(this.container);
 
@@ -2518,8 +2527,9 @@ this.d3.maptable = (function () {
       }, {
         key: 'restoreState',
         value: function restoreState(defaultCriteria) {
-          if (!defaultCriteria) return;
-          this.setFilters(defaultCriteria);
+          var criteria = defaultCriteria || this.options.defaultFilters;
+          if (!criteria) return;
+          this.setFilters(criteria);
         }
 
         /**

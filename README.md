@@ -540,6 +540,7 @@ Functions that have `groupedData` as parameter, means that `groupedData` is a JS
 
 - `show:` _([string, ...], default: null)_ Set the order and the columns that we want to see in the filters.
 - `saveState:` _(bool, default: true)_ Save filters state into the URL
+- `defaultFilters` _(Object, default: null)_ Pre-apply default set of filters when visualization loads. Each value of this option is an array: `[filterMethod, range, value, valueMax]`
 
 ## Table
 
